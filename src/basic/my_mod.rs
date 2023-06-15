@@ -1,6 +1,11 @@
-// 一个名为 `my_mod` 的模块
+//!
+//! my_mod.rs 文件就是my_mod 模块
+//!
+// 此处定义：一个名为 `my_mod` 的模块，与文件模块重复。
+//因模块不是公开的，无法在super 模块访问
+//
 #[allow(dead_code)]
-mod my_mod {
+pub mod my_mod {
     // 模块中的项默认具有私有的可见性
     fn private_function() {
         println!("called `my_mod::private_function()`");
@@ -30,7 +35,7 @@ mod my_mod {
 
         // 使用 `pub(in path)` 语法定义的函数只在给定的路径中可见。
         // `path` 必须是父模块（parent module）或祖先模块（ancestor module）
-        pub(in crate::my_mod) fn public_function_in_my_mod() {
+        pub(in crate::basic::my_mod) fn public_function_in_my_mod() {
             print!("called `my_mod::nested::public_function_in_my_mod()`, that\n > ");
             public_function_in_nested()
         }
@@ -68,7 +73,7 @@ mod my_mod {
 }
 
 #[allow(dead_code)]
-fn function() {
+pub fn function() {
     println!("called `function()`");
 }
 

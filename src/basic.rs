@@ -2,7 +2,8 @@
 //! Rust 语言学习基础功能样例代码实现
 //!
 //!
-pub mod my_mod;
+pub mod expression_sample;
+pub mod module_sample;
 pub mod my_visiable;
 pub mod rectangle;
 
@@ -10,7 +11,7 @@ use std::collections::HashMap;
 use std::hash::Hash;
 use std::{array, collections, vec};
 
-use crate::basic::my_mod::my_mod as other_mod;
+use crate::basic::module_sample::supper_mod as other_mod;
 use crate::basic::rectangle::Rectangle;
 
 ///
@@ -18,16 +19,22 @@ use crate::basic::rectangle::Rectangle;
 ///
 ///
 pub fn basic_example() {
-    //数字计算方法
-    number_calc();
+    //变量赋值与绑定
+    expression_sample::variable_bind();
 
-    println!("add fn :{}", add(2, 3));
+    //数字计算方法
+    expression_sample::number_calc();
+
+    println!("add fn :{}", expression_sample::add(2, 3));
+
+    //位运算
+    expression_sample::bit_calc();
 
     //条件表达式
-    condition_sample();
+    expression_sample::condition_sample();
 
     //循环表达式
-    loops_sample();
+    expression_sample::loops_sample();
 
     //所有权
     ownership_sample();
@@ -35,88 +42,12 @@ pub fn basic_example() {
     //结构体作用域
     rectangle_sample();
 
-    my_mod::function();
-
-    // my_mod::my_mod::nested::public_function_in_nested();
+    module_sample::function();
 
     other_mod::function();
 
     //集合
     collections_example();
-}
-
-/**
- * 数字计算方法。
- * 加、减、乘、除、余
- */
-fn number_calc() {
-    let sum = 5 + 10;
-    // 加
-
-    let difference = 95.5 - 4.3;
-    // 减
-
-    let product = 4 * 30;
-    // 乘
-
-    let quotient = 56.7 / 32.2;
-    // 除
-
-    let remainder = 43 % 5;
-    // 求余
-
-    println!(
-        "sum: {}, diff: {}, product: {}, quotient: {}, remainder:{}",
-        sum, difference, product, quotient, remainder
-    );
-}
-
-/**
- *函数 求和
- */
-fn add(a: i32, b: i32) -> i32 {
-    return a + b;
-}
-
-///
-///条件表达式
-///
-fn condition_sample() {
-    let a = 12;
-    let b;
-
-    if a > 0 {
-        b = 1;
-    } else if a < 0 {
-        b = -1;
-    } else {
-        b = 0;
-    }
-
-    println!("b is {}", b);
-}
-
-/**
- * 循环表达式
- */
-fn loops_sample() {
-    println!("loops_sample.....start");
-    //数组
-    let a = [10, 20, 30, 40, 50];
-
-    // for 迭代器
-    for i in a.iter() {
-        println!("值为 : {}", i);
-    }
-
-    //vec 迭代器
-    let v = Vec::from([3, 2, 4]);
-
-    for (i, n) in v.iter().enumerate() {
-        println!("索引：{},值为 : {}", i, n);
-    }
-
-    println!("loops_sample.....end");
 }
 
 /**
@@ -137,7 +68,7 @@ fn ownership_sample() {
     // println!("s2 value after move. {}",s2);
     // 试一试 ^ 取消此行注释
 
-    println!("ownership_sample.....start");
+    println!("ownership_sample.....end\n");
 }
 
 /**
@@ -167,8 +98,10 @@ fn takes_and_gives_back(a_string: String) -> String {
  * 结构体 作用域 可见性
 */
 fn rectangle_sample() {
+    println!("rectangle_sample.....start");
     let rect1 = Rectangle::create(30, 50);
 
+    //结构体进行赋值
     let rect2 = Rectangle {
         width: 30,
         height: 50,
@@ -177,6 +110,8 @@ fn rectangle_sample() {
     println!("rect1's area is {}", rect1.area());
 
     println!("rect1 is wider rect2 :{}", rect1.wider(&rect2));
+
+    println!("rectangle_sample.....end\n");
 }
 
 ///
@@ -250,13 +185,13 @@ mod tests {
 
     #[test]
     fn test_add() {
-        assert_eq!(add(1, 2), 3);
+        assert_eq!(expression_sample::add(1, 2), 3);
     }
 
     #[ignore]
     #[test]
     fn test_bad_add() {
         // 这个断言会导致测试失败。注意私有的函数也可以被测试！
-        assert_eq!(add(1, 2), 3);
+        assert_eq!(expression_sample::add(1, 2), 3);
     }
 }

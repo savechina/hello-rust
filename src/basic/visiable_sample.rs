@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-mod my_visiable {
+mod visiable_sample {
     // 一个公有的结构体，带有一个公有的字段（类型为泛型 `T`）
     pub struct OpenBox<T> {
         pub contents: T,
@@ -30,9 +30,9 @@ mod tests {
     use super::*;
 
     #[test]
-    fn main_test() {
+    fn visiable_test() {
         // 带有公有字段的公有结构体，可以像平常一样构造
-        let open_box = my_visiable::OpenBox {
+        let open_box = visiable_sample::OpenBox {
             contents: "public information",
         };
 
@@ -45,7 +45,7 @@ mod tests {
         // 试一试 ^ 取消此行注释
 
         // 不过带有私有字段的结构体可以使用公有的构造器来创建。
-        let _closed_box = my_visiable::ClosedBox::new("classified information");
+        let _closed_box = visiable_sample::ClosedBox::new("classified information");
 
         // 并且一个结构体中的私有字段不能访问到。
         // 报错！`content` 字段是私有的。

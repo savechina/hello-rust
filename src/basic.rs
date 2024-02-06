@@ -2,15 +2,13 @@
 //! Rust 语言学习基础功能样例代码实现
 //!
 //!
+pub mod datatype_sample;
 pub mod expression_sample;
 pub mod module_sample;
-pub mod my_visiable;
+pub mod visiable_sample;
 pub mod rectangle;
 
-use std::collections::HashMap;
-use std::hash::Hash;
-use std::{array, collections, vec};
-
+// import mod use as alias name
 use crate::basic::module_sample::supper_mod as other_mod;
 use crate::basic::rectangle::Rectangle;
 
@@ -47,7 +45,11 @@ pub fn basic_example() {
     other_mod::function();
 
     //集合
-    collections_example();
+    datatype_sample::collections_example();
+
+    datatype_sample::vet_sample();
+
+    datatype_sample::array_sample();
 }
 
 /**
@@ -112,61 +114,6 @@ fn rectangle_sample() {
     println!("rect1 is wider rect2 :{}", rect1.wider(&rect2));
 
     println!("rectangle_sample.....end\n");
-}
-
-///
-///集合 HashMap
-///
-fn collections_example() {
-    let mut map: HashMap<String, String> = HashMap::new();
-
-    map.insert("jack".to_string(), "1334567896".to_string());
-
-    map.insert("pony".to_string(), "1342356755".to_string());
-
-    map.insert("tony".to_string(), "1324567891".to_string());
-
-    println!("collection example hashmap: {:?}", map);
-
-    //获取 Key by entry
-    let entry = map.entry("jack".to_string());
-
-    println!(
-        "map is entry: key:{},value:{:?}",
-        "jack",
-        &entry.or_default()
-    );
-
-    //通过 get_key_value 获取 Map 的值
-    let kv = map.get_key_value(&"pony".to_string());
-
-    match kv {
-        Some(val) => println!("k:{},v:{}", val.0, val.1),
-        None => println!("panic"),
-    }
-
-    if map.contains_key(&"pony".to_string()) {
-        //借用 map 权限，获取key 的 val. &map[&key]
-        let val = &map[&"pony".to_string()];
-
-        println!("val:{}", val);
-    }
-
-    map.insert("key".to_string(), "val".to_string());
-
-    //HashMap 迭代器
-    for (key, val) in map.iter() {
-        println!("itertor key:{}, val:{} ", key, val);
-    }
-
-    println!("remove before get key:k,val: {:?}", map.get("key").unwrap());
-
-    map.remove("key");
-
-    let k = map.get("key");
-    println!("remove after get key:k,val: {:?}", k);
-
-    println!("map is empty:{}", map.is_empty());
 }
 
 ///

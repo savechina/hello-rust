@@ -3,8 +3,8 @@
 //! Basic DataType Sample
 //!
 //!
-
 use std::array;
+use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::vec;
 
@@ -12,8 +12,9 @@ use std::vec;
 ///集合 HashMap
 ///
 pub(crate) fn collections_example() {
-    println!(" collections_example ... start");
+    println!("datatype_sample::collections_example ... start");
 
+    //初始化HashMap 并设置值
     let mut map: HashMap<String, String> = HashMap::new();
 
     map.insert("jack".to_string(), "1334567896".to_string());
@@ -64,7 +65,7 @@ pub(crate) fn collections_example() {
 
     println!("map is empty:{}", map.is_empty());
 
-    println!(" collections_example ... end\n");
+    println!("datatype_sample::collections_example ... end\n");
 }
 
 ///
@@ -73,7 +74,8 @@ pub(crate) fn collections_example() {
 ///
 
 pub(crate) fn array_sample() {
-    println!("array_sampe ...... start");
+    println!("datatype::array_sampe ...... start");
+
     let months = [
         "January",
         "February",
@@ -89,7 +91,10 @@ pub(crate) fn array_sample() {
         "December",
     ];
 
-    println!("Months is {:?}", months);
+    println!("Months array first is {:?}", months[0]);
+    println!("Months array second  is {:?}", months[1]);
+
+    println!("Months array all is {:?}", months);
 
     // 编译器自动推导出one的类型
     let one = [1, 2, 3];
@@ -119,7 +124,6 @@ pub(crate) fn array_sample() {
     }
 
     println!("array_sampe ...... end \n");
-
 }
 
 ///
@@ -150,12 +154,244 @@ pub(crate) fn vet_sample() {
     println!("vet_sample ......end\n");
 }
 
+/**
+ * 定义扑克花色枚举
+ */
+#[derive(Debug)]
+enum PokerSuit {
+    ///
+    /// 黑桃 ♠️
+    ///
+    Clubs,
+    ///
+    ///梅花 ♣️
+    ///
+    Spades,
+    ///
+    /// 方块 ♦️
+    ///
+    Diamonds,
+    ///
+    ///红心 ♥️
+    ///
+    Hearts,
+}
+
+/**
+ * Poker
+ */
+#[derive(Debug)]
+struct PokerCard {
+    suit: PokerSuit,
+    value: u8,
+}
+
+/**
+ * PokerCard implement 方法
+ */
+impl PokerCard {
+    ///
+    /// 格式化显示Poker Card Value 方法
+    ///
+    pub fn view(&self) -> String {
+        match self.suit {
+            PokerSuit::Clubs => format!("♠️{}", Self::format_value(self.value)),
+            PokerSuit::Spades => format!("♣️{}", Self::format_value(self.value)),
+            PokerSuit::Diamonds => format!("♦️{}", Self::format_value(self.value)),
+            PokerSuit::Hearts => format!("♥️{}", Self::format_value(self.value)),
+        }
+    }
+
+    /**
+     * 格式化Poker value 为字符
+     */
+    fn format_value(value: u8) -> String {
+        if value == 1 {
+            return "A".to_string();
+        } else if value > 1 && value < 10 {
+            return value.to_string();
+        } else if value == 10 {
+            return String::from("T");
+        } else if value == 11 {
+            return String::from("J");
+        } else if value == 12 {
+            return String::from("Q");
+        } else if value == 13 {
+            return String::from("K");
+        } else {
+            panic!("value is incorrect");
+        }
+    }
+}
+
+/**
+ * enum 样例
+ */
+pub(crate) fn enum_sample() {
+    println!("enum_sample ...... start");
+    let c1 = PokerCard {
+        suit: PokerSuit::Clubs,
+        value: 1,
+    };
+    let c2: PokerCard = PokerCard {
+        suit: PokerSuit::Diamonds,
+        value: 12,
+    };
+
+    println!("PokerCard A is {:?},B is {:?}", c1, c2);
+
+    println!("PokerCard view A is {},B is {}", c1.view(), c2.view());
+
+    let mut poker_cards: Vec<PokerCard> = Vec::new();
+
+    for n in 1..14 {
+        let p1 = PokerCard {
+            suit: PokerSuit::Clubs,
+            value: n,
+        };
+        poker_cards.push(p1);
+
+        let p2 = PokerCard {
+            suit: PokerSuit::Spades,
+            value: n,
+        };
+        poker_cards.push(p2);
+
+        let p3 = PokerCard {
+            suit: PokerSuit::Diamonds,
+            value: n,
+        };
+        poker_cards.push(p3);
+
+        let p4 = PokerCard {
+            suit: PokerSuit::Hearts,
+            value: n,
+        };
+        poker_cards.push(p4);
+    }
+
+    for i in 0..poker_cards.len() {
+        let card = &poker_cards[i];
+
+        let view = card.view();
+
+        if i % 4 == 0 {
+            print!("\nPokerCards is {} ", card.value)
+        }
+        print!("\t{} ", view);
+    }
+    println!();
+
+    println!("enum_sample ...... end\n");
+}
+
+/**
+ * tupl_sample
+ */
+pub(crate) fn tupl_sample() {
+    println!("datatype tupl_sample .....start");
+
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+
+    let five_hundred = x.0;
+
+    let six_point_four: f64 = x.1;
+
+    let one: u8 = x.2;
+
+    println!("tupl:({},{},{})", five_hundred, six_point_four, one);
+
+    let s1 = String::from("hello");
+
+    let (s2, len) = calc_length(s1);
+
+    println!("The length of '{}' is {}.", s2, len);
+
+    println!("datatype tupl_sample .....end\n");
+}
+
+/**
+ * calc length
+ */
+fn calc_length(s: String) -> (String, usize) {
+    let length = s.len(); // len() 返回字符串的长度
+
+    (s, length)
+}
+
+/**
+ * 结构体 sample
+ */
+pub(crate) fn struct_sample() {
+    println!("datatype sample struct_sample .....start");
+
+    let user1 = User {
+        email: String::from("someone@example.com"),
+        username: String::from("someusername123"),
+        active: true,
+        sign_in_count: 1,
+    };
+
+    println!("Struct update filed value by other struct result.");
+
+    let user2 = User {
+        email: String::from("another@example.com"),
+        ..user1
+    };
+
+    // print!("user is {:?}", user1);
+
+    println!(
+        "根据已有的结构体实例，创建新的结构体实例.user2: {:?}",
+        user2
+    );
+
+    let user3 = build_user(
+        String::from("another@example.com"),
+        String::from("someusername456"),
+    );
+
+    let user4: User = User {
+        active: user3.active,
+        username: user3.username,
+        email: String::from("another@example.com"),
+        sign_in_count: user1.sign_in_count,
+    };
+
+    println!("user build result user4 is {:?}", user4);
+
+    println!("datatype sample struct_sample .....end");
+}
+
+#[derive(Debug)]
+struct User {
+    active: bool,
+    username: String,
+    email: String,
+    sign_in_count: u64,
+}
+
+fn build_user(email: String, username: String) -> User {
+    User {
+        email: email,
+        username: username,
+        active: true,
+        sign_in_count: 1,
+    }
+}
+
 #[cfg(test)]
 mod tests {
 
     use super::*;
+
     #[test]
     fn vet_test() {
         vet_sample();
+    }
+
+    #[test]
+    fn poker_test() {
+        enum_sample();
     }
 }

@@ -5,8 +5,8 @@
 pub mod datatype_sample;
 pub mod expression_sample;
 pub mod module_sample;
-pub mod visiable_sample;
 pub mod rectangle;
+pub mod visiable_sample;
 
 // import mod use as alias name
 use crate::basic::module_sample::supper_mod as other_mod;
@@ -44,12 +44,23 @@ pub fn basic_example() {
 
     other_mod::function();
 
-    //集合
+    //集合 HasMap
     datatype_sample::collections_example();
 
+    //数组 动态数组
     datatype_sample::vet_sample();
 
+    //数组 静态数组
     datatype_sample::array_sample();
+
+    //枚举
+    datatype_sample::enum_sample();
+
+    //元组
+    datatype_sample::tupl_sample();
+
+    //结构体
+    datatype_sample::struct_sample();
 }
 
 /**
@@ -60,8 +71,10 @@ fn ownership_sample() {
 
     //所有权 值引用
     let s1 = gives_ownership();
+
     // gives_ownership 移动它的返回值到 s1
     let s2 = String::from("hello");
+    
     // s2 被声明有效
     let s3 = takes_and_gives_back(s2);
     // s2 被当作参数移动, s3 获得返回值所有权

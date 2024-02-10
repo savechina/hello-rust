@@ -41,7 +41,7 @@ pub(crate) fn add_generic_sample() {
     println!("generic add i8: {}", add(2i8, 3i8));
     println!("generic add i32: {}", add(20, 30));
     println!("generic add f64: {}", add(1.23, 1.23));
-    
+
     println!("generic add_generic_sample ..... end\n");
 }
 
@@ -53,13 +53,17 @@ struct Point<T: Add<T, Output = T>> {
     y: T,
 }
 
+/**
+ *  Point 结构体泛型
+ */
 pub(crate) fn point_generic_sample() {
-
     println!("generic point_generic_sample ..... start");
     let p1 = Point { x: 5, y: 10 };
     let p2 = Point { x: 1.0, y: 4.0 };
 
     println!("p = {:?},p2={:?}", p1, p2);
+
+    println!("p1=(p.x = {},p.y = {})", p1.x, p1.y);
 
     println!("generic point_generic_sample ..... end\n");
 }
@@ -83,7 +87,7 @@ pub(crate) fn const_generic_sample() {
 }
 
 /**
- * 定义Summary trait
+ * 定义Summary trait 特征
  *
  */
 pub trait Summary {
@@ -91,7 +95,7 @@ pub trait Summary {
 }
 
 /**
- * Post
+ * Post 结构体
  */
 pub struct Post {
     pub title: String,   // 标题
@@ -99,6 +103,9 @@ pub struct Post {
     pub content: String, // 内容
 }
 
+/**
+ * Post 实现 Summary 特征接口
+ */
 impl Summary for Post {
     fn summarize(&self) -> String {
         format!("文章{}, 作者是{}", self.title, self.author)
@@ -106,13 +113,17 @@ impl Summary for Post {
 }
 
 /**
- * Twitter
+ * Twitter 结构体
  */
 pub struct Twitter {
     pub username: String,
     pub content: String,
 }
-
+/**
+ *
+ * Twitter 实现 Summary 特征接口
+ *
+ */
 impl Summary for Twitter {
     fn summarize(&self) -> String {
         format!("{}发表了微博{}", self.username, self.content)

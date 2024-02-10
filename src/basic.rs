@@ -56,12 +56,13 @@ pub fn basic_example() {
     //结构体作用域
     rectangle_sample();
 
+    // 模块
     module_sample::function();
-
+    // 模块
     other_mod::function();
 
     //集合 HasMap
-    datatype_sample::collections_example();
+    datatype_sample::hashmap_example();
 
     //数组 动态数组
     datatype_sample::vet_sample();
@@ -78,9 +79,17 @@ pub fn basic_example() {
     //结构体
     datatype_sample::struct_sample();
 
+    datatype_sample::linkedlist_sample();
+
+    //泛型 add 加法
     generic_sample::add_generic_sample();
 
+    //
     generic_sample::summary_sample();
+
+    generic_sample::point_generic_sample();
+
+    generic_sample::const_generic_sample();
 
     //多线程 创建线程
     threads_sample::create_thread_sample();
@@ -95,12 +104,11 @@ pub fn basic_example() {
     threads_sample::thread_local_sample();
 }
 
-
 /**
  * 结构体 作用域 可见性
 */
 fn rectangle_sample() {
-    println!("rectangle_sample.....start");
+    println!("datatype struct rectangle_sample.....start");
     let rect1 = Rectangle::create(30, 50);
 
     //结构体进行赋值
@@ -109,11 +117,15 @@ fn rectangle_sample() {
         height: 50,
     };
 
+    let rect3 = Rectangle::new(30, 50);
+
     println!("rect1's area is {}", rect1.area());
 
     println!("rect1 is wider rect2 :{}", rect1.wider(&rect2));
 
-    println!("rectangle_sample.....end\n");
+    println!("rect3's area is {}", rect3.area());
+
+    println!("datatype struct rectangle_sample.....end\n");
 }
 
 ///

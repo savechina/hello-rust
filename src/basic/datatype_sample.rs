@@ -11,66 +11,6 @@ use std::vec;
 use crate::leetcode::Solution;
 
 ///
-///集合 HashMap
-///
-pub(crate) fn collections_example() {
-    println!("datatype_sample::collections_example ... start");
-
-    //初始化HashMap 并设置值
-    let mut map: HashMap<String, String> = HashMap::new();
-
-    map.insert("jack".to_string(), "1334567896".to_string());
-
-    map.insert("pony".to_string(), "1342356755".to_string());
-
-    map.insert("tony".to_string(), "1324567891".to_string());
-
-    println!("collection example hashmap: {:?}", map);
-
-    //获取 Key by entry
-    let entry = map.entry("jack".to_string());
-
-    println!(
-        "map is entry: key:{},value:{:?}",
-        "jack",
-        &entry.or_default()
-    );
-
-    //通过 get_key_value 获取 Map 的值
-    let kv = map.get_key_value(&"pony".to_string());
-
-    match kv {
-        Some(val) => println!("k:{},v:{}", val.0, val.1),
-        None => println!("panic"),
-    }
-
-    if map.contains_key(&"pony".to_string()) {
-        //借用 map 权限，获取key 的 val. &map[&key]
-        let val = &map[&"pony".to_string()];
-
-        println!("val:{}", val);
-    }
-
-    map.insert("key".to_string(), "val".to_string());
-
-    //HashMap 迭代器
-    for (key, val) in map.iter() {
-        println!("itertor key:{}, val:{} ", key, val);
-    }
-
-    println!("remove before get key:k,val: {:?}", map.get("key").unwrap());
-
-    map.remove("key");
-
-    let k = map.get("key");
-    println!("remove after get key:k,val: {:?}", k);
-
-    println!("map is empty:{}", map.is_empty());
-
-    println!("datatype_sample::collections_example ... end\n");
-}
-
-///
 /// Array Sample
 /// 数组
 ///
@@ -295,10 +235,13 @@ pub(crate) fn tupl_sample() {
 
     let x: (i32, f64, u8) = (500, 6.4, 1);
 
+    //使用dot(.) 获取元组数值，offset 从0开始。
+    //获取元组第1个值
     let five_hundred = x.0;
 
+    //获取元组 第2个值
     let six_point_four: f64 = x.1;
-
+    //获取元组 第3个值
     let one: u8 = x.2;
 
     println!("tupl:({},{},{})", five_hundred, six_point_four, one);
@@ -385,22 +328,85 @@ fn build_user(email: String, username: String) -> User {
     }
 }
 
+///
+///集合 HashMap
+///
+pub(crate) fn hashmap_example() {
+    println!("datatype_sample::collections_example ... start");
+
+    //初始化HashMap 并设置值
+    let mut map: HashMap<String, String> = HashMap::new();
+
+    map.insert("jack".to_string(), "1334567896".to_string());
+
+    map.insert("pony".to_string(), "1342356755".to_string());
+
+    map.insert("tony".to_string(), "1324567891".to_string());
+
+    println!("collection example hashmap: {:?}", map);
+
+    //获取 Key by entry
+    let entry = map.entry("jack".to_string());
+
+    println!(
+        "map is entry: key:{},value:{:?}",
+        "jack",
+        &entry.or_default()
+    );
+
+    //通过 get_key_value 获取 Map 的值
+    let kv = map.get_key_value(&"pony".to_string());
+
+    match kv {
+        Some(val) => println!("k:{},v:{}", val.0, val.1),
+        None => println!("panic"),
+    }
+
+    if map.contains_key(&"pony".to_string()) {
+        //借用 map 权限，获取key 的 val. &map[&key]
+        let val = &map[&"pony".to_string()];
+
+        println!("val:{}", val);
+    }
+
+    map.insert("key".to_string(), "val".to_string());
+
+    //HashMap 迭代器
+    for (key, val) in map.iter() {
+        println!("itertor key:{}, val:{} ", key, val);
+    }
+
+    println!("remove before get key:k,val: {:?}", map.get("key").unwrap());
+
+    map.remove("key");
+
+    let k = map.get("key");
+    println!("remove after get key:k,val: {:?}", k);
+
+    println!("map is empty:{}", map.is_empty());
+
+    println!("datatype_sample::collections_example ... end\n");
+}
+
 /**
- * 链表 LinkedList
+ * 集合 链表 LinkedList
  */
 pub(crate) fn linkedlist_sample() {
+    println!("datatype linkedlist_sample ..... start");
+
     let mut list = LinkedList::from([1, 2, 3]);
 
     println!("linkelist is {:?}", list);
-
+    // 链表头部增加 值
     list.push_front(0);
     list.push_front(-1);
-
+    //链表尾部追加 值
     list.push_back(4);
     list.push_back(5);
 
     println!("linkelist is {:?}", list);
- 
+
+    println!("datatype linkedlist_sample ..... end\n");
 }
 
 #[cfg(test)]
@@ -421,7 +427,7 @@ mod tests {
     #[test]
     fn test_linkedlist() {
         let list = LinkedList::from([1, 2, 3]);
-    
+
         println!("linkelist is {:?}", list);
 
         linkedlist_sample();

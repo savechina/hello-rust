@@ -2,11 +2,24 @@
 //! Rust 语言学习基础功能样例代码实现
 //!
 //!
-pub mod datatype_sample;
+
+///表达式
 pub mod expression_sample;
+
+/// 数据类型
+pub mod datatype_sample;
+
+///模块
 pub mod module_sample;
-pub mod rectangle;
 pub mod visiable_sample;
+
+///泛型
+pub mod generic_sample;
+
+///多线程
+pub mod threads_sample;
+
+pub mod rectangle;
 
 // import mod use as alias name
 use crate::basic::module_sample::supper_mod as other_mod;
@@ -61,6 +74,22 @@ pub fn basic_example() {
 
     //结构体
     datatype_sample::struct_sample();
+
+    generic_sample::add_generic_sample();
+
+    generic_sample::summary_sample();
+
+    //多线程 创建线程
+    threads_sample::create_thread_sample();
+
+    //多线程，线程返回结果
+    threads_sample::thread_callable_sample();
+
+    //线程屏障(Barrier)
+    threads_sample::thread_barrier_sample();
+
+    //thread local
+    threads_sample::thread_local_sample();
 }
 
 /**
@@ -74,7 +103,7 @@ fn ownership_sample() {
 
     // gives_ownership 移动它的返回值到 s1
     let s2 = String::from("hello");
-    
+
     // s2 被声明有效
     let s3 = takes_and_gives_back(s2);
     // s2 被当作参数移动, s3 获得返回值所有权

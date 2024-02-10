@@ -12,6 +12,8 @@ fn main() {
 
     //Rust LeetCode 题目解决答案，样例代码
     leetcode::leetcode_example();
+
+    // leet_code();
 }
 
 /**

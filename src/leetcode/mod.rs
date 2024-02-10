@@ -12,4 +12,6 @@ mod solution_0001;
  */
 pub fn leetcode_example() {
     Solution::two_sum(vec![2, 3, 5, 6], 8);
+
+    Solution::two_sum2(vec![2, 3, 5, 6], 8);
 }

@@ -5,8 +5,10 @@
 //!
 use std::array;
 use std::borrow::Borrow;
-use std::collections::HashMap;
+use std::collections::{HashMap, LinkedList};
 use std::vec;
+
+use crate::leetcode::Solution;
 
 ///
 ///集合 HashMap
@@ -360,9 +362,12 @@ pub(crate) fn struct_sample() {
 
     println!("user build result user4 is {:?}", user4);
 
-    println!("datatype sample struct_sample .....end");
+    println!("datatype sample struct_sample .....end\n");
 }
 
+///
+///  用户信息 结构体
+///
 #[derive(Debug)]
 struct User {
     active: bool,
@@ -380,6 +385,24 @@ fn build_user(email: String, username: String) -> User {
     }
 }
 
+/**
+ * 链表 LinkedList
+ */
+pub(crate) fn linkedlist_sample() {
+    let mut list = LinkedList::from([1, 2, 3]);
+
+    println!("linkelist is {:?}", list);
+
+    list.push_front(0);
+    list.push_front(-1);
+
+    list.push_back(4);
+    list.push_back(5);
+
+    println!("linkelist is {:?}", list);
+ 
+}
+
 #[cfg(test)]
 mod tests {
 
@@ -393,5 +416,14 @@ mod tests {
     #[test]
     fn poker_test() {
         enum_sample();
+    }
+
+    #[test]
+    fn test_linkedlist() {
+        let list = LinkedList::from([1, 2, 3]);
+    
+        println!("linkelist is {:?}", list);
+
+        linkedlist_sample();
     }
 }

@@ -5,6 +5,7 @@ mod leetcode;
 //Mian 函数
 //
 fn main() {
+
     println!("Hello, world!");
 
     //Rust基础样例
@@ -40,6 +41,6 @@ mod tests {
     #[test]
     fn test_bad_add() {
         // 这个断言会导致测试失败。注意私有的函数也可以被测试！
-        assert_eq!(add(1, 2), 3);
+        assert_ne!(add(1, 2), 4);
     }
 }

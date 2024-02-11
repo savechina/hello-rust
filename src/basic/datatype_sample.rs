@@ -3,21 +3,17 @@
 //! Basic DataType Sample
 //!
 //!
-use std::array;
-use std::borrow::Borrow;
 use std::collections::{HashMap, LinkedList};
 use std::vec;
-
-use crate::leetcode::Solution;
 
 ///
 /// Array Sample
 /// 数组
 ///
-
 pub(crate) fn array_sample() {
     println!("datatype::array_sampe ...... start");
 
+    //定义 12个月 数组
     let months = [
         "January",
         "February",
@@ -33,6 +29,7 @@ pub(crate) fn array_sample() {
         "December",
     ];
 
+    //获取数组中元素
     println!("Months array first is {:?}", months[0]);
     println!("Months array second  is {:?}", months[1]);
 
@@ -40,6 +37,7 @@ pub(crate) fn array_sample() {
 
     // 编译器自动推导出one的类型
     let one = [1, 2, 3];
+
     // 显式类型标注
     let two: [u8; 3] = [1, 2, 3];
     let blank1 = [0; 3];
@@ -284,8 +282,10 @@ pub(crate) fn struct_sample() {
         ..user1
     };
 
-    // print!("user is {:?}", user1);
+    //可以尝试注释以下语句，会报错误，因为user1 所有权已经被借用了，
+    //^ print!("user is {:?}", user1);
 
+    //所以user2 拥有所有权 ，可以正常打印
     println!(
         "根据已有的结构体实例，创建新的结构体实例.user2: {:?}",
         user2
@@ -302,6 +302,14 @@ pub(crate) fn struct_sample() {
         email: String::from("another@example.com"),
         sign_in_count: user1.sign_in_count,
     };
+
+    println!("user3 user.emal:{}", user3.email);
+
+    //以下语句报：
+    //borrow of moved value: `user3.username`
+    //move occurs because `user3.username` has type `String`, which does not implement the `Copy`
+    //可以尝试删除注释
+    //^ println!("user3 user.username:{}",user3.username);
 
     println!("user build result user4 is {:?}", user4);
 
@@ -422,6 +430,11 @@ mod tests {
     #[test]
     fn poker_test() {
         enum_sample();
+    }
+
+    #[test]
+    fn user_test() {
+        struct_sample();
     }
 
     #[test]

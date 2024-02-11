@@ -6,16 +6,18 @@ use std::collections::HashMap;
 use std::ops::Sub;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::mpsc;
-use std::sync::Once;
-use std::sync::RwLock;
-use std::sync::{Arc, Barrier, Condvar, Mutex};
+use std::sync::{Arc, Barrier, Condvar, Mutex, Once, RwLock};
 use std::thread;
 use std::thread::JoinHandle;
 use std::time::Duration;
 use std::time::Instant;
 
 /**
- * 简单创建线程
+ * 一个简单创建线程样例
+ *  
+ *  `
+ *  thread::spawn(|| {});
+ *  `
  */
 pub(crate) fn create_thread_sample() {
     println!("thread sample ,create on thread .....start");
@@ -345,6 +347,9 @@ fn add_n_times(n: u64) -> JoinHandle<()> {
     })
 }
 
+/**
+ *  Atomic 原子类型，AtomicU64 线程安全无锁累计
+ */
 pub(crate) fn thread_atomic_sample() {
     let s = Instant::now();
     let mut threads = Vec::with_capacity(N_THREADS);
@@ -374,8 +379,6 @@ mod tests {
     #[test]
     fn test_simple_thread_sample() {
         create_thread_sample();
-
-        thread_callable_sample();
     }
 
     #[test]

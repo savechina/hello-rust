@@ -3,13 +3,19 @@ name = "hello-rust"
 version = "0.1.0"
 edition = "2021"
 
+default-run="hello-rust"
+
 [workspace]
 members = []
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+env_logger = "0.11.1"
+log = "0.4.20"
 rand = "0.8.5"
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
 
 [workspace.dependencies]
 # local crates

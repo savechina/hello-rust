@@ -1,6 +1,6 @@
 //!
 //! Tracing Logger output demo.
-//! 
+//!
 use std::{error::Error, io};
 use tracing::{debug, error, info, span, warn, Level};
 

@@ -1,5 +1,12 @@
 //!
-//! Rust 语言学习基础功能样例代码实现
+//! Rust语言基础教程样例代码
+//! 主要包括：
+//!     expression_sample 表达式
+//!  
+//! Rust Basic Example
+//! include:
+//!    expression_sample 表达式
+//!
 //!
 //!
 

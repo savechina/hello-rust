@@ -29,7 +29,7 @@ fn add<T: std::ops::Add<Output = T>>(a: T, b: T) -> T {
 }
 
 /**
- * 泛型 加法 样例
+ * 泛型 add 加法 样例
  */
 pub(crate) fn add_generic_sample() {
     println!("generic add_generic_sample ..... start");

@@ -31,9 +31,9 @@ pub(crate) fn logger_print() {
 
     log::info!("This will be logged to the file");
 
-    let y =add_one(x);
-    
-    log::info!("add one result is {}",y);
+    let y = add_one(x);
+
+    log::info!("add one result is {}", y);
 }
 
 fn add_one(num: i32) -> i32 {
@@ -42,7 +42,7 @@ fn add_one(num: i32) -> i32 {
 }
 
 // pub mod  yak_shave;
-use crate::{add, basic::yak_shave};
+use crate::basic::yak_shave;
 use tracing;
 use tracing_subscriber::FmtSubscriber;
 /**

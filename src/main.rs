@@ -1,3 +1,6 @@
+use log::info;
+
+mod advance;
 mod basic;
 mod leetcode;
 
@@ -5,7 +8,6 @@ mod leetcode;
 //Mian 函数
 //
 fn main() {
-
     println!("Hello, world!");
 
     //Rust基础样例
@@ -14,7 +16,9 @@ fn main() {
     //Rust LeetCode 题目解决答案，样例代码
     leetcode::leetcode_example();
 
-    // leet_code();
+    let x = add(3, 5);
+
+    info!("number add sum :{}", x);
 }
 
 /**

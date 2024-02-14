@@ -14,6 +14,10 @@ members = []
 env_logger = "0.11.1"
 log = "0.4.20"
 rand = "0.8.5"
+serde = {version="1.0.196",features = ["derive"]}
+serde-transcode = "1.1.1"
+serde_json = "1.0.113"
+tempfile = "3.10.0"
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
 

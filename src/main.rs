@@ -3,6 +3,7 @@ use log::info;
 mod advance;
 mod basic;
 mod leetcode;
+mod algo;
 
 //
 //Mian 函数
@@ -12,6 +13,9 @@ fn main() {
 
     //Rust基础样例
     basic::basic_example();
+
+    //Rust 高阶样例
+    advance::advance_sample();
 
     //Rust LeetCode 题目解决答案，样例代码
     leetcode::leetcode_example();

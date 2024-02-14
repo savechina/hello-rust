@@ -4,4 +4,4 @@
 //!
 
 //链表数据结构
-mod linkedlist;
+mod linked_list;

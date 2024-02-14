@@ -12,9 +12,9 @@ pub(crate) fn tempfile_sample() {
     let tmpdir = std::env::temp_dir();
     println!("temp dir location: {:?}", tmpdir);
 
-    let currdir= std::env::current_dir().unwrap();
+    let currdir = std::env::current_dir().unwrap();
 
-    println!("current dir: {:?}",currdir);
+    println!("current dir: {:?}", currdir);
 
     // Write
     let mut tmpfile: File = tempfile::tempfile().unwrap();
@@ -32,15 +32,15 @@ pub(crate) fn tempfile_sample() {
 }
 
 /**
- * 
+ *
  */
 pub(crate) fn temp_namedfile_sample() {
     let text = "Brian was here. Briefly.";
 
-    // Create a file inside of `std::env::temp_dir()` by `NamedTempFile::new()`. 
-    // Create a file inside of path  by `NamedTempFile::new_in(paht)`. 
+    // Create a file inside of `std::env::temp_dir()` by `NamedTempFile::new()`.
+    // Create a file inside of path  by `NamedTempFile::new_in(paht)`.
     let mut file1 = NamedTempFile::new_in("/Users/weirenyan").unwrap();
-    println!("tempfile : {:?}",{&file1});
+    println!("tempfile : {:?}", { &file1 });
 
     // Re-open it.
     let mut file2 = file1.reopen().unwrap();
@@ -56,7 +56,7 @@ pub(crate) fn temp_namedfile_sample() {
 }
 
 /**
- * 
+ * 临时目录创建，临时文件
  */
 pub(crate) fn tempdir_addfile() {
     // Create a directory inside of `std::env::temp_dir()`.
@@ -65,7 +65,8 @@ pub(crate) fn tempdir_addfile() {
     let file_path = dir.path().join("my-temporary-note.txt");
 
     let mut file = File::create(file_path).unwrap();
-    writeln!(file, "Brian was here. Briefly.");
+
+    writeln!(file, "Brian was here. Briefly.").unwrap();
 
     // By closing the `TempDir` explicitly, we can check that it has
     // been deleted successfully. If we don't close it explicitly,

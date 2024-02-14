@@ -16,6 +16,7 @@ pub(crate) fn advance_sample() {
     json_sample::typed_sample().unwrap();
     json_sample::untyped_sample().unwrap();
     json_sample::json_process_sample();
+    json_sample::json_transcode_sample();
 
     //临时目录
     tempfile_sample::tempfile_sample();

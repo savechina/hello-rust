@@ -16,6 +16,7 @@ mod first {
     #[derive(Debug, Clone)]
     pub struct List {
         head: Link,
+        len: usize,
     }
 
     ///
@@ -40,7 +41,7 @@ mod first {
          * List::new()
          */
         pub fn new() -> Self {
-            List { head: None }
+            List { head: None, len: 0 }
         }
 
         /**
@@ -53,6 +54,7 @@ mod first {
             });
 
             self.head = Some(new_node);
+            self.len += 1;
         }
 
         /**
@@ -69,6 +71,9 @@ mod first {
                     result = Some(node.elem);
                 }
             };
+
+            self.len -= 1;
+
             return result;
 
             //或者以下使用map 闭包
@@ -97,6 +102,10 @@ mod first {
 
         pub fn into_iter(self) -> IntoIter {
             IntoIter(self)
+        }
+
+        pub fn len(&self) -> usize {
+            return self.len;
         }
     }
 
@@ -139,6 +148,7 @@ mod first {
             println!("fist list :{:?}", list);
 
             assert_eq!(list.pop(), None);
+            assert_eq!(list.len(), 0);
         }
 
         #[test]
@@ -154,6 +164,8 @@ mod first {
             list.push(2);
 
             println!("list after push 2 :{:?}", list);
+
+            assert_eq!(list.len(), 2);
         }
 
         #[test]
@@ -169,6 +181,8 @@ mod first {
             let elem = list.pop();
 
             println!("list after pop :{:?}, elem:{:?}", list, elem);
+
+            assert_eq!(list.len(), 1);
         }
 
         #[test]
@@ -177,6 +191,9 @@ mod first {
             for i in 0..100000 {
                 list.push(i);
             }
+
+            assert_eq!(list.len(), 1);
+
             drop(list);
         }
 
@@ -227,6 +244,7 @@ mod second {
     #[derive(Debug, Clone)]
     pub struct List<T> {
         head: Link<T>,
+        len: usize,
     }
 
     ///
@@ -251,7 +269,7 @@ mod second {
          * List::new()
          */
         pub fn new() -> Self {
-            List { head: None }
+            List { head: None, len: 0 }
         }
 
         /**
@@ -264,6 +282,7 @@ mod second {
             });
 
             self.head = Some(new_node);
+            self.len += 1;
         }
 
         /**
@@ -280,6 +299,9 @@ mod second {
                     result = Some(node.elem);
                 }
             };
+
+            self.len -= 1;
+
             return result;
 
             //或者以下使用map 闭包
@@ -308,6 +330,10 @@ mod second {
 
         pub fn into_iter(self) -> IntoIter<T> {
             IntoIter(self)
+        }
+
+        pub fn len(&self) -> usize {
+            return self.len;
         }
     }
 

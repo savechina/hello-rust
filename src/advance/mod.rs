@@ -11,6 +11,8 @@ mod json_sample;
 ///临时文件
 mod tempfile_sample;
 
+mod memmap_sample;
+
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析
     json_sample::typed_sample().unwrap();
@@ -22,4 +24,6 @@ pub(crate) fn advance_sample() {
     tempfile_sample::tempfile_sample();
     tempfile_sample::temp_namedfile_sample();
     tempfile_sample::tempdir_addfile();
+
+    memmap_sample::memmap_file_sample();
 }

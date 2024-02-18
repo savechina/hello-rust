@@ -13,6 +13,8 @@ members = []
 [dependencies]
 env_logger = "0.11.1"
 log = "0.4.20"
+memmap2 = "0.9.4"
+mmap-sync = "1.0.2"
 rand = "0.8.5"
 serde = {version="1.0.196",features = ["derive"]}
 serde-transcode = "1.1.1"

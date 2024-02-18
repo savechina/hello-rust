@@ -429,7 +429,7 @@ mod second {
             let mut list = List::<&str>::new();
 
             println!("fist list :{:?}", list);
-
+            
             assert_eq!(list.pop(), None);
         }
 
@@ -496,6 +496,8 @@ mod second {
             list.push("1");
 
             list.push("2");
+
+            list.push("3");
 
             let mut iter = list.into_iter();
             let elem1: Option<&str> = iter.next();

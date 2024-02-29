@@ -35,6 +35,8 @@ pub mod yak_shave;
 
 pub mod logger_sample;
 
+pub mod pointer_sample;
+
 // import mod use as alias name
 use crate::basic::module_sample::supper_mod as other_mod;
 use crate::basic::rectangle::Rectangle;

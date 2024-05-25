@@ -1,3 +1,4 @@
+use std::env;
 use std::fs::File;
 use std::io::{Read, Seek, SeekFrom, Write};
 
@@ -37,9 +38,10 @@ pub(crate) fn tempfile_sample() {
 pub(crate) fn temp_namedfile_sample() {
     let text = "Brian was here. Briefly.";
 
-    // Create a file inside of `std::env::temp_dir()` by `NamedTempFile::new()`.
+    let home_dir: std::path::PathBuf = env::home_dir().expect("Failed to get home directory");
+
     // Create a file inside of path  by `NamedTempFile::new_in(paht)`.
-    let mut file1 = NamedTempFile::new_in("/Users/weirenyan").unwrap();
+    let mut file1 = NamedTempFile::new_in(home_dir).unwrap();
     println!("tempfile : {:?}", { &file1 });
 
     // Re-open it.

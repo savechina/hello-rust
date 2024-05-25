@@ -26,4 +26,5 @@ pub(crate) fn advance_sample() {
     tempfile_sample::tempdir_addfile();
 
     memmap_sample::memmap_file_sample();
+    memmap_sample::sys_page_size_sample();
 }

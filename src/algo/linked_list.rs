@@ -64,7 +64,10 @@ mod first {
             let result;
 
             match self.head.take() {
-                None => result = None,
+                None => {
+                    result = None;
+                    return result;
+                }
 
                 Some(node) => {
                     self.head = node.next;
@@ -72,7 +75,9 @@ mod first {
                 }
             };
 
-            self.len -= 1;
+            if self.len > 0 {
+                self.len -= 1;
+            }
 
             return result;
 
@@ -145,7 +150,7 @@ mod first {
         fn test_list_new() {
             let mut list = List::new();
 
-            println!("fist list :{:?}", list);
+            println!("fist list :{:?}", list.pop());
 
             assert_eq!(list.pop(), None);
             assert_eq!(list.len(), 0);
@@ -192,7 +197,7 @@ mod first {
                 list.push(i);
             }
 
-            assert_eq!(list.len(), 1);
+            assert_eq!(list.len(), 100000);
 
             drop(list);
         }
@@ -300,7 +305,9 @@ mod second {
                 }
             };
 
-            self.len -= 1;
+            if self.len > 0 {
+                self.len -= 1;
+            }
 
             return result;
 
@@ -429,7 +436,7 @@ mod second {
             let mut list = List::<&str>::new();
 
             println!("fist list :{:?}", list);
-            
+
             assert_eq!(list.pop(), None);
         }
 

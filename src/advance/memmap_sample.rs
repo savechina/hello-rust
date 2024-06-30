@@ -28,21 +28,21 @@ pub(crate) fn memmap_file_sample() {
     //write
     let mut mm = mmap.make_mut().unwrap();
 
-    (&mut mm[..]).write_all(b"Hello Zen!");
+    let _ = (&mut mm[..]).write_all(b"Hello Zen!");
 
     // mm.deref_mut().write_all(b"hello, world!");
 
     assert_eq!(b"Hello Zen!d!", &mm[..]);
 }
 
-pub(crate) fn sys_page_size_sample(){
+pub(crate) fn sys_page_size_sample() {
     let page_size = get_sys_page_size();
     println!("system page_size:{}", page_size);
 }
 
 ///
 /// 获取操作系统页面大小
-/// 每个操作系统的页面大小不一样，默认大小是4096 
+/// 每个操作系统的页面大小不一样，默认大小是4096
 ///
 fn get_sys_page_size() -> usize {
     let page_size = page_size::get();

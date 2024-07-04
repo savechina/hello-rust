@@ -2,6 +2,10 @@
  
 This is an example code for learning Rust programming language.
 
+## Getting Started
+
+[Getting Started Guide](https://github.com/savechina/hello-rust/blob/master/docs/getting-started.md)
+
 ## Basic
 
 This is an example code library for learning the basics of Rust programming language. 

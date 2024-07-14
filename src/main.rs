@@ -1,9 +1,10 @@
+//
 use log::info;
 
 mod advance;
-mod basic;
-mod leetcode;
 mod algo;
+mod basic;
+use leetcode;
 
 //
 //Mian 函数

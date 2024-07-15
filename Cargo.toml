@@ -27,6 +27,7 @@ tracing-subscriber = "0.3.18"
 
 # local crates
 leetcode = {version="0.1.0",path="crates/leetcode"}
+futures = "0.3.30"
 
 [workspace.dependencies]
 

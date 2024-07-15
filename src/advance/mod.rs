@@ -8,10 +8,14 @@
 ///JSON
 mod json_sample;
 
-///临时文件
+/// memap
+mod memmap_sample;
+
+/// tempfile
 mod tempfile_sample;
 
-mod memmap_sample;
+/// fetures async
+mod futures_sample;
 
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析
@@ -25,6 +29,11 @@ pub(crate) fn advance_sample() {
     tempfile_sample::temp_namedfile_sample();
     tempfile_sample::tempdir_addfile();
 
+    //memap
     memmap_sample::memmap_file_sample();
     memmap_sample::sys_page_size_sample();
+
+    futures_sample::futures_block_sample();
+    futures_sample::futures_manul_handle_sample();
+    futures_sample::futures_await_main();
 }

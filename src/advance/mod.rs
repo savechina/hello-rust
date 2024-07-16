@@ -34,6 +34,7 @@ pub(crate) fn advance_sample() {
     memmap_sample::sys_page_size_sample();
 
     futures_sample::futures_block_sample();
-    futures_sample::futures_manul_handle_sample();
+    futures_sample::futures_block_handle_sample();
     futures_sample::futures_await_main();
+    futures_sample::futures_async_block_main();
 }

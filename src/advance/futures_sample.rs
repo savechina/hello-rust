@@ -44,7 +44,7 @@ async fn dance() {
 
 ///
 /// manul block handle async future
-pub(crate) fn futures_manul_handle_sample() {
+pub(crate) fn futures_block_handle_sample() {
     let song = block_on(learn_song());
 
     block_on(sing_song(song));
@@ -60,11 +60,13 @@ async fn learn_and_sing() {
     sing_song(song).await;
 }
 
-///futures join!
+///futures join! async handle
 ///  
-async fn futures_async_main() {
+async fn futures_async_handle_main() {
+    //future sing
     let f1 = learn_and_sing();
 
+    //future dance
     let f2 = dance();
 
     // `join!` is like `.await` but can wait for multiple futures concurrently.
@@ -77,7 +79,7 @@ async fn futures_async_main() {
 
 ///
 pub(crate) fn futures_await_main() {
-    block_on(futures_async_main());
+    block_on(futures_async_handle_main());
 }
 
 // `foo()` returns a type that implements `Future<Output = u8>`.
@@ -138,6 +140,8 @@ pub(crate) fn futures_async_block_main() {
 
     println!("result : {}", r);
 
+    let r1 = block_on(blocks());
+
     let r2 = block_on(move_block());
 }
 ///
@@ -156,7 +160,7 @@ mod tests {
 
     #[test]
     fn test_fetures_main() {
-        futures_manul_handle_sample();
+        futures_block_handle_sample();
     }
 
     #[test]

@@ -17,6 +17,8 @@ mod tempfile_sample;
 /// fetures async
 mod futures_sample;
 
+mod tokio_sample;
+
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析
     json_sample::typed_sample().unwrap();
@@ -37,4 +39,7 @@ pub(crate) fn advance_sample() {
     futures_sample::futures_block_handle_sample();
     futures_sample::futures_await_main();
     futures_sample::futures_async_block_main();
+
+    tokio_sample::tokio_server_main();
+    tokio_sample::tokio_client_main();
 }

@@ -40,6 +40,6 @@ pub(crate) fn advance_sample() {
     futures_sample::futures_await_main();
     futures_sample::futures_async_block_main();
 
-    tokio_sample::tokio_server_main();
-    tokio_sample::tokio_client_main();
+    // tokio_sample::tokio_server_main();
+    // tokio_sample::tokio_client_main();
 }

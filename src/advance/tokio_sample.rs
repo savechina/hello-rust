@@ -1,14 +1,24 @@
+use std::sync::atomic::{AtomicBool, Ordering};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpListener;
+use tokio::net::TcpSocket;
 
-#[tokio::main]
+use std::io;
+// #[tokio::main]
 pub(crate) async fn tokio_server_main() -> Result<(), Box<dyn std::error::Error>> {
     println!(" tokio_server_main ...");
 
     let listener = TcpListener::bind("127.0.0.1:8080").await?;
 
     loop {
+        // if !status.load(Ordering::Relaxed) {
+        //     break;
+        // }
+
         let (mut socket, _) = listener.accept().await?;
+
+        println!(" tokio_server_main ...connection accept");
+        println!("New connection established!");
 
         tokio::spawn(async move {
             let mut buf: [u8; 1024] = [0; 1024];
@@ -42,15 +52,13 @@ pub(crate) async fn tokio_server_main() -> Result<(), Box<dyn std::error::Error>
             }
         });
 
-        println!(" tokio_server_main ...done");
+        println!(" tokio_server_main ...connection done");
     }
+
+    Ok(())
 }
 
-use tokio::net::TcpSocket;
-
-use std::io;
-
-#[tokio::main]
+// #[tokio::main]
 pub(crate) async fn tokio_client_main() -> io::Result<()> {
     println!(" tokio_client_main ...");
     let addr = "127.0.0.1:8080".parse().unwrap();
@@ -73,26 +81,54 @@ pub(crate) async fn tokio_client_main() -> io::Result<()> {
 
     Ok(())
 }
+
+#[tokio::main]
+pub(crate) async fn tokio_client_sample() -> io::Result<()> {
+    let mut running = AtomicBool::new(true);
+
+    let server_task = tokio::spawn(async move {
+        tokio_server_main();
+    });
+
+    println!(" tokio_client_main ... 1");
+    println!(" tokio_client_main ... 2");
+
+    println!(" tokio_client_main ... 3");
+
+    while running.load(Ordering::Relaxed) {
+        tokio_client_main();
+
+        // Simulate a short delay between client connections
+        tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+    }
+    // Set running flag to false to stop the server
+    running.store(false, Ordering::Relaxed);
+
+    server_task.await?;
+
+    Ok(())
+}
 ///
 /// 单元测试
 /// #[cfg(test)]
 ///
 #[cfg(test)]
 mod tests {
+
     use tokio::time::sleep;
 
     // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
     use super::*;
 
+    #[ignore]
     #[test]
     fn test_fetures_tokio() {
         tokio_server_main();
+    }
 
-        println!(" tokio_client_main ... 1");
-        println!(" tokio_client_main ... 2");
-
-        println!(" tokio_client_main ... 3");
-
+    #[test]
+    fn test_fetures_tokio_client() {
+        // tokio_client_sample();
         tokio_client_main();
     }
 }

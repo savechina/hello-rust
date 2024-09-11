@@ -173,6 +173,27 @@ fn bytes_base64() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+
+fn bytes_base64_write() {
+    use base64::engine::general_purpose;
+    use std::io::Write;
+
+    // use a vec as the simplest possible `Write` -- in real code this is probably a file, etc.
+    let mut enc = base64::write::EncoderWriter::new(Vec::new(), &general_purpose::STANDARD);
+
+    // handle errors as you normally would
+    enc.write_all(b"asdf").unwrap();
+
+    // could leave this out to be called by Drop, if you don't care
+    // about handling errors or getting the delegate writer back
+    let delegate = enc.finish().unwrap();
+
+    // base64 was written to the writer
+    assert_eq!(b"YXNkZg==", &delegate[..]);
+
+    println!("'asdf' is base64 : {:?}", String::from_utf8(delegate));
+}
+
 ///
 /// 单元测试
 /// #[cfg(test)]
@@ -201,5 +222,7 @@ mod tests {
     #[test]
     fn test_base64() {
         bytes_base64();
+
+        bytes_base64_write();
     }
 }

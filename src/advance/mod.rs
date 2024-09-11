@@ -17,9 +17,14 @@ mod tempfile_sample;
 /// fetures async
 mod futures_sample;
 
+/// tokio async
 mod tokio_sample;
 
+/// bytes
 mod bytes_sample;
+
+///Database Sqlx
+mod sqlx_sqmple;
 
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析

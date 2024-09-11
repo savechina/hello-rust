@@ -7,6 +7,75 @@ use std::collections::{HashMap, LinkedList};
 use std::vec;
 
 ///
+/// 字符串
+///
+
+pub(crate) fn string_sample() {
+    println!("datatype::string_sample ...... start");
+
+    //普通字符串字面量
+    let simple_string = "Hello, world!";
+
+    println!("{}", simple_string);
+
+    //转义字符 反斜杠 \ 来转义特殊字符
+    let escaped_string = "This is a \"quoted\" string with a newline\nand a tab\t.";
+
+    println!("{}", escaped_string);
+
+    let multi_line_string = "This is a long string \
+that spans multiple lines.";
+    println!("{}", multi_line_string);
+
+    // 普通字符串字面量，需要转义特殊字符
+    let normal_string = "This is a \"normal\" string with a newline\n and a backslash \\.";
+
+    // 原始字符串字面量，不需要转义特殊字符
+    let raw_string = r#"This is a "raw" string with a newline
+ and a backslash \."#;
+
+    println!("{}", normal_string);
+    println!("{}", raw_string);
+
+    //字符串切片
+    let string_slice: &str = "Hello, world!";
+
+    let hello = &string_slice[0..5];
+    let world = &string_slice[7..12];
+
+    println!(
+        "{}, slice[0..5]:{},slice[7..12]:{}",
+        string_slice, hello, world
+    );
+
+    //字符串连接
+    let hello = String::from("Hello");
+    let world = " world!";
+    let combined = hello + world; // 注意：hello 被移动，不能再使用
+
+    let mut greet = String::from("Hello");
+    greet.push_str(", world!");
+
+    //字符串查找和替换
+    let s = "Hello, world!";
+    if let Some(index) = s.find("world") {
+        println!("Found 'world' at index {}", index);
+    }
+
+    let replaced = s.replace("world", "Rust");
+    println!("{}", replaced);
+
+    //字符串分割
+    let s = "Hello, world!";
+    let parts: Vec<&str> = s.split(", ").collect();
+    for part in parts {
+        println!("{}", part);
+    }
+
+    println!("datatype::string_sample ...... end\n");
+}
+
+///
 /// Array Sample
 /// 数组
 ///
@@ -421,6 +490,11 @@ pub(crate) fn linkedlist_sample() {
 mod tests {
 
     use super::*;
+
+    #[test]
+    fn string_test() {
+        string_sample();
+    }
 
     #[test]
     fn vet_test() {

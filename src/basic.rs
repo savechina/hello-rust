@@ -74,6 +74,9 @@ pub fn basic_example() {
     // 模块
     other_mod::function();
 
+    //字符串
+    datatype_sample::string_sample();
+
     //集合 HasMap
     datatype_sample::hashmap_example();
 

@@ -3,13 +3,17 @@
 //! Basic DataType Sample
 //!
 //!
+use bigdecimal::num_bigint::{BigUint, RandBigInt, ToBigInt};
+use bigdecimal::num_traits::{One, Zero};
+use bigdecimal::{BigDecimal, RoundingMode};
+use serde::*;
+use serde_json;
 use std::collections::{HashMap, LinkedList};
+use std::str::FromStr;
 use std::vec;
-
 ///
 /// 字符串
 ///
-
 pub(crate) fn string_sample() {
     println!("datatype::string_sample ...... start");
 
@@ -73,6 +77,120 @@ that spans multiple lines.";
     }
 
     println!("datatype::string_sample ...... end\n");
+}
+
+///
+/// decimal sample
+///
+
+/**
+ *Account sample
+ */
+
+#[derive(Debug, Serialize, Deserialize)]
+struct MyAccount {
+    name: String,
+    // this will be written to json as string
+    value: BigDecimal,
+    // this will be written to json as number
+    #[serde(with = "bigdecimal::serde::json_num")]
+    number: BigDecimal,
+}
+///
+/// decimal_sample
+///
+pub(crate) fn decimal_sample() {
+    let json_src = r#"
+    { "name": "foo", "value": 1234567e-3, "number": 3.14159 }
+"#;
+
+    let account: MyAccount = serde_json::from_str(&json_src).unwrap();
+
+    dbg!(&account);
+    // MyStruct { name: "foo", value: BigDecimal("1234.567"), BigDecimal("3.1459") }
+
+    println!("{:?}", serde_json::to_string(&account));
+    // {"name":"foo","value":"1234.567","number":3.1459}
+
+    //sqrt
+    let two = BigDecimal::from(2);
+    println!("sqrt(2) = {}", two.sqrt().unwrap());
+
+    //
+    let n = BigDecimal::from(700);
+    println!("1/{n} = {}", n.inverse().round(6));
+
+    //new
+    let input = "0.8";
+    let dec = BigDecimal::from_str(&input).unwrap();
+    let float = f32::from_str(&input).unwrap();
+
+    println!("Input ({}) with 10 decimals: {} vs {})", input, dec, float);
+
+    // rounding
+    let n: BigDecimal = "129.41675".parse().unwrap();
+
+    assert_eq!(
+        n.with_scale_round(2, RoundingMode::Up),
+        "129.42".parse().unwrap()
+    );
+    assert_eq!(
+        n.with_scale_round(-1, RoundingMode::Down),
+        "120".parse().unwrap()
+    );
+    assert_eq!(
+        n.with_scale_round(4, RoundingMode::HalfEven),
+        "129.4168".parse().unwrap()
+    );
+
+    //abs
+    let n: BigDecimal = "123.45".parse().unwrap();
+    assert_eq!(n.abs(), "123.45".parse().unwrap());
+
+    let n: BigDecimal = "-123.45".parse().unwrap();
+    assert_eq!(n.abs(), "123.45".parse().unwrap());
+
+    //cube
+    let n: BigDecimal = "1.1156024145937225657484".parse().unwrap();
+    assert_eq!(
+        n.cube(),
+        "1.388443899780141911774491376394890472130000455312878627147979955904"
+            .parse()
+            .unwrap()
+    );
+
+    let n: BigDecimal = "-9.238597585E+84".parse().unwrap();
+    assert_eq!(
+        n.cube(),
+        "-7.88529874035334084567570176625E+254".parse().unwrap()
+    );
+}
+
+// Calculate large fibonacci numbers.
+fn fib(n: usize) -> BigUint {
+    let mut f0: BigUint = Zero::zero();
+    let mut f1: BigUint = One::one();
+    for _ in 0..n {
+        let f2 = f0 + &f1;
+        f0 = f1;
+        f1 = f2;
+    }
+    f0
+}
+
+pub(crate) fn bigint_sample() {
+    // This is a very large number.
+    println!("fib(1000) = {}", fib(1000));
+
+    let mut rng = rand::thread_rng();
+    let a = rng.gen_bigint(1000);
+
+    let low = -10000.to_bigint().unwrap();
+    let high = 10000.to_bigint().unwrap();
+    let b = rng.gen_bigint_range(&low, &high);
+
+    // Probably an even larger number.
+    println!("{}", a * b);
 }
 
 ///
@@ -494,6 +612,16 @@ mod tests {
     #[test]
     fn string_test() {
         string_sample();
+    }
+
+    #[test]
+    fn decimal_test() {
+        decimal_sample();
+    }
+
+    #[test]
+    fn bigint_test() {
+        bigint_sample();
     }
 
     #[test]

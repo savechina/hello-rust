@@ -1,6 +1,7 @@
 use sqlx::sqlite::SqlitePool;
 use sqlx::Connection;
 use sqlx::Row;
+use sqlx::Sqlite;
 use sqlx::SqliteConnection;
 use std::borrow::Borrow;
 use std::env;
@@ -14,7 +15,11 @@ struct User {
 
 #[tokio::main(flavor = "current_thread")]
 async fn sqlx_sqlite_example() -> Result<(), sqlx::Error> {
-    let mut conn = SqliteConnection::connect("sqlite::memory:").await?;
+    let db_url = "sqlite::memory:";
+
+    let mut conn = SqliteConnection::connect(db_url).await?;
+
+    // Sqlite::create_database(db_url);
 
     // 创建一个示例表
     sqlx::query(

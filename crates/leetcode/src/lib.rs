@@ -7,6 +7,9 @@ pub struct Solution;
 //问题0001的解决
 mod solution_0001;
 
+//问题0002
+mod solution_0002;
+
 /**
  * leetcode 样例入口
  */

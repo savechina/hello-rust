@@ -16,6 +16,10 @@ This is an example code library from learning the advance of Rust programming la
 
 It include some open source framework use example. like json,memmap,tempfile etc.
 
+## Algorithm
+
+This is an example code library for Algorithm and Data structure of Rust.
+
 ## LeetCode
 
 It also includes answers to sample LeetCode problems as additional practice and demonstration of learned concepts.

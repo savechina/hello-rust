@@ -23,6 +23,9 @@ mod tokio_sample;
 /// bytes
 mod bytes_sample;
 
+/// Ollama
+mod ollama_sample;
+
 ///Database Sqlx
 mod sqlx_sqmple;
 

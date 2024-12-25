@@ -1,6 +1,7 @@
-# Hello Rust（Rust简明教程）
+# Hello Rust（您好，Rust！）
  
-This is an example code for learning Rust programming language.
+
+Rust简明教程. This is an example code for learning Rust programming language.
 
 ## Getting Started
 
@@ -25,4 +26,6 @@ This is an example code library for Algorithm and Data structure of Rust.
 It also includes answers to sample LeetCode problems as additional practice and demonstration of learned concepts.
 
 
- 
+## Awesome 
+
+This is an example code library for usecase some Framework and Crates of Rust.

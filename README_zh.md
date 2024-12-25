@@ -1,4 +1,6 @@
-# Rust简明教程（Hello Rust）
+# 您好，Rust！（Hello Rust）
+
+Rust简明教程
 
 ## 基础
 

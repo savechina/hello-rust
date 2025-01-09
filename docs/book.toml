@@ -1,0 +1,6 @@
+[book]
+authors = ["RenYan Wei"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Hello Rust"

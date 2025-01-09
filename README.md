@@ -5,7 +5,7 @@ Rust简明教程. This is an example code for learning Rust programming language
 
 ## Getting Started
 
-[Getting Started Guide](https://github.com/savechina/hello-rust/blob/master/docs/getting-started.md)
+[Getting Started Guide](https://github.com/savechina/hello-rust/blob/master/docs/src/getting-started.md)
 
 ## Basic
 

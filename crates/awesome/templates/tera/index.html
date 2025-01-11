@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <h1>{{ greeting }}, {{ name }}!</h1>
+
+    {% if show_message %}
+    <p>{{ message }}</p>
+    {% endif %}
+
+    <ul>
+        {% for item in items %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <p>Current date: {{ now | date(format="%Y-%m-%d %H:%M:%S") }}</p>
+
+    {% if user %}
+    <p>User details:</p>
+    <p>ID: {{ user.id }}</p>
+    <p>Name: {{ user.name }}</p>
+    {% endif %}
+
+</body>
+
+</html>

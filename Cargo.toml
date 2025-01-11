@@ -40,6 +40,7 @@ bigdecimal = { version = "0.4.5", features = [ "std","serde-json" ] }
 num-bigint = { version = "0.4", features = ["rand"] }
 ollama-rs = "0.2.1"
 tera = "1.20.0"
+chrono = {version="0.4.39", features=["serde"]}
 
 [workspace.dependencies]
 

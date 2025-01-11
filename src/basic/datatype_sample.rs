@@ -6,10 +6,13 @@
 use bigdecimal::num_bigint::{BigUint, RandBigInt, ToBigInt};
 use bigdecimal::num_traits::{One, Zero};
 use bigdecimal::{BigDecimal, RoundingMode};
+use chrono::prelude::*;
 use serde::*;
 use serde_json;
 use std::collections::{HashMap, LinkedList};
 use std::str::FromStr;
+use std::thread::sleep;
+use std::time::{Duration, Instant, SystemTime};
 use std::vec;
 ///
 /// 字符串
@@ -604,6 +607,109 @@ pub(crate) fn linkedlist_sample() {
     println!("datatype linkedlist_sample ..... end\n");
 }
 
+pub fn time_sample() {
+    //Instant
+    let now = Instant::now();
+    // 执行一些代码
+    let elapsed = now.elapsed();
+    println!("Elapsed: {:.2?}", elapsed); // 输出经过的时间
+
+    //Duration
+    let timeout = Duration::from_secs(1);
+    let start = Instant::now();
+
+    sleep(Duration::from_millis(500));
+
+    if start.elapsed() > timeout {
+        println!("Timeout!");
+    } else {
+        println!("Operation completed within timeout.");
+    }
+
+    //SystemTime
+    let now = SystemTime::now();
+    let since_the_epoch = now.duration_since(SystemTime::UNIX_EPOCH);
+
+    println!(
+        "Seconds since the epoch: {}",
+        since_the_epoch.unwrap().as_secs()
+    );
+}
+
+fn date_sample() {
+    // 使用 from_ymd_opt 创建 NaiveDate
+    let date = NaiveDate::from_ymd_opt(2024, 10, 26).unwrap();
+    println!("Date: {}", date);
+
+    // 使用 from_hms_opt 创建 NaiveTime
+    let time = NaiveTime::from_hms_opt(12, 30, 0).unwrap();
+    println!("Time: {}", time);
+
+    // 使用 new 创建 NaiveDateTime
+    let datetime = NaiveDateTime::new(date, time);
+    println!("DateTime: {}", datetime);
+
+    // 使用 with_ymd_and_hms 创建 DateTime<Utc>
+    let utc_datetime = Utc.with_ymd_and_hms(2024, 10, 26, 12, 30, 0).unwrap();
+    println!("UTC DateTime: {}", utc_datetime);
+
+    // 使用 with_ymd_and_hms 创建 DateTime<Local>
+    let local_datetime = Local.with_ymd_and_hms(2024, 10, 26, 12, 30, 0).unwrap();
+    println!("Local DateTime: {}", local_datetime);
+
+    // 获取当前 UTC 时间
+    let now_utc = Utc::now();
+    println!("Now (UTC): {}", now_utc);
+
+    // 获取当前本地时间
+    let now_local = Local::now();
+    println!("Now (Local): {}", now_local);
+
+    //日期格式化
+    let now = Utc::now();
+
+    // 常用格式
+    println!("ISO 8601 / RFC 3339: {}", now.to_rfc3339()); // 推荐的格式
+    println!(
+        "Year-Month-Day Hour:Minute:Second: {}",
+        now.format("%Y-%m-%d %H:%M:%S")
+    );
+    println!(
+        "Day/Month/Year Hour:Minute:Second: {}",
+        now.format("%d/%m/%Y %H:%M:%S")
+    );
+    println!("Month Day, Year: {}", now.format("%B %d, %Y"));
+    println!("Weekday, Day Month Year: {}", now.format("%A, %d %B %Y"));
+
+    // 自定义格式
+    println!("Custom format: {}", now.format("%a %b %e %T %Y"));
+
+    // 时间戳 (Unix timestamp)
+    println!("Timestamp (seconds): {}", now.timestamp());
+    println!("Timestamp (milliseconds): {}", now.timestamp_millis());
+
+    //日期解析
+    let datetime_str = "2024-10-26 12:30:00";
+    let datetime = NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S").unwrap();
+    println!("Parsed DateTime: {}", datetime);
+
+    let date_str = "2024-10-26";
+    let date = NaiveDate::parse_from_str(date_str, "%Y-%m-%d").unwrap();
+    println!("Parsed Date: {}", date);
+
+    let rfc3339_str = "2024-10-26T12:30:00Z";
+    let rfc3339_datetime = DateTime::parse_from_rfc3339(rfc3339_str).unwrap();
+    println!("Parsed RFC3339 DateTime: {}", rfc3339_datetime);
+
+    //错误处理
+    let invalid_date_str = "2024-13-26";
+    let invalid_date = NaiveDate::parse_from_str(invalid_date_str, "%Y-%m-%d");
+    match invalid_date {
+        Ok(_) => println!("Parsed Date: {:?}", invalid_date),
+        Err(e) => println!("Error parsing date: {}", e),
+    }
+}
+
 #[cfg(test)]
 mod tests {
 
@@ -646,5 +752,15 @@ mod tests {
         println!("linkelist is {:?}", list);
 
         linkedlist_sample();
+    }
+
+    #[test]
+    fn test_time() {
+        time_sample();
+    }
+
+    #[test]
+    fn test_date() {
+        date_sample();
     }
 }

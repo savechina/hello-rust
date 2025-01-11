@@ -8,7 +8,7 @@ struct User {
     name: String,
 }
 
-fn tera_main() -> Result<(), tera::Error> {
+fn tera_sample() -> Result<(), tera::Error> {
     // 1. 创建 Tera 实例并加载模板
     let tera = match Tera::new("templates/**/*") {
         Ok(t) => t,
@@ -52,6 +52,6 @@ mod tests {
 
     #[test]
     fn tera_test() {
-        tera_main();
+        tera_sample();
     }
 }

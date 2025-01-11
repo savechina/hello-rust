@@ -845,6 +845,7 @@ dependencies = [
  "bitvec",
  "byteorder",
  "bytes",
+ "chrono",
  "clap",
  "env_logger",
  "futures",

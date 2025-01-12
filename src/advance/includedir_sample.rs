@@ -4,10 +4,11 @@ static ASSETS: Dir = include_dir!("assets");
 
 /// include_dir sample
 pub fn include_dir_sample() {
+    // 读取data.txt文件
     let data_file = ASSETS.get_file("data.txt").unwrap();
     let data_content = std::str::from_utf8(data_file.contents()).unwrap();
     println!("data.txt: {}", data_content);
-
+    // 读取images/logo.png文件
     let logo_file = ASSETS.get_file("images/logo.png").unwrap();
     println!("logo.png size: {} bytes", logo_file.contents().len());
 
@@ -25,6 +26,35 @@ pub fn include_dir_sample() {
         });
     }
 }
+/**
+includedir_all sample
+*/
+fn includedir_all_sample() {
+    // 使用 traverse_recursively 函数遍历所有文件
+    fn traverse_recursively(dir: &Dir) {
+        // 遍历当前目录下的所有文件
+        for file in dir.files() {
+            println!("File path: {:?}", file.path());
+
+            // 区分文本文件和二进制文件
+            if let Some(content) = file.contents_utf8() {
+                println!("File content:\n{}", content);
+            } else {
+                println!("File is binary, size: {} bytes", file.contents().len());
+                // 这里可以进行二进制文件的处理，例如保存到磁盘
+                // std::fs::write(file.path(), file.contents()).unwrap();
+            }
+            println!("---");
+        }
+
+        // 递归遍历子目录
+        for subdir in dir.dirs() {
+            traverse_recursively(subdir);
+        }
+    }
+    // 递归遍历所有文件
+    traverse_recursively(&ASSETS);
+}
 
 #[cfg(test)]
 mod tests {
@@ -32,5 +62,10 @@ mod tests {
     #[test]
     fn test_include_dir_sample() {
         include_dir_sample();
+    }
+
+    #[test]
+    fn test_include_alldir_sample() {
+        includedir_all_sample();
     }
 }

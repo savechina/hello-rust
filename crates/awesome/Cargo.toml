@@ -5,5 +5,6 @@ edition = "2021"
 
 [dependencies]
 chrono = { version = "0.4.39", features = ["serde"] }
+liquid = "0.26.9"
 serde = {version="1.0.217" ,features = ["derive"]}
 tera = "1.20.0"

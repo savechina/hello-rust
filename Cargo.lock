@@ -179,6 +179,9 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "liquid",
+ "pest",
+ "pest_derive",
+ "pest_generator",
  "serde",
  "tera",
 ]

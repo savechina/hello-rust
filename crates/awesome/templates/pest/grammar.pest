@@ -1,0 +1,5 @@
+// grammar.pest
+number = { ASCII_DIGIT+ }
+plus = { "+" }
+multiply = { "*" }
+expression = { number ~ (plus ~ number | multiply ~ number)* }

@@ -1,3 +1,5 @@
+use std::{ffi::OsStr, os::unix::ffi::OsStrExt};
+
 use include_dir::{include_dir, Dir};
 
 static ASSETS: Dir = include_dir!("assets");
@@ -56,6 +58,39 @@ fn includedir_all_sample() {
     traverse_recursively(&ASSETS);
 }
 
+fn include_bytes_sample() {
+    let current_dir = std::env::current_dir().unwrap();
+    println!("current dir: {:?}", current_dir);
+
+    let data = include_bytes!("../../assets/data.txt");
+    println!("include_bytes File content (as bytes): {:?}", data);
+
+    // 将字节数组转换为字符串（需要处理可能的 UTF-8 编码错误）
+    let content = std::str::from_utf8(data).unwrap();
+    println!("include_bytes File content (as string): {}", content);
+
+    let data_path = current_dir.join("assets/data.txt");
+
+    if let Some(s) = data_path.to_str() {
+        println!("Data path: {}", s);
+    } else {
+        println!("路径包含无效的 UTF-8 字符");
+    }
+
+    fn os_str_to_str(s: &OsStr) -> Option<&str> {
+        std::str::from_utf8(s.as_encoded_bytes()).ok()
+    }
+
+    let os_str = data_path.into_os_string();
+    match os_str_to_str(&os_str) {
+        Some(s) => println!("Data path: {}", s),
+        None => println!("路径包含无效的 UTF-8 字符"),
+    }
+
+    let data = include_str!("../../assets/data.txt");
+    println!("include_str File content (as str): {:?}", data);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -67,5 +102,10 @@ mod tests {
     #[test]
     fn test_include_alldir_sample() {
         includedir_all_sample();
+    }
+
+    #[test]
+    fn test_include_bytes_sample() {
+        include_bytes_sample();
     }
 }

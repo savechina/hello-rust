@@ -1,4 +1,4 @@
-# Hello Rust（您好，Rust！）
+# Hello Rust（您好，Rust）
  
 
 Rust简明教程. This is an example code for learning Rust programming language.

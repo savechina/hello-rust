@@ -1,11 +1,16 @@
 # Summary
 
+[Introduction](./introduction.md)
 [Getting Started](./getting-started.md)
+
 # Basic
-- [Chapter 1](./chapter_1.md)
 - [basic](./basic/basic.md)
+
 # Advance
+- [advance](./advance/advance.md)
 
 # Algo
+- [algo](./algo/algo.md)
 
 # LeetCode
+- [LeetCode](./leetcode/leetcode.md)

@@ -42,5 +42,6 @@ ollama-rs = "0.2.1"
 tera = "1.20.0"
 chrono = {version="0.4.39", features=["serde"]}
 include_dir = {version="0.7.4",features=["glob","metadata"]}
+dotenvy = "0.15.7"
 [workspace.dependencies]
 

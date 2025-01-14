@@ -5,11 +5,14 @@ use std::ops::{Deref, DerefMut};
 use memmap2::Mmap;
 use tempfile;
 
+/// memmap_file_sample
 pub(crate) fn memmap_file_sample() {
+    // Open a file in read-only mode
     let mut tmpfile = tempfile::tempfile().expect("failed to open the file");
 
     println!("tempfile : {:?}", tmpfile);
 
+    // Write
     write!(tmpfile, "Hello World!").unwrap();
 
     // Seek to start
@@ -21,6 +24,7 @@ pub(crate) fn memmap_file_sample() {
 
     assert_eq!("Hello World!", buf);
 
+    // Map the file into memory
     let mmap = unsafe { Mmap::map(&tmpfile).expect("failed to map the file") };
 
     assert_eq!(b"Hello World!", &mmap[..]);
@@ -28,6 +32,7 @@ pub(crate) fn memmap_file_sample() {
     //write
     let mut mm = mmap.make_mut().unwrap();
 
+    // Write to the memory map
     let _ = (&mut mm[..]).write_all(b"Hello Zen!");
 
     // mm.deref_mut().write_all(b"hello, world!");
@@ -35,6 +40,7 @@ pub(crate) fn memmap_file_sample() {
     assert_eq!(b"Hello Zen!d!", &mm[..]);
 }
 
+/// sys_page_size_sample
 pub(crate) fn sys_page_size_sample() {
     let page_size = get_sys_page_size();
     println!("system page_size:{}", page_size);

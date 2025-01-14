@@ -32,6 +32,7 @@ pub(crate) fn untyped_sample() -> Result<()> {
     Ok(())
 }
 
+/// Struct Person
 #[derive(Serialize, Deserialize)]
 struct Person {
     name: String,
@@ -65,6 +66,9 @@ pub(crate) fn typed_sample() -> Result<()> {
     Ok(())
 }
 
+/**
+ * JSON transcode
+ */
 pub(crate) fn json_transcode_sample() {
     // A JSON input with plenty of whitespace.
     let input = r#"
@@ -85,6 +89,7 @@ pub(crate) fn json_transcode_sample() {
     serde_transcode::transcode(&mut deserializer, &mut serializer).unwrap();
 }
 
+/// Point Struct
 #[derive(Serialize, Deserialize, Debug)]
 struct Point {
     x: i32,
@@ -92,7 +97,7 @@ struct Point {
 }
 
 /**
- *
+ * JSON process
  */
 pub(crate) fn json_process_sample() {
     let point = Point { x: 1, y: 2 };

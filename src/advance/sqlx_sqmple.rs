@@ -6,17 +6,21 @@ use sqlx::SqliteConnection;
 use std::borrow::Borrow;
 use std::env;
 use std::fmt::Pointer;
+
+/// User 结构体
 #[derive(Debug, sqlx::FromRow)]
 struct User {
     id: i64,
     name: String,
     email: String,
 }
-
+/// sqlx_sqlite_example
 #[tokio::main(flavor = "current_thread")]
-async fn sqlx_sqlite_example() -> Result<(), sqlx::Error> {
+pub(crate) async fn sqlx_sqlite_example() -> Result<(), sqlx::Error> {
+    // 从环境变量中获取数据库 URL
     let db_url = "sqlite::memory:";
 
+    // 连接数据库
     let mut conn = SqliteConnection::connect(db_url).await?;
 
     // Sqlite::create_database(db_url);
@@ -52,6 +56,7 @@ async fn sqlx_sqlite_example() -> Result<(), sqlx::Error> {
         .fetch_all(&mut conn)
         .await?;
 
+    // 处理查询结果
     for (idx, row) in rows.iter().enumerate() {
         println!("[{}]: {:?}", idx, row.get::<String, &str>("name"));
     }

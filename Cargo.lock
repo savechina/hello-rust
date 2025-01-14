@@ -878,6 +878,7 @@ dependencies = [
  "bytes",
  "chrono",
  "clap",
+ "dotenvy",
  "env_logger",
  "futures",
  "include_dir",

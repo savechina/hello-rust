@@ -32,6 +32,9 @@ mod sqlx_sqmple;
 /// include_dir sample
 mod includedir_sample;
 
+/// dotenv
+mod dotenv_sample;
+
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析
     json_sample::typed_sample().unwrap();

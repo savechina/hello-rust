@@ -87,7 +87,6 @@ mod tests {
 
     #[test]
     fn test_sqlx_sqlite_example() {
-        // tokio_client_sample();
         sqlx_sqlite_example();
     }
 }

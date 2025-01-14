@@ -51,6 +51,7 @@ pub(crate) fn advance_sample() {
     memmap_sample::memmap_file_sample();
     memmap_sample::sys_page_size_sample();
 
+    //futures
     futures_sample::futures_block_sample();
     futures_sample::futures_block_handle_sample();
     futures_sample::futures_await_main();
@@ -58,4 +59,13 @@ pub(crate) fn advance_sample() {
 
     // tokio_sample::tokio_server_main();
     // tokio_sample::tokio_client_main();
+
+    //bytes
+    bytes_sample::bytes_create();
+
+    //ollama
+    // ollama_sample::ollama_sample();
+
+    //sqlx
+    sqlx_sqmple::sqlx_sqlite_example().unwrap();
 }

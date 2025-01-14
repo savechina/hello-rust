@@ -1,5 +1,13 @@
 //!
-//! futures Sample
+//! bytes Sample.
+//! bytes_create();
+//! bytes_buffer();
+//! bytes_search();
+//! bytes_order();
+//! bytes_bitvets();
+//! bytes_base64();
+//! bytes_base64_write();
+//!
 //!
 use base64::prelude::*;
 use base64::{engine::general_purpose::URL_SAFE, Engine as _};
@@ -8,7 +16,8 @@ use byteorder::{BigEndian, ReadBytesExt};
 use bytes::{Buf, BufMut, Bytes, BytesMut};
 use std::io::Cursor;
 
-fn bytes_create() {
+/// Demonstrates the use of `Bytes` and `BytesMut`.
+pub(crate) fn bytes_create() {
     let mut mem = Bytes::from("Hello world");
     let a = mem.slice(0..5);
 
@@ -28,7 +37,8 @@ fn bytes_create() {
     assert_eq!(&b[..], b" world");
 }
 
-fn bytes_buffer() {
+/// Demonstrates the use of `BytesMut` and `Bytes`.
+pub(crate) fn bytes_buffer() {
     let hello = Bytes::new();
     let mut buf = BytesMut::with_capacity(1024);
     buf.put(&b"hello world"[..]);
@@ -45,7 +55,8 @@ fn bytes_buffer() {
     assert_eq!(buf.capacity(), 998);
 }
 
-fn bytes_search() {
+/// Demonstrates the use of `binary_search` and `binary_search_by`.
+pub(crate) fn bytes_search() {
     let s = [0, 1, 1, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55];
 
     assert_eq!(s.binary_search(&13), Ok(9));
@@ -73,6 +84,7 @@ fn bytes_search() {
     });
 }
 
+/// Read unsigned 16-bit big-endian integers from a `Cursor<&[u8]>`.
 fn bytes_order() {
     let mut rdr = Cursor::new(vec![2, 5, 3, 0]);
     // Note that we use type parameters to indicate which kind of byte order
@@ -81,6 +93,7 @@ fn bytes_order() {
     assert_eq!(768, rdr.read_u16::<BigEndian>().unwrap());
 }
 
+/// Demonstrates the use of `BitSlice` and `BitVec`.
 fn bytes_bitvets() {
     // All data-types have macro
     // constructors.
@@ -154,7 +167,8 @@ fn bytes_bitvets() {
     );
 }
 
-fn bytes_base64() -> Result<(), Box<dyn std::error::Error>> {
+/// Demonstrates the use of `base64` encoding and decoding.
+pub(crate) fn bytes_base64() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(BASE64_STANDARD.decode(b"+uwgVQA=")?, b"\xFA\xEC\x20\x55\0");
     assert_eq!(BASE64_STANDARD.encode(b"\xFF\xEC\x20\x55\0"), "/+wgVQA=");
 
@@ -174,7 +188,8 @@ fn bytes_base64() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn bytes_base64_write() {
+/// Demonstrates the use of `base64` encoding and decoding.
+pub(crate) fn bytes_base64_write() {
     use base64::engine::general_purpose;
     use std::io::Write;
 

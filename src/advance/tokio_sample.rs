@@ -2,6 +2,8 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpListener;
 use tokio::net::TcpSocket;
+use tokio::sync::mpsc;
+use tokio::task;
 
 use std::io;
 // #[tokio::main]
@@ -108,6 +110,27 @@ pub(crate) async fn tokio_client_sample() -> io::Result<()> {
 
     Ok(())
 }
+
+#[tokio::main]
+async fn tokio_mpsc_sample() {
+    // 创建一个异步通道，并指定缓冲区大小（例如 100）
+    let (tx, mut rx) = mpsc::channel(100);
+
+    // 使用 tokio::spawn 创建一个异步任务
+    task::spawn(async move {
+        let val = String::from("hello from tokio");
+        // 使用 .await 将发送操作转换为异步操作
+        if let Err(_) = tx.send(val).await {
+            println!("send error")
+        }
+    });
+
+    // 在主任务中使用 .await 接收消息
+    if let Some(received) = rx.recv().await {
+        println!("Got: {}", received);
+    }
+}
+
 ///
 /// 单元测试
 /// #[cfg(test)]
@@ -130,5 +153,10 @@ mod tests {
     fn test_fetures_tokio_client() {
         // tokio_client_sample();
         tokio_client_main();
+    }
+
+    #[test]
+    fn test_fetures_tokio_mpsc() {
+        tokio_mpsc_sample();
     }
 }

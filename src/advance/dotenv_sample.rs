@@ -4,7 +4,8 @@
 ///    dotenvy::dotenv()?;
 ///
 use dotenvy;
-use std::env;
+use home;
+use std::env::{self, home_dir};
 use std::error::Error;
 
 /// dotenv_sample
@@ -57,6 +58,16 @@ fn current_dir_sample() -> Result<(), Box<dyn std::error::Error>> {
         .ok_or("Could not get executable directory")?;
 
     println!("Executable directory: {}", exe_dir.display());
+
+    // 获取 HOME 目录
+    env::home_dir().map(|home| println!("Home directory: {}", home.display()));
+
+    // 获取 HOME 目录
+    home::home_dir().map(|home| println!("Home directory: {}", home.display()));
+
+    // 获取 HOME 目录
+    // 优先使用 home crate
+    home::cargo_home().map(|home| println!("Cargo home directory: {}", home.display()));
 
     Ok(())
 }

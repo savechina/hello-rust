@@ -43,6 +43,24 @@ fn dotenv_sample() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+fn current_dir_sample() -> Result<(), Box<dyn std::error::Error>> {
+    // 获取当前工作目录
+    let current_dir = env::current_dir()?;
+    println!("Current directory: {}", current_dir.display());
+
+    // 获取可执行文件的完整路径
+    let exe_path = env::current_exe()?;
+
+    // 从路径中提取目录部分
+    let exe_dir = exe_path
+        .parent()
+        .ok_or("Could not get executable directory")?;
+
+    println!("Executable directory: {}", exe_dir.display());
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -50,5 +68,10 @@ mod tests {
     #[test]
     fn test_dotenv_sample() {
         dotenv_sample().unwrap();
+    }
+
+    #[test]
+    fn test_current_dir_sample() {
+        current_dir_sample().unwrap();
     }
 }

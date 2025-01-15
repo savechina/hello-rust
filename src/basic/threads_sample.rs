@@ -333,12 +333,14 @@ pub(crate) fn thread_mpsc_channel_sample() {
     }
 }
 
+//线程安全
 //atomic
+//原子类型是一种特殊的类型，它们可以在多线程环境中安全地共享和修改。
 const N_TIMES: u64 = 10000000;
 const N_THREADS: usize = 10;
-
+//原子类型
 static R: AtomicU64 = AtomicU64::new(0);
-
+//线程安全 无锁累计
 fn add_n_times(n: u64) -> JoinHandle<()> {
     thread::spawn(move || {
         for _ in 0..n {

@@ -83,6 +83,20 @@ fn query_post(mut connection: SqliteConnection) {
 fn diesel_sample() {
     let mut connection = establish_connection();
 
+    let create_table_query = "
+        CREATE TABLE posts (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR NOT NULL,
+        body TEXT  ,
+        published BOOLEAN  DEFAULT FALSE
+        );
+    ";
+
+    match diesel::sql_query(create_table_query).execute(&mut connection) {
+        Ok(_) => println!("Table created successfully."),
+        Err(err) => println!("Error creating table: {:?}", err),
+    }
+
     let post = create_post(&mut connection, "My first post", "Hello, world!");
 
     println!("Saved post with id: {}", post.id);

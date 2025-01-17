@@ -44,5 +44,6 @@ chrono = {version="0.4.39", features=["serde"]}
 include_dir = {version="0.7.4",features=["glob","metadata"]}
 dotenvy = "0.15.7"
 home = "0.5.11"
+diesel = {version="2.2.6",features = ["sqlite","time","uuid","numeric","returning_clauses_for_sqlite_3_35"]}
 [workspace.dependencies]
 

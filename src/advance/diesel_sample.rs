@@ -52,6 +52,23 @@ pub fn establish_connection() -> SqliteConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
+///
+fn setup_database(connection: &mut SqliteConnection) {
+    let create_table_query = "
+        CREATE TABLE IF NOT EXISTS posts  (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title VARCHAR NOT NULL,
+        body TEXT ,
+        published BOOLEAN  DEFAULT FALSE
+        );
+    ";
+
+    match diesel::sql_query(create_table_query).execute(connection) {
+        Ok(_) => println!("Table created successfully."),
+        Err(err) => println!("Error creating table: {:?}", err),
+    }
+}
+
 fn create_post(conn: &mut SqliteConnection, title: &str, body: &str) -> Post {
     use schema::posts;
 
@@ -64,38 +81,34 @@ fn create_post(conn: &mut SqliteConnection, title: &str, body: &str) -> Post {
         .expect("Error saving new post")
 }
 
+/// query record from posts table
+///
+/// Retrieves up to 5 published posts from the database.
 fn query_post(mut connection: SqliteConnection) {
     use schema::posts;
     let results = posts::table
-        .filter(posts::published.eq(true))
+        .filter(posts::published.eq(false))
         .limit(5)
         .load::<Post>(&mut connection)
         .expect("Error loading posts");
 
-    println!("Displaying {} posts", results.len());
+    println!("Displaying {} posts:", results.len());
+
     for post in results {
-        println!("{}", post.title);
+        println!("post.id: {}", post.id);
+        println!("post.title: {}", post.title);
         println!("----------\n");
-        println!("{}", post.body);
+        println!("post.body: {}", post.body);
     }
 }
-
+/// diesel sample .
+/// create sqlite database connection. setup database create posts table
+/// insert posts row data
+///
 fn diesel_sample() {
     let mut connection = establish_connection();
 
-    let create_table_query = "
-        CREATE TABLE posts (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR NOT NULL,
-        body TEXT  ,
-        published BOOLEAN  DEFAULT FALSE
-        );
-    ";
-
-    match diesel::sql_query(create_table_query).execute(&mut connection) {
-        Ok(_) => println!("Table created successfully."),
-        Err(err) => println!("Error creating table: {:?}", err),
-    }
+    setup_database(&mut connection);
 
     let post = create_post(&mut connection, "My first post", "Hello, world!");
 

@@ -10,6 +10,8 @@ use std::env;
 //     published BOOLEAN NOT NULL DEFAULT FALSE
 //   );
 
+///
+/// Schema definition for the `posts` table.
 mod schema {
     use diesel::table;
     table! {
@@ -21,28 +23,43 @@ mod schema {
         }
     }
 }
-
+/// Models representing the data structure of the `posts` table in the database.
 mod models {
     use super::schema::posts;
     use diesel::prelude::*;
 
+    /// Represents a post in the `posts` table.
     #[derive(Queryable, Identifiable, Selectable)]
     #[diesel(table_name = posts)]
     pub struct Post {
+        /// The unique identifier for the post.
         pub id: i32,
+        /// The title of the post.
         pub title: String,
+        /// The body of the post.
         pub body: String,
+        /// Whether the post is published or not.
         pub published: bool,
     }
 
+    /// Represents a new post to be inserted into the `posts` table.
     #[derive(Insertable)]
     #[diesel(table_name = posts)]
     pub struct NewPost<'a> {
+        /// The title of the new post.
         pub title: &'a str,
+        /// The body of the new post.
         pub body: &'a str,
     }
 }
 
+/// Establishes a connection to the SQLite database using environment variables.
+///
+/// If the `DATABASE_URL` environment variable is not set, it defaults to "test.db".
+///
+/// # Returns
+///
+/// A `SqliteConnection` object representing the established connection to the database.
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
 
@@ -52,8 +69,9 @@ pub fn establish_connection() -> SqliteConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
-///
+/// Sets up the database by creating the necessary tables.
 fn setup_database(connection: &mut SqliteConnection) {
+    // SQL query to create the 'posts' table if it doesn't already exist.
     let create_table_query = "
         CREATE TABLE IF NOT EXISTS posts  (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -63,12 +81,14 @@ fn setup_database(connection: &mut SqliteConnection) {
         );
     ";
 
+    // Execute the SQL query to create the 'posts' table.
     match diesel::sql_query(create_table_query).execute(connection) {
         Ok(_) => println!("Table created successfully."),
         Err(err) => println!("Error creating table: {:?}", err),
     }
 }
 
+/// Inserts a new post into the database.
 fn create_post(conn: &mut SqliteConnection, title: &str, body: &str) -> Post {
     use schema::posts;
 

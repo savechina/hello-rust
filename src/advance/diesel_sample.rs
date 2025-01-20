@@ -1,14 +1,9 @@
+/// This file contains the implementation of the `advance/diesel_sample.rs` file.
+///
 use diesel::{prelude::*, sqlite::SqliteConnection};
 use dotenvy::dotenv;
 use models::{NewPost, Post};
 use std::env;
-//sqlite> .schema
-// CREATE TABLE posts (
-//     id SERIAL PRIMARY KEY,
-//     title VARCHAR NOT NULL,
-//     body TEXT NOT NULL,
-//     published BOOLEAN NOT NULL DEFAULT FALSE
-//   );
 
 ///
 /// Schema definition for the `posts` table.
@@ -92,8 +87,10 @@ fn setup_database(connection: &mut SqliteConnection) {
 fn create_post(conn: &mut SqliteConnection, title: &str, body: &str) -> Post {
     use schema::posts;
 
+    // create an new post
     let new_post = NewPost { title, body };
 
+    // insert the new post into the database
     diesel::insert_into(posts::table)
         .values(&new_post)
         .returning(Post::as_returning())
@@ -101,19 +98,20 @@ fn create_post(conn: &mut SqliteConnection, title: &str, body: &str) -> Post {
         .expect("Error saving new post")
 }
 
-/// query record from posts table
+/// Query records from posts table
 ///
 /// Retrieves up to 5 published posts from the database.
-fn query_post(mut connection: SqliteConnection) {
+fn query_post(connection: &mut SqliteConnection) {
     use schema::posts;
+    // query record from posts table
     let results = posts::table
         .filter(posts::published.eq(false))
         .limit(5)
-        .load::<Post>(&mut connection)
+        .load::<Post>(connection)
         .expect("Error loading posts");
 
     println!("Displaying {} posts:", results.len());
-
+    // loop through the results and print each post
     for post in results {
         println!("post.id: {}", post.id);
         println!("post.title: {}", post.title);
@@ -121,20 +119,41 @@ fn query_post(mut connection: SqliteConnection) {
         println!("post.body: {}", post.body);
     }
 }
-/// diesel sample .
-/// create sqlite database connection. setup database create posts table
-/// insert posts row data
+
+/// Delete records from posts table
+fn delete_post(connection: &mut SqliteConnection) {
+    use schema::posts;
+
+    let pattern = "%My first post1%";
+    let num_deleted = diesel::delete(posts::table.filter(posts::title.like(pattern)))
+        .execute(connection)
+        .expect("Error deleting posts");
+
+    println!("Deleted {} posts", num_deleted);
+}
+
+/// This example demonstrates how to create a SQLite database connection, setup the database,
+/// insert posts into the database, and query records from the `posts` table.
 ///
+/// The code includes functions for establishing a connection, creating necessary tables,
+/// inserting new posts, and querying published posts. Each function is designed to
+/// perform specific tasks related to the database operations.
 fn diesel_sample() {
     let mut connection = establish_connection();
 
+    // setup the database
     setup_database(&mut connection);
 
+    // insert new posts
     let post = create_post(&mut connection, "My first post", "Hello, world!");
 
     println!("Saved post with id: {}", post.id);
 
-    query_post(connection);
+    // query published posts
+    query_post(&mut connection);
+
+    // delete the inserted post
+    delete_post(&mut connection);
 }
 
 #[cfg(test)]

@@ -264,7 +264,7 @@ async fn tokio_rwlock_complex_sample() {
             //建议使用StdRng，它是线程安全的
             let mut rng = StdRng::from_entropy();
 
-            let read_data = data_clone.clone();
+            // let read_data = data_clone.clone();
             loop {
                 let operation = rng.gen_range(0..2); // 0: 读，1: 写
 
@@ -272,7 +272,7 @@ async fn tokio_rwlock_complex_sample() {
                 // let operation = n % 2; // 0: 读，1: 写
 
                 if operation == 0 {
-                    let read_guard = read_data.read().await;
+                    let read_guard = data_clone.read().await;
                     println!("Task {} 读取：{}", i, *read_guard);
                 } else {
                     let mut write_guard = data_clone.write().await;
@@ -302,7 +302,7 @@ async fn tokio_random_sample() {
     for i in 0..10 {
         handles.push(task::spawn(async move {
             let mut rng = rand::thread_rng(); // 每个任务都有自己的 rng 实例
-            let random_number = rng.gen_range(0..100); // 错误用法
+            let random_number = rng.gen_range(0..100);
             println!("Task {}: Random number = {}", i, random_number);
         }));
     }

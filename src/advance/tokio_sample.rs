@@ -131,6 +131,36 @@ async fn tokio_mpsc_sample() {
     }
 }
 
+#[tokio::main]
+async fn tokio_mpsc_multitask_sample() {
+    // 创建一个异步通道，并指定缓冲区大小（例如 100）
+    let (tx, mut rx) = mpsc::channel(100);
+
+    // 使用 tokio::spawn 创建多个异步任务
+    for i in 0..50 {
+        let tx_clone = tx.clone();
+
+        task::spawn(async move {
+            let val = String::from("hello from tokio, task: ") + &i.to_string();
+            println!("task {} sending:{}", i, val);
+
+            // 使用 .await 将发送操作转换为异步操作
+            if let Err(e) = tx_clone.send(val).await {
+                println!("task {} send error:{}", i, e)
+            }
+        });
+    }
+
+    // 手动关闭发送端，避免接收端一直等待
+    drop(tx); // 非常重要！
+
+    // 在主任务中使用 .await 接收消息
+    while let Some(received) = rx.recv().await {
+        println!("Received: {}", received);
+    }
+    println!("End of Task.");
+}
+
 ///
 /// 单元测试
 /// #[cfg(test)]
@@ -158,5 +188,10 @@ mod tests {
     #[test]
     fn test_fetures_tokio_mpsc() {
         tokio_mpsc_sample();
+    }
+
+    #[test]
+    fn test_fetures_tokio_mpsc_multitask() {
+        tokio_mpsc_multitask_sample();
     }
 }

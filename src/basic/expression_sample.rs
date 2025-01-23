@@ -147,14 +147,25 @@ pub(crate) fn loops_sample() {
     //数组
     let a = [10, 20, 30, 40, 50];
 
-    // for 迭代器
+    // for 遍历数组 迭代器
     for i in a.iter() {
         println!("值为 : {}", i);
     }
 
+    // 遍历范围迭代器
+    (0..100).for_each(|i| {
+        // 打印输出
+        println!("(0.100): {}", i)
+    });
+
+    // 常规for 迭代器
+    for i in 0..100 {
+        println!("Iteration number: {}", i);
+    }
+
     //vec 迭代器
     let v = Vec::from([3, 2, 4]);
-
+    //遍历可变引用
     for (i, n) in v.iter().enumerate() {
         println!("索引：{},值为 : {}", i, n);
     }
@@ -192,5 +203,20 @@ mod tests {
     fn test_bad_add() {
         // 这个断言会导致测试失败。注意私有的函数也可以被测试！
         assert_eq!(add(1, 2), 3);
+    }
+
+    #[test]
+    fn test_bit_calc() {
+        bit_calc();
+    }
+
+    #[test]
+    fn test_condition_sample() {
+        condition_sample();
+    }
+
+    #[test]
+    fn test_loops_sample() {
+        loops_sample();
     }
 }

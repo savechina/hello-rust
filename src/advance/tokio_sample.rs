@@ -84,6 +84,7 @@ pub(crate) async fn tokio_client_main() -> io::Result<()> {
     Ok(())
 }
 
+/// tokio client 示例
 #[tokio::main]
 pub(crate) async fn tokio_client_sample() -> io::Result<()> {
     let mut running = AtomicBool::new(true);
@@ -97,7 +98,9 @@ pub(crate) async fn tokio_client_sample() -> io::Result<()> {
 
     println!(" tokio_client_main ... 3");
 
+    // Run the client in a loop
     while running.load(Ordering::Relaxed) {
+        // Simulate a short delay between client connections
         tokio_client_main();
 
         // Simulate a short delay between client connections
@@ -111,6 +114,8 @@ pub(crate) async fn tokio_client_sample() -> io::Result<()> {
     Ok(())
 }
 
+/// tokio::sync::mpsc 示例
+/// 通过创建单个异步任务，实现并发处理
 #[tokio::main]
 async fn tokio_mpsc_sample() {
     // 创建一个异步通道，并指定缓冲区大小（例如 100）
@@ -131,15 +136,19 @@ async fn tokio_mpsc_sample() {
     }
 }
 
+/// 多任务并发处理示例
+/// 通过创建多个异步任务，实现并发处理
 #[tokio::main]
 async fn tokio_mpsc_multitask_sample() {
     // 创建一个异步通道，并指定缓冲区大小（例如 100）
-    let (tx, mut rx) = mpsc::channel(100);
+    let (tx, mut rx) = mpsc::channel(10);
 
     // 使用 tokio::spawn 创建多个异步任务
     for i in 0..50 {
+        // 创建一个通道的克隆副本
         let tx_clone = tx.clone();
 
+        // 使用 task::spawn 创建一个异步任务
         task::spawn(async move {
             let val = String::from("hello from tokio, task: ") + &i.to_string();
             println!("task {} sending:{}", i, val);

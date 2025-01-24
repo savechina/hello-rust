@@ -1,5 +1,16 @@
+/// This module demonstrates how to serialize a `TestStruct` using the `rkyv` crate.
+/// The `rkyv` crate provides a zero-copy serialization of Rust types, which can be
+/// used in any context that requires a `TestStruct`.
+/// Allowing for zero-copy deserialization can be very useful in scenarios where memory efficiency is critical. For example, when working with large datasets or when transferring data over the network.
+/// Archived types is `ArchiveTestStruct` struct.
+/// rkyv_serialize_sample.rs
+///
 use rkyv::{deserialize, rancor::Error, Archive, Deserialize, Serialize};
 
+/// This is the archived version of `TestStruct` and can be used in any context that requires a `TestStruct`.
+/// It is a zero-copy deserialization of `TestStruct`. It can be used in any context that requires a `TestStruct`.
+/// Allowing for zero-copy deserialization can be very useful in scenarios where memory efficiency is critical. For example, when working with large datasets or when transferring data over the network.
+/// Archived types is `ArchiveTestStruct` struct.
 #[derive(Archive, Deserialize, Serialize, Debug, PartialEq)]
 #[rkyv(
     // This will generate a PartialEq impl between our unarchived
@@ -14,6 +25,11 @@ struct TestStruct {
     option: Option<Vec<i32>>,
 }
 
+/// This use case demonstrates how to serialize a `TestStruct` using the `rkyv` crate.
+/// The `rkyv` crate provides a zero-copy serialization of Rust types, which can be
+/// very useful in scenarios where memory efficiency is critical.
+/// For example, when working with large datasets or when transferring data over the network.
+///  rkyv_serialize_sample.rs
 fn rkyv_serialize_sample() {
     let value = TestStruct {
         int: 42,

@@ -1,3 +1,4 @@
+use parking_lot;
 use rand::rngs::SmallRng;
 use rand::{rngs::StdRng, Rng, SeedableRng};
 use std::io;
@@ -7,6 +8,7 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpSocket};
 use tokio::sync::{mpsc, oneshot, RwLock};
 use tokio::task;
+
 // #[tokio::main]
 pub(crate) async fn tokio_server_main() -> Result<(), Box<dyn std::error::Error>> {
     println!(" tokio_server_main ...");
@@ -365,6 +367,76 @@ async fn tokio_random_sample() {
     }
 }
 
+/// tokio::task::spawn_blocking 示例. 使用Parking_lot库的RwLock来实现线程安全的读写操作.
+#[tokio::main]
+async fn tokio_task_blocking_example() {
+    // 创建一个 RwLock 包装的共享数据结构体
+    let data = Arc::new(parking_lot::RwLock::new(0));
+
+    let mut handles = Vec::new();
+
+    // 创建多个任务来模拟对共享数据的读操作
+    for i in 0..10 {
+        // 创建一个任务来模拟对共享数据的写操作
+        let data = data.clone();
+
+        // 使用 spawn 创建异步任务
+        handles.push(tokio::spawn(async move {
+            // 使用 spawn_blocking 来执行阻塞任务
+            let result = task::spawn_blocking(move || {
+                // 使用 spawn_blocking RwLock 的读锁
+                let read_guard = data.read();
+                *read_guard
+            })
+            .await
+            .unwrap();
+            println!("任务:{},读取数据：{}", i, result);
+        }));
+    }
+
+    // 等待所有读任务完成,然后读取数据
+    let data_read_clone = data.clone();
+
+    // 等待所有读任务完成,然后读取数据
+    let data_writer_clone = data.clone();
+
+    // 启动一个写任务
+    let write_handle = tokio::spawn(async move {
+        task::spawn_blocking(move || {
+            // 使用 spawn_blocking RwLock 的写锁
+            let mut write_guard = data_writer_clone.write();
+
+            // 写入数据 +1
+            *write_guard += 1;
+
+            println!("任务：{},写入数据：{}", "write_handle", *write_guard);
+
+            *write_guard
+        })
+        .await
+        .unwrap();
+    });
+
+    // 等待所有读任务完成
+    for handle in handles {
+        handle.await.unwrap();
+    }
+
+    // 等待写任务完成
+    write_handle.await.unwrap();
+
+    // 读取数据 并打印结果
+    let result = task::spawn_blocking(move || {
+        // 使用 spawn_blocking，获取读锁，读取数据
+        let read_guard = data_read_clone.read();
+        *read_guard
+    })
+    .await
+    .unwrap();
+
+    println!("最终数据：{}", result);
+}
+
 ///
 /// 单元测试
 /// #[cfg(test)]
@@ -427,5 +499,11 @@ mod tests {
     #[test]
     fn test_features_random_sample() {
         tokio_random_sample();
+    }
+
+    /// .
+    #[test]
+    fn test_features_task_blocking_example() {
+        tokio_task_blocking_example();
     }
 }

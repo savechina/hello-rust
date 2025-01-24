@@ -1014,6 +1014,7 @@ dependencies = [
  "num-bigint",
  "ollama-rs",
  "page_size",
+ "parking_lot",
  "rand",
  "rkyv 0.8.10",
  "serde",

@@ -58,6 +58,7 @@ diesel = { version = "2.2.6", features = [
 ] }
 rkyv = { version = "0.8.10", features = ["std", "aligned", "arrayvec-0_7"] }
 bytecheck = "0.8.0"
+parking_lot = "0.12.3"
 
 
 [workspace.dependencies]

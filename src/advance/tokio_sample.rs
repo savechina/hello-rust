@@ -1,5 +1,5 @@
-use rand::rngs::StdRng;
-use rand::{Rng, SeedableRng};
+use rand::rngs::SmallRng;
+use rand::{rngs::StdRng, Rng, SeedableRng};
 use std::io;
 use std::sync::atomic::{self, AtomicBool, AtomicU32, Ordering};
 use std::sync::Arc;
@@ -246,30 +246,29 @@ async fn tokio_rwlock_basic_sample() {
     println!("最终数据：{}", *read_guard);
 }
 
+/// tokio::sync::RwLock 示例 , 读写锁的复杂示例，使用rand生成随机数,
+/// 模拟多个线程同时读写数据并发操作。
 #[tokio::main]
 async fn tokio_rwlock_complex_sample() {
     let data = Arc::new(RwLock::new(0));
     let num_tasks = 10;
 
     let mut handles = Vec::new();
+
     for i in 0..num_tasks {
+        // 创建一个任务来修改数据
+        // 使用 Arc 和 clone 来共享数据
         let data_clone = data.clone();
 
-        let atomic_read = Arc::new(AtomicU32::new(i));
-        let atomic_write = Arc::new(AtomicU32::new(i));
-
         handles.push(tokio::spawn(async move {
-            // 使用 rand::thread_rng() 随机数生成器，是非线程安全的，不能跨线程共享。
+            // 使用 rand::thread_rng() 随机数生成器，是非线程安全的，ThreadRng 缺少Send trait，因此不能跨线程共享。
             // let mut rng = rand::thread_rng(); // 错误用法
-            //建议使用StdRng，它是线程安全的
+            //建议使用StdRng,SmallRng等，它是线程安全的
             let mut rng = StdRng::from_entropy();
 
-            // let read_data = data_clone.clone();
+            // 使用 Arc 和 RwLock 来实现线程安全的读写操作。
             loop {
                 let operation = rng.gen_range(0..2); // 0: 读，1: 写
-
-                // let n = atomic_read.fetch_add(1, Ordering::Relaxed);
-                // let operation = n % 2; // 0: 读，1: 写
 
                 if operation == 0 {
                     let read_guard = data_clone.read().await;
@@ -293,6 +292,47 @@ async fn tokio_rwlock_complex_sample() {
     }
 }
 
+/// tokio::sync::RwLock 示例 , 读写锁的复杂示例，使用atomic进行原子操作计数取模，进行随机打散模拟读写操作。
+#[tokio::main]
+async fn tokio_rwlock_complex_atomic_sample() {
+    let data = Arc::new(RwLock::new(0));
+    let num_tasks = 10;
+
+    let mut handles = Vec::new();
+    for i in 0..num_tasks {
+        let data_clone = data.clone();
+
+        let atomic_count = Arc::new(AtomicU32::new(i));
+
+        handles.push(tokio::spawn(async move {
+            loop {
+                let num = atomic_count.fetch_add(1, Ordering::Relaxed);
+
+                let operation = num % 2; // 0: 读，1: 写
+
+                if operation == 0 {
+                    let read_guard = data_clone.read().await;
+                    println!("Task {} 读取：{}", i, *read_guard);
+                } else {
+                    let mut write_guard = data_clone.write().await;
+                    *write_guard += 1;
+                    println!("Task {} 写入：{}", i, *write_guard);
+                }
+                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+            }
+        }));
+    }
+
+    // 让任务运行一段时间
+    tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
+
+    // 终止所有任务 (在实际应用中需要更优雅的终止方式)
+    for handle in handles {
+        handle.abort();
+    }
+}
+
+/// tokio::task::spawn random numbers and print them in a separate task
 #[tokio::main]
 async fn tokio_random_sample() {
     // 在闭包外部创建 rng，这是错误的！
@@ -302,11 +342,24 @@ async fn tokio_random_sample() {
     for i in 0..10 {
         handles.push(task::spawn(async move {
             let mut rng = rand::thread_rng(); // 每个任务都有自己的 rng 实例
+
             let random_number = rng.gen_range(0..100);
             println!("Task {}: Random number = {}", i, random_number);
         }));
-    }
 
+        // SmallRng 是线程安全的，可以跨线程共享
+        handles.push(task::spawn(async move {
+            let mut rng = SmallRng::from_entropy(); // 生成随机数种子
+
+            let random_number = rng.gen_range(0..100);
+            println!("Task {}: Random number = {}", i, random_number);
+
+            // 模拟任务执行时间
+            tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
+        }));
+    }
+    // 模拟任务执行时间
+    tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
     for handle in handles {
         handle.await.unwrap();
     }
@@ -364,6 +417,11 @@ mod tests {
     #[test]
     fn test_features_rwlock_complex() {
         tokio_rwlock_complex_sample();
+    }
+
+    #[test]
+    fn test_features_rwlock_complex_atomic() {
+        tokio_rwlock_complex_atomic_sample();
     }
 
     #[test]

@@ -746,6 +746,16 @@ mod tests {
     }
 
     #[test]
+    fn array_test() {
+        array_sample();
+    }
+
+    #[test]
+    fn test_hashmap() {
+        hashmap_example();
+    }
+
+    #[test]
     fn test_linkedlist() {
         let list = LinkedList::from([1, 2, 3]);
 

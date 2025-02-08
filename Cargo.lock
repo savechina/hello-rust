@@ -1027,6 +1027,7 @@ dependencies = [
  "bytecheck 0.8.0",
  "byteorder",
  "bytes",
+ "cfg-if",
  "chrono",
  "clap",
  "csv",

@@ -31,15 +31,22 @@ pub mod threads_sample;
 
 pub mod rectangle;
 
+///日志 trace
 pub mod yak_shave;
 
+///日志
 pub mod logger_sample;
 
+///指针
 pub mod pointer_sample;
+
+///cfg_if
+pub mod cfg_if_sample;
 
 // import mod use as alias name
 use crate::basic::module_sample::supper_mod as other_mod;
 use crate::basic::rectangle::Rectangle;
+// Import the cfg_if macro
 
 ///
 ///Basic Example

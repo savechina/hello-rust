@@ -9,7 +9,7 @@ use bigdecimal::{BigDecimal, RoundingMode};
 use chrono::prelude::*;
 use serde::*;
 use serde_json;
-use std::collections::{HashMap, LinkedList};
+use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet, LinkedList};
 use std::str::FromStr;
 use std::thread::sleep;
 use std::time::{Duration, Instant, SystemTime};
@@ -82,14 +82,9 @@ that spans multiple lines.";
     println!("datatype::string_sample ...... end\n");
 }
 
-///
-/// decimal sample
-///
-
-/**
+/*
  *Account sample
  */
-
 #[derive(Debug, Serialize, Deserialize)]
 struct MyAccount {
     name: String,
@@ -99,6 +94,7 @@ struct MyAccount {
     #[serde(with = "bigdecimal::serde::json_num")]
     number: BigDecimal,
 }
+
 ///
 /// decimal_sample
 ///
@@ -280,6 +276,28 @@ pub(crate) fn vet_sample() {
     }
 
     println!("vet all sum is {}", sum);
+
+    //创建一个空的Vec
+    let mut empty_vec = Vec::new();
+    //push item to vec
+    empty_vec.push(123);
+    empty_vec.push(456);
+    empty_vec.push(789);
+    println!("empty vec is {:?}", empty_vec);
+
+    //创建一个包含5个元素的Vec，每个元素都是0
+    let zero_vec = vec![0; 5];
+    println!("zero vec is {:?}", zero_vec);
+
+    //创建一个包含5个元素的Vec，每个元素都是0
+    let mut zero_vec = Vec::with_capacity(5);
+    //push item to vec
+    zero_vec.push(0);
+    zero_vec.push(0);
+    zero_vec.push(0);
+    zero_vec.push(0);
+    zero_vec.push(0);
+    println!("zero vec is {:?}", zero_vec);
 
     println!("vet_sample ......end\n");
 }
@@ -560,6 +578,7 @@ pub(crate) fn hashmap_example() {
         None => println!("panic"),
     }
 
+    //通过 contains_key 判断是否存在 Key
     if map.contains_key(&"pony".to_string()) {
         //借用 map 权限，获取key 的 val. &map[&key]
         let val = &map[&"pony".to_string()];
@@ -567,6 +586,7 @@ pub(crate) fn hashmap_example() {
         println!("val:{}", val);
     }
 
+    //insert key value
     map.insert("key".to_string(), "val".to_string());
 
     //HashMap 迭代器
@@ -584,6 +604,201 @@ pub(crate) fn hashmap_example() {
     println!("map is empty:{}", map.is_empty());
 
     println!("datatype_sample::collections_example ... end\n");
+}
+
+/**
+ * 集合 HashSet
+ * basic/datatype_sample.rs
+ */
+pub(crate) fn hashset_sample() {
+    println!("datatype hashset_sample ..... start");
+    let mut set = HashSet::new();
+    set.insert(1);
+    set.insert(2);
+    set.insert(3);
+
+    println!("hashset is {:?}", set);
+    println!("hashset size:{}", set.len());
+    println!("hashset contains 2:{}", set.contains(&2));
+
+    set.remove(&2);
+    println!("hashset contains 2:{}", set.contains(&2));
+
+    //集合迭代器
+    let set1: HashSet<_> = [1, 2, 3].iter().cloned().collect();
+    let set2: HashSet<_> = [4, 2, 3, 4].iter().cloned().collect();
+    println!("hashset1: {:?}", set1);
+    println!("hashset2: {:?}", set2);
+
+    //并集
+    let union: HashSet<_> = set1.union(&set2).collect();
+    println!("union: {:?}", union);
+
+    //交集
+    let intersection: HashSet<_> = set1.intersection(&set2).collect();
+    println!("intersection: {:?}", intersection);
+
+    //差集
+    let difference: HashSet<_> = set1.difference(&set2).collect();
+    println!("difference: {:?}", difference);
+
+    //对称差集
+    let symmetric_difference: HashSet<_> = set1.symmetric_difference(&set2).collect();
+    println!("symmetric_difference: {:?}", symmetric_difference);
+
+    //空集
+    let empty: HashSet<i32> = HashSet::new();
+    println!("empty: {:?}", empty);
+
+    //全集
+    let full: HashSet<i32> = (0..=10).collect();
+    println!("full: {:?}", full);
+
+    //集合长度
+    let length: usize = set1.len();
+    println!("length: {:?}", length);
+
+    //包含
+    let contains: bool = set1.contains(&3);
+    println!("contains: {:?}", contains);
+
+    //空集合
+    let is_empty: bool = set1.is_empty();
+    println!("is_empty: {:?}", is_empty);
+
+    let mut set3: HashSet<i32> = HashSet::new();
+    //插入
+    set3.insert(1);
+    set3.insert(2);
+    set3.insert(3);
+    println!("set3: {:?}", set3);
+
+    //删除
+    set3.remove(&3);
+    println!("remove: {:?}", set3);
+
+    //清空
+    set3.clear();
+    println!("clear: {:?}", set3);
+
+    println!("datatype hashset_sample ..... end\n");
+}
+
+/**
+ * 集合 BTreeMap
+ */
+pub(crate) fn btree_map_sample() {
+    println!("datatype btree_map_sample ..... start");
+
+    //初始化 BTreeMap 并设置值 有序插入
+    let mut map = BTreeMap::new();
+    map.insert("a", 1);
+    map.insert("b", 2);
+    map.insert("c", 3);
+    map.insert("e", 5);
+    map.insert("d", 4);
+    map.insert("f", 6);
+    map.insert("h", 8);
+    map.insert("g", 7);
+    map.insert("i", 9);
+    map.insert("j", 10);
+
+    println!("map: {:?}", map);
+
+    //集合迭代器
+    for (key, value) in map.iter() {
+        println!("key: {}, value: {}", key, value);
+    }
+
+    //集合长度
+    let length: usize = map.len();
+    println!("length: {:?}", length);
+
+    //查找
+    let find = map.get("a");
+    println!("find: {:?}", find);
+
+    //更新
+    map.insert("a", 11);
+    println!("update: {:?}", map);
+
+    //包含
+    let contains: bool = map.contains_key("a");
+    println!("contains: {:?}", contains);
+
+    //倒序
+    for (key, value) in map.iter().rev() {
+        println!("key: {}, value: {}", key, value);
+    }
+
+    //删除
+    map.remove("b");
+    println!("remove: {:?}", map);
+
+    //清空
+    map.clear();
+    println!("clear: {:?}", map);
+
+    println!("datatype btree_map_sample ..... end\n");
+}
+
+/**
+ * 集合 BTreeSet
+ */
+pub(crate) fn btree_set_sample() {
+    println!("datatype btree_set_sample ..... start");
+    let mut set = BTreeSet::new();
+    set.insert("a");
+    set.insert("b");
+    println!("set: {:?}", set);
+    //删除
+    set.remove("b");
+    println!("remove: {:?}", set);
+    //清空
+    set.clear();
+    println!("clear: {:?}", set);
+
+    //集合迭代器
+    for item in set.iter() {
+        println!("{}", item);
+    }
+
+    //集合长度
+    let length: usize = set.len();
+    println!("length: {:?}", length);
+
+    //包含
+    let contains: bool = set.contains("a");
+    println!("contains: {:?}", contains);
+
+    //两个集合
+    let set1: BTreeSet<_> = [1, 2, 3].iter().cloned().collect();
+    let set2: BTreeSet<_> = [4, 2, 3, 4].iter().cloned().collect();
+
+    println!("set1: {:?}", set1);
+    println!("set2: {:?}", set2);
+
+    //交集
+    let intersection: BTreeSet<_> = set1.intersection(&set2).cloned().collect();
+    println!("intersection: {:?}", intersection);
+
+    //差集
+    let difference: BTreeSet<_> = set1.difference(&set2).cloned().collect();
+    println!("difference: {:?}", difference);
+
+    //对称差集
+    let symmetric_difference: BTreeSet<_> = set1.symmetric_difference(&set2).cloned().collect();
+    println!("symmetric_difference: {:?}", symmetric_difference);
+
+    //空集合
+    let is_empty: bool = set1.is_empty();
+    println!("is_empty: {:?}", is_empty);
+
+    //全集
+    let full: BTreeSet<i32> = (0..=10).collect();
+    println!("full: {:?}", full);
+
+    println!("datatype btree_set_sample ..... end\n");
 }
 
 /**
@@ -741,7 +956,7 @@ mod tests {
     }
 
     #[test]
-    fn user_test() {
+    fn test_user_struct() {
         struct_sample();
     }
 
@@ -753,6 +968,21 @@ mod tests {
     #[test]
     fn test_hashmap() {
         hashmap_example();
+    }
+
+    #[test]
+    fn test_hashset() {
+        hashset_sample();
+    }
+
+    #[test]
+    fn test_btree_map() {
+        btree_map_sample();
+    }
+
+    #[test]
+    fn test_btree_set() {
+        btree_set_sample();
     }
 
     #[test]

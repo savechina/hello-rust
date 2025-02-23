@@ -45,6 +45,9 @@ pub mod pointer_sample;
 ///cfg_if
 pub mod cfg_if_sample;
 
+///闭包
+pub mod closure_sample;
+
 use rectangle::{RectangleBorrowMut, RectangleOwner, RectangleRef};
 
 // import mod use as alias name

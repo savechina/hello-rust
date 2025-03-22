@@ -21,6 +21,7 @@ struct Employee {
     salary: f64,
 }
 
+/// 使用 serde 的属性来指定字段名和映射
 #[derive(Debug, serde::Deserialize)]
 struct Record {
     city: String,

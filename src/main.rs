@@ -1,6 +1,9 @@
 #[macro_use]
 extern crate cfg_if;
 extern crate log;
+// Import the getset macros
+#[macro_use]
+extern crate getset;
 //
 use log::info;
 

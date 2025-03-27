@@ -44,6 +44,9 @@ mod rkyv_sample;
 /// csv
 mod csv_sample;
 
+///getset
+mod getset_sample;
+
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析
     json_sample::typed_sample().unwrap();

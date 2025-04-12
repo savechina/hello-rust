@@ -1,10 +1,10 @@
 use std::convert::Infallible;
-use std::fmt::format;
 use std::net::SocketAddr;
 
 use http_body_util::combinators::BoxBody;
 use http_body_util::{BodyExt, Empty, Full};
-use hyper::body::{Body, Bytes, Incoming};
+use hyper::body::Bytes;
+use hyper::body::Incoming;
 use hyper::server::conn::http1;
 use hyper::service::service_fn;
 use hyper::{Request, Response};

@@ -47,6 +47,9 @@ mod csv_sample;
 ///getset
 mod getset_sample;
 
+///hyper
+mod hyper_sample;
+
 ///mio
 mod mio_sample;
 

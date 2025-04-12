@@ -1,7 +1,8 @@
 /target
 .DS_Store
-
+*.swp
 .vscode
+.ruby-lsp
 
 docs/book
 

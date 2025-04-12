@@ -47,6 +47,9 @@ mod csv_sample;
 ///getset
 mod getset_sample;
 
+///mio
+mod mio_sample;
+
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析
     json_sample::typed_sample().unwrap();

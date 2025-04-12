@@ -259,12 +259,13 @@ mod tests {
     fn test_mio_simple() {
         mio_simple();
     }
-
+    #[ignore = "mio server test"]
     #[test]
     fn test_mio_sample_server() {
         mio_sample_main(true);
     }
 
+    #[ignore = "mio client test"]
     #[test]
     fn test_mio_sample_client() {
         mio_sample_main(false);

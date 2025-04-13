@@ -1193,6 +1193,7 @@ dependencies = [
  "mio 1.0.3",
  "mmap-sync",
  "num-bigint",
+ "object_store",
  "ollama-rs",
  "page_size",
  "parking_lot",
@@ -1473,6 +1474,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "itertools"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285"
+dependencies = [
+ "either",
+]
+
+[[package]]
 name = "itoa"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1560,7 +1570,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2752e978ffc53670f3f2e8b3ef09f348d6f7b5474a3be3f8a5befe5382e4effb"
 dependencies = [
  "anymap2",
- "itertools",
+ "itertools 0.13.0",
  "kstring",
  "liquid-derive",
  "num-traits",
@@ -1588,7 +1598,7 @@ version = "0.26.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "59b1a298d3d2287ee5b1e43840d885b8fdfc37d3f4e90d82aacfd04d021618da"
 dependencies = [
- "itertools",
+ "itertools 0.13.0",
  "liquid-core",
  "once_cell",
  "percent-encoding",
@@ -1850,6 +1860,28 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "081b846d1d56ddfc18fdf1a922e4f6e07a11768ea1b92dec44e42b72712ccfce"
 dependencies = [
  "memchr",
+]
+
+[[package]]
+name = "object_store"
+version = "0.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e9ce831b09395f933addbc56d894d889e4b226eba304d4e7adbab591e26daf1e"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "chrono",
+ "futures",
+ "http",
+ "humantime",
+ "itertools 0.14.0",
+ "parking_lot",
+ "percent-encoding",
+ "thiserror 2.0.11",
+ "tokio",
+ "tracing",
+ "url",
+ "walkdir",
 ]
 
 [[package]]

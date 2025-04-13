@@ -56,6 +56,9 @@ mod mio_sample;
 /// axum
 mod axum_sample;
 
+///object_store
+mod objectstore_sample;
+
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析
     json_sample::typed_sample().unwrap();

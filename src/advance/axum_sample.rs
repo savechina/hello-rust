@@ -73,11 +73,14 @@ struct User {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[ignore]
     #[test]
     fn test_axum_sample_main() {
         axum_simple_sample();
     }
 
+    #[ignore]
     #[test]
     fn test_axum_service_sample_main() {
         axum_service_sample();

@@ -9,6 +9,8 @@ fn sysinfo_sample() {
 
     println!("Operating System: {:?}", System::name());
     println!("OS Version: {:?}", System::os_version());
+    println!("OS Arch: {:?}", System::cpu_arch());
+    println!("Distribution ID,{:?}", System::distribution_id());
     println!("Kernel Version: {:?}", System::kernel_version());
     println!("Long OS Version: {:?}", System::long_os_version());
 }

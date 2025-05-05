@@ -65,6 +65,9 @@ mod sysinfo_sample;
 ///rayon_sample
 mod rayon_sample;
 
+/// cyclerc_sample
+mod cyclerc_sample;
+
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析
     json_sample::typed_sample().unwrap();

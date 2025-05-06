@@ -238,6 +238,290 @@ fn cycle_bump_sample() {
     // 由于使用了 Bump 分配器，所有分配的内存会在 bump 被 drop 时自动释放。
 }
 
+use std::fmt::Debug; // 用于调试打印
+use std::thread; // 虽然例子是单线程的，但 Arc 意味着它能用于多线程
+use std::time::Duration;
+
+// 定义一个简化的 B+Tree 节点
+#[derive(Debug)] // 添加 Debug 以方便打印
+struct BTreeNode {
+    id: usize, // 节点标识符
+    // 子节点列表：使用 Arc，表示父节点强拥有子节点的引用
+    children: RefCell<Vec<sync::Arc<RefCell<BTreeNode>>>>,
+    // 父节点：这是一个潜在的循环点。如果使用 Arc，Child -> Parent -> Child...
+    // 我们将在这里展示导致泄漏的 Arc 版本 和 解决泄漏的 Weak 版本
+    // parent: RefCell<Option<Arc<RefCell<BTreeNode>>>>, // <-- 导致泄漏的版本
+    parent: RefCell<Option<sync::Weak<RefCell<BTreeNode>>>>, // <-- 解决泄漏的版本 (使用 Weak)
+}
+
+// 实现 Drop Trait，以便观察何时节点被销毁
+impl Drop for BTreeNode {
+    fn drop(&mut self) {
+        println!("Dropping BTreeNode with id: {}", self.id);
+    }
+}
+
+// --- 示例 1: 使用 Arc 创建父子循环 (会导致泄漏) ---
+// 为了演示，这里我们先定义一个使用 Arc 做 parent 的 NodeProblematic
+struct BTreeNodeProblematic {
+    id: usize,
+    children: RefCell<Vec<Arc<RefCell<BTreeNodeProblematic>>>>,
+    // 这里使用 Arc 做 parent 链接
+    parent: RefCell<Option<Arc<RefCell<BTreeNodeProblematic>>>>,
+}
+impl Drop for BTreeNodeProblematic {
+    fn drop(&mut self) {
+        println!("Dropping BTreeNodeProblematic with id: {}", self.id);
+    }
+}
+
+fn demonstrate_leak_with_arc_cycle() {
+    println!("--- 示例 1: 使用 Arc 创建父子循环 (会导致泄漏) ---");
+
+    // 使用块作用域限制 Arc 变量的生命周期
+    {
+        // 创建根节点
+        let root = Arc::new(RefCell::new(BTreeNodeProblematic {
+            id: 0,
+            children: RefCell::new(vec![]),
+            parent: RefCell::new(None), // 根节点没有父节点
+        }));
+        println!(
+            "创建根节点 (ID: 0). Arc 强引用计数: {}",
+            Arc::strong_count(&root)
+        ); // 1
+
+        // 创建子节点 1
+        let child1 = Arc::new(RefCell::new(BTreeNodeProblematic {
+            id: 1,
+            children: RefCell::new(vec![]),
+            parent: RefCell::new(None),
+        }));
+        println!(
+            "创建子节点 1 (ID: 1). Arc 强引用计数: {}",
+            Arc::strong_count(&child1)
+        ); // 1
+
+        // 创建子节点 2
+        let child2 = Arc::new(RefCell::new(BTreeNodeProblematic {
+            id: 2,
+            children: RefCell::new(vec![]),
+            parent: RefCell::new(None),
+        }));
+        println!(
+            "创建子节点 2 (ID: 2). Arc 强引用计数: {}",
+            Arc::strong_count(&child2)
+        ); // 1
+
+        println!("\n链接 Root -> Child1, Root -> Child2 (使用 Arc)...");
+        // 将子节点添加到根节点的 children 列表中 (增加子节点的强引用计数)
+        root.borrow_mut()
+            .children
+            .borrow_mut()
+            .push(Arc::clone(&child1));
+        root.borrow_mut()
+            .children
+            .borrow_mut()
+            .push(Arc::clone(&child2));
+        println!(
+            "链接后 Arc 强引用计数 (root): {}, (child1): {}, (child2): {}",
+            Arc::strong_count(&root),
+            Arc::strong_count(&child1),
+            Arc::strong_count(&child2)
+        );
+        // root: 1 (main)
+        // child1: 2 (main + root.children 持有)
+        // child2: 2 (main + root.children 持有)
+
+        println!("\n链接 Child1 -> Root, Child2 -> Root (使用 Arc) - 这将创建循环...");
+        // 将子节点的 parent 指向根节点 (使用 Arc 的克隆，增加根节点的强引用计数)
+        child1.borrow_mut().parent.replace(Some(Arc::clone(&root)));
+        child2.borrow_mut().parent.replace(Some(Arc::clone(&root)));
+        println!(
+            "链接后 Arc 强引用计数 (root): {}, (child1): {}, (child2): {}",
+            Arc::strong_count(&root),
+            Arc::strong_count(&child1),
+            Arc::strong_count(&child2)
+        );
+        // root: 3 (main + child1.parent + child2.parent)
+        // child1: 2 (main + root.children)
+        // child2: 2 (main + root.children)
+
+        // 此时，我们创建了多级循环：
+        // root -> child1 -> root
+        // root -> child2 -> root
+        // 强引用计数永远不会归零。
+
+        println!("\n块作用域结束，main 函数持有的 root, child1, child2 强引用即将丢弃...");
+        // drop root, child1, child2 变量，它们持有的强引用计数减 1
+    } // <- root, child1, child2 离开作用域
+
+    // root 的强引用计数从 3 变为 0 -> 2 (child1.parent 和 child2.parent 仍然指着它)
+    // child1 的强引用计数从 2 变为 0 -> 1 (root.children 仍然指着它)
+    // child2 的强引用计数从 2 变为 0 -> 1 (root.children 仍然指着它)
+    // 所有节点的强引用计数都未能降到 0。
+
+    println!(
+        "块作用域已结束。因为循环，你应该不会看到 'Dropping BTreeNodeProblematic...' 的输出。"
+    );
+    println!("节点因循环引用而泄漏。");
+    println!("--- 示例 1 结束 ---");
+}
+
+// --- 示例 2: 使用 Arc 和 Weak 解决父子循环 ---
+// 我们将使用最初定义的 BTreeNode 结构体，其中 parent 使用 Weak
+
+fn demonstrate_fix_with_weak() {
+    println!("\n--- 示例 2: 使用 Arc 和 Weak 解决父子循环 ---");
+
+    // 使用块作用域限制 Arc 变量的生命周期
+    {
+        // 创建根节点
+        let root = Arc::new(RefCell::new(BTreeNode {
+            id: 100,
+            children: RefCell::new(vec![]),
+            parent: RefCell::new(None), // 根节点没有父节点
+        }));
+        println!(
+            "创建根节点 (ID: 100). Arc 强引用计数: {}, 弱引用计数: {}",
+            Arc::strong_count(&root),
+            Arc::weak_count(&root)
+        ); // S=1, W=0
+
+        // 创建子节点 1
+        let child1 = Arc::new(RefCell::new(BTreeNode {
+            id: 101,
+            children: RefCell::new(vec![]),
+            parent: RefCell::new(None),
+        }));
+        println!(
+            "创建子节点 1 (ID: 101). Arc 强引用计数: {}, 弱引用计数: {}",
+            Arc::strong_count(&child1),
+            Arc::weak_count(&child1)
+        ); // S=1, W=0
+
+        // 创建子节点 2
+        let child2 = Arc::new(RefCell::new(BTreeNode {
+            id: 102,
+            children: RefCell::new(vec![]),
+            parent: RefCell::new(None),
+        }));
+        println!(
+            "创建子节点 2 (ID: 102). Arc 强引用计数: {}, 弱引用计数: {}",
+            Arc::strong_count(&child2),
+            Arc::weak_count(&child2)
+        ); // S=1, W=0
+
+        println!("\n链接 Root -> Child1, Root -> Child2 (使用 Arc)...");
+        // 将子节点添加到根节点的 children 列表中 (增加子节点的强引用计数)
+        root.borrow_mut()
+            .children
+            .borrow_mut()
+            .push(Arc::clone(&child1));
+        root.borrow_mut()
+            .children
+            .borrow_mut()
+            .push(Arc::clone(&child2));
+        println!(
+            "链接后 Arc 强引用计数 (root): {}, 弱引用计数 (root): {}",
+            Arc::strong_count(&root),
+            Arc::weak_count(&root)
+        ); // S=1, W=0
+        println!(
+            "链接后 Arc 强引用计数 (child1): {}, 弱引用计数 (child1): {}",
+            Arc::strong_count(&child1),
+            Arc::weak_count(&child1)
+        ); // S=2, W=0
+        println!(
+            "链接后 Arc 强引用计数 (child2): {}, 弱引用计数 (child2): {}",
+            Arc::strong_count(&child2),
+            Arc::weak_count(&child2)
+        ); // S=2, W=0
+
+        println!("\n链接 Child1 -> Root, Child2 -> Root (使用 Weak) - 这将打破循环...");
+        // 将子节点的 parent 指向根节点 (使用 Arc::downgrade() 获取弱引用)
+        child1
+            .borrow_mut()
+            .parent
+            .replace(Some(Arc::downgrade(&root)));
+        child2
+            .borrow_mut()
+            .parent
+            .replace(Some(Arc::downgrade(&root)));
+        println!(
+            "链接后 Arc 强引用计数 (root): {}, 弱引用计数 (root): {}",
+            Arc::strong_count(&root),
+            Arc::weak_count(&root)
+        ); // S=1, W=2 (child1.parent 和 child2.parent 持有弱引用)
+        println!(
+            "链接后 Arc 强引用计数 (child1): {}, 弱引用计数 (child1): {}",
+            Arc::strong_count(&child1),
+            Arc::weak_count(&child1)
+        ); // S=2, W=0
+        println!(
+            "链接后 Arc 强引用计数 (child2): {}, 弱引用计数 (child2): {}",
+            Arc::strong_count(&child2),
+            Arc::weak_count(&child2)
+        ); // S=2, W=0
+
+        // 此时，我们创建了结构： root (强) -> child1 (强) -> root (弱), root (强) -> child2 (强) -> root (弱)
+        // 父到子的链接是强的，子到父的链接是弱的。
+        // a 的强引用计数是 1: main 函数持有 1个
+        // b 的强引用计数是 2: main 函数持有 1个, root.children 持有 1个
+        // a 的弱引用计数是 2: child1.parent 和 child2.parent 持有
+        // b 的弱引用计数是 0
+
+        // 在作用域内，我们仍然可以通过弱引用尝试访问父节点
+        if let Some(parent_weak) = child1.borrow().parent.borrow().as_ref() {
+            if let Some(parent_arc) = parent_weak.upgrade() {
+                println!(
+                    "\n成功从 child1 通过 Weak 引用升级并访问到父节点 (ID: {})",
+                    parent_arc.borrow().id
+                );
+            } else {
+                println!("\n无法从 child1 升级 Weak 引用，父节点可能已被丢弃。");
+            }
+        }
+
+        println!("\n块作用域结束，main 函数持有的 root, child1, child2 强引用即将丢弃...");
+        // drop root, child1, child2 变量，它们持有的强引用计数减 1
+    } // <- root, child1, child2 离开作用域
+
+    // 追踪 Drop 过程：
+    // 1. root 的强引用计数从 1 变为 0。
+    // 2. 因为 root 的强引用计数归零，root 指向的 NodeFixed 对象被 drop。
+    // 3. 调用 Drop::drop for BTreeNode with value: 100。打印。
+    // 4. 在 Drop(root) 中，其字段被丢弃：
+    //    - children 字段 (Vec<Arc<NodeFixed>>) 被丢弃。Vec 中的 Arc 会被丢弃。
+    //    - Dropping Arc<child1>: child1 的强引用计数从 2 变为 1。
+    //    - Dropping Arc<child2>: child2 的强引用计数从 2 变为 1。
+    //    - parent 字段是 None。
+    // 5. child1 和 child2 的强引用计数现在是 1 (由 main 函数中原始的 child1, child2 变量持有)。它们尚未被 drop。
+    // 6. child1 变量被丢弃。child1 的强引用计数从 1 变为 0。
+    // 7. 因为 child1 强引用计数归零，child1 指向的 NodeFixed 对象被 drop。
+    // 8. 调用 Drop::drop for BTreeNode with value: 101。打印。
+    // 9. 在 Drop(child1) 中：
+    //    - children 字段是空的 Vec，被丢弃。
+    //    - parent 字段持有的 Weak<root> 被丢弃。root 的弱引用计数从 2 变为 1。
+    // 10. child2 变量被丢弃。child2 的强引用计数从 1 变为 0。
+    // 11. 因为 child2 强引用计数归零，child2 指向的 NodeFixed 对象被 drop。
+    // 12. 调用 Drop::drop for BTreeNode with value: 102。打印。
+    // 13. 在 Drop(child2) 中：
+    //    - children 字段是空的 Vec，被丢弃。
+    //    - parent 字段持有的 Weak<root> 被丢弃。root 的弱引用计数从 1 变为 0。
+    // 14. 所有节点的强引用和弱引用计数都归零。所有节点都被正确 drop。
+
+    println!("块作用域已结束。因为使用了 Weak，你应该看到了所有 'Dropping BTreeNode...' 的输出。");
+    println!("节点被正确销毁。");
+    println!("--- 示例 2 结束 ---");
+}
+
+fn cycle_btree_sample() {
+    demonstrate_leak_with_arc_cycle();
+    println!("\n======================================\n");
+    demonstrate_fix_with_weak();
+}
+
 ///
 /// 单元测试
 /// #[cfg(test)]
@@ -258,5 +542,10 @@ mod test {
     #[test]
     fn test_cycle_bump_sample() {
         cycle_bump_sample();
+    }
+
+    #[test]
+    fn test_cycle_btree_sample() {
+        cycle_btree_sample();
     }
 }

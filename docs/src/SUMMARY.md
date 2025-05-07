@@ -5,6 +5,7 @@
 
 # Basic
 - [basic](./basic/basic.md)
+- [ownership](./basic/basic-ownership.md)
 
 # Advance
 - [advance](./advance/advance.md)

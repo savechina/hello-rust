@@ -3,6 +3,7 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 
+mod database;
 mod liquid_sample;
 mod pest_sample;
 mod tera_sample;

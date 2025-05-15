@@ -54,4 +54,33 @@ mod tests {
     fn tera_test() {
         tera_sample();
     }
+
+    #[test]
+    fn test_crates_path() {
+        let path = std::env::current_dir().unwrap();
+        println!("Current directory: {:?}", path);
+        let crates_path = path.join("crates");
+        println!("Crates path: {:?}", crates_path);
+        let tera_path = crates_path.join("awesome").join("templates");
+        println!("Tera path: {:?}", tera_path);
+        let tera_path_str = tera_path.to_str().unwrap();
+        println!("Tera path string: {:?}", tera_path_str);
+        let tera = Tera::new(&format!("{}/**/*", tera_path_str));
+        match tera {
+            Ok(_) => println!("Tera instance created successfully."),
+            Err(e) => println!("Error creating Tera instance: {}", e),
+        }
+
+        let tera = Tera::new("templates/**/*");
+        match tera {
+            Ok(_) => println!("Tera instance created successfully."),
+            Err(e) => println!("Error creating Tera instance: {}", e),
+        }
+
+        // data path
+        let data_path = path.join("data");
+        println!("Data path: {:?}", data_path);
+        let data_path_str = data_path.to_str().unwrap();
+        println!("Data path string: {:?}", data_path_str);
+    }
 }

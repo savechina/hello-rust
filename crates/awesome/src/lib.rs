@@ -9,6 +9,9 @@ mod database;
 ///templates
 mod templates;
 
+/// rpcs
+mod rpcs;
+
 fn main_awesome() {
     println!("Hello, Awesome!");
 }

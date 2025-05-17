@@ -10,7 +10,7 @@ use helloworld::HelloRequest;
 
 // The main function for the client.
 #[tokio::main]
-async fn hello_client_sample() -> Result<(), Box<dyn std::error::Error>> {
+pub async fn hello_client() -> Result<(), Box<dyn std::error::Error>> {
     // Connect to the gRPC server.
     // The address should match the server's listening address.
     let mut client = GreeterClient::connect("http://[::1]:50051").await?;
@@ -36,6 +36,6 @@ mod tests {
     #[ignore = "tonic grpc server"]
     #[test]
     fn test_hello_client() {
-        hello_client_sample().unwrap();
+        hello_client().unwrap();
     }
 }

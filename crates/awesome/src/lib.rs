@@ -4,13 +4,13 @@ extern crate pest;
 extern crate pest_derive;
 
 ///database
-mod database;
+pub mod database;
 
 ///templates
 mod templates;
 
 /// rpcs
-mod rpcs;
+pub mod rpcs;
 
 fn main_awesome() {
     println!("Hello, Awesome!");

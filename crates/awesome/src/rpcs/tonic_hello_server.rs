@@ -43,7 +43,7 @@ type MainFn = fn() -> Result<(), Box<dyn std::error::Error>>;
 
 // The main function where the server is started.
 #[tokio::main]
-async fn hello_server() -> Result<(), Box<dyn std::error::Error>> {
+pub async fn hello_server() -> Result<(), Box<dyn std::error::Error>> {
     // Define the address for the server to listen on.
     let addr: SocketAddr = "[::1]:50051".parse()?;
     // Create an instance of our service implementation.

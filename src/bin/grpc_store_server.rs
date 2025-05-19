@@ -1,4 +1,4 @@
-use awesome::rpcs::tonic_hello_client;
+use awesome::rpcs::tonic_store_server;
 use clap::{Parser, Subcommand};
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -8,7 +8,6 @@ struct Args {
     name: String,
 }
 fn main() {
-    println!("Hello, Tonic Hello client!");
-    let url = "http://[::1]:50051";
-    tonic_hello_client::hello_client(url);
+    println!("Hello,Tonic Store server!");
+    tonic_store_server::store_server("127.0.0.1", 9001);
 }

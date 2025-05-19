@@ -9,6 +9,7 @@ mod helloworld {
 use helloworld::greeter_server::{Greeter, GreeterServer};
 use helloworld::{HelloReply, HelloRequest};
 use std::net::SocketAddr;
+use std::time::{Instant, SystemTime, UNIX_EPOCH};
 use tonic::{Request, Response, Status};
 
 // Define a struct to hold our service implementation.
@@ -29,7 +30,14 @@ impl Greeter for MyGreeter {
         // Extract the name from the request message.
         let name = &request.get_ref().name;
         // Create the response message.
-        let message = format!("Hello {}!", name);
+        let message = format!(
+            "Hello {}!,time:{:?}",
+            name,
+            SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_millis()
+        );
 
         // Create the response reply.
         let reply = HelloReply { message };
@@ -43,9 +51,10 @@ type MainFn = fn() -> Result<(), Box<dyn std::error::Error>>;
 
 // The main function where the server is started.
 #[tokio::main]
-pub async fn hello_server() -> Result<(), Box<dyn std::error::Error>> {
+pub async fn hello_server(host: &str, port: u32) -> Result<(), Box<dyn std::error::Error>> {
     // Define the address for the server to listen on.
-    let addr: SocketAddr = "[::1]:50051".parse()?;
+    let url = format!("{}:{}", host, port);
+    let addr: SocketAddr = url.parse()?;
     // Create an instance of our service implementation.
     let greeter = MyGreeter::default();
 
@@ -69,6 +78,6 @@ mod tests {
     #[ignore = "tonic grpc server"]
     #[test]
     fn test_hello_server() {
-        hello_server().unwrap();
+        hello_server("[::1]", 50051).unwrap();
     }
 }

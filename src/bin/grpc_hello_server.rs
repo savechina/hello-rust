@@ -8,6 +8,6 @@ struct Args {
     name: String,
 }
 fn main() {
-    println!("Hello, Awesome!");
-    tonic_hello_server::hello_server();
+    println!("Hello,Tonic Hollo Server!");
+    tonic_hello_server::hello_server("[::1]", 50051);
 }

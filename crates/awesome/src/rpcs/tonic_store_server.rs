@@ -273,8 +273,9 @@ impl Inventory for StoreInventory {
 }
 
 #[tokio::main]
-pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = "127.0.0.1:9001".parse()?;
+pub async fn store_server(host: &str, port: u32) -> Result<(), Box<dyn std::error::Error>> {
+    let url = format!("{}:{}", host, port);
+    let addr = url.parse()?;
     let inventory = StoreInventory::default();
 
     let reflection_service = tonic_reflection::server::Builder::configure()

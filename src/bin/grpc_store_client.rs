@@ -1,26 +1,30 @@
-use awesome::rpcs::tonic_store_server;
+use awesome::rpcs::tonic_store_client;
 use clap::{Parser, Subcommand};
-// #[derive(Parser, Debug)]
-// #[command(version, about, long_about = None)]
-// struct Args {
-//     /// Name of the person to greet
-//     #[arg(short, long)]
-//     name: String,
-// }
 
 #[derive(Debug, Parser)]
 struct Options {
     #[clap(subcommand)]
     command: Command,
 }
+/// A simple inventory management system
+/// using gRPC and Tonic.
+/// This program allows you to add, remove, get, update quantity, and update price of items in the inventory.
+/// ./grpc_store_client add --sku TESTSKU --price 1.99 --quantity 20 --name bananas --description "yellow fruit"
+/// ./grpc_store_client get --sku TESTSKU
 
 #[derive(Debug, Parser)]
 enum Command {
+    /// Add an item to the inventory
     Add(AddOptions),
+    /// Remove an item from the inventory
     Remove(RemoveOptions),
+    /// Get an item from the inventory
     Get(GetOptions),
+    /// Update the quantity of an item in the inventory
     UpdateQuantity(UpdateQuantityOptions),
+    /// Update the price of an item in the inventory
     UpdatePrice(UpdatePriceOptions),
+    /// Watch an item in the inventory
     Watch(GetOptions),
 }
 
@@ -65,20 +69,54 @@ struct UpdatePriceOptions {
     #[clap(long)]
     price: f32,
 }
-
-fn main() {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Hello,Tonic Store server!");
-    tonic_store_server::store_server("127.0.0.1", 9001);
+    // tonic_store_server::store_server("127.0.0.1", 9001);
 
     let opts = Options::parse();
 
-    // use Command::*;
-    // match opts.command {
-    //     Add(opts) => add(opts).await?,
-    //     Remove(opts) => remove(opts).await?,
-    //     Get(opts) => get(opts).await?,
-    //     UpdateQuantity(opts) => update_quantity(opts).await?,
-    //     UpdatePrice(opts) => update_price(opts).await?,
-    //     Watch(opts) => watch(opts).await?,
-    // };
+    use tonic_store_client::{
+        AddOptions, GetOptions, RemoveOptions, UpdatePriceOptions, UpdateQuantityOptions,
+    };
+    use Command::*;
+
+    match opts.command {
+        //
+        Add(opts) => {
+            tonic_store_client::add(tonic_store_client::AddOptions {
+                sku: opts.sku,
+                price: opts.price,
+                quantity: opts.quantity,
+                name: opts.name,
+                description: opts.description,
+            })
+            .await?
+        }
+        Remove(opts) => {
+            tonic_store_client::remove(tonic_store_client::RemoveOptions { sku: opts.sku }).await?
+        }
+        Get(opts) => {
+            tonic_store_client::get(tonic_store_client::GetOptions { sku: opts.sku }).await?
+        }
+        UpdateQuantity(opts) => {
+            tonic_store_client::update_quantity(tonic_store_client::UpdateQuantityOptions {
+                sku: opts.sku,
+                change: opts.change,
+            })
+            .await?
+        }
+        UpdatePrice(opts) => {
+            tonic_store_client::update_price(tonic_store_client::UpdatePriceOptions {
+                sku: opts.sku,
+                price: opts.price,
+            })
+            .await?
+        }
+        Watch(opts) => {
+            tonic_store_client::watch(tonic_store_client::GetOptions { sku: opts.sku }).await?
+        }
+    };
+
+    Ok(())
 }

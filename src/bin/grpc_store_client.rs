@@ -77,14 +77,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let opts = Options::parse();
 
     use tonic_store_client::{
-        AddOptions, GetOptions, RemoveOptions, UpdatePriceOptions, UpdateQuantityOptions,
+        AddRequest, GetRequest, RemoveRequest, UpdatePriceRequest, UpdateQuantityRequest,
     };
     use Command::*;
 
     match opts.command {
         //
         Add(opts) => {
-            tonic_store_client::add(tonic_store_client::AddOptions {
+            tonic_store_client::add(tonic_store_client::AddRequest {
                 sku: opts.sku,
                 price: opts.price,
                 quantity: opts.quantity,
@@ -94,27 +94,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .await?
         }
         Remove(opts) => {
-            tonic_store_client::remove(tonic_store_client::RemoveOptions { sku: opts.sku }).await?
+            tonic_store_client::remove(tonic_store_client::RemoveRequest { sku: opts.sku }).await?
         }
         Get(opts) => {
-            tonic_store_client::get(tonic_store_client::GetOptions { sku: opts.sku }).await?
+            tonic_store_client::get(tonic_store_client::GetRequest { sku: opts.sku }).await?
         }
         UpdateQuantity(opts) => {
-            tonic_store_client::update_quantity(tonic_store_client::UpdateQuantityOptions {
+            tonic_store_client::update_quantity(tonic_store_client::UpdateQuantityRequest {
                 sku: opts.sku,
                 change: opts.change,
             })
             .await?
         }
         UpdatePrice(opts) => {
-            tonic_store_client::update_price(tonic_store_client::UpdatePriceOptions {
+            tonic_store_client::update_price(tonic_store_client::UpdatePriceRequest {
                 sku: opts.sku,
                 price: opts.price,
             })
             .await?
         }
         Watch(opts) => {
-            tonic_store_client::watch(tonic_store_client::GetOptions { sku: opts.sku }).await?
+            tonic_store_client::watch(tonic_store_client::GetRequest { sku: opts.sku }).await?
         }
     };
 

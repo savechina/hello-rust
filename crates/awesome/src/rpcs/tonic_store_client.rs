@@ -10,7 +10,7 @@ use store::{
 };
 use tokio_stream::StreamExt;
 
-pub struct AddOptions {
+pub struct AddRequest {
     pub sku: String,
     pub price: f32,
     pub quantity: u32,
@@ -18,7 +18,7 @@ pub struct AddOptions {
     pub description: Option<String>,
 }
 
-pub async fn add(opts: AddOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn add(opts: AddRequest) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let id = ItemIdentifier { sku: opts.sku };
@@ -47,11 +47,11 @@ pub async fn add(opts: AddOptions) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub struct RemoveOptions {
+pub struct RemoveRequest {
     pub sku: String,
 }
 
-pub async fn remove(opts: RemoveOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn remove(opts: RemoveRequest) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let request = tonic::Request::new(ItemIdentifier { sku: opts.sku });
@@ -63,11 +63,11 @@ pub async fn remove(opts: RemoveOptions) -> Result<(), Box<dyn std::error::Error
     Ok(())
 }
 
-pub struct GetOptions {
+pub struct GetRequest {
     pub sku: String,
 }
 
-pub async fn get(opts: GetOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn get(opts: GetRequest) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let request = tonic::Request::new(ItemIdentifier { sku: opts.sku });
@@ -77,13 +77,13 @@ pub async fn get(opts: GetOptions) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub struct UpdateQuantityOptions {
+pub struct UpdateQuantityRequest {
     pub sku: String,
     pub change: i32,
 }
 
 pub async fn update_quantity(
-    opts: UpdateQuantityOptions,
+    opts: UpdateQuantityRequest,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
@@ -102,12 +102,12 @@ pub async fn update_quantity(
     Ok(())
 }
 
-pub struct UpdatePriceOptions {
+pub struct UpdatePriceRequest {
     pub sku: String,
     pub price: f32,
 }
 
-pub async fn update_price(opts: UpdatePriceOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn update_price(opts: UpdatePriceRequest) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let request = tonic::Request::new(PriceChangeRequest {
@@ -125,7 +125,7 @@ pub async fn update_price(opts: UpdatePriceOptions) -> Result<(), Box<dyn std::e
     Ok(())
 }
 
-pub async fn watch(opts: GetOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn watch(opts: GetRequest) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let mut stream = client

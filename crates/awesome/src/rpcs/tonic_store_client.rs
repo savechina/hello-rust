@@ -11,22 +11,6 @@ use store::{
 };
 
 #[derive(Debug, Parser)]
-struct Options {
-    #[clap(subcommand)]
-    command: Command,
-}
-
-#[derive(Debug, Parser)]
-enum Command {
-    Add(AddOptions),
-    Remove(RemoveOptions),
-    Get(GetOptions),
-    UpdateQuantity(UpdateQuantityOptions),
-    UpdatePrice(UpdatePriceOptions),
-    Watch(GetOptions),
-}
-
-#[derive(Debug, Parser)]
 struct AddOptions {
     #[clap(long)]
     sku: String,

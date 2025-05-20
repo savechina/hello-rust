@@ -4,27 +4,21 @@ mod store {
     pub(crate) const FILE_DESCRIPTOR_SET: &[u8] =
         tonic::include_file_descriptor_set!("store_descriptor");
 }
-
 use store::inventory_client::InventoryClient;
 use store::{
     Item, ItemIdentifier, ItemInformation, ItemStock, PriceChangeRequest, QuantityChangeRequest,
 };
+use tokio_stream::StreamExt;
 
-#[derive(Debug, Parser)]
-struct AddOptions {
-    #[clap(long)]
-    sku: String,
-    #[clap(long)]
-    price: f32,
-    #[clap(default_value = "0", long)]
-    quantity: u32,
-    #[clap(long)]
-    name: Option<String>,
-    #[clap(long)]
-    description: Option<String>,
+pub struct AddOptions {
+    pub sku: String,
+    pub price: f32,
+    pub quantity: u32,
+    pub name: Option<String>,
+    pub description: Option<String>,
 }
 
-async fn add(opts: AddOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn add(opts: AddOptions) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let id = ItemIdentifier { sku: opts.sku };
@@ -53,13 +47,11 @@ async fn add(opts: AddOptions) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-#[derive(Debug, Parser)]
-struct RemoveOptions {
-    #[clap(long)]
-    sku: String,
+pub struct RemoveOptions {
+    pub sku: String,
 }
 
-async fn remove(opts: RemoveOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn remove(opts: RemoveOptions) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let request = tonic::Request::new(ItemIdentifier { sku: opts.sku });
@@ -71,13 +63,11 @@ async fn remove(opts: RemoveOptions) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-#[derive(Debug, Parser)]
-struct GetOptions {
-    #[clap(long)]
-    sku: String,
+pub struct GetOptions {
+    pub sku: String,
 }
 
-async fn get(opts: GetOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn get(opts: GetOptions) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let request = tonic::Request::new(ItemIdentifier { sku: opts.sku });
@@ -87,15 +77,14 @@ async fn get(opts: GetOptions) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-#[derive(Debug, Parser)]
-struct UpdateQuantityOptions {
-    #[clap(long)]
-    sku: String,
-    #[clap(allow_hyphen_values = true, long)]
-    change: i32,
+pub struct UpdateQuantityOptions {
+    pub sku: String,
+    pub change: i32,
 }
 
-async fn update_quantity(opts: UpdateQuantityOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn update_quantity(
+    opts: UpdateQuantityOptions,
+) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let request = tonic::Request::new(QuantityChangeRequest {
@@ -113,15 +102,12 @@ async fn update_quantity(opts: UpdateQuantityOptions) -> Result<(), Box<dyn std:
     Ok(())
 }
 
-#[derive(Debug, Parser)]
-struct UpdatePriceOptions {
-    #[clap(long)]
-    sku: String,
-    #[clap(long)]
-    price: f32,
+pub struct UpdatePriceOptions {
+    pub sku: String,
+    pub price: f32,
 }
 
-async fn update_price(opts: UpdatePriceOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn update_price(opts: UpdatePriceOptions) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let request = tonic::Request::new(PriceChangeRequest {
@@ -139,7 +125,7 @@ async fn update_price(opts: UpdatePriceOptions) -> Result<(), Box<dyn std::error
     Ok(())
 }
 
-async fn watch(opts: GetOptions) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn watch(opts: GetOptions) -> Result<(), Box<dyn std::error::Error>> {
     let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
 
     let mut stream = client
@@ -164,23 +150,6 @@ async fn watch(opts: GetOptions) -> Result<(), Box<dyn std::error::Error>> {
         };
     }
     println!("stream closed");
-
-    Ok(())
-}
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let opts = Options::parse();
-
-    use Command::*;
-    match opts.command {
-        Add(opts) => add(opts).await?,
-        Remove(opts) => remove(opts).await?,
-        Get(opts) => get(opts).await?,
-        UpdateQuantity(opts) => update_quantity(opts).await?,
-        UpdatePrice(opts) => update_price(opts).await?,
-        Watch(opts) => watch(opts).await?,
-    };
 
     Ok(())
 }

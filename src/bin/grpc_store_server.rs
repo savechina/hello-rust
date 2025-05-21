@@ -1,4 +1,4 @@
-use awesome::rpcs::tonic_store_server;
+use awesome::services::tonic_store_server;
 use clap::{Parser, Subcommand};
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]

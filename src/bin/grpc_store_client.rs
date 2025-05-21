@@ -1,4 +1,4 @@
-use awesome::rpcs::tonic_store_client;
+use awesome::services::tonic_store_client;
 use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
@@ -81,16 +81,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
     use Command::*;
 
+    let client_url = String::from("http://127.0.0.1:9001");
+
     match opts.command {
         //
         Add(opts) => {
-            tonic_store_client::add(tonic_store_client::AddRequest {
-                sku: opts.sku,
-                price: opts.price,
-                quantity: opts.quantity,
-                name: opts.name,
-                description: opts.description,
-            })
+            tonic_store_client::add(
+                client_url,
+                tonic_store_client::AddRequest {
+                    sku: opts.sku,
+                    price: opts.price,
+                    quantity: opts.quantity,
+                    name: opts.name,
+                    description: opts.description,
+                },
+            )
             .await?
         }
         Remove(opts) => {

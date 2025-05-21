@@ -18,8 +18,8 @@ pub struct AddRequest {
     pub description: Option<String>,
 }
 
-pub async fn add(opts: AddRequest) -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
+pub async fn add(url: String, opts: AddRequest) -> Result<(), Box<dyn std::error::Error>> {
+    let mut client = InventoryClient::connect(url).await?;
 
     let id = ItemIdentifier { sku: opts.sku };
 

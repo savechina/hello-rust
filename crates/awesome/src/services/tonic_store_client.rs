@@ -51,8 +51,8 @@ pub struct RemoveRequest {
     pub sku: String,
 }
 
-pub async fn remove(opts: RemoveRequest) -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
+pub async fn remove(url: String, opts: RemoveRequest) -> Result<(), Box<dyn std::error::Error>> {
+    let mut client = InventoryClient::connect(url).await?;
 
     let request = tonic::Request::new(ItemIdentifier { sku: opts.sku });
     let response = client.remove(request).await?;
@@ -67,8 +67,8 @@ pub struct GetRequest {
     pub sku: String,
 }
 
-pub async fn get(opts: GetRequest) -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
+pub async fn get(url: String, opts: GetRequest) -> Result<(), Box<dyn std::error::Error>> {
+    let mut client = InventoryClient::connect(url).await?;
 
     let request = tonic::Request::new(ItemIdentifier { sku: opts.sku });
     let item = client.get(request).await?.into_inner();
@@ -83,9 +83,10 @@ pub struct UpdateQuantityRequest {
 }
 
 pub async fn update_quantity(
+    url: String,
     opts: UpdateQuantityRequest,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
+    let mut client = InventoryClient::connect(url).await?;
 
     let request = tonic::Request::new(QuantityChangeRequest {
         sku: opts.sku,
@@ -107,8 +108,11 @@ pub struct UpdatePriceRequest {
     pub price: f32,
 }
 
-pub async fn update_price(opts: UpdatePriceRequest) -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
+pub async fn update_price(
+    url: String,
+    opts: UpdatePriceRequest,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let mut client = InventoryClient::connect(url).await?;
 
     let request = tonic::Request::new(PriceChangeRequest {
         sku: opts.sku,
@@ -125,8 +129,8 @@ pub async fn update_price(opts: UpdatePriceRequest) -> Result<(), Box<dyn std::e
     Ok(())
 }
 
-pub async fn watch(opts: GetRequest) -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = InventoryClient::connect("http://127.0.0.1:9001").await?;
+pub async fn watch(url: String, opts: GetRequest) -> Result<(), Box<dyn std::error::Error>> {
+    let mut client = InventoryClient::connect(url).await?;
 
     let mut stream = client
         .watch(ItemIdentifier {

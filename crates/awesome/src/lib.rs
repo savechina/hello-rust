@@ -10,7 +10,7 @@ pub mod database;
 mod templates;
 
 /// rpcs
-pub mod rpcs;
+pub mod services;
 
 fn main_awesome() {
     println!("Hello, Awesome!");

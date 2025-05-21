@@ -1,4 +1,4 @@
-use awesome::rpcs::tonic_hello_client;
+use awesome::services::tonic_hello_client;
 use clap::{Parser, Subcommand};
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]

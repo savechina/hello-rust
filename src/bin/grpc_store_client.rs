@@ -5,6 +5,8 @@ use clap::{Parser, Subcommand};
 struct Options {
     #[clap(subcommand)]
     command: Command,
+    #[clap(default_value = "http://127.0.0.1:9001", long)]
+    url: String,
 }
 /// A simple inventory management system
 /// using gRPC and Tonic.
@@ -69,10 +71,11 @@ struct UpdatePriceOptions {
     #[clap(long)]
     price: f32,
 }
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("Hello,Tonic Store server!");
-    // tonic_store_server::store_server("127.0.0.1", 9001);
+    println!("Hello,Tonic Store Client!");
+    println!("This is a gRPC client for the Tonic Store server.");
 
     let opts = Options::parse();
 
@@ -81,7 +84,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
     use Command::*;
 
-    let client_url = String::from("http://127.0.0.1:9001");
+    // let client_url = String::from("http://127.0.0.1:9001");
+    let client_url = opts.url;
+
+    println!("Connecting to gRPC server at {}", client_url);
 
     match opts.command {
         //
@@ -99,27 +105,39 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .await?
         }
         Remove(opts) => {
-            tonic_store_client::remove(tonic_store_client::RemoveRequest { sku: opts.sku }).await?
+            tonic_store_client::remove(
+                client_url,
+                tonic_store_client::RemoveRequest { sku: opts.sku },
+            )
+            .await?
         }
         Get(opts) => {
-            tonic_store_client::get(tonic_store_client::GetRequest { sku: opts.sku }).await?
+            tonic_store_client::get(client_url, tonic_store_client::GetRequest { sku: opts.sku })
+                .await?
         }
         UpdateQuantity(opts) => {
-            tonic_store_client::update_quantity(tonic_store_client::UpdateQuantityRequest {
-                sku: opts.sku,
-                change: opts.change,
-            })
+            tonic_store_client::update_quantity(
+                client_url,
+                tonic_store_client::UpdateQuantityRequest {
+                    sku: opts.sku,
+                    change: opts.change,
+                },
+            )
             .await?
         }
         UpdatePrice(opts) => {
-            tonic_store_client::update_price(tonic_store_client::UpdatePriceRequest {
-                sku: opts.sku,
-                price: opts.price,
-            })
+            tonic_store_client::update_price(
+                client_url,
+                tonic_store_client::UpdatePriceRequest {
+                    sku: opts.sku,
+                    price: opts.price,
+                },
+            )
             .await?
         }
         Watch(opts) => {
-            tonic_store_client::watch(tonic_store_client::GetRequest { sku: opts.sku }).await?
+            tonic_store_client::watch(client_url, tonic_store_client::GetRequest { sku: opts.sku })
+                .await?
         }
     };
 

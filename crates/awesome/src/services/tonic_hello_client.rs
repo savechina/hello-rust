@@ -10,7 +10,7 @@ use helloworld::HelloRequest;
 
 // The main function for the client.
 #[tokio::main]
-pub async fn hello_client(url: &'static str) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn hello_client(url: String) -> Result<(), Box<dyn std::error::Error>> {
     // Connect to the gRPC server.
     // The address should match the server's listening address.
 

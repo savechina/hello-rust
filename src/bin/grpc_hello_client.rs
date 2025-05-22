@@ -3,12 +3,11 @@ use clap::{Parser, Subcommand};
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// Name of the person to greet
-    #[arg(short, long)]
-    name: String,
+    #[clap(default_value = "http://127.0.0.1:9001", long)]
+    url: String,
 }
 fn main() {
     println!("Hello, Tonic Hello client!");
-    let url = "http://[::1]:50051";
-    tonic_hello_client::hello_client(url);
+    let opts = Args::parse();
+    tonic_hello_client::hello_client(opts.url);
 }

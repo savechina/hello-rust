@@ -37,6 +37,6 @@ mod tests {
     #[ignore = "tonic grpc server"]
     #[test]
     fn test_hello_client() {
-        hello_client("http://[::1]:50051").unwrap();
+        hello_client("http://[::1]:50051".to_owned()).unwrap();
     }
 }

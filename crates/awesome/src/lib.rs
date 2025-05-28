@@ -12,6 +12,9 @@ mod templates;
 /// rpcs
 pub mod services;
 
+/// sequences
+pub mod sequences;
+
 fn main_awesome() {
     println!("Hello, Awesome!");
 }

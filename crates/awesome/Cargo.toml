@@ -20,7 +20,7 @@ tokio = "1.45.0"
 tokio-stream = "0.1.17"
 tonic = "0.13.1"
 tonic-reflection = "0.13.1"
-uuid = "1.16.0"
+uuid = { version = "1.16.0", features = ["v3", "v5","v7"] }
 
 [build-dependencies]
 tonic-build = "0.13.1"

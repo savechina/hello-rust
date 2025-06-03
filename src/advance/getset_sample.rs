@@ -81,7 +81,7 @@ impl CategoryBuilder {
 
 /// Define Product model struct with getset annotations
 /// Display formatter String with derive_more annotations
-#[derive(Getters, Setters,MutGetters, CopyGetters, Default, Display)]
+#[derive(Getters, Setters, MutGetters, CopyGetters, Default, Display)]
 #[display(
     "Product(id={}, name={}, price={},in_stock={},category={})",
     id,
@@ -107,7 +107,7 @@ pub struct Product {
     #[getset(get_copy = "pub", set = "pub")] // get_copy for primitive types
     in_stock: bool,
 
-    #[getset(get = "pub",get_mut="pub", set = "pub")]
+    #[getset(get = "pub", get_mut = "pub", set = "pub")]
     category: Category,
 }
 
@@ -157,12 +157,11 @@ fn getset_sample() {
     println!("Catetory Display:{}", product.category());
 
     //after cateogry
-   let   category=   product.category_mut();
-   category.set_first_category_id(2);
-   category.set_first_category_name("蔬菜".to_string());
+    let category = product.category_mut();
+    category.set_first_category_id(2);
+    category.set_first_category_name("蔬菜".to_string());
 
-   println!("After Catetory:{}", product.category());
-
+    println!("After Catetory:{}", product.category());
 
     println!("After Product:{}", product);
 }
@@ -201,13 +200,13 @@ mod tests {
 
         println!("{}", category);
 
+        //builder pattern create instance use CategoryBuilder
+        let category = Category::builder()
+            .with_first_category(2, "水果".to_string())
+            .with_second_category(21, "苹果梨".to_string())
+            .with_three_category(201, "苹果".to_string())
+            .build();
 
-         //builder pattern create instance use CategoryBuilder
-         let category = Category::builder()
-         .with_first_category(2, "水果".to_string())
-         .with_second_category(21, "苹果梨".to_string())
-         .with_three_category(201, "苹果".to_string()).build();
-
-     println!("{}", category);
+        println!("{}", category);
     }
 }

@@ -19,7 +19,6 @@ fn get_str_at_location(pointer: usize, length: usize) -> &'static str {
 
 /// 获取字符串的内存地址和长度
 fn get_str_raw_sample() {
-
     // 获取字符串的内存地址和长度
     let (pointer, length) = get_memory_location();
 

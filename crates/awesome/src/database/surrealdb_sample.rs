@@ -94,6 +94,10 @@ async fn surreal_mem_sample() -> surrealdb::Result<()> {
 
     dbg!(per);
 
+    let health = db.health();
+
+    dbg!(health);
+
     Ok(())
 }
 

@@ -12,7 +12,7 @@ async fn main_consul() -> Result<(), Box<dyn std::error::Error>> {
     // 例如：.address("http://your-consul-host:8500")
 
     let consul_config = Config {
-        address: "http://192.168.2.6:8500".to_string(),
+        address: "http://localhost:8500".to_string(),
         token: None,          // No token required in development mode
         ..Default::default()  // Uses default values for other settings
     };
@@ -32,7 +32,7 @@ async fn main_consul() -> Result<(), Box<dyn std::error::Error>> {
     let payload = RegisterEntityPayload {
         ID: None,
         Node: node_id.to_string(),
-        Address: "192.168.2.7".to_string(), //server address
+        Address: "localhost".to_string(), //server address
         Datacenter: None,
         TaggedAddresses: Default::default(),
         NodeMeta: Default::default(),
@@ -58,10 +58,19 @@ async fn main_consul() -> Result<(), Box<dyn std::error::Error>> {
         service_name
     );
 
-    // // 构建服务注册请求
-
     // // --- 服务发现示例 (简单查询，确认服务已注册) ---
-    // println!("\n--- Discovering service: {} ---", service_name);
+
+    let service_list = consul.get_all_registered_service_names(None).await?;
+    println!("\n--- Discovering service: {:?} ---", service_list);
+
+    let service_node = consul
+        .get_service_addresses_and_ports(service_name, None)
+        .await?;
+
+    println!(
+        "\n--- Discovering service: {:?} ,server instance:{:?}---",
+        service_name, service_node
+    );
 
     // // --- KV 存储示例 ---
     // let kv_key = "my_app/config/feature_x_enabled";

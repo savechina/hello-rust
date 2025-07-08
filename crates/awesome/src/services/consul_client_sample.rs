@@ -11,11 +11,12 @@ async fn main_consul() -> Result<(), Box<dyn std::error::Error>> {
     // 默认连接到 localhost:8500。如果你有不同的Consul地址，可以在这里配置。
     // 例如：.address("http://your-consul-host:8500")
 
-    let consul_config = Config {
-        address: "http://localhost:8500".to_string(),
+    let var_name = Config {
+        address: "http://192.168.2.6:8500".to_string(),
         token: None,          // No token required in development mode
         ..Default::default()  // Uses default values for other settings
     };
+    let consul_config = var_name;
 
     let consul = Consul::new(consul_config);
 
@@ -32,7 +33,7 @@ async fn main_consul() -> Result<(), Box<dyn std::error::Error>> {
     let payload = RegisterEntityPayload {
         ID: None,
         Node: node_id.to_string(),
-        Address: "localhost".to_string(), //server address
+        Address: "192.168.2.7".to_string(), //server address
         Datacenter: None,
         TaggedAddresses: Default::default(),
         NodeMeta: Default::default(),
@@ -73,14 +74,33 @@ async fn main_consul() -> Result<(), Box<dyn std::error::Error>> {
     );
 
     // // --- KV 存储示例 ---
-    // let kv_key = "my_app/config/feature_x_enabled";
-    // let kv_value = b"true"; // KV 值是字节数组
+    let kv_key = "hello_app/config/feature_x_enabled";
+    let kv_value = b"true"; // KV 值是字节数组
+
+    let create_key_request = CreateOrUpdateKeyRequest {
+        key: kv_key,
+        ..Default::default()
+    };
+    consul
+        .create_or_update_key(create_key_request, kv_value.to_vec())
+        .await
+        .unwrap();
 
     // // 存储一个 KV 对
-    // println!("\n--- Putting KV pair: {} = {:?} ---", kv_key, kv_value);
+    println!("\n--- Putting KV pair: {} = {:?} ---", kv_key, kv_value);
 
     // // 获取 KV 对
-    // println!("\n--- Getting KV pair: {} ---", kv_key);
+    let read_key_request = ReadKeyRequest {
+        key: kv_key,
+        ..Default::default()
+    };
+
+    let read_key_result = consul.read_key(read_key_request).await.unwrap();
+
+    println!(
+        "\n--- Getting KV pair: {},value:{:?} ---",
+        kv_key, read_key_result
+    );
 
     // // --- 服务注销示例 ---
     let node_id = "root-node";

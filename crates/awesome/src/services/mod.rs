@@ -1,4 +1,5 @@
 pub mod consul_client_sample;
+pub mod framework;
 pub mod tonic_hello_client;
 pub mod tonic_hello_server;
 pub mod tonic_store_client;

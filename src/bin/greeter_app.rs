@@ -1,6 +1,6 @@
 use anyhow::Result; // Use anyhow for top-level main function error handling
 use awesome::services::framework::{
-    config::{BaseServiceConfig, ConsulConfig},
+    config::{BaseServiceConfig, RegistryConfig},
     lifecycle::{ApplicationFramework, RunnableService, ServiceStatus},
 };
 use awesome::services::greeter_service::{GreeterApplicationService, GreeterServiceConfig};
@@ -39,8 +39,8 @@ async fn main() -> Result<()> {
     let base_config = BaseServiceConfig {
         service_id_prefix: "greeter-app".to_string(),
         service_name: "my-greeter-service".to_string(),
-        consul: ConsulConfig {
-            api_url: "http://192.168.2.6:8500/v1/".to_string(),
+        consul: RegistryConfig {
+            registry_url: "http://192.168.2.6:8500/v1/".to_string(),
             service_ip: "192.168.2.7".to_string(),
         },
     };

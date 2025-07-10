@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.98"
 async-trait = "0.1.88"
+axum = "0.8.4"
 chrono = { version = "0.4.39", features = ["serde"] }
 consul-rs = "0.1.14"
 futures = "0.3.31"
@@ -14,7 +15,7 @@ pest = "2.7.15"
 pest_derive = "2.7.15"
 pest_generator = "2.7.15"
 prost = "0.13.5"
-reqwest = "0.12.22"
+reqwest = { version = "0.12.22", features = ["json"] }
 rs-consul = { version = "0.11.0", features = ["metrics", "trace"] }
 rusqlite = {version="0.32.0",features=["bundled"]}
 serde = {version="1.0.217" ,features = ["derive"]}
@@ -27,6 +28,8 @@ tokio = "1.45.0"
 tokio-stream = "0.1.17"
 tonic = "0.13.1"
 tonic-reflection = "0.13.1"
+tower = { version = "0.5.2", features = ["full"] }
+tower-http = { version = "0.6.6", features = ["trace", "tracing"] }
 tracing = "0.1.41"
 url = "2.5.4"
 uuid = { version = "1.16.0", features = ["v3", "v5","v7"] }

@@ -1,17 +1,18 @@
 use anyhow::{anyhow, Context, Result};
 use async_trait::async_trait;
-use http::StatusCode;
+// use http::StatusCode;
 use std::{collections::HashMap, net::SocketAddr, sync::Arc};
 use tokio::sync::{oneshot, RwLock};
-use tower::ServiceBuilder;
-use tower_http::trace::TraceLayer;
+use tonic::{Request, Response, Status};
+// use tower::ServiceBuilder;
+// // use tower_http::trace::TraceLayer;
 use tracing::{error, info, instrument};
 
-use crate::framework::{
+use framework::{
     config::{BaseServiceConfig, ServiceConfig as TraitServiceConfig},
-    consul::{AgentServiceCheck, AgentServiceRegistration, ConsulClient},
     error::FrameworkError,
     lifecycle::{RunnableService, ServiceStatus},
+    resgistry::{AgentServiceCheck, AgentServiceRegistration, ConsulClient},
 };
 
 // --- gRPC auto-generated code ---
@@ -22,6 +23,8 @@ use helloworld::{
     greeter_server::{Greeter, GreeterServer},
     HelloReply, HelloRequest,
 };
+
+use crate::services::framework;
 
 // --- gRPC Service Logic ---
 #[derive(Default)]
@@ -95,7 +98,7 @@ impl RunnableService for GreeterApplicationService {
 
     #[instrument(name = "greeter_service_logic", skip(self, shutdown_rx))]
     async fn start_service_logic(
-        self,
+        &self,
         shutdown_rx: oneshot::Receiver<()>,
     ) -> Result<(), FrameworkError> {
         let grpc_addr: SocketAddr = format!(
@@ -114,26 +117,26 @@ impl RunnableService for GreeterApplicationService {
         // --- Build gRPC Service with Tower Middleware ---
         let greeter_service = helloworld::greeter_server::GreeterServer::new(MyGreeter::default());
 
-        let service_with_middleware = ServiceBuilder::new()
-            .layer(TraceLayer::new_for_grpc()) // Add gRPC tracing (from tower-http)
-            // Add other Tower middleware here, e.g., .timeout(), .rate_limit()
-            .service(greeter_service);
+        // let service_with_middleware = ServiceBuilder::new()
+        //     .layer(TraceLayer::new_for_grpc()) // Add gRPC tracing (from tower-http)
+        //     // Add other Tower middleware here, e.g., .timeout(), .rate_limit()
+        //     .service(greeter_service);
 
         let grpc_server = tonic::transport::Server::builder()
-            .add_service(service_with_middleware)
+            .add_service(greeter_service)
             .serve(grpc_addr);
 
         // --- Start HTTP Health Check Server ---
-        let health_app = axum::Router::new().route(
-            "/health",
-            axum::routing::get(|| async {
-                // In a real application, perform internal health checks here (e.g., database connection)
-                StatusCode::OK
-            }),
-        );
+        // let health_app = axum::Router::new().route(
+        //     "/health",
+        //     axum::routing::get(|| async {
+        //         // In a real application, perform internal health checks here (e.g., database connection)
+        //         StatusCode::OK
+        //     }),
+        // );
 
-        let health_server =
-            axum::Server::bind(&http_health_addr).serve(health_app.into_make_service());
+        // let health_server =
+        //     axum::Server::bind(&http_health_addr).serve(health_app.into_make_service());
 
         // --- Register with Consul ---
         let registration_payload = AgentServiceRegistration {
@@ -179,14 +182,14 @@ impl RunnableService for GreeterApplicationService {
                     info!("gRPC server for '{}' stopped gracefully.", self.instance_id);
                 }
             }
-            health_res = health_server => {
-                if let Err(e) = health_res {
-                    error!("Health check server for '{}' stopped with error: {}", self.instance_id, e);
-                    return Err(FrameworkError::Startup(format!("Health check server failed: {}", e)));
-                } else {
-                    info!("Health check server for '{}' stopped gracefully.", self.instance_id);
-                }
-            }
+            // health_res = health_server => {
+            //     if let Err(e) = health_res {
+            //         error!("Health check server for '{}' stopped with error: {}", self.instance_id, e);
+            //         return Err(FrameworkError::Startup(format!("Health check server failed: {}", e)));
+            //     } else {
+            //         info!("Health check server for '{}' stopped gracefully.", self.instance_id);
+            //     }
+            // }
             _ = shutdown_rx => {
                 info!("Shutdown signal received for '{}'.", self.instance_id);
             }

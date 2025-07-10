@@ -11,7 +11,7 @@ pub struct ConsulConfig {
 impl Default for ConsulConfig {
     fn default() -> Self {
         Self {
-            api_url: "http://127.0.0.1:8500/v1".to_string(),
+            api_url: "http://127.0.0.1:8500/v1/".to_string(),
             service_ip: "127.0.0.1".to_string(),
         }
     }

@@ -10,7 +10,7 @@ use url::Url;
 #[derive(Serialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]
 pub struct AgentServiceRegistration {
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none", rename = "ID")]
     pub id: Option<String>,
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -28,7 +28,7 @@ pub struct AgentServiceRegistration {
 #[derive(Serialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]
 pub struct AgentServiceCheck {
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none", rename = "ID")]
     pub id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

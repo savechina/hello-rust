@@ -1,10 +1,10 @@
 use anyhow::{anyhow, Context, Result};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use serde_json;
 use std::collections::HashMap;
 use tracing::{error, info, instrument, warn};
 use url::Url;
-
 // --- Consul API Structs (these are the actual data structures matching Consul's JSON API) ---
 
 #[derive(Serialize, Debug, Clone)]
@@ -28,8 +28,8 @@ pub struct AgentServiceRegistration {
 #[derive(Serialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]
 pub struct AgentServiceCheck {
-    #[serde(skip_serializing_if = "Option::is_none", rename = "ID")]
-    pub id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub check_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -68,8 +68,8 @@ pub struct ConsulClient {
 }
 
 impl ConsulClient {
-    pub fn new(consul_api_url: &str) -> Result<Self> {
-        let base_url = Url::parse(consul_api_url).context("Invalid Consul API URL")?;
+    pub fn new(registry_url: &str) -> Result<Self> {
+        let base_url = Url::parse(registry_url).context("Invalid Consul API URL")?;
         Ok(Self {
             http_client: Client::new(),
             consul_api_base_url: base_url,
@@ -78,6 +78,15 @@ impl ConsulClient {
 
     #[instrument(name = "consul_register", skip(self, registration))]
     pub async fn register_service(&self, registration: &AgentServiceRegistration) -> Result<()> {
+        // Ensure the registration has a valid ID
+        if registration.id.is_none() {
+            return Err(anyhow!("Service registration must have a valid ID"));
+        }
+
+        let reg_str = serde_json::to_string(&registration).unwrap();
+
+        println!("Serialized AgentServiceRegistration: {}", reg_str);
+
         let url = self.consul_api_base_url.join("agent/service/register")?;
 
         let response = self
@@ -170,5 +179,43 @@ impl ConsulClient {
             service_name
         );
         Ok(nodes)
+    }
+}
+
+///
+/// 单元测试
+/// #[cfg(test)]
+///
+#[cfg(test)]
+mod tests {
+    // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_registration_to_json() {
+        let registration = AgentServiceRegistration {
+            id: Some("test-service".to_string()),
+            name: "Test Service".to_string(),
+            tags: Some(vec!["tag1".to_string(), "tag2".to_string()]),
+            address: Some("".to_string()),
+            port: Some(8080),
+            meta: Some(HashMap::new()),
+            check: Some(AgentServiceCheck {
+                check_id: Some("test-check".to_string()),
+                name: Some("Test Check".to_string()),
+                http: Some("http://localhost:8080/health".to_string()),
+                tcp: None,
+                interval: Some("10s".to_string()),
+                timeout: Some("5s".to_string()),
+                deregister_critical_service_after: Some("1m".to_string()),
+            }),
+        };
+        // Serialize the registration to JSON
+        // This will convert the AgentServiceRegistration struct into a JSON string
+        // using serde_json's to_string function.
+        let reg_str = serde_json::to_string(&registration).unwrap();
+
+        println!("Serialized AgentServiceRegistration: {}", reg_str);
     }
 }

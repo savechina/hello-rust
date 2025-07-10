@@ -8,7 +8,7 @@ use uuid::Uuid;
 use super::{
     config::{BaseServiceConfig, ServiceConfig as TraitServiceConfig},
     error::FrameworkError,
-    resgistry::{AgentServiceRegistration, ConsulClient}, // Import Consul structs
+    registry::{AgentServiceRegistration, ConsulClient}, // Import Consul structs
 };
 
 /// Represents the current operational status of a service.

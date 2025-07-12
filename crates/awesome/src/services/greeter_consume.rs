@@ -29,26 +29,8 @@ use framework::{
 use crate::services::framework::{self, config::RegistryConfig};
 
 // The main function for the client.
-#[tokio::main]
+// #[tokio::main]
 pub async fn start_consume(url: String) -> Result<()> {
-    // --- 1. Initialize Logging ---
-    // This should be done once at the very beginning of your application.
-    // 1. Initialize the tracing subscriber
-    // This should be done once at the very beginning of your application.
-    tracing_subscriber::registry()
-        .with(
-            fmt::layer() // Use the fmt layer for console output
-                .compact() // Make the output more compact (optional)
-                .with_target(true) // Include the target (module path) of the event
-                .with_level(true) // Include the log level
-                .with_thread_ids(true) // Include thread IDs (optional)
-                .with_thread_names(true), // Include thread names (optional)
-        )
-        .with(
-            EnvFilter::from_default_env() // Allow filtering via RUST_LOG env var
-                .add_directive(Level::INFO.into()), // Default log level if RUST_LOG is not set
-        )
-        .init(); // Initialize the global default subscriber
     info!("Starting gRPC client for service discovery...");
 
     // --- 2. Configure Consul Client ---
@@ -169,6 +151,30 @@ mod tests {
     #[ignore = "tonic grpc server"]
     #[test]
     fn test_hello_client() {
-        start_consume("http://192.168.2.7:50051".to_owned()).unwrap();
+        // --- 1. Initialize Logging ---
+        // This should be done once at the very beginning of your application.
+        // 1. Initialize the tracing subscriber
+        // This should be done once at the very beginning of your application.
+        tracing_subscriber::registry()
+            .with(
+                fmt::layer() // Use the fmt layer for console output
+                    .compact() // Make the output more compact (optional)
+                    .with_target(true) // Include the target (module path) of the event
+                    .with_level(true) // Include the log level
+                    .with_thread_ids(true) // Include thread IDs (optional)
+                    .with_thread_names(true), // Include thread names (optional)
+            )
+            .with(
+                EnvFilter::from_default_env() // Allow filtering via RUST_LOG env var
+                    .add_directive(Level::INFO.into()), // Default log level if RUST_LOG is not set
+            )
+            .init(); // Initialize the global default subscriber
+
+        let rt = tokio::runtime::Runtime::new().unwrap();
+        rt.block_on(async {
+            start_consume("http://192.168.2.7:50051".to_owned())
+                .await
+                .unwrap();
+        });
     }
 }

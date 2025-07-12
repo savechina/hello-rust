@@ -6,6 +6,7 @@ use tokio::sync::{oneshot, RwLock};
 use tonic::{Request, Response, Status};
 use tower::ServiceBuilder;
 use tower_http::trace::TraceLayer;
+use uuid::uuid;
 // use hyper::Server;
 use tracing::{error, info, instrument};
 
@@ -40,8 +41,14 @@ impl Greeter for MyGreeter {
     ) -> Result<Response<HelloReply>, Status> {
         let name = request.into_inner().name;
         info!("Received greeting request from: {}", name);
+
+        let trace_id = uuid::Uuid::new_v4().to_string();
+
         let reply = helloworld::HelloReply {
-            message: format!("Hello {} from gRPC Greeter Service!", name),
+            message: format!(
+                "Hello {} from gRPC Greeter Service!traceId:{}",
+                name, trace_id
+            ),
         };
         Ok(Response::new(reply))
     }

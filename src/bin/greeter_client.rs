@@ -30,10 +30,8 @@ async fn main() -> Result<()> {
                 .add_directive(Level::INFO.into()), // Default log level if RUST_LOG is not set
         )
         .init(); // Initialize the global default subscriber
-
-    let _span_ = span!(Level::TRACE, "app_startup").entered();
+    let _span_ = span!(Level::TRACE, "greeter_client_startup").entered();
     info!("Starting application framework...");
-
     // --- 2. Define Base Configuration ---
     // In a real app, you might load this from a file (e.g., JSON, YAML)
     let base_config = BaseServiceConfig {
@@ -44,55 +42,7 @@ async fn main() -> Result<()> {
             service_ip: "192.168.2.7".to_string(),
         },
     };
-
     // --- 3. Define Greeter Service Specific Configuration ---
-    let greeter_config = GreeterServiceConfig {
-        base_config,
-        grpc_port: 50052,
-        http_health_port: 8081,
-    };
-
-    // --- 4. Initialize and Start the Service via the Framework ---
-    let mut app_framework = ApplicationFramework::<GreeterApplicationService>::new(greeter_config)
-        .expect("Failed to initialize ApplicationFramework");
-
-    info!(
-        "Application service '{}' started in background.",
-        app_framework.service().instance_id()
-    );
-
-    // --- 5. Main Application Loop (Simulates ongoing work and status monitoring) ---
-    for i in 0..100 {
-        sleep(Duration::from_secs(3)).await;
-        let current_status = app_framework.get_status().await;
-        info!(
-            "Main loop ({}s): Current service status: {:?}",
-            i * 3,
-            current_status
-        );
-
-        if matches!(current_status, ServiceStatus::Failed(_)) {
-            error!("Service entered a failed state. Initiating immediate exit.");
-            break; // Service failed, exit loop
-        }
-    }
-
-    // --- 6. Handle OS Signals for Graceful Shutdown ---
-    info!("Press Ctrl+C to initiate graceful shutdown...");
-    tokio::signal::ctrl_c()
-        .await
-        .expect("Failed to listen for Ctrl+C");
-    info!("Ctrl+C received. Initiating graceful shutdown via framework.");
-
-    // --- 7. Stop the Service Gracefully ---
-    match app_framework.stop().await {
-        Ok(_) => info!("Application service gracefully stopped."),
-        Err(e) => error!("Application service stopped with error: {}", e),
-    }
-
-    // --- 8. Final Status Check ---
-    let final_status = app_framework.get_status().await;
-    info!("Final service status: {:?}", final_status);
 
     Ok(())
 }

@@ -16,14 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # 2. 安装 protoc
-      # 这个步骤至关重要，它会下载并配置 protoc
       - name: Install Protoc
-        uses: extractions/setup-protoc@v1 # 使用 setup-protoc action
+        uses: arduino/setup-protoc@v2
         with:
-          version:
-            "29.3" # 指定你需要的 protoc 版本，例如 29.3
-            # 你可以根据项目的 protoc 版本要求进行调整，
-            # 通常与你的 protobuf crate 版本兼容。
+          version: "29.3"
       - name: Build
         run: cargo build --verbose
       - name: Run tests

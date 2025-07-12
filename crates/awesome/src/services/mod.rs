@@ -1,5 +1,6 @@
 pub mod consul_client_sample;
 pub mod framework;
+pub mod greeter_client;
 pub mod greeter_service;
 pub mod tonic_hello_client;
 pub mod tonic_hello_server;

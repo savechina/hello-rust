@@ -42,7 +42,7 @@ pub trait RunnableService: Send + Sync + 'static {
     fn instance_id(&self) -> &str;
 
     /// Returns a clone of the shared status Arc.
-    fn get_status_arc(&self) -> Arc<RwLock<ServiceStatus>>;
+    fn get_status(&self) -> Arc<RwLock<ServiceStatus>>;
 
     /// The main async logic for the service.
     /// It should run indefinitely until `shutdown_rx` receives a signal or a fatal error occurs.
@@ -93,7 +93,7 @@ where
         // Spawn the service's main logic as a background task
         let service_handle = tokio::spawn(async move {
             let instance_id_clone = service_for_task.instance_id().to_string();
-            let status_arc_clone = service_for_task.get_status_arc();
+            let status_arc_clone = service_for_task.get_status();
 
             // Set status to Starting before calling start_service_logic
             {

@@ -34,6 +34,6 @@ tracing = "0.1.41"
 url = "2.5.4"
 uuid = { version = "1.16.0", features = ["v3", "v5","v7"] }
 zerocopy = "0.8.25"
-
+tracing-subscriber = {version ="0.3.18",features=["env-filter"]}
 [build-dependencies]
 tonic-build = "0.13.1"

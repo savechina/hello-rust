@@ -93,7 +93,7 @@ impl RunnableService for GreeterApplicationService {
         &self.instance_id
     }
 
-    fn get_status_arc(&self) -> Arc<RwLock<ServiceStatus>> {
+    fn get_status(&self) -> Arc<RwLock<ServiceStatus>> {
         Arc::clone(&self.status)
     }
 

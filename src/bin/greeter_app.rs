@@ -48,8 +48,8 @@ async fn main() -> Result<()> {
     // --- 3. Define Greeter Service Specific Configuration ---
     let greeter_config = GreeterServiceConfig {
         base_config,
-        grpc_port: 50051,
-        http_health_port: 8080,
+        grpc_port: 50052,
+        http_health_port: 8081,
     };
 
     // --- 4. Initialize and Start the Service via the Framework ---

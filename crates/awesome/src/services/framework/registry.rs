@@ -50,6 +50,7 @@ pub struct AgentServiceCheck {
 pub struct CatalogServiceNode {
     pub node: String,
     pub address: String,
+    #[serde(rename = "ServiceID")]
     pub service_id: String,
     pub service_name: String,
     pub service_address: String,

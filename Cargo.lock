@@ -581,6 +581,7 @@ dependencies = [
  "tower",
  "tower-http",
  "tracing",
+ "tracing-subscriber",
  "url",
  "uuid",
  "zerocopy 0.8.25",

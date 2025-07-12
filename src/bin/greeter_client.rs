@@ -3,6 +3,7 @@ use awesome::services::framework::{
     config::{BaseServiceConfig, RegistryConfig},
     lifecycle::{ApplicationFramework, RunnableService, ServiceStatus},
 };
+use awesome::services::greeter_consume;
 use awesome::services::greeter_service::{GreeterApplicationService, GreeterServiceConfig};
 use tokio::time::{sleep, Duration};
 use tracing::{error, info, span, Level};
@@ -42,7 +43,11 @@ async fn main() -> Result<()> {
             service_ip: "192.168.2.7".to_string(),
         },
     };
+
     // --- 3. Define Greeter Service Specific Configuration ---
+
+    greeter_consume::start_consume("http://192.168.2.7:50052".to_string())
+        .expect("Failed to run greeter consume client");
 
     Ok(())
 }

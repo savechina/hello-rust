@@ -30,7 +30,7 @@ use crate::services::framework::{self, config::RegistryConfig};
 
 // The main function for the client.
 #[tokio::main]
-pub async fn greeter_consume(url: String) -> Result<()> {
+pub async fn start_consume(url: String) -> Result<()> {
     // --- 1. Initialize Logging ---
     // This should be done once at the very beginning of your application.
     // 1. Initialize the tracing subscriber
@@ -169,6 +169,6 @@ mod tests {
     #[ignore = "tonic grpc server"]
     #[test]
     fn test_hello_client() {
-        greeter_consume("http://192.168.2.7:50051".to_owned()).unwrap();
+        start_consume("http://192.168.2.7:50051".to_owned()).unwrap();
     }
 }

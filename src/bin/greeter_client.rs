@@ -47,7 +47,13 @@ async fn main() -> Result<()> {
     // --- 3. Define Greeter Service Specific Configuration ---
 
     greeter_consume::start_consume("http://192.168.2.7:50052".to_string())
+        .await
         .expect("Failed to run greeter consume client");
 
+    info!("Press Ctrl+C to initiate graceful shutdown...");
+    tokio::signal::ctrl_c()
+        .await
+        .expect("Failed to listen for Ctrl+C");
+    info!("Ctrl+C received. Initiating graceful shutdown via framework.");
     Ok(())
 }

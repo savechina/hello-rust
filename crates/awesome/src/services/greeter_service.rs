@@ -46,7 +46,7 @@ impl Greeter for MyGreeter {
 
         let reply = helloworld::HelloReply {
             message: format!(
-                "Hello {} from gRPC Greeter Service!traceId:{}",
+                "Hello {} from gRPC Greeter Service! traceId:{}",
                 name, trace_id
             ),
         };

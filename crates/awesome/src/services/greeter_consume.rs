@@ -6,10 +6,11 @@ use anyhow::{anyhow, Context, Result};
 use axum::http::StatusCode;
 use helloworld::greeter_client::GreeterClient;
 use helloworld::HelloRequest;
+use rand::{thread_rng, Rng};
 use std::{collections::HashMap, net::SocketAddr, sync::Arc};
 use tokio::sync::{oneshot, RwLock};
 use tonic::{transport::Channel, Request, Response, Status};
-use tower::{util::rng, ServiceBuilder};
+use tower::ServiceBuilder;
 use tower_http::trace::TraceLayer;
 // use hyper::Server;
 use tracing::{error, info, instrument, Level};
@@ -29,7 +30,7 @@ use crate::services::framework::{self, config::RegistryConfig};
 
 // The main function for the client.
 #[tokio::main]
-pub async fn greeter_client(url: String) -> Result<()> {
+pub async fn greeter_consume(url: String) -> Result<()> {
     // --- 1. Initialize Logging ---
     // This should be done once at the very beginning of your application.
     // 1. Initialize the tracing subscriber
@@ -128,12 +129,18 @@ pub async fn greeter_client(url: String) -> Result<()> {
         if let Some(client) = &mut client_opt {
             // Use &mut client_opt to take mutable reference
             info!("Attempting gRPC call...");
-            match client
-                .say_hello(HelloRequest {
-                    name: "Client i".into(),
-                })
-                .await
-            {
+            // Prepare the request
+            let mut rng = thread_rng();
+            let client_id = rng.gen_range(0..10000); // Random client ID for demonstration
+                                                     // Create a HelloRequest with a name
+                                                     // This is a simple request, you can modify it as needed.
+                                                     // Create a HelloRequest with a name
+            let request = HelloRequest {
+                name: format!("Client#{}", client_id).into(),
+            };
+            // Use the client to make the gRPC call
+            // Make the gRPC call
+            match client.say_hello(request).await {
                 Ok(response) => {
                     let msg = response.into_inner().message;
                     info!("gRPC Response: {}", msg);
@@ -151,8 +158,7 @@ pub async fn greeter_client(url: String) -> Result<()> {
         // Sleep before the next discovery attempt
         tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
     }
-    // --- 3. Create the gRPC client ---
-    // This will use the URL provided to connect to the gRPC server.
+
     info!("Shutdown GreeterClient... done");
     Ok(())
 }
@@ -163,6 +169,6 @@ mod tests {
     #[ignore = "tonic grpc server"]
     #[test]
     fn test_hello_client() {
-        greeter_client("http://192.168.2.7:50051".to_owned()).unwrap();
+        greeter_consume("http://192.168.2.7:50051".to_owned()).unwrap();
     }
 }

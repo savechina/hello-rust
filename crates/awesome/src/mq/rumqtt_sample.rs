@@ -39,10 +39,14 @@ fn mqtt_sync_sample() {
     // Iterate to poll the eventloop for connection progress
     for (i, notification) in connection.iter().enumerate() {
         info!("value:{},Notification = {:?}", i, notification);
-        notification
+        let message = notification.unwrap();
+        if let Event::Incoming(Packet::Publish(p)) = message {
+            info!("message: {:?}", p)
+        }
     }
 }
 #[tokio::main]
+
 async fn mqtt_async_sample() {
     info!("mqtt_async_sample 'hello/rumqtt'");
 

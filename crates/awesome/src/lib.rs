@@ -15,6 +15,9 @@ pub mod services;
 /// sequences
 pub mod sequences;
 
+/// message queue
+pub mod mq;
+
 fn main_awesome() {
     println!("Hello, Awesome!");
 }

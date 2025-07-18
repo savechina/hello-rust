@@ -4,3 +4,8 @@ language = "en"
 multilingual = false
 src = "src"
 title = "Hello Rust"
+
+[output.html]
+# 指定输出目录为 docs
+default-theme = "light"
+root = "/hello-rust/"

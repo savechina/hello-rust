@@ -1,5 +1,5 @@
 # Hello Rust
-|英文|[简体中文](README_zh.md)|
+| 英文 | [简体中文](README_zh.md)|
 
 
 Rust简明教程. This is an example code for learning Rust programming language.

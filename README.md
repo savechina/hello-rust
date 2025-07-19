@@ -1,8 +1,7 @@
 # Hello Rust
  English | [简体中文](README_zh.md)
 
-
-Rust简明教程. This is an example code for learning Rust programming language.
+[**Hello Rust**]( https://savechina.github.io/hello-rust/). This is an example code for learning Rust programming language.
 
 ## Getting Started
 
@@ -25,7 +24,6 @@ This is an example code library for Algorithm and Data structure of Rust.
 ## LeetCode
 
 It also includes answers to sample LeetCode problems as additional practice and demonstration of learned concepts.
-
 
 ## Awesome
 

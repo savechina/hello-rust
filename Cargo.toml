@@ -37,7 +37,6 @@ bitvec = "1.0.1"
 base64 = "0.22.1"
 sqlx = { version = "0.8.2", features = [
     "sqlite",
-    "runtime-tokio",
     "tls-native-tls",
     "runtime-tokio",
 ] }

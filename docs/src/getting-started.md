@@ -1,6 +1,37 @@
 # Getting Started
 
-hello-rust
+## 安装 Rust
+
+首先，你需要安装 Rust。你可以从 [Rust 官方网站](https://www.rust-lang.org/) 下载并安装。
+
+Windows 上，你可以从 [Rust 官方网站](https://www.rust-lang.org/) 下 载并安装。
+
+Linux 上，你可以使用包管理器来安装 Rust：
+
+```bash
+    $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    $ rustup update
+```
+
+或者
+
+```bash
+    $ sudo apt-get install rustup
+```
+
+MacOS 上，你可以使用 Homebrew 来安装 Rust：
+```bash
+    $ brew install rustup
+    $ rustup update
+```
+
+## 创建项目
+
+安装完成后，你可以使用以下命令来创建一个新的 Rust项目：
+
+```bash
+    $ cargo new hello-rust
+```
 
 
 Cargo 推荐的目录结构，解释如下：

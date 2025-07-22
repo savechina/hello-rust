@@ -11,7 +11,7 @@
     - [了解所有权](./basic/ownership.md)
 
 # Advance
-- [高阶进阶](./advance/advance-overview.md)
+- [高级进阶](./advance/advance-overview.md)
     - [文件目录](./advance/directory.md)
     - [数据库](./advance/database.md)
 

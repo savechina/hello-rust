@@ -13,7 +13,7 @@ Linux 上，你可以使用包管理器来安装 Rust：
     $ rustup update
 ```
 
-或者
+或者 Ubuntu 下使用以下命令来安装 Rust：
 
 ```bash
     $ sudo apt-get install rustup

@@ -8,6 +8,7 @@ title = "Hello Rust"
 
 [preprocessor.admonish]
 command = "mdbook-admonish"
+assets_version = "3.1.0" # do not edit: managed by `mdbook-admonish install`
 
 [output.html]
 # 指定输出目录为 docs
@@ -15,4 +16,4 @@ default-theme = "light"
 #root = "/hello-rust/"
 git-repository-url = "https://github.com/savechina/hello-rust"
 git-repository-icon = "fa-github"
-additional-css = ["./mdbook-admonish.css"]
+additional-css = ["./assets/css/mdbook-admonish.css"]

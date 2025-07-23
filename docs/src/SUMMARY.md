@@ -9,6 +9,12 @@
     - [变量表达式](./basic/expression.md)
     - [基础数据类型](./basic/datatype.md)
     - [了解所有权](./basic/ownership.md)
+    - [结构体](./basic/struct.md)
+        - [结构体字段](./basic/struct-fields.md)
+        - [结构体方法](./basic/struct-methods.md)
+    - [枚举](./basic/enums.md)
+    - [模块](./basic/module.md)
+
 
 # Advance
 - [高级进阶](./advance/advance-overview.md)

@@ -62,3 +62,19 @@ Cargo 推荐的目录结构，解释如下：
 * 基准测试 benchmark 放在 benches 目录下
 * 示例代码放在 examples 目录下
 * 集成测试代码放在 tests 目录下
+
+
+> [!NOTE]  
+> Highlights information that users should take into account, even when skimming.
+
+> [!TIP]
+> Optional information to help a user be more successful.
+
+> [!IMPORTANT]  
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]  
+> Critical content demanding immediate user attention due to potential risks.
+
+> [!CAUTION]
+> Negative potential consequences of an action.

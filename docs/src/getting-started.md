@@ -11,18 +11,25 @@ Linux 上，你可以使用包管理器来安装 Rust：
 ```bash
     $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     $ rustup update
+    # rustup toolchain install stable 
+    $ rustup default stable 
 ```
 
 或者 Ubuntu 下使用以下命令来安装 Rust：
 
 ```bash
     $ sudo apt-get install rustup
+    $ rustup update
+    # rustup toolchain install stable 
+    $ rustup default stable 
 ```
 
 MacOS 上，你可以使用 Homebrew 来安装 Rust：
 ```bash
     $ brew install rustup
     $ rustup update
+    # rustup toolchain install stable 
+    $ rustup default stable 
 ```
 
 ## 创建项目

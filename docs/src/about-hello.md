@@ -14,4 +14,4 @@ Rust 是一个非常优秀的系统编程语言，它简洁易读，性能高，
 对于新手来说，**Hello, Rust** 是一个绝佳的起点。通过这个项目，你不仅能快速入门 Rust 编程，还能通过编程、调试、运行示例代码，迅速掌握 Rust 的核心知识点，熟悉基础语法和基本概念。更棒的是，它还涵盖了高级进阶知识和精选的 Rust Crates 库应用示例。
 
 
-本书的当前版本假设你使用 Rust 1.86.0（2025-02-28 发布）或更高版本并在所有项目的 Cargo.toml 文件中通过 edition = "2024"将其配置为使用 Rust 2024 edition 惯用法。请查看Getting Started的 “安装” 部分了解如何安装和升级 Rust。
+本书的当前版本假设你使用 Rust 1.86.0（2025-04-03 发布）或更高版本并在所有项目的 Cargo.toml 文件中通过 edition = "2024"将其配置为使用 Rust 2024 edition 惯用法。请查看[Getting Started](getting-started.md)的 “安装” 部分了解如何安装和升级 Rust。

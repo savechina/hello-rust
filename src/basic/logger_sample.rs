@@ -42,7 +42,7 @@ fn add_one(num: i32) -> i32 {
 }
 
 // pub mod  yak_shave;
-use crate::basic::yak_shave;
+use crate::basic::tracing_sample;
 use tracing;
 use tracing_subscriber::FmtSubscriber;
 /**
@@ -63,7 +63,7 @@ pub(crate) fn tracing_sample() {
     // this creates a new event, outside of any spans.
     tracing::info!(number_of_yaks, "preparing to shave yaks");
 
-    let number_shaved = yak_shave::shave_all(number_of_yaks);
+    let number_shaved = tracing_sample::shave_all(number_of_yaks);
     tracing::info!(
         all_yaks_shaved = number_shaved == number_of_yaks,
         "yak shaving completed."

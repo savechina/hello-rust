@@ -34,7 +34,7 @@ pub mod threads_sample;
 pub mod rectangle;
 
 ///日志 trace
-pub mod yak_shave;
+pub mod tracing_sample;
 
 ///日志
 pub mod logger_sample;

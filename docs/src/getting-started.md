@@ -34,6 +34,24 @@ MacOS 上，你可以使用 Homebrew 来安装 Rust：
 ```
 
 
+
+这将创建一个名为 `hello-rust` 的项目目录，并在其中创建一个 `Cargo.toml` 文件，其中包含了项目的依赖信息。
+进入项目目录：  
+```bash
+    $ cd hello-rust
+```
+
+## 编译和运行
+你可以使用以下命令来编译和运行项目
+```bash
+    $ cargo build
+    $ cargo run
+```
+
+这将编译项目并运行 `main.rs` 文件。运行后，你会看到输出 `Hello, world!`。
+
+## 项目结构
+
 Cargo 推荐的目录结构，解释如下：
 * Cargo.toml 和 Cargo.lock 保存在 package 根目录下
 * 源代码放在 src 目录下

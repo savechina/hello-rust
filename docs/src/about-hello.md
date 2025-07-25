@@ -15,3 +15,4 @@ Rust 是一个非常优秀的系统编程语言，它简洁易读，性能高，
 
 
 本书的当前版本假设你使用 Rust 1.86.0（2025-04-03 发布）或更高版本并在所有项目的 Cargo.toml 文件中通过 edition = "2024"将其配置为使用 Rust 2024 edition 惯用法。请查看[Getting Started](getting-started.md)的 “安装” 部分了解如何安装和升级 Rust。
+

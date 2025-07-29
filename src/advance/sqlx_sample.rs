@@ -152,6 +152,7 @@ mod tests {
         sqlx_sqlite_example();
     }
 
+    #[ignore = "reason: mysql connection is not available in CI"]
     #[test]
     fn test_sqlx_mysql_example() {
         sqlx_mysql_example();

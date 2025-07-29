@@ -1,12 +1,15 @@
+use dotenvy;
 use sqlx::sqlite::SqlitePool;
 use sqlx::Connection;
+use sqlx::MySql;
+use sqlx::MySqlConnection;
+use sqlx::MySqlPool;
 use sqlx::Row;
 use sqlx::Sqlite;
 use sqlx::SqliteConnection;
 use std::borrow::Borrow;
 use std::env;
 use std::fmt::Pointer;
-
 /// User 结构体
 #[derive(Debug, sqlx::FromRow)]
 struct User {
@@ -78,6 +81,60 @@ pub(crate) async fn sqlx_sqlite_example() -> Result<(), sqlx::Error> {
     Ok(())
 }
 
+/// sqlx_mysql_example
+#[tokio::main(flavor = "current_thread")]
+pub(crate) async fn sqlx_mysql_example() -> Result<(), sqlx::Error> {
+    dotenvy::dotenv();
+
+    // 从环境变量中获取数据库 URL
+    let db_url = env::var("DATABASE_URL")
+        .unwrap_or_else(|_| "mysql://root:password@localhost:3306/test".to_string());
+    // 创建一个数据库连接
+    let pool = MySqlPool::connect(&db_url).await?;
+    // 创建一个示例表
+    sqlx::query(
+        r#"
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL
+        )
+        "#,
+    )
+    .execute(&pool)
+    .await?;
+    // 插入一些示例数据
+    sqlx::query("INSERT INTO users (name, email) VALUES (?, ?)")
+        .bind("Alice")
+        .bind("alice@example.com")
+        .execute(&pool)
+        .await?;
+    // 查询数据
+    let rows = sqlx::query("SELECT id, name, email FROM users")
+        .fetch_all(&pool)
+        .await?;
+    for row in rows {
+        let id: i64 = row.get("id");
+        let name: String = row.get("name");
+        let email: String = row.get("email");
+        println!("id: {}, name: {}, email: {}", id, name, email);
+    }
+    // 查询数据,并反射结果对象
+    let rows = sqlx::query_as::<_, User>("SELECT id, name, email FROM users")
+        .fetch_all(&pool)
+        .await?;
+    for row in rows {
+        let id: i64 = row.id;
+        let name: String = row.name;
+        let email: String = row.email;
+        println!("id: {}, name: {}, email: {}", id, name, email);
+    }
+    // 关闭连接池
+    pool.close().await;
+
+    Ok(())
+}
+
 ///
 /// 单元测试
 /// #[cfg(test)]
@@ -93,5 +150,10 @@ mod tests {
     #[test]
     fn test_sqlx_sqlite_example() {
         sqlx_sqlite_example();
+    }
+
+    #[test]
+    fn test_sqlx_mysql_example() {
+        sqlx_mysql_example();
     }
 }

@@ -27,7 +27,7 @@ mod bytes_sample;
 mod ollama_sample;
 
 ///Database Sqlx
-mod sqlx_sqmple;
+mod sqlx_sample;
 
 /// include_dir sample
 mod includedir_sample;
@@ -103,5 +103,5 @@ pub(crate) fn advance_sample() {
     // ollama_sample::ollama_sample();
 
     //sqlx
-    sqlx_sqmple::sqlx_sqlite_example().unwrap();
+    sqlx_sample::sqlx_sqlite_example().unwrap();
 }

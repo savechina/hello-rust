@@ -48,6 +48,9 @@ pub mod cfg_if_sample;
 ///闭包
 pub mod closure_sample;
 
+/// trait 特性
+pub mod traits_sample;
+
 use rectangle::{RectangleBorrowMut, RectangleOwner, RectangleRef};
 
 // import mod use as alias name

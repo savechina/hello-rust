@@ -199,5 +199,7 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; 
 error: test failed, to rerun pass `-p hello-rust --bin hello-rust`
 ```
 
+Rust 返回的测试失败结果信息，是很详细的，所以你一定要详细阅读错误信息，看清楚问题所在。最好的方法是通过错误问题，调试代码并解决这些问题，最终可以成功编译和运行项目，整体过程能快速提升代码能力。
+
 > [!NOTE]  
 > 经过上述简单的旅程，我们已经对 Rust 有了初步的了解。接下来，我们将深入探索 Rust 的核心概念和特性。那么，让我们继续前进吧！开始进入 Rust 的世界旅行吧！

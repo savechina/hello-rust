@@ -103,3 +103,12 @@ Welcome to my project showcase! Below are four highlighted projects, including `
   </div>
 
 </div>
+
+
+
+> [!IMPORTANT]  
+> Crucial information necessary for users to succeed.
+
+> [!WARNING]  
+> Critical content demanding immediate user attention due to potential risks.
+

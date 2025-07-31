@@ -60,7 +60,7 @@ fn main() {
     println!("Hello, world!");
 }
 ```
-`main.rs` 是一个 Rust 程序的入口点。或者创建的是一个crates库，它是一个独立的 Rust 项目，可以被其他 Rust 项目导入和使用。Cargo 会创建一个`lib.rs`文件，它包含库的入口点，并且可以被其他 Rust 项目导入和使用。
+`main.rs` 是一个 Rust 程序的入口点。或者创建的是一个crates库。Cargo 会创建一个`lib.rs`文件，它包含库的入口点，并且可以被其他 Rust 项目导入和使用。
 
 Cargo.toml 文件内容如下：
 ```toml
@@ -84,9 +84,9 @@ Cargo.toml 文件中，
 
 这将编译项目并运行 `main.rs` 文件。运行后，你会看到输出 `Hello, world!`。
 
-## 项目结构
+## 一个完整的 Rust 项目结构
 
-Cargo 推荐的目录结构，解释如下：
+Cargo 推荐的目录结构，如下：
 * Cargo.toml 和 Cargo.lock 保存在 package 根目录下
 * 源代码放在 src 目录下
 * Crate子模块源代码放在 crates 目录下
@@ -99,7 +99,9 @@ Cargo 推荐的目录结构，解释如下：
 
 ## 测试你的代码
 
-cargo test 会运行所有测试文件。你可以使用以下命令来编译和运行测试：
+> [!TIP]
+> 良好的编程习惯，一定要写单元测试.下面先认识下，如何编写一个简单的单元测试，去测试你的第一个 Rust 程序。
+
 
 ### 单元测试的结构
 
@@ -134,8 +136,8 @@ mod tests {
 
 ```
 
-`cargo test` 会运行 `tests` 目录下的所有测试文件。你可以使用以下命令来编译和运行测试：
-```
+`cargo test` 会运行 `tests` 目录下的所有测试文件。你可以使用以下命令来编译和运行测试，运行上述命令后，你会看到以下输出：
+```rust
 running 1 test
 test tests::it_works ... ok
 
@@ -146,24 +148,56 @@ successes:
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+说明你的单元测试通过了。
 
 在这个例子中，`add` 函数的测试通过了。如果 `add` 函数返回的值不是 4，测试将会失败。你可以通过修改 `add` 函数的返回值来验证这一点。
 
+> [!CAUTION]
+> 如果你的测试失败了，你可以通过查看 `test` 目录下的输出文件来找到具体的错误信息。
 
+```rust
+running 1 test
+test tests::it_works ... FAILED
+
+successes:
+
+successes:
+
+failures:
+
+---- tests::it_works stdout ----
+
+thread 'tests::it_works' panicked at src/main.rs:16:9:
+assertion `left == right` failed
+  left: 4
+ right: 5
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/05f9846f893b09a1be1fc8560e33fc3c815cfecb/library/std/src/panicking.rs:695:5
+   1: core::panicking::panic_fmt
+             at /rustc/05f9846f893b09a1be1fc8560e33fc3c815cfecb/library/core/src/panicking.rs:75:14
+   2: core::panicking::assert_failed_inner
+   3: core::panicking::assert_failed
+             at /rustc/05f9846f893b09a1be1fc8560e33fc3c815cfecb/library/core/src/panicking.rs:380:5
+   4: hello_rust::tests::it_works
+             at ./src/main.rs:16:9
+   5: hello_rust::tests::it_works::{{closure}}
+             at ./src/main.rs:14:18
+   6: core::ops::function::FnOnce::call_once
+             at /Users/weirenyan/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+   7: core::ops::function::FnOnce::call_once
+             at /rustc/05f9846f893b09a1be1fc8560e33fc3c815cfecb/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+
+failures:
+    tests::it_works
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p hello-rust --bin hello-rust`
+```
 
 > [!NOTE]  
-> Highlights information that users should take into account, even when skimming.
+> 经过上述简单的旅程，我们已经对 Rust 有了初步的了解。接下来，我们将深入探索 Rust 的核心概念和特性。那么，让我们继续前进吧！开始进入 Rust 的世界旅行吧！
 
-
-
-> [!TIP]
-> Optional information to help a user be more successful.
-
-> [!IMPORTANT]  
-> Crucial information necessary for users to succeed.
-
-> [!WARNING]  
-> Critical content demanding immediate user attention due to potential risks.
-
-> [!CAUTION]
-> Negative potential consequences of an action.

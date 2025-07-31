@@ -28,6 +28,29 @@ fn traits_simple_sample() {
     println!("trait simple_sample ..... end");
 }
 
+trait UnObjectSafeTrait {
+    fn create() -> Self; // Error: method is not object-safe
+}
+
+struct UnObjectSafeStruct {
+    count: i32,
+}
+impl UnObjectSafeTrait for UnObjectSafeStruct {
+    fn create() -> Self {
+        UnObjectSafeStruct { count: 0 }
+    }
+}
+
+// Error: method is not object-safe
+// fn create_trait_object() -> Box<dyn UnObjectSafeTrait> {
+//     Box::new(UnObjectSafeStruct::create())
+// }
+
+fn un_object_safe_sample() {
+    let _instance = UnObjectSafeStruct::create();
+    println!("UnObjectSafeTrait print: {:?}", _instance.count);
+}
+
 ///
 /// 单元测试
 /// #[cfg(test)]
@@ -40,5 +63,10 @@ mod tests {
     #[test]
     fn test_trait_simple_sample() {
         traits_simple_sample();
+    }
+
+    #[test]
+    fn test_un_object_safe_sample() {
+        un_object_safe_sample();
     }
 }

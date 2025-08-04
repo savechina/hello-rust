@@ -11,8 +11,8 @@ Linux 上，你可以使用包管理器来安装 Rust：
 ```bash
     $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     $ rustup update
-    # rustup toolchain install stable 
-    $ rustup default stable 
+    # rustup toolchain install stable
+    $ rustup default stable
 ```
 
 或者 Ubuntu 下使用以下命令来安装 Rust：
@@ -20,16 +20,16 @@ Linux 上，你可以使用包管理器来安装 Rust：
 ```bash
     $ sudo apt-get install rustup
     $ rustup update
-    # rustup toolchain install stable 
-    $ rustup default stable 
+    # rustup toolchain install stable
+    $ rustup default stable
 ```
 
 MacOS 上，你可以使用 Homebrew 来安装 Rust：
 ```bash
     $ brew install rustup
     $ rustup update
-    # rustup toolchain install stable 
-    $ rustup default stable 
+    # rustup toolchain install stable
+    $ rustup default stable
 ```
 
 ## 创建项目
@@ -41,7 +41,7 @@ MacOS 上，你可以使用 Homebrew 来安装 Rust：
 ```
 
 这将创建一个名为 `hello-rust` 的项目目录，并在其中创建一个 `Cargo.toml` 文件，其中包含了项目的依赖信息。
-进入项目目录：  
+进入项目目录：
 ```bash
     $ cd hello-rust
 ```
@@ -138,7 +138,7 @@ mod tests {
 ```
 
 `cargo test` 会运行 `tests` 目录下的所有测试文件。你可以使用以下命令来编译和运行测试，运行上述命令后，你会看到以下输出：
-```rust
+```bash
 running 1 test
 test tests::it_works ... ok
 
@@ -156,7 +156,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 > [!CAUTION]
 > 如果你的测试失败了，你可以通过查看 `test` 目录下的输出文件来找到具体的错误信息。
 
-```rust
+```bash
 running 1 test
 test tests::it_works ... FAILED
 
@@ -201,5 +201,5 @@ error: test failed, to rerun pass `-p hello-rust --bin hello-rust`
 
 Rust 返回的测试失败结果信息，是很详细的，所以你一定要详细阅读错误信息，看清楚问题所在。最好的方法是通过错误问题，调试代码并解决这些问题，最终可以成功编译和运行项目，整体过程能快速提升代码能力。
 
-> [!NOTE]  
+> [!NOTE]
 > 经过上述简单的旅程，我们已经对 Rust 有了初步的了解。接下来，我们将深入探索 Rust 的核心概念和特性。那么，让我们继续前进吧！开始进入 Rust 的世界旅行吧！

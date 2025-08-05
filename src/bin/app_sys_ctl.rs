@@ -28,6 +28,8 @@ use sysinfo::{Pid, System};
 use tokio::signal;
 use tokio::sync::oneshot;
 
+extern crate env_logger;
+
 #[derive(Parser)]
 #[command(name = "my-app")]
 #[command(about = "A simple app with start and stop commands")]
@@ -163,12 +165,13 @@ fn stop_app() -> Result<(), Box<dyn std::error::Error>> {
 
     let pid_str = fs::read_to_string(PID_FILE)?;
     let pid: u32 = pid_str.trim().parse()?;
-
+    info!("start Sent stop signal to PID: {}", pid);
     // 使用 sysinfo 查找并终止进程
     let mut system = System::new_all();
     system.refresh_all();
 
     if let Some(process) = system.process(Pid::from(pid as usize)) {
+        info!("Sent stop signal to PID: {}", pid);
         // 发送 SIGTERM 信号
         #[cfg(unix)]
         {
@@ -183,7 +186,6 @@ fn stop_app() -> Result<(), Box<dyn std::error::Error>> {
             process.kill(); // 直接杀死进程（Windows 不支持 SIGTERM）
         }
 
-        info!("Sent stop signal to PID: {}", pid);
         fs::remove_file(PID_FILE)?;
     } else {
         error!("No process found with PID: {}", pid);

@@ -53,13 +53,13 @@ fn start() -> io::Result<()> {
     // Define the file where the PID is stored
     let pid_file = "app.pid";
 
-    if let Ok(exists) = fs::exists(pid_file) {
-        if exists {
-            // If the file exists, we assume the application is already running
-            // and we do not overwrite the PID file.
+    match fs::exists(pid_file).unwrap_or(false) {
+        exists if exists => {
+            eprintln!(
+                "PID file '{}' already exists. Application might be running.",
+                pid_file
+            );
             eprintln!("Exiting without starting a new instance.");
-            // Optionally, you could return an error here or handle it as needed.
-            // For now, we just print a message and exit.
             return Err(io::Error::new(
                 io::ErrorKind::AlreadyExists,
                 format!(
@@ -68,14 +68,7 @@ fn start() -> io::Result<()> {
                 ),
             ));
         }
-    } else {
-        return Err(io::Error::new(
-            io::ErrorKind::Other,
-            format!(
-                "PID file '{}' already exists. Application might be running.",
-                pid_file
-            ),
-        ));
+        _ => (),
     }
     // Write the PID to a file for later reference
 
@@ -103,6 +96,9 @@ fn start() -> io::Result<()> {
     thread::sleep(Duration::from_secs(60));
 
     println!("Main application finished naturally.");
+
+    // 删除 PID 文件
+    fs::remove_file(pid_file)?;
     Ok(())
 }
 

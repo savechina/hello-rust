@@ -1,5 +1,12 @@
 use clap::{Parser, Subcommand};
-// use hyper::service::{make_service_fn, service_fn};
+
+use http_body_util::BodyExt;
+use hyper::server::conn::http1::Builder;
+use hyper::service::service_fn;
+use hyper::service::Service;
+
+use hyper_util::server::graceful::GracefulShutdown;
+
 // use hyper::{Body, Request, Response};
 use log::{error, info};
 use std::fs::{self, File};
@@ -30,7 +37,10 @@ const PID_FILE: &str = "my-app.pid";
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    env_logger::init(); // 初始化日志
+    // 初始化日志
+    env_logger::init();
+
+    // 解析命令行参数
     let cli = Cli::parse();
 
     match cli.command {
@@ -51,6 +61,7 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
     // 保存当前进程的 PID
     let pid = std::process::id();
     File::create(PID_FILE)?.write_all(pid.to_string().as_bytes())?;
+
     info!("Application started with PID: {}", pid);
 
     // 设置服务器地址

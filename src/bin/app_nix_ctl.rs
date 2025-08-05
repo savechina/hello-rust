@@ -26,6 +26,7 @@ enum Commands {
 }
 
 fn main() -> io::Result<()> {
+    env_logger::init(); // 初始化日志
     let cli = Cli::parse();
 
     match &cli.command {

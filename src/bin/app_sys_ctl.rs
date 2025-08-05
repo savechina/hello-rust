@@ -8,7 +8,6 @@ use hyper::body::Incoming;
 use hyper::server::conn::http1;
 use hyper::server::conn::http1::Builder;
 use hyper::service::service_fn;
-use hyper::service::HttpService;
 use hyper::service::Service;
 use hyper::Request;
 use hyper::Response;
@@ -92,74 +91,61 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
         Ok::<_, Infallible>(Response::new(Full::new(Bytes::from("Hello, World!"))))
     };
 
+    async fn shutdown_signal() {
+        // Wait for the CTRL+C signal
+        tokio::signal::ctrl_c()
+            .await
+            .expect("failed to install CTRL+C signal handler");
+    }
+
     // 启动 HTTP 服务器
 
     let listener = TcpListener::bind(addr).await?;
 
     info!("Server running on http://{}", addr);
+    // specify our HTTP settings (http1, http2, auto all work)
+    let mut http = http1::Builder::new();
+    // the graceful watcher
+    let graceful = hyper_util::server::graceful::GracefulShutdown::new();
+    // when this signal completes, start shutdown
+    let mut signal = std::pin::pin!(shutdown_signal());
 
-    let connection_timeouts = vec![Duration::from_secs(5), Duration::from_secs(2)];
-
+    // Our server accept loop
     loop {
-        let (stream, _) = listener.accept().await?;
-
-        // Use an adapter to access something implementing `tokio::io` traits as if they implement
-        // `hyper::rt` IO traits.
-        let io = TokioIo::new(stream);
-
-        // Clone the connection_timeouts so they can be passed to the new task.
-        let connection_timeouts_clone = connection_timeouts.clone();
-
-        // Spawn a tokio task to serve multiple connections concurrently
-        tokio::task::spawn(async move {
-            // Pin the connection object so we can use tokio::select! below.
-            let conn = http1::Builder::new().serve_connection(io, service_fn(hello));
-            pin!(conn);
-
-            // Iterate the timeouts.  Use tokio::select! to wait on the
-            // result of polling the connection itself,
-            // and also on tokio::time::sleep for the current timeout duration.
-            for (iter, sleep_duration) in connection_timeouts_clone.iter().enumerate() {
-                println!("iter = {} sleep_duration = {:?}", iter, sleep_duration);
-
-                tokio::select! {
-                    res = conn.as_mut() => {
-                        // Polling the connection returned a result.
-                        // In this case print either the successful or error result for the connection
-                        // and break out of the loop.
-                        match res {
-                            Ok(()) => println!("after polling conn, no error"),
-                            Err(e) =>  println!("error serving connection: {:?}", e),
-                        };
-                        break;
+        tokio::select! {
+            Ok((stream, _addr)) = listener.accept() => {
+                let io = TokioIo::new(stream);
+                let conn = http.serve_connection(io, service_fn(hello));
+                // watch this connection
+                let fut = graceful.watch(conn);
+                tokio::spawn(async move {
+                    if let Err(e) = fut.await {
+                        eprintln!("Error serving connection: {:?}", e);
                     }
-                    _ = tokio::time::sleep(*sleep_duration) => {
-                        // tokio::time::sleep returned a result.
-                        // Call graceful_shutdown on the connection and continue the loop.
-                        println!("iter = {} got timeout_interval, calling conn.graceful_shutdown", iter);
-                        conn.as_mut().graceful_shutdown();
-                    }
-                }
+                });
+            },
+
+            _ = &mut signal => {
+                drop(listener);
+                eprintln!("graceful shutdown signal received");
+                // stop the accept loop
+                break;
             }
-        });
+        }
     }
 
-    // // 保存服务器任务
-    // let server_task = tokio::spawn(async move {
-    //     if let Err(e) = server.await {
-    //         error!("Server error: {}", e);
-    //     }
-    // });
+    // Now start the shutdown and wait for them to complete
+    // Optional: start a timeout to limit how long to wait.
 
-    // 监听系统信号以实现优雅关机
-    signal::ctrl_c().await?;
+    tokio::select! {
+        _ = graceful.shutdown() => {
+            eprintln!("all connections gracefully closed");
+        },
+        _ = tokio::time::sleep(std::time::Duration::from_secs(10)) => {
+            eprintln!("timed out wait for all connections to close");
+        }
+    }
     info!("Received Ctrl+C, initiating graceful shutdown...");
-
-    // 发送关机信号
-    let _ = tx.send(());
-
-    // 等待服务器任务完成
-    // server_task.await?;
 
     // 删除 PID 文件
     fs::remove_file(PID_FILE)?;

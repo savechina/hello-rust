@@ -18,7 +18,9 @@ use std::net::SocketAddr;
 use std::time::Duration;
 use tokio::net::TcpListener;
 use tokio::pin;
+
 // use hyper::{Body, Request, Response};
+use env_logger;
 use log::{error, info};
 use rkyv::ser;
 use std::fs::{self, File};
@@ -27,8 +29,6 @@ use std::path::Path;
 use sysinfo::{Pid, System};
 use tokio::signal;
 use tokio::sync::oneshot;
-
-extern crate env_logger;
 
 #[derive(Parser)]
 #[command(name = "my-app")]
@@ -51,7 +51,12 @@ const PID_FILE: &str = "my-app.pid";
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 初始化日志
-    env_logger::init();
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Debug)
+        .try_init()
+        .unwrap_or_else(|_| {
+            eprintln!("Failed to initialize logger");
+        });
 
     // 解析命令行参数
     let cli = Cli::parse();
@@ -65,6 +70,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
+    info!("Starting application...");
     // 检查是否已经运行
     if Path::new(PID_FILE).exists() {
         error!("Application is already running. Check {}", PID_FILE);
@@ -145,7 +151,10 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
         },
         _ = tokio::time::sleep(std::time::Duration::from_secs(10)) => {
             eprintln!("timed out wait for all connections to close");
-        }
+        },
+        // _ = signal::unix::signal(signal::unix::SignalKind::terminate()) => {
+        //     println!("接收到 SIGTERM 信号，准备优雅停机...");
+        // },
     }
     info!("Received Ctrl+C, initiating graceful shutdown...");
 
@@ -157,26 +166,30 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn stop_app() -> Result<(), Box<dyn std::error::Error>> {
-    // 读取 PID 文件
+    info!("Stopping application...");
+    // 检查 PID 文件是否存在
+
     if !Path::new(PID_FILE).exists() {
         error!("No running application found. PID file does not exist.");
         return Err("No running application".into());
     }
 
+    // 读取 PID 文件
     let pid_str = fs::read_to_string(PID_FILE)?;
     let pid: u32 = pid_str.trim().parse()?;
+
     info!("start Sent stop signal to PID: {}", pid);
     // 使用 sysinfo 查找并终止进程
     let mut system = System::new_all();
     system.refresh_all();
 
     if let Some(process) = system.process(Pid::from(pid as usize)) {
-        info!("Sent stop signal to PID: {}", pid);
         // 发送 SIGTERM 信号
         #[cfg(unix)]
         {
             use nix::sys::signal::{kill, Signal};
             use nix::unistd::Pid as NixPid;
+            info!("Sent SIGTERM to process with PID: {}", pid);
             kill(NixPid::from_raw(pid as i32), Signal::SIGTERM)?;
         }
 
@@ -193,5 +206,6 @@ fn stop_app() -> Result<(), Box<dyn std::error::Error>> {
         return Err("No process found".into());
     }
 
+    info!("Application stopped successfully");
     Ok(())
 }

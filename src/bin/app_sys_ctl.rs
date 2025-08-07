@@ -15,10 +15,11 @@ use hyper_util::rt::TokioIo;
 use hyper_util::server::graceful::GracefulShutdown;
 use std::convert::Infallible;
 use std::net::SocketAddr;
+use std::process;
 use std::time::Duration;
 use tokio::net::TcpListener;
 use tokio::pin;
-
+use tokio::signal::unix::{signal, SignalKind};
 // use hyper::{Body, Request, Response};
 use env_logger;
 use log::{error, info};
@@ -44,6 +45,8 @@ enum Commands {
     Start,
     /// Stop the application
     Stop,
+    /// Status the application
+    Status,
 }
 
 const PID_FILE: &str = "my-app.pid";
@@ -64,6 +67,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
         Commands::Start => start_app().await?,
         Commands::Stop => stop_app()?,
+        Commands::Status => status_app()?,
     }
 
     Ok(())
@@ -78,13 +82,12 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // 保存当前进程的 PID
-    let pid = std::process::id();
-    File::create(PID_FILE)?.write_all(pid.to_string().as_bytes())?;
+    let pid = write_pid()?;
 
     info!("Application started with PID: {}", pid);
 
     // 设置服务器地址
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from(([127, 0, 0, 1], 3600));
 
     // 创建一个 oneshot 通道用于优雅关机
     let (tx, rx) = oneshot::channel::<()>();
@@ -165,18 +168,17 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+fn write_pid() -> Result<u32, Box<dyn std::error::Error>> {
+    let pid = std::process::id();
+    File::create(PID_FILE)?.write_all(pid.to_string().as_bytes())?;
+    Ok(pid)
+}
+
 fn stop_app() -> Result<(), Box<dyn std::error::Error>> {
     info!("Stopping application...");
     // 检查 PID 文件是否存在
 
-    if !Path::new(PID_FILE).exists() {
-        error!("No running application found. PID file does not exist.");
-        return Err("No running application".into());
-    }
-
-    // 读取 PID 文件
-    let pid_str = fs::read_to_string(PID_FILE)?;
-    let pid: u32 = pid_str.trim().parse()?;
+    let pid = get_pid()?;
 
     info!("start Sent stop signal to PID: {}", pid);
     // 使用 sysinfo 查找并终止进程
@@ -208,4 +210,36 @@ fn stop_app() -> Result<(), Box<dyn std::error::Error>> {
 
     info!("Application stopped successfully");
     Ok(())
+}
+
+fn get_pid() -> Result<u32, Box<dyn std::error::Error>> {
+    if !Path::new(PID_FILE).exists() {
+        error!("No running application found. PID file does not exist.");
+        return Err("No running application".into());
+    }
+    let pid_str = fs::read_to_string(PID_FILE)?;
+    let pid: u32 = pid_str.trim().parse()?;
+    Ok(pid)
+}
+
+/// app run status
+fn status_app() -> Result<(), Box<dyn std::error::Error>> {
+    let pid = get_pid()?;
+
+    print_process_stats(pid);
+    Ok(())
+}
+
+fn print_process_stats(pid: u32) {
+    let mut system = System::new_all();
+    system.refresh_all();
+
+    if let Some(process) = system.process(Pid::from_u32(pid)) {
+        println!("id: {:?}", process.pid());
+        println!("name:{:?}", process.name());
+        println!("cpu: {:?}", process.cpu_usage());
+        println!("memory: {:?}", process.memory());
+        println!("start time:{:?}", process.start_time());
+        println!("run time: {:?}", process.run_time());
+    }
 }

@@ -1,4 +1,7 @@
-use sysinfo::System;
+use std::process;
+
+use bigdecimal::ToPrimitive;
+use sysinfo::{Pid, System};
 
 /// .sysinfo example
 fn sysinfo_sample() {
@@ -15,6 +18,23 @@ fn sysinfo_sample() {
     println!("Long OS Version: {:?}", System::long_os_version());
 }
 
+/// process stats sample
+fn process_stats_sample() {
+    let mut system = System::new_all();
+    system.refresh_all();
+
+    let pid = process::id();
+
+    if let Some(process) = system.process(Pid::from_u32(pid)) {
+        println!("id: {:?}", process.pid());
+        println!("name:{:?}", process.name());
+        println!("cpu: {:?}", process.cpu_usage());
+        println!("memory: {:?}", process.memory());
+        println!("start time:{:?}", process.start_time());
+        println!("run time: {:?}", process.run_time());
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -22,5 +42,10 @@ mod tests {
     #[test]
     fn test_sysinfo_sample() {
         sysinfo_sample();
+    }
+
+    #[test]
+    fn test_process_stats_sample() {
+        process_stats_sample();
     }
 }

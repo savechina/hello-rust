@@ -14,6 +14,7 @@ use hyper::Response;
 use hyper_util::rt::TokioIo;
 use hyper_util::server::graceful::GracefulShutdown;
 use std::convert::Infallible;
+
 use std::net::SocketAddr;
 use std::process;
 use std::time::Duration;
@@ -28,7 +29,7 @@ use std::fs::{self, File};
 use std::io::Write;
 use std::path::Path;
 use sysinfo::{Pid, System};
-use tokio::signal;
+
 use tokio::sync::oneshot;
 
 #[derive(Parser)]
@@ -121,6 +122,12 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
     // when this signal completes, start shutdown
     let mut signal = std::pin::pin!(shutdown_signal());
 
+    // 监听 SIGINT (Ctrl+C)
+    // let mut sigint = tokio::signal::unix::signal(SignalKind::interrupt())?;
+
+    // 监听 SIGTERM (kill 默认发送的信号)
+    let mut sigterm = tokio::signal::unix::signal(SignalKind::terminate())?;
+
     // Our server accept loop
     loop {
         tokio::select! {
@@ -141,6 +148,12 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
                 eprintln!("graceful shutdown signal received");
                 // stop the accept loop
                 break;
+            },
+            _ = sigterm.recv() => {
+
+                drop(listener);
+                eprintln!("✅ 收到 SIGTERM (kill)，开始退出...");
+                break;
             }
         }
     }
@@ -152,17 +165,30 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
         _ = graceful.shutdown() => {
             eprintln!("all connections gracefully closed");
         },
-        _ = tokio::time::sleep(std::time::Duration::from_secs(10)) => {
-            eprintln!("timed out wait for all connections to close");
-        },
-        // _ = signal::unix::signal(signal::unix::SignalKind::terminate()) => {
-        //     println!("接收到 SIGTERM 信号，准备优雅停机...");
+        // _ = tokio::time::sleep(std::time::Duration::from_secs(5)) => {
+        //     eprintln!("timed out wait for all connections to close");
         // },
     }
+
+    // tokio::select! {
+    //     _ = sigint.recv() => {
+    //                 println!("✅ 收到 SIGINT (Ctrl+C)，开始退出...");
+    //             },
+    //     _ = sigterm.recv() => {
+    //         println!("✅ 收到 SIGTERM (kill)，开始退出...");
+    //     }
+    // }
+
     info!("Received Ctrl+C, initiating graceful shutdown...");
 
     // 删除 PID 文件
-    fs::remove_file(PID_FILE)?;
+    if Path::new(PID_FILE).exists() {
+        fs::remove_file(PID_FILE)?;
+        info!("PID file removed");
+    } else {
+        info!("PID file not found, skipping removal");
+    }
+
     info!("Application stopped successfully");
 
     Ok(())

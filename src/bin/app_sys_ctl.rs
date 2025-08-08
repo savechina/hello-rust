@@ -144,15 +144,16 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
             },
 
             _ = &mut signal => {
+                info!("Received Ctrl+C, initiating graceful shutdown...");
                 drop(listener);
-                eprintln!("graceful shutdown signal received");
+                info!("graceful shutdown signal received");
                 // stop the accept loop
                 break;
             },
             _ = sigterm.recv() => {
+                info!("Received SIGTERM (kill), initiating graceful shutdown...");
 
                 drop(listener);
-                eprintln!("✅ 收到 SIGTERM (kill)，开始退出...");
                 break;
             }
         }
@@ -178,8 +179,6 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
     //         println!("✅ 收到 SIGTERM (kill)，开始退出...");
     //     }
     // }
-
-    info!("Received Ctrl+C, initiating graceful shutdown...");
 
     // 删除 PID 文件
     if Path::new(PID_FILE).exists() {

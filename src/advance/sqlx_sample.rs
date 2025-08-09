@@ -135,6 +135,42 @@ pub(crate) async fn sqlx_mysql_example() -> Result<(), sqlx::Error> {
     Ok(())
 }
 
+/// sqlx_mysql_example
+#[tokio::main(flavor = "current_thread")]
+pub(crate) async fn sqlx_mysql_transaction_example() -> Result<(), sqlx::Error> {
+    dotenvy::dotenv();
+
+    // 从环境变量中获取数据库 URL
+    let db_url = env::var("DATABASE_URL")
+        .unwrap_or_else(|_| "mysql://root:password@localhost:3306/test".to_string());
+    // 创建一个数据库连接
+    let pool = MySqlPool::connect(&db_url).await?;
+
+    let mut tx = pool.begin().await?;
+
+    let mut stmt = sqlx::query("INSERT INTO users (name, email) VALUES (?, ?)")
+        .bind("John Doe23")
+        .bind("john.doe.23@example.com")
+        .execute(&mut *tx)
+        .await?;
+
+    tx.commit().await?;
+
+    // tx has been moved, cannot be used again. it used in context of the closure.
+    // let mut stmt = sqlx::query("SELECT name,email) FROM users where name = ?")
+    //     .bind("John Doe23")
+    //     .execute(&mut *tx)
+    //     .await?;
+    // 关闭连接池
+    pool.close().await;
+    Ok(())
+}
+
+/// sqlx_mysql_example
+#[tokio::main(flavor = "current_thread")]
+pub(crate) async fn sqlx_mysql_transaction_template_example() -> Result<(), sqlx::Error> {
+    Ok(())
+}
 ///
 /// 单元测试
 /// #[cfg(test)]
@@ -156,5 +192,17 @@ mod tests {
     #[test]
     fn test_sqlx_mysql_example() {
         sqlx_mysql_example();
+    }
+
+    #[ignore = "reason: mysql connection is not available in CI"]
+    #[test]
+    fn test_sqlx_mysql_transaction_example() {
+        sqlx_mysql_transaction_example();
+    }
+
+    #[ignore = "reason: mysql connection is not available in CI"]
+    #[test]
+    fn test_sqlx_mysql_transaction_template_example() {
+        sqlx_mysql_transaction_template_example();
     }
 }

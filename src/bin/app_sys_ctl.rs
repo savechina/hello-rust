@@ -82,6 +82,11 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
         return Err("Application already running".into());
     }
 
+    // if let pid = read_pid()? {
+    //     info!("Application is already running with PID: {}", pid);
+    //     return Err("Application already running".into());
+    // }
+
     // 保存当前进程的 PID
     let pid = write_pid()?;
 
@@ -180,17 +185,20 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
     //     }
     // }
 
-    // 删除 PID 文件
-    if Path::new(PID_FILE).exists() {
-        fs::remove_file(PID_FILE)?;
-        info!("PID file removed");
-    } else {
-        info!("PID file not found, skipping removal");
-    }
+    remove_pid()?;
 
     info!("Application stopped successfully");
 
     Ok(())
+}
+
+fn remove_pid() -> Result<(), Box<dyn std::error::Error>> {
+    Ok(if Path::new(PID_FILE).exists() {
+        fs::remove_file(PID_FILE)?;
+        info!("PID file removed");
+    } else {
+        info!("PID file not found, skipping removal");
+    })
 }
 
 fn write_pid() -> Result<u32, Box<dyn std::error::Error>> {
@@ -226,10 +234,10 @@ fn stop_app() -> Result<(), Box<dyn std::error::Error>> {
             process.kill(); // 直接杀死进程（Windows 不支持 SIGTERM）
         }
 
-        fs::remove_file(PID_FILE)?;
+        remove_pid()?;
     } else {
         error!("No process found with PID: {}", pid);
-        fs::remove_file(PID_FILE)?; // 清理无效的 PID 文件
+        remove_pid()?; // 清理无效的 PID 文件
         return Err("No process found".into());
     }
 

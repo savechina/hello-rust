@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 /// Printable trait 特性示例
 ///
 trait Printable {
@@ -84,6 +86,14 @@ impl A for MyStruct {
     }
 }
 
+struct MyStructB;
+
+impl A for MyStructB {
+    fn method_a(&self) {
+        println!("MyStructB implements method_a");
+    }
+}
+
 /// more trait inherit sample
 fn multi_inherit_sample() {
     let s = MyStruct;
@@ -97,6 +107,27 @@ fn multi_inherit_sample() {
     let b_trait_obj: &dyn B = &s;
     b_trait_obj.method_a(); // Can call method_a through B trait object
     b_trait_obj.method_b();
+}
+
+/// more trait dynmaic sample
+fn multi_dynmaic_sample() {
+    let mut context: HashMap<String, Box<dyn A>> = HashMap::new();
+
+    let a = MyStruct;
+
+    let b = MyStructB;
+
+    context.insert("A".to_string(), Box::new(a));
+    context.insert("B".to_string(), Box::new(b));
+
+    for (key, value) in &context {
+        println!("Key: {}", key);
+        value.method_a();
+    }
+
+    let sa = &context.get("A").unwrap();
+
+    sa.method_a();
 }
 
 ///
@@ -121,5 +152,10 @@ mod tests {
     #[test]
     fn test_multi_inherit_sample() {
         multi_inherit_sample();
+    }
+
+    #[test]
+    fn test_multi_dynmaic_sample() {
+        multi_dynmaic_sample();
     }
 }

@@ -6,14 +6,20 @@
 use bigdecimal::num_bigint::{BigUint, RandBigInt, ToBigInt};
 use bigdecimal::num_traits::{One, Zero};
 use bigdecimal::{BigDecimal, RoundingMode};
+use chrono::prelude::NaiveDate;
+use chrono::prelude::NaiveDateTime;
+use chrono::prelude::Utc;
 use chrono::prelude::*;
+use chrono::{DateTime, Local};
 use serde::*;
 use serde_json;
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet, LinkedList};
 use std::str::FromStr;
 use std::thread::sleep;
+use std::time::UNIX_EPOCH;
 use std::time::{Duration, Instant, SystemTime};
 use std::vec;
+
 ///
 /// 字符串
 ///
@@ -824,8 +830,9 @@ pub(crate) fn linkedlist_sample() {
 
 pub fn time_sample() {
     //Instant
-    let now = Instant::now();
-    // 执行一些代码
+    let now: Instant = Instant::now();
+    println!("Instant: {:?}!", now); // 输出当前时间
+
     let elapsed = now.elapsed();
     println!("Elapsed: {:.2?}", elapsed); // 输出经过的时间
 
@@ -843,12 +850,16 @@ pub fn time_sample() {
 
     //SystemTime
     let now = SystemTime::now();
-    let since_the_epoch = now.duration_since(SystemTime::UNIX_EPOCH);
+    let since_the_epoch = now.duration_since(SystemTime::UNIX_EPOCH).unwrap();
 
-    println!(
-        "Seconds since the epoch: {}",
-        since_the_epoch.unwrap().as_secs()
-    );
+    //since 1970-01-01 00:00:00 UTC was seconds ago
+    println!("Seconds since the epoch: {}", since_the_epoch.as_secs());
+
+    sleep(Duration::from_millis(5000));
+
+    //返回now与当前时间的差值,单位为秒
+    let elapsed = now.elapsed().unwrap();
+    println!("Seconds since the elapsed: {}", elapsed.as_secs());
 }
 
 fn date_sample() {

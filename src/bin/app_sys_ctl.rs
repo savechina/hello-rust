@@ -23,7 +23,7 @@ use tokio::pin;
 use tokio::signal::unix::{signal, SignalKind};
 // use hyper::{Body, Request, Response};
 use env_logger;
-use log::{error, info};
+use log::{error, info, trace};
 use rkyv::ser;
 use std::fs::{self, File};
 use std::io::Write;
@@ -110,9 +110,17 @@ async fn start_app() -> Result<(), Box<dyn std::error::Error>> {
 
     async fn shutdown_signal() {
         // Wait for the CTRL+C signal
-        tokio::signal::ctrl_c()
-            .await
-            .expect("failed to install CTRL+C signal handler");
+        let ctrl_c = async {
+            tokio::signal::ctrl_c()
+                .await
+                .expect("failed to install CTRL+C signal handler");
+        };
+
+        tokio::select! {
+            _=ctrl_c => {
+                info!("Received Ctrl+C, initiating graceful shutdown...");
+            }
+        }
     }
 
     // 启动 HTTP 服务器

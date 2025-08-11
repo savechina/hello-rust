@@ -239,6 +239,7 @@ pub(crate) fn thread_lock_sample() {
  * 线程只运行1次
  */
 pub(crate) fn thread_call_once_sample() {
+    // can run in editon 2021, but not in edition 2024
     static mut VAL: usize = 0;
     static INIT: Once = Once::new();
 

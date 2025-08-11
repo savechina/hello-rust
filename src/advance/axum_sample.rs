@@ -13,6 +13,25 @@ async fn axum_simple_sample() {
 }
 
 #[tokio::main]
+async fn axum_grace_shutdown_sample() {
+    // build our application with a single route
+    let app = Router::new().route("/", get(|| async { "Hello, World!" }));
+
+    // run our app with hyper, listening globally on port 3000
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let server = axum::serve(listener, app);
+
+    println!("start axum server...");
+
+    //graceful shutdown
+    server
+        .with_graceful_shutdown(shutdown_signal())
+        .await
+        .unwrap();
+    println!("axum server shutdown done");
+}
+
+#[tokio::main]
 async fn axum_service_sample() {
     // our router
     let app = Router::new()
@@ -23,6 +42,7 @@ async fn axum_service_sample() {
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
+
 // which calls one of these handlers
 async fn root() -> &'static str {
     "Hello, World!"
@@ -70,6 +90,30 @@ struct User {
     username: String,
 }
 
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        tokio::signal::ctrl_c()
+            .await
+            .expect("failed to install Ctrl+C handler");
+    };
+
+    let terminate = async {
+        tokio::signal::unix::signal(tokio::signal::unix::SignalKind::terminate())
+            .expect("failed to install signal handler")
+            .recv()
+            .await;
+    };
+
+    tokio::select! {
+        _ = ctrl_c => {
+            println!("Received Ctrl+C signal, waiting for web server shutdown")
+        },
+        _ = terminate => {
+            println!("Received kill signal, waiting for web server shutdown")
+        },
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -84,5 +128,11 @@ mod tests {
     #[test]
     fn test_axum_service_sample_main() {
         axum_service_sample();
+    }
+
+    #[ignore]
+    #[test]
+    fn test_axum_grace_shutdown_sample() {
+        axum_grace_shutdown_sample();
     }
 }

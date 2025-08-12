@@ -25,7 +25,13 @@ Rust 支持多种整数类型: i8, i16, i32, i64, i128, isize 和 u8, u16, u32, 
 
 ## 日期时间
 
-Rust `std::time` 库提供了处理时间的功能。 你可以使用 `SystemTime` 来获取当前时间，并且可以使用 `UNIX_EPOCH` 来表示1970-01-01 00:00:00 UTC的时间戳。
+### Rust 标准库时间
+
+Rust 的标准库，`std::time` 库提供了基础的时间处理功能。
+* `SystemTime` 是一个表示时间的结构体，它是一个不可变的时间戳。表示一个时间点。 你可以使用 `SystemTime` 来获取当前时间点，并且可以使用 `UNIX_EPOCH` 来获取自Unix epoch （1970-01-01 00:00:00 UTC）以来的时间戳（Unixtime）。
+* `Instant` 是用于高精度单调时间测量（不考虑系统时钟调整），适合性能测试或计时。
+* `Duration` 是表示一个时间间隔，以秒和纳秒为单位。时间加减：可与 SystemTime 或 Instant 结合使用
+
 
 以下是使用 `SystemTime` 和 `Instant` 的示例，你可以直接复制到你的 Rust 项目中直接运行，查看输出结果：
 
@@ -89,19 +95,26 @@ mod tests {
 
 
 > [!TIP]
-> 什么是Unix epoch?
+> **什么是Unix epoch?**
+>
 > Unix epoch 是一个固定的时间点，即 1970年1月1日 00:00:00 UTC。
 >
-> 什么是Unixtime?
-> Unix time 是 Unix epoch 的时间戳，（也称为 POSIX time 或 epoch time）,它是一个自从 Unix epoch 开始经过的秒数。Unixtime 是一个非常常用的时间戳格式，在许多编程语言和系统中都广泛使用。
+> **什么是Unixtime?**
 >
-> Unix Time 的作用和优点:
+> Unix time 是 Unix epoch 的时间戳，（也称为 POSIX time 或 epoch time）,它是一个自从 Unix epoch 开始经过的秒数，它不考虑闰秒，以简化和标准化时间计算。通常表示为一个整数。简单来说，Unix epoch 是基准点，Unix time 是从这个基准点开始的秒数计数。Unixtime 是一个非常常用的时间戳格式，在许多编程语言和系统中都广泛使用。
+>
+> **Unix Time 的作用和优点:**
 > * 简化时间存储和计算: Unix time 是一个简单的整数，非常适合在计算机内部存储和进行时间比较、计算等操作。这比处理复杂的日期、月份、年份、时区和闰年规则要简单得多。
 > * 跨平台兼容性: 几乎所有主流的操作系统、编程语言和数据库都支持 Unix time，使其成为在不同系统之间传递时间信息时的通用标准。
 > * 精确性和一致性: Unix time 避免了时区、夏令时等问题，确保了时间表示的精确性和一致性。它通常以 32 位或 64 位整数存储，能够表示非常长的时间范围。
 
 
-Rust 提供了 `chrono` 库来处理日期和时间。 你可以使用 `chrono::prelude::NaiveDate` 和 `use chrono::prelude::NaiveDateTime` 来表示日期和时间，并且可以使用 `chrono::Duration` 来表示时间差。
+###  Chrono 库日期时间
+
+Rust 社区提供了 `chrono` 库来处理日期和时间。 你可以使用 `chrono::prelude::NaiveDate` 来表示日期和 `chrono::prelude::NaiveDateTime` 来表示日期时间，并且可以使用 `chrono::Duration` 来表示时间差。
+
+
+* 依赖配置
 
 添加 `chrono` 库到你的项目中，你可以使用以下命令来安装：
 ```bash
@@ -117,12 +130,14 @@ cargo add chrono
 chrono = { version = "0.4.39", features = ["serde"] }
 
 ```
+* 示例代码
 
 如何获取当前日期和时间呢？ 你可以使用 `chrono::Local.now()` 来获取当前的本地日期和时间。 你也可以使用 `chrono::Utc.now()` 来获取当前的 UTC 日期和时间。
 
+
 获取本地当前日期和时间：
-```rust,editable
-extern crate chrono;
+```rust ignore
+
 use chrono::prelude::*;
 use chrono::{DateTime, Local};
 fn main() {
@@ -131,12 +146,93 @@ fn main() {
 }
 ```
 
+
 获取 UTC当前日期和时间：
-```rust
-extern crate chrono;
+```rust ignore
+
 use chrono::{DateTime, Utc};
 fn main() {
     let now = Utc.now();
     println!("Current date and time: {}", now);
 }
+```
+
+一个更完成样例代码，展示了如何使用 `chrono` 库来获取当前日期和时间，并将其格式化为字符串：
+
+```rust ignore
+
+fn date_sample() {
+    // 使用 from_ymd_opt 创建 NaiveDate
+    let date = NaiveDate::from_ymd_opt(2024, 10, 26).unwrap();
+    println!("Date: {}", date);
+
+    // 使用 from_hms_opt 创建 NaiveTime
+    let time = NaiveTime::from_hms_opt(12, 30, 0).unwrap();
+    println!("Time: {}", time);
+
+    // 使用 new 创建 NaiveDateTime
+    let datetime = NaiveDateTime::new(date, time);
+    println!("DateTime: {}", datetime);
+
+    // 使用 with_ymd_and_hms 创建 DateTime<Utc>
+    let utc_datetime = Utc.with_ymd_and_hms(2024, 10, 26, 12, 30, 0).unwrap();
+    println!("UTC DateTime: {}", utc_datetime);
+
+    // 使用 with_ymd_and_hms 创建 DateTime<Local>
+    let local_datetime = Local.with_ymd_and_hms(2024, 10, 26, 12, 30, 0).unwrap();
+    println!("Local DateTime: {}", local_datetime);
+
+    // 获取当前 UTC 时间
+    let now_utc = Utc::now();
+    println!("Now (UTC): {}", now_utc);
+
+    // 获取当前本地时间
+    let now_local = Local::now();
+    println!("Now (Local): {}", now_local);
+
+    //日期格式化
+    let now = Utc::now();
+
+    // 常用格式
+    println!("ISO 8601 / RFC 3339: {}", now.to_rfc3339()); // 推荐的格式
+    println!(
+        "Year-Month-Day Hour:Minute:Second: {}",
+        now.format("%Y-%m-%d %H:%M:%S")
+    );
+    println!(
+        "Day/Month/Year Hour:Minute:Second: {}",
+        now.format("%d/%m/%Y %H:%M:%S")
+    );
+    println!("Month Day, Year: {}", now.format("%B %d, %Y"));
+    println!("Weekday, Day Month Year: {}", now.format("%A, %d %B %Y"));
+
+    // 自定义格式
+    println!("Custom format: {}", now.format("%a %b %e %T %Y"));
+
+    // 时间戳 (Unix timestamp)
+    println!("Timestamp (seconds): {}", now.timestamp());
+    println!("Timestamp (milliseconds): {}", now.timestamp_millis());
+
+    //日期解析
+    let datetime_str = "2024-10-26 12:30:00";
+    let datetime = NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S").unwrap();
+    println!("Parsed DateTime: {}", datetime);
+
+    let date_str = "2024-10-26";
+    let date = NaiveDate::parse_from_str(date_str, "%Y-%m-%d").unwrap();
+    println!("Parsed Date: {}", date);
+
+    let rfc3339_str = "2024-10-26T12:30:00Z";
+    let rfc3339_datetime = DateTime::parse_from_rfc3339(rfc3339_str).unwrap();
+    println!("Parsed RFC3339 DateTime: {}", rfc3339_datetime);
+
+    //错误处理
+    let invalid_date_str = "2024-13-26";
+    let invalid_date = NaiveDate::parse_from_str(invalid_date_str, "%Y-%m-%d");
+    match invalid_date {
+        Ok(_) => println!("Parsed Date: {:?}", invalid_date),
+        Err(e) => println!("Error parsing date: {}", e),
+    }
+}
+
 ```

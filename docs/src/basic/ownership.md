@@ -1,10 +1,16 @@
 # 了解所有权
 
+## 什么是所有权？
 
-4. 如何解决函数内部定义变量如何返回出来的问题？
+## 所有权系统的基本概念
+
+## 所有权遇到问题
+
+### 1. 如何解决函数内部定义变量如何返回出来的问题？
+
 这是 Rust 所有权系统的核心问题。你不能返回一个指向函数内部栈上定义的局部变量的引用。 函数执行完毕后，栈上的局部变量会被清理掉，返回的引用将指向无效内存（悬垂指针
 
-```Rust
+```rust ignore
 // 这是错误的示例！悬垂指针！
 fn create_value_and_return_ref<'a>() -> &'a i32 {
     let value = 42; // value 在函数栈上
@@ -23,7 +29,7 @@ fn get_ref_from_external_source<'a>(data: &'a i32) -> &'a i32 {
 
 * 直接返回数据 (按值返回): 函数返回类型是 T，你直接返回函数内部创建的变量。数据的所有权从函数内部转移到调用者。
 
-```Rust
+```rust
 fn create_value_and_return_owned() -> i32 {
     let value = 42; // value 在函数栈上
     value // value 的所有权被移出函数
@@ -43,7 +49,7 @@ fn create_box_and_return_owned() -> Box<i32> {
 
 * 返回智能指针: 如果你需要共享数据，可以将内部创建的数据包装在 Rc 或 Arc 等智能指针中，并返回智能指针的副本。数据的实际所有权由智能指针管理，而你返回的是智能指针的共享引用或智能指针本身（所有权转移）。
 
-```Rust
+```rust
 use std::sync::Arc;
 use std::cell::RefCell;
 
@@ -56,9 +62,7 @@ fn ownership_shared_sample() {
     let shared = create_shared_data(); // shared 现在拥有 Arc 的所有权
     println!("{}", shared.borrow());
 }
-```
 
-```Rust
 ///
 /// 单元测试
 /// #[cfg(test)]

@@ -13,8 +13,8 @@
         - [结构体字段](./basic/struct-fields.md)
         - [结构体方法](./basic/struct-methods.md)
     - [枚举](./basic/enums.md)
-    - [特征](./basic/trait.md)
     - [模块](./basic/module.md)
+    - [特征](./basic/trait.md)
 
 
 # Advance

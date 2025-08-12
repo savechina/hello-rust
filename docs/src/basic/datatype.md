@@ -25,7 +25,7 @@ Rust 支持多种整数类型: i8, i16, i32, i64, i128, isize 和 u8, u16, u32, 
 
 ## 日期时间
 
-Rust `std::time` 库提供了处理时间的功能。 你可以使用 `SystemTime` 来获取当前时间，并且可以使用 `UNIX_EPOCH` 来表示1970-01-01 00:00:00 UTC的时间戳。 
+Rust `std::time` 库提供了处理时间的功能。 你可以使用 `SystemTime` 来获取当前时间，并且可以使用 `UNIX_EPOCH` 来表示1970-01-01 00:00:00 UTC的时间戳。
 
 以下是使用 `SystemTime` 和 `Instant` 的示例，你可以直接复制到你的 Rust 项目中直接运行，查看输出结果：
 
@@ -33,7 +33,7 @@ Rust `std::time` 库提供了处理时间的功能。 你可以使用 `SystemTim
 use std::time::{Duration, Instant, SystemTime};
 use std::thread::sleep;
 
-/// Sample function to demonstrate time operations. 
+/// Sample function to demonstrate time operations.
 pub fn time_sample() {
     //Instant
     let now: Instant = Instant::now();
@@ -68,7 +68,7 @@ pub fn time_sample() {
 
     //返回now与当前时间的差值,单位为秒
     let elapsed = now.elapsed().unwrap();
-    println!("Seconds since the elapsed: {}s", elapsed.as_secs()); //打印输出 1s 
+    println!("Seconds since the elapsed: {}s", elapsed.as_secs()); //打印输出 1s
 }
 
 ///to call run the time_sample function
@@ -89,15 +89,15 @@ mod tests {
 
 
 > [!TIP]
-> 什么是Unix epoch? 
+> 什么是Unix epoch?
 > Unix epoch 是一个固定的时间点，即 1970年1月1日 00:00:00 UTC。
 >
-> 什么是Unixtime? 
+> 什么是Unixtime?
 > Unix time 是 Unix epoch 的时间戳，（也称为 POSIX time 或 epoch time）,它是一个自从 Unix epoch 开始经过的秒数。Unixtime 是一个非常常用的时间戳格式，在许多编程语言和系统中都广泛使用。
 >
 > Unix Time 的作用和优点:
 > * 简化时间存储和计算: Unix time 是一个简单的整数，非常适合在计算机内部存储和进行时间比较、计算等操作。这比处理复杂的日期、月份、年份、时区和闰年规则要简单得多。
->* 跨平台兼容性: 几乎所有主流的操作系统、编程语言和数据库都支持 Unix time，使其成为在不同系统之间传递时间信息时的通用标准。
+> * 跨平台兼容性: 几乎所有主流的操作系统、编程语言和数据库都支持 Unix time，使其成为在不同系统之间传递时间信息时的通用标准。
 > * 精确性和一致性: Unix time 避免了时区、夏令时等问题，确保了时间表示的精确性和一致性。它通常以 32 位或 64 位整数存储，能够表示非常长的时间范围。
 
 
@@ -140,6 +140,3 @@ fn main() {
     println!("Current date and time: {}", now);
 }
 ```
-
-
-

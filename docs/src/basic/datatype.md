@@ -1,8 +1,8 @@
 # 基础数据类型
 
-在 Rust 中，每一个值都有一个特定 数据类型（data type），这告诉 Rust 它被指定为何种数据，以便明确数据处理方式。我们将看到两类数据类型子集：标量（scalar）和复合（compound）。
+在 Rust 中，每一个值都有一个特定数据类型（data type），这告诉 Rust 它被指定为何种数据，以便明确数据处理方式。我们将看到两类数据类型子集：标量（scalar）和复合（compound）。
 
-记住，Rust 是 静态类型（statically typed）语言，也就是说在编译时就必须知道所有变量的类型。根据值及其使用方式，编译器通常可以推断出我们想要用的类型。
+Rust 是静态类型（statically typed）语言，也就是说在编译时就必须知道所有变量的类型。根据值及其使用方式，编译器通常可以推断出我们想要用的类型。
 
 ## 标量类型
 标量（scalar）类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过它们。让我们深入了解它们在 Rust 中是如何工作的。
@@ -17,11 +17,11 @@ Rust 支持常见的基本类型:
 
 ### 整型
 
-整型 是一个没有小数部分的数字。我们在Getting Started 部分已经使用过 u64 整数类型。该类型声明表明，它关联的值应该是一个占据 64 比特位的无符号整数（有符号整数类型以 i 开头而不是 u）。表格 1 展示了 Rust 内建的整数类型。我们可以使用其中的任一个来声明一个整数值的类型。
+整型 是一个没有小数部分的数字。我们在Getting Started 部分已经使用过 u64 整数类型。该类型声明表明，它关联的值应该是一个占据 64 比特位的无符号整数（有符号整数类型以 i 开头而不是 u）。表格 1-1 展示了 Rust 内建的整数类型。我们可以使用其中的任一个来声明一个整数值的类型。
 
 Rust 支持多种整数类型: i8, i16, i32, i64, i128, isize 和 u8, u16, u32, u64, u128, usize。 其中 isize 和 usize 是指针大小的整数类型。
 
-表格 1 Rust 中的整型：
+表格 1-1 Rust 中的整型：
 
 | 长度      | 有符号     | 无符号  |
 | ------- | ------- | ------- |
@@ -32,7 +32,99 @@ Rust 支持多种整数类型: i8, i16, i32, i64, i128, isize 和 u8, u16, u32, 
 | 128-bit | `i128`  | `u128`  |
 | 架构相关    | `isize` | `usize` |
 
+
+每一个整型变量都可以是有符号或无符号的，并有一个明确的大小。有符号 和 无符号 代表数字能否为负值，也就是说，这个数字是否有可能是负数（有符号数），或者永远为正而不需要符号（无符号数）。这有点像在纸上书写数字：当需要考虑符号的时候，数字以加号或减号作为前缀；然而，可以安全地假设为正数时，加号前缀通常省略。有符号数以二进制补码形式（two’s complement representation） 存储。
+
+另外，isize 和 usize 类型依赖运行程序的计算机架构：64 位架构上它们是 64 位的，32 位架构上它们是 32 位的。
+
 ### 浮点数
+
+Rust 也有两个原生的浮点数（floating-point numbers）类型，它们是带小数点的数字。Rust 的浮点数类型是 f32 和 f64，分别占 32 位和 64 位。默认类型是 f64，因为在现代 CPU 中，它与 f32 速度几乎一样，不过精度更高。所有的浮点型都是有符号的。
+
+
+Rust 中的所有数字类型都支持基本数学运算：加法、减法、乘法、除法和取余。整数除法会向零舍入到最接近的整数。下面的代码展示了如何在 let 语句中使用各种数值运算：
+
+```rust
+/**
+* 数字计算方法。
+* 加、减、乘、除、余
+*/
+pub(crate) fn number_calc() {
+    // 加
+    let sum = 5 + 11;
+
+    let difference = 45.5 - 4.3;
+
+    // 乘
+    let product = 4 * 30;
+  
+    // 除
+    let quotient = 86.7 / 32.2;
+   
+    // 求余
+    let remainder = 63 % 5;
+
+    println!(
+        "sum: {}, diff: {}, product: {}, quotient: {}, remainder:{}",
+        sum, difference, product, quotient, remainder
+    );
+}
+
+// 测试运行
+ number_calc();
+
+///
+/// 单元测试
+/// #[cfg(test)]
+///
+#[cfg(test)]
+mod tests {
+    // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
+    use super::*;
+
+    #[test]
+    fn test_number_calc() {
+        let sum = 5 + 10;
+        // 加法测试。注意这个断言会导致测试失败。
+        assert_eq!(sum, 15);
+
+         number_calc();
+    }
+}
+
+```
+
+
+### 布尔类型
+
+Rust 中的布尔类型有两个可能的值：true 和 false。Rust 中的布尔类型使用 bool 表示。例如：
+
+```rust
+fn main() {
+     let t = true;
+
+    let f: bool = false; // with explicit type annotation
+}
+
+```
+
+使用布尔值的主要场景是条件表达式，例如 if 表达式。
+
+### 字符类型
+
+Rust 的 char 类型是语言中最原始的字母类型。下面是一些声明 char 值的例子：
+
+```rust
+fn main() {
+    let c = 'z';
+    let z: char = 'ℤ'; // with explicit type annotation
+    let heart_eyed_cat = '😻';
+    let ok = '好';
+}
+
+```
+注意，我们用单引号声明 char 字面值，而与之相反的是，使用双引号声明字符串字面值。Rust 的 char 类型的大小为四个字节 (four bytes)，并代表了一个 Unicode 标量值（Unicode Scalar Value），这意味着它可以比 ASCII 表示更多内容。在 Rust 中，带变音符号的字母（Accented letters），中文、日文、韩文等字符，emoji（绘文字）以及零长度的空白字符都是有效的 char 值。Unicode 标量值包含从 U+0000 到 U+D7FF 和 U+E000 到 U+10FFFF 在内的值。不过，“字符” 并不是一个 Unicode 中的概念，所以人直觉上的 “字符” 可能与 Rust 中的 char 并不符合。
+
 
 
 ```admonish 
@@ -46,7 +138,7 @@ Rust 支持多种整数类型: i8, i16, i32, i64, i128, isize 和 u8, u16, u32, 
 - 值范围：限定数据的有效范围（如 i32 的范围是 -2³¹ 到 2³¹-1）。
 - 类型安全：确保操作符合数据类型的规则，防止错误（如避免将字符串当作数字相加）。
 
-数据类型是编程语言的基础，影响程序的性能、内存使用和代码可读性。在像 Rust 这样的强类型语言中，数据类型在编译时严格检查，确保类型安全。数据类型的简要历史数据类型的发展与编程语言的演进密切相关：
+数据类型是编程语言的基础，影响程序的性能、内存使用和代码的表达性及可读性。在像 Rust 这样的强类型语言中，数据类型在编译时严格检查，确保类型安全。数据类型的简要历史数据类型的发展与编程语言的演进密切相关：
 
 - 早期（1950s-1960s）：在汇编语言和早期高级语言（如 Fortran、ALGOL）中，数据类型较为简单，主要包括整数、浮点数和字符。例如，Fortran 引入了 INTEGER 和 REAL 类型，用于数值计算。
 - 结构化编程（1970s）：随着 Pascal 和 C 的出现，数据类型变得更加丰富，支持结构体（struct）和数组等复合类型，允许更复杂的数据组织。
@@ -61,8 +153,8 @@ Rust 支持多种整数类型: i8, i16, i32, i64, i128, isize 和 u8, u16, u32, 
 - 标量类型（Scalar Types）：
     - 表示单一值。
     - 示例：
-        - 整数（如 Rust 的 i8, i32, u64）：存储整数值。
-        - 浮点数（如 f32, f64）：存储小数。
+        - 整数（如 Rust 的 `i8`, `i32`, `u64`）：存储整数值。
+        - 浮点数（如 `f32`, `f64`）：存储小数。
         - 布尔值（bool）：表示 `true` 或 `false`。
         - 字符（char）：存储单个 Unicode 字符（如 Rust 的 `char`）。
     - 常见于所有语言，用于基本计算。
@@ -70,10 +162,10 @@ Rust 支持多种整数类型: i8, i16, i32, i64, i128, isize 和 u8, u16, u32, 
     - 由多个值组成，封装更复杂的数据结构。
     - 示例：
         - 数组（Array）：固定长度的同类型元素集合（如 Rust 的 `[i32; 5]`）。
-        - 元组（Tuple）：固定长度的异构类型集合（如 Rust 的 (`i32`, `f64`, `char`)）。
+        - 元组（Tuple）：固定长度的异构类型集合（如 Rust 的 `(i32, f64, char)`）。
         - 结构体（Struct）：自定义类型，包含命名字段（如 Rust 的 `struct`）。
         - 枚举（Enum）：表示一组可能的值（如 Rust 的 `enum`）。
-        - 字符串：如 Rust 的 String 和 &str，存储文本数据。
+        - 字符串：如 Rust 的 `String` 和 `&str`，存储文本数据。
         - 集合类型：如向量（Rust 的 `Vec<T>`）、哈希表（`HashMap`）等。
     - 复合类型用于组织复杂数据，支持更高层次的抽象。
 
@@ -108,7 +200,7 @@ Rust 支持多种整数类型: i8, i16, i32, i64, i128, isize 和 u8, u16, u32, 
 - 逻辑类型：如布尔值（`bool`）。
 - 集合类型：如数组、列表、字典。
 - 时间类型：如 Rust 标准库的 `std::time::Duration` 或 `chrono::DateTime`，用于表示时间和日期。
-- 函数类型：在支持函数式编程的语言中，函数本身也是一种类型（如 Rust 的闭包类型 Fn、FnMut）。
+- 函数类型：在支持函数式编程的语言中，函数本身也是一种类型（如 Rust 的闭包类型 `Fn`、`FnMut`）。
 - 用户自定义类型：通过结构体、枚举或类定义的类型。
 
 5. 其他特殊分类
@@ -127,7 +219,179 @@ Rust 支持多种整数类型: i8, i16, i32, i64, i128, isize 和 u8, u16, u32, 
 ### 元组（tuple）
 
 
+```rust
+/**
+ * tupl_sample
+ */
+pub(crate) fn tupl_sample() {
+    println!("datatype tupl_sample .....start");
+
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+
+    //使用dot(.) 获取元组数值，offset 从0开始。
+    //获取元组第1个值
+    let five_hundred = x.0;
+
+    //获取元组 第2个值
+    let six_point_four: f64 = x.1;
+    //获取元组 第3个值
+    let one: u8 = x.2;
+
+    println!("tupl:({},{},{})", five_hundred, six_point_four, one);
+
+    let s1 = String::from("hello");
+
+    let (s2, len) = calc_length(s1);
+
+    println!("The length of '{}' is {}.", s2, len);
+
+    println!("datatype tupl_sample .....end\n");
+}
+
+/**
+ * calc length
+ */
+fn calc_length(s: String) -> (String, usize) {
+    let length = s.len(); // len() 返回字符串的长度
+
+    (s, length)
+}
+
+```
+
 ### 数组（array）
+
+* 固定数组 array：
+
+定义：使用方括号 `[]` 定义一个数组，每个元素之间用逗号分隔。
+
+
+完整的array样例代码如下：
+```rust
+///
+/// Array Sample
+/// 数组
+///
+pub(crate) fn array_sample() {
+    println!("datatype::array_sampe ...... start");
+
+    //定义 12个月 数组
+    let months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ];
+
+    //获取数组中元素
+    println!("Months array first is {:?}", months[0]);
+    println!("Months array second  is {:?}", months[1]);
+
+    println!("Months array all is {:?}", months);
+
+    // 编译器自动推导出one的类型
+    let one = [1, 2, 3];
+
+    // 显式类型标注
+    let two: [u8; 3] = [1, 2, 3];
+    let blank1 = [0; 3];
+    let blank2: [u8; 3] = [0; 3];
+
+    // arrays是一个二维数组，其中每一个元素都是一个数组，元素类型是[u8; 3]
+    let arrays: [[u8; 3]; 4] = [one, two, blank1, blank2];
+
+    // 借用arrays的元素用作循环中
+    for a in &arrays {
+        print!("{:?}: ", a);
+        // 将a变成一个迭代器，用于循环
+        // 你也可以直接用for n in a {}来进行循环
+        for n in a.iter() {
+            print!("\t{} + 10 = {}", n, n + 10);
+        }
+
+        let mut sum = 0;
+        // 0..a.len,是一个 Rust 的语法糖，其实就等于一个数组，元素是从0,1,2一直增加到到a.len-1
+        for i in 0..a.len() {
+            sum += a[i];
+        }
+        println!("\t({:?} = {})", a, sum);
+    }
+
+    println!("array_sampe ...... end \n");
+}
+
+
+```
+
+* 变长数组 Vec：
+
+定义一个变量并使用 `vec!` 宏来初始化它。`vec!` 宏会自动推断数组的类型。
+
+或者创建一个空的数组：
+`let mut empty_vec = Vec::new();`
+
+
+完整的Vec样例代码如下：
+```rust
+///
+/// Vec Samle
+/// Vector 为动态数组
+///
+pub(crate) fn vet_sample() {
+    println!("vet_sample ......start");
+
+    let v = vec![12, 34, 56, 78];
+
+    let first = v.first();
+
+    println!("ver fist is {:?}", first);
+
+    //fist unwrap option is 12
+    println!("ver fist is {}", first.unwrap());
+
+    let mut sum = 0;
+    //iter every item
+    for n in v {
+        println!("vet print item is {}", n);
+        sum += n;
+    }
+
+    println!("vet all sum is {}", sum);
+
+    //创建一个空的Vec
+    let mut empty_vec = Vec::new();
+    //push item to vec
+    empty_vec.push(123);
+    empty_vec.push(456);
+    empty_vec.push(789);
+    println!("empty vec is {:?}", empty_vec);
+
+    //创建一个包含5个元素的Vec，每个元素都是0
+    let zero_vec = vec![0; 5];
+    println!("zero vec is {:?}", zero_vec);
+
+    //创建一个包含5个元素的Vec，每个元素都是0
+    let mut zero_vec = Vec::with_capacity(5);
+    //push item to vec
+    zero_vec.push(0);
+    zero_vec.push(0);
+    zero_vec.push(0);
+    zero_vec.push(0);
+    zero_vec.push(0);
+    println!("zero vec is {:?}", zero_vec);
+
+    println!("vet_sample ......end\n");
+}
+
+```
 
 ### 字符串
 
@@ -210,7 +474,7 @@ mod tests {
 >
 > Unix epoch 是一个固定的时间点，即 1970年1月1日 00:00:00 UTC。
 >
-> **什么是Unixtime?**
+>  **什么是Unixtime?**
 >
 > Unix time 是 Unix epoch 的时间戳，（也称为 POSIX time 或 epoch time）,它是一个自从 Unix epoch 开始经过的秒数，它不考虑闰秒，以简化和标准化时间计算。通常表示为一个整数。简单来说，Unix epoch 是基准点，Unix time 是从这个基准点开始的秒数计数。Unixtime 是一个非常常用的时间戳格式，在许多编程语言和系统中都广泛使用。
 >

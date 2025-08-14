@@ -75,3 +75,10 @@ sysinfo = "0.34.2"
 rayon = "1.10.0"
 bumpalo = "3.17.0"
 nix = { version = "0.30.1", features = ["signal"] }
+async-trait = "0.1.88"
+mockall = "0.13.1"
+
+
+[dev-dependencies]
+rspec = "1.0.0"
+speculate = "0.1.2"

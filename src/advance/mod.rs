@@ -74,6 +74,12 @@ mod typealias_sample;
 /// process sample
 mod process_sample;
 
+/// mock sample
+mod mock_sample;
+
+/// rspec sample
+mod rspec_sample;
+
 pub(crate) fn advance_sample() {
     //JSON 序列化及反序列化解析
     json_sample::typed_sample().unwrap();

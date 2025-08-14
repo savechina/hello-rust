@@ -4,6 +4,8 @@ extern crate log;
 // Import the getset macros
 #[macro_use]
 extern crate getset;
+#[cfg(test)]
+extern crate rspec;
 //
 use log::info;
 

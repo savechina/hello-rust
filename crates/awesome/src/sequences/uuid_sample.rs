@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use uuid::Uuid;
 
 fn uuid_sample() {
@@ -36,6 +38,60 @@ fn uuid_sample() {
     }
 }
 
+// use md5::{Digest, Md5};
+
+/// Generates a GUID (UUID) from the MD5 hash of multiple fields.
+///
+/// This function concatenates all provided fields, computes their MD5 hash,
+/// and then uses the resulting 16 bytes to create a UUID.
+///
+/// # Arguments
+/// * `tenant_id` - The tenant ID.
+/// * `area_id` - The area ID.
+/// * `area_code` - The area code.
+/// * `object_code` - The object code.
+/// * `object_type` - The object type.
+///
+/// # Returns
+/// A `uuid::Uuid` generated from the MD5 hash.
+pub fn generate_guid_from_fields(
+    tenant_id: &str,
+    area_id: u64,
+    area_code: &str,
+    object_code: &str,
+    object_type: i32,
+) -> Uuid {
+    // 1. Combine all fields into a single string.
+    // The order of concatenation is important for consistent results.
+    let combined_context = format!(
+        "{}-{}-{}-{}-{}",
+        tenant_id, area_id, area_code, object_code, object_type
+    );
+
+    // 2. Compute the MD5 hash of the combined string.
+    let mut hasher = md5::Context::new();
+
+    hasher.write(combined_context.as_bytes());
+    let result = hasher.finalize();
+
+    let md5_bytes = result.into();
+
+    // 3. Create a UUID from the 16-byte MD5 hash.
+    Uuid::from_bytes(md5_bytes)
+}
+
+fn md5_sample() {
+    let tenant_id = "T001";
+    let area_id = 1001;
+    let area_code = "A01";
+    let object_code = "OBJ-001";
+    let object_type = 0;
+
+    let guid = generate_guid_from_fields(tenant_id, area_id, area_code, object_code, object_type);
+
+    println!("Generated GUID: {}", guid);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -47,5 +103,14 @@ mod tests {
         println!("Generated UUID: {}", uuid);
 
         uuid_sample();
+    }
+
+    #[test]
+    fn test_generate_md5_uuid() {
+        let uuid = Uuid::new_v4();
+        assert!(uuid.is_nil() == false, "Generated UUID should not be nil");
+        println!("Generated UUID: {}", uuid);
+
+        md5_sample();
     }
 }

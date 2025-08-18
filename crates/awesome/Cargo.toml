@@ -38,5 +38,6 @@ tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 rand = "0.9.1"
 rumqttc = "0.24.0"
 test-log = { version = "0.2.18", features = ["trace"] }
+md5 = "0.8.0"
 [build-dependencies]
 tonic-build = "0.13.1"

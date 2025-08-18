@@ -1,6 +1,7 @@
-use std::io::Write;
+use std::{io::Write, time::SystemTime};
 
-use uuid::Uuid;
+use chrono::Local;
+use uuid::{NoContext, Timestamp, Uuid};
 
 fn uuid_sample() {
     // 1. Generate a Version 4 (random) UUID
@@ -36,6 +37,32 @@ fn uuid_sample() {
         Ok(parsed_uuid) => println!("Parsed UUID: {}", parsed_uuid),
         Err(e) => println!("Failed to parse UUID: {}", e),
     }
+
+    // 5. Generate a v7 UUID
+
+    let uuid_v7 = Uuid::now_v7();
+    println!("Generated UUID v7: {}", uuid_v7);
+
+    //current unixtime
+    let now = SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap();
+
+    let now_sec = now.as_secs();
+
+    let ns = now.subsec_nanos();
+
+    let ts = Timestamp::from_unix(NoContext, now_sec, ns);
+
+    let uuid_v7_2 = Uuid::new_v7(ts);
+
+    println!("Generated UUID v7: {}", uuid_v7_2);
+
+    let ts = Timestamp::from_unix_time(now_sec, ns, 123456, 14);
+
+    let uuid_v7_3 = Uuid::new_v7(ts);
+
+    println!("Generated UUID v7: {}", uuid_v7_3)
 }
 
 // use md5::{Digest, Md5};

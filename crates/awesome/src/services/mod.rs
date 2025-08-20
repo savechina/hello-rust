@@ -1,4 +1,5 @@
 pub mod consul_sample;
+pub mod di_sample;
 pub mod framework;
 pub mod greeter_consume;
 pub mod greeter_service;

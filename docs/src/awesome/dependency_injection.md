@@ -97,6 +97,23 @@ mod tests {
 
 ```
 
+执行输出结果：
+```text
+running 1 test
+test services::dependency_injection_concrete_sample::tests::test_dependency_injection_sample ... ok
+
+successes:
+
+---- services::dependency_injection_concrete_sample::tests::test_dependency_injection_sample stdout ----
+Hello, User 42 from InMemoryRepo!
+
+
+successes:
+    services::dependency_injection_concrete_sample::tests::test_dependency_injection_sample
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.00s
+
+```
 
 ## 服务容器的动态依赖注入
 
@@ -323,5 +340,33 @@ mod tests {
     }
 }
 
+
+```
+
+执行输出结果：
+```text
+
+running 1 test
+test services::dependency_injection_dynmaic_sample::tests::test_injection_main ... ok
+
+successes:
+
+---- services::dependency_injection_dynmaic_sample::tests::test_injection_main stdout ----
+Registering trait object: TypeId(0x56cbfa3cabf188feb9d956576e38424a)
+Registering trait object: TypeId(0x8ffe278beee70f55493c3bb2f23af8b3)
+Log: Performing task: Process data
+Log: Task result: Query result for: Process data
+resolve trait trait object: TypeId(0x56cbfa3cabf188feb9d956576e38424a)
+resolve trait trait object: true
+Log: Direct logger access
+resolve trait trait object: TypeId(0x8ffe278beee70f55493c3bb2f23af8b3)
+resolve trait trait object: true
+query: Query result for: Direct database access
+
+
+successes:
+    services::dependency_injection_dynmaic_sample::tests::test_injection_main
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.00s
 
 ```

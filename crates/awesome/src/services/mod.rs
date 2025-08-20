@@ -1,6 +1,6 @@
 pub mod consul_sample;
-pub mod di_sample;
-pub mod dependency_injection_sample;
+pub mod dependency_injection_concrete_sample;
+pub mod dependency_injection_dynmaic_sample;
 pub mod framework;
 pub mod greeter_consume;
 pub mod greeter_service;

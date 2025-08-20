@@ -8,7 +8,7 @@ trait Service: Send + Sync + 'static {
 }
 
 // Example service interfaces
-trait LoggerService: Any + Send + Sync + 'static {
+trait LoggerService: Send + Sync + 'static {
     fn log(&self, message: &str);
 }
 
@@ -55,6 +55,7 @@ impl BusinessService {
     fn new(logger: Arc<dyn LoggerService>, database: Arc<dyn DatabaseService>) -> Self {
         BusinessService { logger, database }
     }
+
     fn perform_task(&self, task: &str) {
         self.logger.log(&format!("Performing task: {}", task));
         let result = self.database.query(task);
@@ -90,10 +91,9 @@ impl ServiceContainer {
         type_id: TypeId,
     ) {
         // Ensure the service is a trait object
-
         // Insert the service into the container
         let service: Arc<dyn Any + Send + Sync> = service;
-        let type_id = TypeId::of::<T>();
+        // let type_id = TypeId::of::<T>();
 
         println!("Registering trait object: {:?}", type_id);
 
@@ -140,12 +140,16 @@ impl ServiceContainer {
 
     // Resolve a trait object (accepts Arc<dyn Trait> types); trait objects themselves (dyn Trait) are unsized,
     // so call this with Arc<dyn Trait> as the type parameter (e.g. resolve_trait::<Arc<dyn LoggerService>>()).
-    fn resolve_trait<T: Any + Send + Sync + 'static>(&self) -> Option<Arc<T>> {
+    fn resolve_trait<T: Send + Sync + 'static>(&self) -> Option<Arc<T>> {
         let type_id = TypeId::of::<T>();
 
         println!("resolve trait trait object: {:?}", type_id);
         if let Some(service) = self.services.lock().unwrap().get(&type_id) {
-            return service.clone().downcast::<T>().ok();
+            let downcast = service.clone().downcast::<T>().ok();
+
+            println!("resolve trait trait object: {:?}", downcast.is_some());
+
+            return downcast;
         }
 
         None
@@ -160,13 +164,15 @@ fn injection_main() {
     container.register(InMemoryDatabase);
 
     // Register trait objects
-    container.register_trait::<dyn LoggerService>(
-        Arc::new(ConsoleLogger) as Arc<dyn LoggerService>,
+    // using a box or reference package to dyn trait objects
+    container.register_trait::<Arc<dyn LoggerService>>(
+        Arc::new(Arc::new(ConsoleLogger) as Arc<dyn LoggerService>),
         TypeId::of::<Arc<dyn LoggerService>>(),
     );
-    container.register_trait::<dyn DatabaseService>(
-        Arc::new(InMemoryDatabase) as Arc<dyn Any + Send + Sync>,
-        TypeId::of::<dyn DatabaseService>(),
+
+    container.register_trait::<Arc<dyn DatabaseService>>(
+        Arc::new(Arc::new(InMemoryDatabase) as Arc<dyn DatabaseService>),
+        TypeId::of::<Arc<dyn DatabaseService>>(),
     );
 
     // Register a factory for BusinessService (resolve concrete implementations and coerce to trait objects)
@@ -183,6 +189,7 @@ fn injection_main() {
 
         Arc::new(BusinessService::new(logger, database))
     });
+    
     // Resolve and use BusinessService
     let business_service = container
         .resolve::<BusinessService>()
@@ -194,6 +201,14 @@ fn injection_main() {
         .resolve_trait::<Arc<dyn LoggerService>>()
         .expect("LoggerService not found");
     logger.log("Direct logger access");
+
+    // Resolve and use a trait object (request Arc<dyn DatabaseService> as the type parameter)
+    let database_service = container
+        .resolve_trait::<Arc<dyn DatabaseService>>()
+        .expect("DatabaseService not found");
+    let result = database_service.query("Direct database access");
+
+    println!("query: {}", result);
 }
 #[cfg(test)]
 mod tests {

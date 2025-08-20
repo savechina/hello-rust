@@ -189,7 +189,7 @@ fn injection_main() {
 
         Arc::new(BusinessService::new(logger, database))
     });
-    
+
     // Resolve and use BusinessService
     let business_service = container
         .resolve::<BusinessService>()

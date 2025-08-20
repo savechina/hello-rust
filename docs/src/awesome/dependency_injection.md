@@ -46,7 +46,7 @@ impl<R: UserRepository> UserService<R> {
 }
 
  // di 通常与异步运行时配合，但这里可以不用 async
-async fn dependency_injection_manul_sample() -> anyhow::Result<()> {
+ fn dependency_injection_manul_sample() -> anyhow::Result<()> {
     // --- 创建 DI 容器 ---
     let mut services = HashMap::<TypeId, Arc<dyn Any + Send + Sync>>::new();
 

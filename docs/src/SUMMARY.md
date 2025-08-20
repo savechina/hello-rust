@@ -30,6 +30,7 @@
 - [实战精选](./awesome/awesome-overview.md)
     - [数据库](./awesome/database.md)
     - [微服务](./awesome/services.md)
+        - [服务依赖注入](./awesome/dependency_injection.md)
     - [序列](./awesome/sequences.md)
     - [消息队列](./awesome/mq.md)
     - [模板](./awesome/templates.md)

@@ -5,6 +5,7 @@
 Rust 是静态类型（statically typed）语言，也就是说在编译时就必须知道所有变量的类型。根据值及其使用方式，编译器通常可以推断出我们想要用的类型。
 
 ## 标量类型
+
 标量（scalar）类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。你可能在其他语言中见过它们。让我们深入了解它们在 Rust 中是如何工作的。
 
 Rust 支持常见的基本类型:
@@ -400,7 +401,7 @@ pub(crate) fn vet_sample() {
 
 ### 日期时间
 
-#### Rust 标准库时间
+* Rust 标准库时间
 
 Rust 的标准库，`std::time` 库提供了基础的时间处理功能。
 * `SystemTime` 是一个表示时间的结构体，它是一个不可变的时间戳。表示一个时间点。 你可以使用 `SystemTime` 来获取当前时间点，并且可以使用 `UNIX_EPOCH` 来获取自Unix epoch （1970-01-01 00:00:00 UTC）以来的时间戳（Unixtime）。
@@ -484,7 +485,7 @@ mod tests {
 > * 精确性和一致性: Unix time 避免了时区、夏令时等问题，确保了时间表示的精确性和一致性。它通常以 32 位或 64 位整数存储，能够表示非常长的时间范围。
 
 
-####  Chrono 库日期时间
+* Chrono 库日期时间
 
 Rust 社区提供了 `chrono` 库来处理日期和时间。 你可以使用 `chrono::prelude::NaiveDate` 来表示日期和 `chrono::prelude::NaiveDateTime` 来表示日期时间，并且可以使用 `chrono::Duration` 来表示时间差。
 

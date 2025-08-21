@@ -570,7 +570,6 @@ dependencies = [
  "rs-consul",
  "rumqttc",
  "rusqlite",
- "rust_di",
  "serde",
  "serde_json",
  "sqlite-vec",
@@ -1596,20 +1595,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dashmap"
-version = "7.0.0-rc2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4a1e35a65fe0538a60167f0ada6e195ad5d477f6ddae273943596d4a1a5730b"
-dependencies = [
- "cfg-if",
- "crossbeam-utils",
- "equivalent",
- "hashbrown 0.15.2",
- "lock_api",
- "parking_lot_core",
-]
-
-[[package]]
 name = "data-encoding"
 version = "2.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1699,18 +1684,6 @@ name = "deunicode"
 version = "1.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "339544cc9e2c4dc3fc7149fd630c5f22263a4fdf18a98afd0075784968b5cf00"
-
-[[package]]
-name = "di_macros"
-version = "4.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "590cc3be332becda5b1107201b7e6a0748e092ad26fbadb482f8b8e00acdf923"
-dependencies = [
- "inventory",
- "proc-macro2 1.0.101",
- "quote 1.0.40",
- "syn 2.0.106",
-]
 
 [[package]]
 name = "diesel"
@@ -3144,15 +3117,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e0242819d153cba4b4b05a5a8f2a7e9bbf97b6055b2a002b395c96b5ff3c0222"
 dependencies = [
  "cfg-if",
-]
-
-[[package]]
-name = "inventory"
-version = "0.3.20"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab08d7cd2c5897f2c949e5383ea7c7db03fb19130ffcfbf7eda795137ae3cb83"
-dependencies = [
- "rustversion",
 ]
 
 [[package]]
@@ -5415,22 +5379,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust_di"
-version = "2.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4787c144345cf68e6586526da3de8965afdc3a99cd878252707aed8313eabd83"
-dependencies = [
- "arc-swap",
- "async-trait",
- "dashmap 7.0.0-rc2",
- "di_macros",
- "inventory",
- "once_cell",
- "thiserror 2.0.12",
- "tokio",
-]
-
-[[package]]
 name = "rustc-demangle"
 version = "0.1.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6549,7 +6497,7 @@ dependencies = [
  "cedar-policy",
  "chrono",
  "ciborium",
- "dashmap 5.5.3",
+ "dashmap",
  "deunicode",
  "dmp",
  "ext-sort",

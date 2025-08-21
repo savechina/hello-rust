@@ -241,31 +241,31 @@ pub(crate) fn thread_lock_sample() {
 pub(crate) fn thread_call_once_sample() {
     // can run in editon 2021, but not in edition 2024
     static mut VAL: usize = 0;
+
     static INIT: Once = Once::new();
 
-    unsafe {
-        println!("call once val is {}", VAL);
-    }
+    println!("call once val is {}", unsafe { VAL });
 
     let handle1 = thread::spawn(move || {
         INIT.call_once(|| unsafe {
             thread::sleep(Duration::from_millis(10));
             VAL = 1;
-            println!("call once val is {}", VAL);
+            println!("call once val is {}", unsafe { VAL });
         });
     });
 
     let handle2 = thread::spawn(move || {
         INIT.call_once(|| unsafe {
             VAL = 2;
-            println!("call once val is {}", VAL);
+            println!("call once val is {}", unsafe { VAL });
         });
     });
 
     handle1.join().unwrap();
     handle2.join().unwrap();
 
-    println!("{}", unsafe { VAL });
+    // Access VAL directly in an unsafe block
+    println!("call once val is {}", unsafe { VAL });
 }
 
 /**

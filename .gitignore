@@ -9,3 +9,7 @@ docs/book
 .zed
 data/filtered_employees.csv
 data/test.db
+.env
+
+.continue
+docs/target

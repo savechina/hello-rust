@@ -5,8 +5,8 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::ops::Sub;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::mpsc;
 use std::sync::{Arc, Barrier, Condvar, Mutex, Once, RwLock};
+use std::sync::{OnceLock, mpsc};
 use std::thread;
 use std::thread::JoinHandle;
 use std::time::Duration;
@@ -269,6 +269,35 @@ pub(crate) fn thread_call_once_sample() {
 }
 
 /**
+ * 线程只运行1次
+ */
+pub(crate) fn thread_call_once_lock_sample() {
+    static VAL: OnceLock<usize> = OnceLock::<usize>::new();
+
+    let handle1 = thread::spawn(move || {
+        let val = VAL.get_or_init(|| {
+            thread::sleep(Duration::from_millis(10));
+            println!("Thread 1 set VAL = 1");
+            1
+        });
+        println!("Thread 1 sees VAL = {}", val);
+    });
+
+    let handle2 = thread::spawn(move || {
+        let val = VAL.get_or_init(|| {
+            println!("Thread 2 set VAL = 2"); // 不会执行
+            2
+        });
+        println!("Thread 2 sees VAL = {}", val);
+    });
+
+    handle1.join().unwrap();
+    handle2.join().unwrap();
+
+    println!("Final VAL = {}", VAL.get().unwrap());
+}
+
+/**
  *  thread message channel
  *  mpsc是multiple producer, single consumer的缩写
  */
@@ -407,6 +436,11 @@ mod tests {
     #[test]
     fn test_thread_call_once_sample() {
         thread_call_once_sample();
+    }
+
+    #[test]
+    fn test_thread_call_once_lock_sample() {
+        thread_call_once_lock_sample();
     }
 
     #[test]

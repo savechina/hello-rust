@@ -8,11 +8,11 @@ trait Service: Send + Sync + 'static {
 }
 
 // Example service interfaces
-trait LoggerService: Send + Sync + 'static {
+trait LoggerService: Service {
     fn log(&self, message: &str);
 }
 
-trait DatabaseService: Send + Sync + 'static {
+trait DatabaseService: Service {
     fn query(&self, query: &str) -> String;
 }
 

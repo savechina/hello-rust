@@ -78,7 +78,14 @@ impl ServiceContainer {
     }
 
     // Register a concrete service
-    fn register<T: Service + 'static>(&self, service: T) {
+    fn register<T: Any + Send + Sync + 'static>(&self, service: T) {
+        let type_id = TypeId::of::<T>();
+        let service: Arc<dyn Any + Send + Sync> = Arc::new(service);
+        self.services.lock().unwrap().insert(type_id, service);
+    }
+
+    // Register a concrete service
+    fn register_service<T: Service + 'static>(&self, service: T) {
         let type_id = TypeId::of::<T>();
         let service: Arc<dyn Any + Send + Sync> = Arc::new(service);
         self.services.lock().unwrap().insert(type_id, service);

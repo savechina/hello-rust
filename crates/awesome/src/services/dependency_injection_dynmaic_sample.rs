@@ -85,15 +85,14 @@ impl ServiceContainer {
     }
 
     // Register a trait object
-    fn register_trait<T: ?Sized + Any + Send + Sync + 'static>(
-        &self,
-        service: Arc<dyn Any + Send + Sync>,
-        type_id: TypeId,
-    ) {
+    fn register_trait<T>(&self, service: Arc<dyn Any + Send + Sync>)
+    where
+        T: ?Sized + Any + Send + Sync + 'static,
+    {
         // Ensure the service is a trait object
         // Insert the service into the container
         let service: Arc<dyn Any + Send + Sync> = service;
-        // let type_id = TypeId::of::<T>();
+        let type_id = TypeId::of::<T>();
 
         println!("Registering trait object: {:?}", type_id);
 
@@ -102,13 +101,11 @@ impl ServiceContainer {
     }
 
     // Register a factory for lazy initialization
-    fn register_factory<
+    fn register_factory<T, F>(&self, factory: F)
+    where
         T: Service + 'static,
         F: Fn(&ServiceContainer) -> Arc<T> + Send + Sync + 'static,
-    >(
-        &self,
-        factory: F,
-    ) {
+    {
         let type_id = TypeId::of::<T>();
         let wrapped_factory: Box<dyn Fn(&ServiceContainer) -> Arc<dyn Any + Send + Sync>> =
             Box::new(move |container| {
@@ -140,7 +137,10 @@ impl ServiceContainer {
 
     // Resolve a trait object (accepts Arc<dyn Trait> types); trait objects themselves (dyn Trait) are unsized,
     // so call this with Arc<dyn Trait> as the type parameter (e.g. resolve_trait::<Arc<dyn LoggerService>>()).
-    fn resolve_trait<T: Send + Sync + 'static>(&self) -> Option<Arc<T>> {
+    fn resolve_trait<T>(&self) -> Option<Arc<T>>
+    where
+        T: Send + Sync + 'static,
+    {
         let type_id = TypeId::of::<T>();
 
         println!("resolve trait trait object: {:?}", type_id);
@@ -165,15 +165,13 @@ fn container_injection_main() {
 
     // Register trait objects
     // using a box or reference package to dyn trait objects
-    container.register_trait::<Arc<dyn LoggerService>>(
-        Arc::new(Arc::new(ConsoleLogger) as Arc<dyn LoggerService>),
-        TypeId::of::<Arc<dyn LoggerService>>(),
-    );
+    container.register_trait::<Arc<dyn LoggerService>>(Arc::new(
+        Arc::new(ConsoleLogger) as Arc<dyn LoggerService>
+    ));
 
-    container.register_trait::<Arc<dyn DatabaseService>>(
-        Arc::new(Arc::new(InMemoryDatabase) as Arc<dyn DatabaseService>),
-        TypeId::of::<Arc<dyn DatabaseService>>(),
-    );
+    container.register_trait::<Arc<dyn DatabaseService>>(Arc::new(
+        Arc::new(InMemoryDatabase) as Arc<dyn DatabaseService>
+    ));
 
     // Register a factory for BusinessService (resolve concrete implementations and coerce to trait objects)
     container.register_factory::<BusinessService, _>(|container| {

@@ -7,18 +7,6 @@ use std::{
 pub trait AnyService: Any + Send + Sync + 'static {}
 impl<T: Any + Send + Sync + 'static> AnyService for T {}
 
-// pub(crate) type ServiceInstance = Arc<RwLock<dyn AnyService + Send + Sync + 'static>>;
-// pub(crate) type ScopedMap = HashMap<ServiceKey, ServiceInstance>;
-// pub(crate) type FactoryMap = HashMap<ServiceKey, ServiceFactory>;
-// pub(crate) type ServiceKey = (String, String);
-// pub(crate) type RegisteredInstances = OnceCell<ArcSwap<FactoryMap>>;
-// pub(crate) type ServiceFactory = Arc<
-//     dyn Fn(Arc<NaiveDate>) -> Pin<Box<dyn Future<Output = Result<ServiceInstance, DiError>> + Send>>
-//         + Send
-//         + Sync
-//         + 'static,
-// >;
-
 // 定义一个 Repository Trait
 trait UserRepository: Any + Send + Sync {
     fn get_user(&self, id: u32) -> String;
@@ -50,7 +38,7 @@ impl<R: UserRepository> UserService<R> {
 }
 
 // di 通常与异步运行时配合，但这里可以不用 async
-fn dependency_injection_manul_sample() -> anyhow::Result<()> {
+fn dependency_injection_concrete_sample() -> anyhow::Result<()> {
     // --- 创建 DI 容器 ---
     let mut services = HashMap::<TypeId, Arc<dyn Any + Send + Sync>>::new();
 
@@ -94,6 +82,6 @@ mod tests {
 
     #[test]
     fn test_dependency_injection_sample() {
-        dependency_injection_manul_sample();
+        dependency_injection_concrete_sample();
     }
 }

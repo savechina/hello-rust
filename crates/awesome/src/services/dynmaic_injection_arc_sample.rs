@@ -1,6 +1,9 @@
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
+use std::ops::Deref;
 use std::sync::{Arc, Mutex};
+
+use tracing::Subscriber;
 
 // Base trait for all services
 trait Service: Send + Sync + 'static {
@@ -146,17 +149,19 @@ impl ServiceContainer {
     // so call this with Arc<dyn Trait> as the type parameter (e.g. resolve_trait::<Arc<dyn LoggerService>>()).
     fn resolve_trait<T>(&self) -> Option<Arc<T>>
     where
-        T: Send + Sync + 'static,
+        T: ?Sized + Send + Sync + 'static,
     {
-        let type_id = TypeId::of::<T>();
+        let type_id = TypeId::of::<Arc<T>>();
 
         println!("resolve trait trait object: {:?}", type_id);
         if let Some(service) = self.services.lock().unwrap().get(&type_id) {
-            let downcast = service.clone().downcast::<T>().ok();
+            let downcast = service.clone().downcast::<Arc<T>>().ok();
 
             println!("resolve trait trait object: {:?}", downcast.is_some());
 
-            return downcast;
+            if let Some(downcast1) = downcast {
+                return Some(downcast1.deref().clone());
+            }
         }
 
         None
@@ -203,13 +208,13 @@ fn container_injection_main() {
 
     // Resolve and use a trait object (request Arc<dyn LoggerService> as the type parameter)
     let logger = container
-        .resolve_trait::<Arc<dyn LoggerService>>()
+        .resolve_trait::<dyn LoggerService>()
         .expect("LoggerService not found");
     logger.log("Direct logger access");
 
     // Resolve and use a trait object (request Arc<dyn DatabaseService> as the type parameter)
     let database_service = container
-        .resolve_trait::<Arc<dyn DatabaseService>>()
+        .resolve_trait::<dyn DatabaseService>()
         .expect("DatabaseService not found");
     let result = database_service.query("Direct database access");
 

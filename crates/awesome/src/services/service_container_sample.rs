@@ -16,20 +16,14 @@ impl Logger for ConsoleLogger {
     }
 }
 
-// impl Any for ConsoleLogger {
-//     fn type_id(&self) -> TypeId {
-//         TypeId::of::<Self>()
-//     }
-// }
-
 // Service Locator struct
-struct ServiceLocator {
+struct ServiceContainer {
     services: HashMap<TypeId, Arc<dyn Any + Send + Sync>>,
 }
 
-impl ServiceLocator {
+impl ServiceContainer {
     fn new() -> Self {
-        ServiceLocator {
+        ServiceContainer {
             services: HashMap::new(),
         }
     }
@@ -51,11 +45,11 @@ impl ServiceLocator {
 
 // Service that uses the Service Locator
 struct UserService {
-    locator: Arc<ServiceLocator>,
+    locator: Arc<ServiceContainer>,
 }
 
 impl UserService {
-    fn new(locator: Arc<ServiceLocator>) -> Self {
+    fn new(locator: Arc<ServiceContainer>) -> Self {
         UserService { locator }
     }
 
@@ -67,8 +61,8 @@ impl UserService {
     }
 }
 
-fn service_locator_main() {
-    let mut locator = ServiceLocator::new();
+fn service_container_main() {
+    let mut locator = ServiceContainer::new();
     locator.register_logger(ConsoleLogger);
     let locator = Arc::new(locator);
 
@@ -82,6 +76,6 @@ mod tests {
 
     #[test]
     fn test_locator_main() {
-        service_locator_main();
+        service_container_main();
     }
 }

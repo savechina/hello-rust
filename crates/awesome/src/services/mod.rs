@@ -1,11 +1,12 @@
+pub mod concrete_injection_sample;
 pub mod consul_sample;
-pub mod dependency_injection_concrete_sample;
-pub mod dependency_injection_dynmaic_sample;
+pub mod dynmaic_injection_arc_sample;
+pub mod dynmaic_injection_box_sample;
 pub mod framework;
 pub mod greeter_consume;
 pub mod greeter_service;
 pub mod inventory_sample;
-pub mod service_locator_sample;
+pub mod service_container_sample;
 pub mod tonic_hello_client;
 pub mod tonic_hello_server;
 pub mod tonic_store_client;

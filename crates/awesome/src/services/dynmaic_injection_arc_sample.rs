@@ -1,4 +1,4 @@
-use std::any::{Any, TypeId};
+use std::any::{self, Any, TypeId};
 use std::collections::HashMap;
 use std::ops::Deref;
 use std::sync::{Arc, Mutex};
@@ -6,7 +6,7 @@ use std::sync::{Arc, Mutex};
 use tracing::Subscriber;
 
 // Base trait for all services
-trait Service: Send + Sync + 'static {
+trait Service: Any + Send + Sync + 'static {
     fn name(&self) -> &'static str;
 }
 
@@ -95,16 +95,19 @@ impl ServiceContainer {
     }
 
     // Register a trait object
-    fn register_trait<T>(&self, service: Arc<dyn Any + Send + Sync>)
+    fn register_trait<T>(&self, service: Arc<T>)
     where
         T: ?Sized + Any + Send + Sync + 'static,
     {
         // Ensure the service is a trait object
         // Insert the service into the container
-        let service: Arc<dyn Any + Send + Sync> = service;
-        let type_id = TypeId::of::<T>();
+        println!("resolve trait name:{:?}", any::type_name_of_val(&service));
+        let service: Arc<dyn Any + Send + Sync> = Arc::new(service);
+        let type_id = TypeId::of::<Arc<T>>();
 
         println!("Registering trait object: {:?}", type_id);
+        println!("resolve trait id:{:?}", type_id);
+        println!("resolve trait name:{:?}", any::type_name_of_val(&service));
 
         // Insert the service into the services map
         self.services.lock().unwrap().insert(type_id, service);
@@ -131,9 +134,11 @@ impl ServiceContainer {
     // Resolve a concrete service
     fn resolve<T: Service + 'static>(&self) -> Option<Arc<T>> {
         let type_id = TypeId::of::<T>();
+
         if let Some(service) = self.services.lock().unwrap().get(&type_id) {
             return service.clone().downcast::<T>().ok();
         }
+
         if let Some(factory) = self.factories.lock().unwrap().get(&type_id) {
             let service = factory(self);
             self.services
@@ -152,7 +157,8 @@ impl ServiceContainer {
         T: ?Sized + Send + Sync + 'static,
     {
         let type_id = TypeId::of::<Arc<T>>();
-
+        println!("resolve trait id:{:?}", type_id);
+        println!("resolve trait name:{:?}", any::type_name::<T>());
         println!("resolve trait trait object: {:?}", type_id);
         if let Some(service) = self.services.lock().unwrap().get(&type_id) {
             let downcast = service.clone().downcast::<Arc<T>>().ok();
@@ -177,13 +183,11 @@ fn container_injection_main() {
 
     // Register trait objects
     // using a box or reference package to dyn trait objects
-    container.register_trait::<Arc<dyn LoggerService>>(Arc::new(
-        Arc::new(ConsoleLogger) as Arc<dyn LoggerService>
-    ));
+    container.register::<Arc<dyn LoggerService>>(Arc::new(ConsoleLogger) as Arc<dyn LoggerService>);
 
-    container.register_trait::<Arc<dyn DatabaseService>>(Arc::new(
+    container.register_trait::<dyn DatabaseService>(
         Arc::new(InMemoryDatabase) as Arc<dyn DatabaseService>
-    ));
+    );
 
     // Register a factory for BusinessService (resolve concrete implementations and coerce to trait objects)
     container.register_factory::<BusinessService, _>(|container| {

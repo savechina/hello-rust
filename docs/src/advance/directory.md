@@ -8,8 +8,8 @@
 
 安装：
 ```bash
-    cargo add home
-    cargo add dotenvy
+cargo add home
+cargo add dotenvy
 ```
 或者配置`Cargo.toml`
 ```toml
@@ -124,7 +124,7 @@ mod tests {
 
 安装：
 ```bash
-    cargo add tempfile
+cargo add tempfile
 ```
 或者配置`Cargo.toml`
 ```toml

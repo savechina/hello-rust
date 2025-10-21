@@ -31,6 +31,8 @@ RUN for file in /etc/apt/sources.list.d/*.sources; do \
     build-essential \
     gcc-arm-linux-gnueabihf \
     gcc-x86-64-linux-gnu \
+    gcc-mingw-w64-x86-64 \
+    g++-mingw-w64-x86-64 \
     flex \
     bison \
     libssl-dev \
@@ -63,10 +65,12 @@ RUN for file in /etc/apt/sources.list.d/*.sources; do \
     # Optional: Install a specific Rust toolchain if needed (e.g., stable, nightly)
     # rustup toolchain install stable && \
     rustup default stable && \
+    rustup toolchain install 1.90-aarch64-unknown-linux-gnu  && \
     # rustup target install armv7-unknown-linux-gnueabihf
     rustup target add armv7-unknown-linux-gnueabihf && \
     # rustup target install x86_64-unknown-linux-gnu
     rustup target add x86_64-unknown-linux-gnu && \
+    rustup target add x86_64-pc-windows-gnu && \
     \
     # Optional: Clean up Rustup's temporary files, if any
     rm -rf /root/.rustup/tmp && \

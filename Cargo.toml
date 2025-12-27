@@ -42,8 +42,9 @@ sqlx = { version = "0.8.2", features = [
     "runtime-tokio",
     "mysql",
 ] }
-bigdecimal = { version = "0.4.5", features = ["std", "serde-json"] }
+bigdecimal = { version = "0.4.9", features = ["std", "serde-json"] }
 num-bigint = { version = "0.4", features = ["rand"] }
+num-bigfloat = "1.7.2"
 ollama-rs = "0.2.1"
 tera = "1.20.0"
 chrono = { version = "0.4.39", features = ["serde"] }

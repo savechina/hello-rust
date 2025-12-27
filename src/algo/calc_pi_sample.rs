@@ -1,3 +1,5 @@
+use bigdecimal::BigDecimal;
+use num_bigfloat::BigFloat;
 use rayon::prelude::*;
 
 /// 使用莱布尼茨公式计算 PI
@@ -69,12 +71,79 @@ pub fn calculate_pi_bbp(steps: usize) -> f64 {
         .sum()
 }
 
+pub fn calculate_pi_bbp_bigfloat(steps: usize) -> BigFloat {
+    (0..steps)
+        .into_par_iter()
+        .map(|k| {
+            let k_bf = BigFloat::from(k as u64);
+            let eight = BigFloat::from(8.0);
+            let sixteen = BigFloat::from(16.0);
+
+            // 计算 16^-k
+            let p16 = BigFloat::from(1.0) / sixteen.pow(&k_bf);
+
+            // BBP 公式核心部分
+            let term = BigFloat::from(4.0) / (eight * k_bf + BigFloat::from(1.0))
+                - BigFloat::from(2.0) / (eight * k_bf + BigFloat::from(4.0))
+                - BigFloat::from(1.0) / (eight * k_bf + BigFloat::from(5.0))
+                - BigFloat::from(1.0) / (eight * k_bf + BigFloat::from(6.0));
+
+            p16 * term
+        })
+        .sum()
+}
+
+pub fn calculate_pi_bbp_bigdecimal(steps: usize) -> BigDecimal {
+    // 设置精度：目标小数位 + 一些额外守位（guard digits）避免累积误差
+    let prec = 1024 + 32;
+
+    let zero = BigDecimal::from(0u64);
+    let one = BigDecimal::from(1u64);
+    let two = BigDecimal::from(2u64);
+    let four = BigDecimal::from(4u64);
+    let five = BigDecimal::from(5u64);
+    let six = BigDecimal::from(6u64);
+    let eight = BigDecimal::from(8u64);
+    let sixteen = BigDecimal::from(16u64);
+
+    // 并行计算每项
+    let sum: BigDecimal = (0..steps)
+        .into_par_iter()
+        .map(|k| {
+            let k_bd = BigDecimal::from(k as u64);
+
+            // 计算 1 / 16^k（从 k=0 开始迭代乘法，避免 pow）
+            // let mut p16 = one.clone();
+            // for _ in 0..k {
+            //     p16 = p16 / &sixteen;
+            // }
+
+            // 计算 1 / 16^k
+            let p16 = one.clone() / sixteen.powi(k as i64);
+
+            // BBP 项：4/(8k+1) - 2/(8k+4) - 1/(8k+5) - 1/(8k+6)
+            let term = four.clone() / (&eight * &k_bd + &one)
+                - two.clone() / (&eight * &k_bd + &four)
+                - one.clone() / (&eight * &k_bd + &five)
+                - one.clone() / (&eight * &k_bd + &six);
+
+            p16 * term
+        })
+        .sum();
+
+    // 最终调整到目标精度
+    sum.with_prec(prec)
+}
+
 ///
 /// 单元测试
 /// #[cfg(test)]
 ///
 #[cfg(test)]
 mod tests {
+
+    use axum::routing::on;
+
     // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
     use super::*;
 
@@ -88,7 +157,8 @@ mod tests {
         let iterations = 10_000_000_000;
         let result = calculate_pi_functional(iterations);
 
-        println!("迭代 {} 次的结果: {}", iterations, result);
+        println!("迭代 {} 次:", iterations);
+        println!("计算结果 PI 值: {}", result);
         println!("系统标准 PI 值: {}", std::f64::consts::PI);
     }
 
@@ -97,7 +167,8 @@ mod tests {
         let iterations = 10_000_000_000;
         let result = calculate_pi_parallel(iterations);
 
-        println!("迭代 {} 次的结果: {}", iterations, result);
+        println!("迭代 {} 次:", iterations);
+        println!("计算结果 PI 值: {}", result);
         println!("系统标准 PI 值: {}", std::f64::consts::PI);
     }
 
@@ -106,7 +177,28 @@ mod tests {
         let iterations = 11;
         let result = calculate_pi_bbp(iterations);
 
-        println!("迭代 {} 次的结果: {}", iterations, result);
+        println!("迭代 {} 次:", iterations);
+        println!("计算结果 PI 值: {}", result);
         println!("系统标准 PI 值: {}", std::f64::consts::PI);
+    }
+
+    #[test]
+    fn test_calculate_pi_bbp_bigfloat() {
+        let iterations = 30;
+        let result = calculate_pi_bbp_bigfloat(iterations);
+
+        println!("迭代 {} 次:", iterations);
+        println!("计算结果 PI 值: {}", result);
+        println!("系统标准 PI 值: {}", num_bigfloat::PI);
+    }
+
+    #[test]
+    fn test_calculate_pi_bbp_bigdecimal() {
+        let steps = 1024;
+        let result = calculate_pi_bbp_bigdecimal(steps);
+
+        println!("迭代 {} 次:", steps);
+        println!("计算结果 PI 值: {}", result);
+        println!("系统标准 PI 值: {}", num_bigfloat::PI);
     }
 }

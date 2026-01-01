@@ -95,7 +95,7 @@ pub fn calculate_pi_bbp_bigfloat(steps: usize) -> BigFloat {
 
 pub fn calculate_pi_bbp_bigdecimal(steps: usize) -> BigDecimal {
     // 设置精度：目标小数位 + 一些额外守位（guard digits）避免累积误差
-    let prec = 1024 + 32;
+    let prec = steps as u64 + 32;
 
     let zero = BigDecimal::from(0u64);
     let one = BigDecimal::from(1u64);

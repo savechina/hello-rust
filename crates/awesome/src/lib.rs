@@ -18,6 +18,9 @@ pub mod sequences;
 /// message queue
 pub mod mq;
 
+/// data frames
+mod data;
+
 fn main_awesome() {
     println!("Hello, Awesome!");
 }

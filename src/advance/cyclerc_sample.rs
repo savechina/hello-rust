@@ -104,7 +104,7 @@ fn cycle_weak_sample() {
 // 结论：通过使用 Weak 引用，循环被打破，所有对象都能被正确 drop 和回收内存。
 
 use std::sync::{self, Arc}; // 导入 Arc 和 Weak // 用于 Arc/Rc 内部的可变性
-                            // 修改节点结构，prev 链接使用 Weak 引用
+// 修改节点结构，prev 链接使用 Weak 引用
 struct NodeFixed {
     value: i32,
     next: RefCell<Option<Arc<NodeFixed>>>,
@@ -522,6 +522,175 @@ fn cycle_btree_sample() {
     demonstrate_fix_with_weak();
 }
 
+/// use slab memory pool
+use slab::Slab;
+
+struct SlabNode {
+    data: String,
+    prev: Option<usize>, // 使用索引代替指针
+    next: Option<usize>,
+}
+
+struct SlabGraph {
+    nodes: Slab<SlabNode>,
+}
+
+impl SlabGraph {
+    fn new() -> Self {
+        Self { nodes: Slab::new() }
+    }
+
+    /// 获取指定索引节点的只读引用
+    pub fn get(&self, idx: usize) -> Option<&SlabNode> {
+        self.nodes.get(idx)
+    }
+
+    /// 获取指定索引节点的可变引用
+    pub fn get_mut(&mut self, idx: usize) -> Option<&mut SlabNode> {
+        self.nodes.get_mut(idx)
+    }
+
+    fn add_node(&mut self, data: &str) -> usize {
+        self.nodes.insert(SlabNode {
+            data: data.to_string(),
+            prev: None,
+            next: None,
+        })
+    }
+
+    fn link(&mut self, first: usize, second: usize) {
+        // 轻松建立双向连接，无生命周期或环的烦恼
+        if let Some(f) = self.nodes.get_mut(first) {
+            f.next = Some(second);
+        }
+        if let Some(s) = self.nodes.get_mut(second) {
+            s.prev = Some(first);
+        }
+    }
+}
+
+struct SlabNodeItem<T> {
+    data: T,
+    prev: Option<usize>,
+    next: Option<usize>,
+}
+pub struct SlabList<T> {
+    nodes: Slab<SlabNodeItem<T>>,
+    head: Option<usize>,
+    tail: Option<usize>,
+}
+
+impl<T> SlabList<T> {
+    fn new() -> Self {
+        Self {
+            nodes: Slab::new(),
+            head: None,
+            tail: None,
+        }
+    }
+
+    /// 获取指定索引节点的只读引用
+    pub fn get(&self, idx: usize) -> Option<&SlabNodeItem<T>> {
+        self.nodes.get(idx)
+    }
+
+    /// 获取指定索引节点的可变引用
+    pub fn get_mut(&mut self, idx: usize) -> Option<&mut SlabNodeItem<T>> {
+        self.nodes.get_mut(idx)
+    }
+
+    /// 添加节点数据到尾部
+    pub fn push_back(&mut self, data: T) -> usize {
+        let new_node = SlabNodeItem {
+            data,
+            prev: self.tail,
+            next: None,
+        };
+        let idx = self.nodes.insert(new_node);
+
+        if let Some(tail_idx) = self.tail {
+            self.nodes[tail_idx].next = Some(idx);
+        } else {
+            self.head = Some(idx);
+        }
+        self.tail = Some(idx);
+        idx
+    }
+
+    ///删除节点数据
+    pub fn remove(&mut self, idx: usize) -> T {
+        let node = self.nodes.remove(idx);
+        // 更新前后节点的指向
+        if let Some(prev) = node.prev {
+            self.nodes[prev].next = node.next;
+        } else {
+            self.head = node.next;
+        }
+
+        if let Some(next) = node.next {
+            self.nodes[next].prev = node.prev;
+        } else {
+            self.tail = node.prev;
+        }
+
+        node.data
+    }
+}
+
+impl<T> Default for SlabList<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+fn cycle_slab_graph_sample() {
+    let mut graph = SlabGraph::new();
+    let n1 = graph.add_node("节点1");
+    let n2 = graph.add_node("节点2");
+    let n3 = graph.add_node("节点3");
+    let n4 = graph.add_node("节点4");
+
+    graph.link(n1, n2);
+    graph.link(n2, n3);
+    graph.link(n3, n4);
+
+    // 即使 n1 指向 n2，n2 指向 n1，
+    //
+    if let Some(node) = graph.get(n3) {
+        println!(
+            "当前内容: {}, 上一个索引: {:?}, 下一个索引: {:?}",
+            node.data, node.prev, node.next
+        );
+    }
+    // 当 graph 离开作用域时，所有内存都会被释放。
+}
+
+fn cycle_slab_list_sample() {
+    // 1. 初始化容器。Slab 拥有所有 Node 的物理所有权。
+    let mut list = SlabList::new();
+
+    // 2. 插入节点。返回的是 usize（索引），而不是引用或指针。
+    let node1_idx = list.push_back("第一步：逻辑推导");
+    let node2_idx = list.push_back("第二步：因果分析");
+    let node3_idx = list.push_back("第三步：系统反馈");
+
+    // 3. 此时 node1 <-> node2 <-> node3 已经通过索引建立了双向链接
+
+    // 4. 访问节点：通过索引从 Slab 中获取
+    if let Some(node) = list.get(node2_idx) {
+        println!(
+            "当前内容: {}, 上一个索引: {:?}, 下一个索引: {:?}",
+            node.data, node.prev, node.next
+        );
+    }
+
+    // 5. 删除节点：Slab 会将该位置标记为空闲，并可循环利用
+    list.remove(node2_idx);
+
+    // 6. 验证：node1 的 next 现在指向 node3，循环引用自动“消失”
+    assert_eq!(list.get(node1_idx).unwrap().next, Some(node3_idx));
+}
+
 ///
 /// 单元测试
 /// #[cfg(test)]
@@ -547,5 +716,15 @@ mod test {
     #[test]
     fn test_cycle_btree_sample() {
         cycle_btree_sample();
+    }
+
+    #[test]
+    fn test_cycle_slab_graph_sample() {
+        cycle_slab_graph_sample();
+    }
+
+    #[test]
+    fn test_cycle_slab_list_sample() {
+        cycle_slab_list_sample();
     }
 }

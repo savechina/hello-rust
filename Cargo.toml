@@ -79,6 +79,7 @@ bumpalo = "3.17.0"
 nix = { version = "0.30.1", features = ["signal"] }
 async-trait = "0.1.88"
 mockall = "0.13.1"
+slab = "0.4.11"
 
 
 [dev-dependencies]

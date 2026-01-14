@@ -203,12 +203,13 @@ fn cycle_arc_sample() {
     println!("\n块作用域已结束。如果节点被正确销毁，你应该已经看到了它们的 Drop 输出。");
     println!("--- 程序结束 (无泄漏) ---");
 }
+
 struct NodeWithBump<'a> {
     value: i32,
     next: RefCell<Option<&'a NodeWithBump<'a>>>, // 使用 RefCell 允许内部可变性
 }
 
-fn create_cycle<'a>(bump: &'a Bump) {
+fn create_cycle_node_bump<'a>(bump: &'a Bump) {
     let node1 = bump.alloc(NodeWithBump {
         value: 1,
         next: RefCell::new(None),
@@ -225,6 +226,12 @@ fn create_cycle<'a>(bump: &'a Bump) {
     println!("Created cycle in bump arena.");
     // 循环在这里存在，但因为是引用，不涉及所有权或引用计数。
     // 生命周期由 'a (bump) 决定。
+
+    println!(
+        "node: value:{}, nex:{:?}",
+        node1.value,
+        node1.next.borrow().unwrap_or(node1).value
+    );
 } // <- node1, node2 引用超出作用域，但它们指向的内存在 bump 中
 
 fn cycle_bump_sample() {
@@ -232,7 +239,7 @@ fn cycle_bump_sample() {
     let bump = Bump::new();
 
     // 创建节点并形成循环
-    create_cycle(&bump);
+    create_cycle_node_bump(&bump);
 
     // bump 在这里被丢弃，内存被整体回收。
     // 由于使用了 Bump 分配器，所有分配的内存会在 bump 被 drop 时自动释放。

@@ -36,6 +36,7 @@
     - [宏编程](./advance/macros.md)
     - [Web 服务](./advance/services.md)
     - [序列化与反序列化](./advance/serialization.md)
+    - [rkyv 零拷贝序列化](./advance/rkyv.md)
 
 # 实战精选 (Awesome)
 

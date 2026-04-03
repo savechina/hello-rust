@@ -422,16 +422,16 @@ This delivers:
 
 ### ASCII Diagrams - SC-012
 
-- [ ] T123 [P] Add ASCII diagrams to ownership.md
+- [x] T123 [P] Add ASCII diagrams to ownership.md
   - Memory layout (stack vs heap)
   - Ownership transfer visualization
   - Borrowing rules diagram
 
-- [ ] T124 [P] Add ASCII diagrams to struct.md
+- [x] T124 [P] Add ASCII diagrams to struct.md
   - Struct memory layout
   - Field access patterns
 
-- [ ] T125 [P] Add ASCII diagrams to generic.md  
+- [x] T125 [P] Add ASCII diagrams to generic.md  
   - Monomorphization process
   - Trait bound relationships
 
@@ -473,7 +473,7 @@ This delivers:
 
 ### 知识检查 (Knowledge Checkpoints) - SC-015
 
-- [ ] T146 [P] Add "知识检查" section to expression.md
+- [x] T146 [P] Add "知识检查" section to expression.md
   - 3 quiz questions (mix of prediction, selection, fix-it)
   - Answers with detailed explanations
   - Difficulty distribution: 50% 🟢, 40% 🟡, 10% 🔴

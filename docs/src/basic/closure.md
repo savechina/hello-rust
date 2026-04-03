@@ -228,50 +228,207 @@ let closure = |x: i32| x + 1;
 ### 错误 2：可变借用冲突
 
 ```rust
-let mut x = 5;
+let mut counter = 0;
+let mut increment = || counter += 1;
 
-let closure1 = || x += 1;
-let closure2 = || x += 1;  // ❌ 多次可变借用
-
-closure1();
-closure2();
+println!("{}", counter);  // ❌ 错误: 与闭包的可变借用冲突
+increment();
 ```
 
-**修复**：
+**编译器输出**:
+```
+error[E0502]: cannot borrow `counter` as immutable because it is also borrowed as mutable
+  --> src/main.rs:5:20
+   |
+3 |     let mut increment = || {
+4 |         counter += 1;
+   |         ------- mutable borrow occurs here
+5 |     println!("{}", counter);
+   |                    ^^^^^^^ immutable borrow occurs here
+```
+
+**修复方法**:
 ```rust
-let mut x = 5;
-{
-    let mut closure1 = || x += 1;
-    closure1();  // 第一个闭包用完
-}
-{
-    let mut closure2 = || x += 1;  // 现在可以用第二个
-    closure2();
-}
+let mut counter = 0;
+let mut increment = || counter += 1;
+
+increment();  // 先调用闭包,释放借用
+println!("{}", counter);  // ✅ 借用已释放
 ```
 
-### 错误 2：move 后使用
+**解析**: 闭包持有可变借用期间,不能有其他借用。
+
+### 错误 3：move 后使用
 
 ```rust
 let x = String::from("hello");
-
-let closure = move || println!("{}", x);
-println!("{}", x);  // ❌ x 已转移
+let closure = move || println!("{}", x);  // move 转移所有权
+println!("{}", x);  // ❌ 错误: x 已被移动
 ```
 
-**修复**：
+**修复方法**:
 ```rust
 let x = String::from("hello");
-
-let closure = || println!("{}", &x);  // 借用，不转移
+let closure = || println!("{}", &x);  // 借用,不转移
 println!("{}", x);  // ✅ x 仍可用
 ```
+
+**解析**: `move` 关键字强制转移所有权,捕获变量不再可用。
+
+### 错误 4：FnOnce 被重复调用
+
+```rust
+let text = String::from("Hello");
+let consume = move || text;  // 实现 FnOnce
+
+consume();  // ✅ 第一次调用
+consume();  // ❌ 错误: 闭包已被消耗
+```
+
+**编译器输出**:
+```
+error[E0382]: use of moved value: `consume`
+  --> src/main.rs:6:5
+   |
+5 |     consume();
+   |     ------- value moved here
+6 |     consume();
+   |     ^^^^^^^ value used here after move
+```
+
+**修复方法**:
+```rust
+// 方法 1: 不使用 move
+let text = String::from("Hello");
+let print = || println!("{}", &text);
+print();
+print();  // ✅ 可多次调用
+
+// 方法 2: 克隆返回值
+let text = String::from("Hello");
+let print_clone = || {
+    println!("{}", text);
+    text.clone()
+};
+```
+
+**解析**: `FnOnce` 闭包消耗捕获变量,只能调用一次。
 
 ---
 
 ## 动手练习
 
-### 练习 1：实现迭代器过滤
+### 练习 1：闭包捕获环境
+
+实现一个计算器闭包,捕获基础值并累加:
+
+```rust
+fn main() {
+    let base = 10;
+    
+    // TODO: 定义 add_to_base 闭包,捕获 base
+    // let add_to_base = ???;
+    
+    println!("{}", add_to_base(5));   // 应输出: 15
+    println!("{}", add_to_base(20));  // 应输出: 30
+}
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+let base = 10;
+let add_to_base = |x: i32| x + base;
+
+println!("{}", add_to_base(5));   // 输出: 15
+println!("{}", add_to_base(20));  // 输出: 30
+```
+
+**解析**: 闭包捕获 `base` 为不可变引用,实现 `Fn` trait,可多次调用。
+</details>
+
+### 练习 2：可变捕获闭包
+
+实现一个累加器闭包,每次调用递增:
+
+```rust
+fn main() {
+    let mut total = 0;
+    
+    // TODO: 定义 accumulate 闭包
+    // let accumulate = ???;
+    
+    println!("{}", accumulate(5));   // 应输出: 5
+    println!("{}", accumulate(10));  // 应输出: 15
+    println!("{}", accumulate(3));   // 应输出: 18
+}
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+let mut total = 0;
+let mut accumulate = |x: i32| {
+    total += x;
+    total
+};
+
+println!("{}", accumulate(5));   // 输出: 5
+println!("{}", accumulate(10));  // 输出: 15
+println!("{}", accumulate(3));   // 输出: 18
+```
+
+**解析**: 闭包可变借用 `total`,实现 `FnMut` trait,需要 `mut` 声明。
+</details>
+
+### 练习 3：闭包作为函数参数
+
+实现 `apply_operation` 函数,接受不同操作的闭包:
+
+```rust
+fn apply_operation<F>(f: F, value: i32) -> i32
+// TODO: 添加 trait 约束
+{
+    // TODO: 调用闭包
+}
+
+fn main() {
+    let double = |x| x * 2;
+    let triple = |x| x * 3;
+    
+    println!("{}", apply_operation(double, 10));  // 应输出: 20
+    println!("{}", apply_operation(triple, 10));  // 应输出: 30
+}
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+fn apply_operation<F>(f: F, value: i32) -> i32
+where
+    F: Fn(i32) -> i32,
+{
+    f(value)
+}
+
+fn main() {
+    let double = |x| x * 2;
+    let triple = |x| x * 3;
+    
+    println!("{}", apply_operation(double, 10));  // 输出: 20
+    println!("{}", apply_operation(triple, 10));  // 输出: 30
+}
+```
+
+**解析**: 泛型参数 `F` 约束为 `Fn(i32) -> i32`,可接受任何匹配的闭包。
+</details>
+
+### 练习 4：迭代器过滤
+
+使用闭包过滤数字集合:
 
 ```rust
 let numbers = vec![1, 2, 3, 4, 5, 6];
@@ -282,77 +439,123 @@ let evens: Vec<i32> = numbers
     .filter(|n| /* TODO */)
     .cloned()
     .collect();
+
+println!("{:?}", evens);  // 应输出: [2, 4, 6]
 ```
 
 <details>
 <summary>点击查看答案</summary>
 
 ```rust
+let numbers = vec![1, 2, 3, 4, 5, 6];
+
 let evens: Vec<i32> = numbers
     .iter()
     .filter(|n| n % 2 == 0)
     .cloned()
     .collect();
+
+println!("{:?}", evens);  // 输出: [2, 4, 6]
 ```
 
-**解析**：`filter` 接受返回 bool 的闭包。
-</details>
-
-### 练习 2：捕获方式判断
-
-以下闭包各用什么方式捕获？
-
-```rust
-let x = 5;
-let a = || println!("{}", x);
-
-let mut y = 5;
-let mut b = || y += 1;
-
-let z = String::from("hi");
-let c = move || println!("{}", z);
-```
-
-<details>
-<summary>答案与解析</summary>
-
-**答案**:
-- a: 不可变借用 (&x)
-- b: 可变借用 (&mut y)
-- c: 转移所有权 (move)
-
-**解析**: 
-- a 只用 x → 不可变借用
-- b 修改 y → 可变借用
-- c 有 move → 转移所有权
+**解析**: `filter` 接受返回 `bool` 的闭包,闭包判断每个元素是否保留。
 </details>
 
 ---
 
 ## 故障排查 (FAQ)
 
-### Q: 闭包和函数选哪个？
+### Q: Fn, FnMut, FnOnce 如何选择?
 
-**A**:
+**A**: 作为参数时根据需求选择:
+
 ```rust
-// 需要泛型时 → 用闭包
-vec.iter().filter(|x| x > &5)
+// Fn: 只读,可多次调用 (最灵活)
+fn process_fn<F>(f: F) where F: Fn() {
+    f();
+    f();  // ✅ 可多次调用
+}
 
-// 需要具体类型时 → 用函数
-fn is_positive(x: &i32) -> bool { *x > 0 }
-vec.iter().filter(is_positive)
+// FnMut: 需修改环境
+fn process_mut<F>(mut f: F) where F: FnMut() {
+    f();  // ✅ 可修改环境
+}
+
+// FnOnce: 消耗所有权 (最严格)
+fn process_once<F>(f: F) where F: FnOnce() {
+    f();  // ✅ 仅一次调用
+}
 ```
 
-### Q: 如何调试闭包类型？
+**选择原则**:
+- 只读访问 → `Fn` (推荐,最灵活)
+- 需要修改环境 → `FnMut`
+- 需要消耗所有权 → `FnOnce` (最严格)
 
-**A**:
+### Q: 闭包和函数有什么区别?
+
+**A**: 
+
+```rust
+// 函数: 不能捕获环境
+fn add_fn(x: i32, factor: i32) -> i32 {
+    x + factor
+}
+
+// 闭包: 可以捕获环境
+let factor = 2;
+let add_closure = |x| x + factor;  // 捕获 factor
+
+// 函数类型: fn (函数指针)
+let fn_ptr: fn(i32) -> i32 = add_fn;
+
+// 闭包类型: 匿名,实现 Fn trait
+// let closure_ptr: ??? = add_closure;  // 类型匿名
+```
+
+**区别总结**:
+- 函数不能捕获环境变量
+- 闭包可以捕获 (灵活)
+- 函数有明确类型 `fn(T) -> R`
+- 闭包类型匿名,通过 trait 表示
+
+### Q: move 何时必须使用?
+
+**A**: 当闭包需要离开定义作用域时:
+
+```rust
+// 1. 返回闭包: 必须 move
+fn create_closure() -> impl Fn() -> String {
+    let text = String::from("Hello");
+    move || text.clone()  // move 捕获 text
+}
+
+// 2. 线程: 必须 move
+use std::thread;
+thread::spawn(move || {
+    // 独立线程需要所有权
+});
+
+// 3. 长时间存储: 建议 move
+let closure = move || {
+    // 避免生命周期问题
+};
+```
+
+### Q: 如何调试闭包类型?
+
+**A**: 
+
 ```rust
 // 闭包类型是匿名的
 let closure = |x| x + 1;
-// type: impl Fn(i32) -> i32
+// 类型: impl Fn(i32) -> i32
 
-// 需要存储时用 Box
-let boxed: Box<dyn Fn(i32) -> i32> = Box::new(closure);
+// 需要存储时用 Box<dyn Fn>
+let boxed: Box<dyn Fn(i32) -> i32> = Box::new(|x| x + 1);
+
+// 需要具体类型时用函数指针
+let fn_ptr: fn(i32) -> i32 = |x| x + 1;  // 不捕获环境的闭包
 ```
 
 ---
@@ -376,57 +579,67 @@ let boxed: Box<dyn Fn(i32) -> i32> = Box::new(closure);
 
 **问题 1** 🟢 (基础概念)
 
-以下代码的输出是什么？
+以下代码的输出是什么?
 
 ```rust
-let x = 5;
-let closure = |y| x + y;
-println!("{}", closure(3));
+let add_one = |x: i32| x + 1;
+let result = add_one(5);
+println!("Result: {}", result);
 ```
+
+A) `5`  
+B) `6`  
+C) `编译错误`  
+D) `运行时错误`
 
 <details>
 <summary>答案与解析</summary>
 
-**答案**: `8`
+**答案**: B) `6`
 
-**解析**: 闭包捕获 x 为不可变引用，使用时 x + y = 5 + 3 = 8。
+**解析**: 闭包 `add_one` 将输入加 1,调用 `add_one(5)` 返回 `5 + 1 = 6`。
 </details>
 
-**问题 2** 🟡 (Fn trait)
+**问题 2** 🟡 (捕获环境)
 
-这段代码违反了什么规则？
+这段代码会输出什么?
 
 ```rust
-let mut data = vec![1];
-let mut closure = || data.push(2);
-
-closure();
-closure();  // ❌
+let captured_value = 10;
+let add_captured = |x: i32| x + captured_value;
+let result = add_captured(5);
+println!("Captured Result: {}", result);
 ```
+
+A) `5`  
+B) `10`  
+C) `15`  
+D) `编译错误`
 
 <details>
 <summary>答案与解析</summary>
 
-**答案**: 违反借用规则
+**答案**: C) `15`
 
-**解析**: 第二次调用时，第一次的可变借用还在作用域内。需要确保闭包用完前一个实例。
+**解析**: 闭包捕获 `captured_value = 10`,调用 `add_captured(5)` 返回 `5 + 10 = 15`。
 </details>
 
-**问题 3** 🔴 (高级)
+**问题 3** 🟡 (Fn trait)
 
-以下哪个闭包实现 `Fn`？
+以下哪个闭包实现 `FnOnce`?
 
 ```rust
 // A
-let a = move |x| x + 1;
+let x = 5;
+let a = || println!("{}", x);
 
-// B 
-let mut count = 0;
-let b = || count += 1;
+// B
+let mut y = 0;
+let mut b = || y += 1;
 
 // C
-let data = vec![1];
-let c = || println!("{}", data.len());
+let z = String::from("hi");
+let c = move || z;  // 返回 z
 ```
 
 <details>
@@ -435,49 +648,130 @@ let c = || println!("{}", data.len());
 **答案**: C
 
 **解析**:
-- A: move 转移所有权 → FnOnce
-- B: 修改 count → FnMut
-- C: 只读捕获 → Fn
+- A: 只读捕获 → 实现 `Fn`
+- B: 可变捕获 → 实现 `FnMut`
+- C: move 并返回所有权 → 实现 `FnOnce` (消耗 z)
+</details>
+
+**问题 4** 🔴 (高级场景)
+
+如何修复这段代码使其可编译?
+
+```rust
+let mut counter = 0;
+let mut increment = |x: i32| {
+    counter += x;
+    counter
+};
+
+fn apply_mut<F>(mut f: F, value: i32) -> i32
+where
+    F: FnMut(i32) -> i32,
+{
+    f(value)
+}
+
+apply_mut(&mut increment, 10);
+println!("After apply_mut: {}", counter);  // ❌ 错误
+```
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: 在调用 `apply_mut` 后,`increment` 的借用已释放
+
+```rust
+let mut counter = 0;
+let mut increment = |x: i32| {
+    counter += x;
+    counter
+};
+
+apply_mut(&mut increment, 10);
+// 借用已释放,可以访问 counter
+println!("Counter: {}", counter);  // ✅ 输出: 10
+```
+
+**解析**: `apply_mut` 接受 `&mut increment`,调用后借用释放,`counter` 可访问。
 </details>
 
 ---
 
 ## 小结
 
-**核心要点**：
+**核心要点**:
 
-1. **闭包是可捕获环境的匿名函数** - 记住周围变量
-2. **三种捕获方式** - 不可变借用、可变借用、转移所有权
-3. **Fn trait 层次** - Fn < FnMut < FnOnce
-4. **类型推断** - 第一个调用确定类型参数
-5. **move 转移所有权** - 用于线程、存储等场景
+1. **闭包是匿名函数** - 简洁语法,类型推断,可存储在变量中
+2. **捕获环境变量** - 自动选择借用或移动,实现"记忆"功能
+3. **三种 trait 层次** - `Fn` (只读) < `FnMut` (修改) < `FnOnce` (消耗)
+4. **作为参数传递** - 泛型 + trait 约束,传递"行为"
+5. **move 关键字** - 强制所有权转移,用于线程、返回等场景
+6. **类型推断机制** - 第一次调用时固定类型参数
 
-**术语**：
+**源码示例对照**:
+
+| 源码位置 | 概念 | 示例 |
+|---------|------|------|
+| `closure_sample.rs:4` | 基本闭包 | `let add_one = |x: i32| x + 1;` |
+| `closure_sample.rs:24` | 捕获环境 | `let add_captured = |x| x + captured_value;` |
+| `closure_sample.rs:58` | FnMut | `let mut increment = |x| { mutable_value += x; }` |
+| `closure_sample.rs:80` | FnOnce | `let consume_string = move || owned_value;` |
+| `closure_sample.rs:11` | 函数参数 | `fn apply<F>(f: F, value: i32) where F: Fn(i32) -> i32` |
+
+**术语**:
 
 - **Closure (闭包)**: 可捕获环境的匿名函数
-- **Capture (捕获)**: 闭包记住环境变量的方式
-- **Move Keyword (move 关键字)**: 强制转移所有权
+- **Capture (捕获)**: 闭包记住环境变量的方式 (by ref, by mut ref, by value)
+- **Environment (环境)**: 闭包定义时的作用域
+- **Trait Bound (特征约束)**: 限制闭包能力的 trait (Fn/FnMut/FnOnce)
+- **Move Keyword (move 关键字)**: 强制所有权转移
 
-**下一步**：
+**下一步**:
 
-- 继续：[迭代器](iterators.md) - 闭包的最佳应用场景
-- 相关：[线程](threads.md) - move 闭包的典型用法
+- 继续: [迭代器](iterators.md) - 闭包的最佳应用场景
+- 相关: [线程](threads.md) - `move` 闭包的典型用法
+- 相关: [所有权](ownership.md) - 理解捕获机制的基础
 
 ---
 
 ## 术语表
 
-| English | 中文 |
-| ------- | ---- |
-| Closure | 闭包 |
-| Capture Environment | 捕获环境 |
-| Move Keyword | move 关键字 |
-| Trait (Fn/FnMut/FnOnce) | Fn 特征 |
+| English | 中文 | 说明 |
+| ------- | ---- | ---- |
+| Closure | 闭包 | 可捕获环境的匿名函数 |
+| Capture Environment | 捕获环境 | 闭包访问外部变量的机制 |
+| Fn Trait | Fn 特征 | 只读捕获,可多次调用 |
+| FnMut Trait | FnMut 特征 | 可变捕获,可修改环境 |
+| FnOnce Trait | FnOnce 特征 | 消耗所有权,仅一次调用 |
+| Move Keyword | move 关键字 | 强制所有权转移 |
+| Anonymous Function | 匿名函数 | 无名称的函数定义 |
+| Type Inference | 类型推断 | 编译器自动确定类型 |
+| Environment | 环境 | 闭包定义时的作用域 |
 
 ---
 
-完整示例：`src/basic/closure_sample.rs`
+## 项目实例
+
+完整示例位于: `src/basic/closure_sample.rs`
+
+**代码示例覆盖**:
+
+1. 基本闭包定义 (第 4-7 行)
+2. 闭包作为函数参数 (第 11-20 行)
+3. 捕获环境变量 (第 23-37 行)
+4. 返回不同类型 (第 40-51 行)
+5. FnMut 使用 (第 54-76 行)
+6. FnOnce 和 move (第 79-90 行)
+
+**运行示例**:
+
+```bash
+# 在项目根目录执行
+cargo run
+
+# 输出包含所有闭包示例结果
+```
 
 ---
 
-> 💡 **提示**：闭包是 Rust 函数式编程的心脏——多练习，你会爱上它的优雅！
+> 💡 **提示**: 闭包是 Rust 函数式编程的核心 - 把"行为"当作"数据"传递,让代码更具表达力!

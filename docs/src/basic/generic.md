@@ -421,3 +421,144 @@ fn main() {
 ---
 
 > 💡 **提示**：泛型是 Rust 零成本抽象的核心 - 编译时的工作绝不留给运行时！
+
+---
+
+## 单态化可视化
+
+### 1. 编译时单态化
+
+```
+编译前 (泛型代码):
+fn max<T: Ord>(a: T, b: T) -> T {
+    if a > b { a } else { b }
+}
+
+编译时 (单态化):
+         ↓ 为 i32 生成专用版本
+         ↓ 为 String 生成专用版本
+         ↓
+
+编译后 (专用代码):
+fn max_i32(a: i32, b: i32) -> i32 { ... }    // 类型 T = i32
+fn max_string(a: String, b: String) -> String { ... }  // 类型 T = String
+```
+
+**关键点**:
+- 编译时生成专用版本
+- 运行时无性能损失
+- 代码量可能增加
+
+### 2. 特征约束图
+
+```
+T: Display + Clone
+
+T 必须实现:
++-----------------+
+|     Display     |
++-----------------+
+|     Clone       |
++-----------------+
+      ↑
+    必须同时实现
+```
+
+### 3. where 子句可视化
+
+```
+fn process<T, U>()
+where
+    T: Display + Clone,
+    U: Into<T>
+
+约束关系:
+U ───Into──→ T ───Display/Clone──→ 
+```
+
+### 4. 泛型实例化
+
+```
+泛型函数：
+fn identity<T>(x: T) -> T { x }
+
+调用时:
+identity(5)      → T = i32
+identity("hi")   → T = &str
+identity(true)   → T = bool
+
+编译器生成:
+fn identity_i32(x: i32) -> i32 { x }
+fn identity_str(x: &str) -> &str { x }
+fn identity_bool(x: bool) -> bool { x }
+```
+
+---
+
+## 知识检查
+
+**问题 1** 🟢 (基础概念)
+
+以下哪个说法正确？
+
+A) 泛型在运行时确定类型  
+B) 泛型会导致运行时性能损失  
+C) 泛型在编译时单态化  
+D) 泛型不能有多个类型参数
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: C) 泛型在编译时单态化
+
+**解析**: Rust 的泛型在编译时将类型参数替换为具体类型，生成 specialised 代码版本。
+</details>
+
+**问题 2** 🟡 (特征约束)
+
+这段代码有什么问题？
+
+```rust
+fn duplicate<T>(x: T) -> (T, T) {
+    (x.clone(), x.clone())
+}
+```
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: 缺少 `Clone` 约束
+
+**修复**:
+```rust
+fn duplicate<T: Clone>(x: T) -> (T, T) {
+    (x.clone(), x.clone())
+}
+```
+
+**解析**: 不是所有类型都实现 `Clone`，需要显式约束。
+</details>
+
+**问题 3** 🔴 (边界情况)
+
+以下代码的输出是什么？
+
+```rust
+fn process<T: Default>() -> T {
+    T::default()
+}
+
+fn main() {
+    let x: i32 = process();
+    println!("{}", x);
+}
+```
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: `0`
+
+**解析**: `i32::default()` 返回 `0`。这是一个空值初始化模式。
+</details>
+

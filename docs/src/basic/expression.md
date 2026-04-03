@@ -621,3 +621,67 @@ cart_items.push("商品");  // ✅
 > 默认不加 `mut`，需要修改时再加
 
 </details>
+
+---
+
+## 知识检查
+
+**问题 1** 🟢 (基础概念)
+
+以下代码的输出是什么？
+
+```rust
+let x = 5;
+let y = x + 3;
+println!("{}", y);
+```
+
+A) 编译错误  
+B) 5  
+C) 8  
+D) 运行时错误
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: C) 8
+
+**解析**: i32 类型实现 Copy trait，赋值时复制值而非移动所有权。
+</details>
+
+**问题 2** 🟡 (移动语义)
+
+这段代码有什么问题？
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1;
+println!("{}", s1);
+```
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: 编译错误 - `s1` 的所有权已移动给 `s2`
+
+**修复**: 使用引用 `&s1` 或克隆 `s1.clone()`
+</details>
+
+**问题 3** 🔴 (边界情况)
+
+以下哪个表达式会在编译时被优化？
+
+```rust
+const X: i32 = 2 + 3;
+let y = 4 * 5;
+static Z: i32 = 6 + 7;
+```
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: `const X` 和`let y` 都会在编译时计算
+
+**解析**: const 强制编译时求值，字面量表达式也会被编译器优化。static 在运行时初始化。
+</details>
+

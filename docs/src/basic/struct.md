@@ -832,3 +832,153 @@ fn main() {
 - 如何快速查找某本书？
 
 </details>
+
+---
+
+## 内存布局可视化
+
+### 1. 结构体内存布局
+
+```
+Rectangle struct (16 bytes):
++0x00         +0x08
++-------------+-------------+
+| width (f64) | height(f64) |
+|  8 bytes    |  8 bytes    |
++-------------+-------------+
+```
+
+**说明**:
+- f64 类型占用 8 字节
+- 无填充，紧密排列
+- 总计 16 字节
+
+### 2. 字段访问模式
+
+```
+rect ──────────→ [Rectangle struct]
+                   ├─ width: 10.0
+                   └─ height: 20.0
+
+rect.width  ───→ 直接字段访问 (10.0)
+rect.height ───→ 直接字段访问 (20.0)
+```
+
+### 3. 方法调用流程
+
+```
+rect.area()
+    │
+    ↓
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+        // 10.0 * 20.0 = 200.0
+    }
+}
+```
+
+### 4. 结构体更新语法
+
+```
+let user1 = User { active: true, username: "alice" };
+
+let user2 = User {
+    username: "bob",  // 新值
+    ..user1           // 其他字段从 user1 复制
+};
+
+内存布局:
+user1 无效 (username 已转移)
+user2 有效 (拥有新 username)
+```
+
+---
+
+## 知识检查
+
+**问题 1** 🟢 (字段访问)
+
+如何修改结构体字段的值？
+
+```rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+let mut p = Point { x: 5, y: 10 };
+// 如何将 x 改为 15？
+```
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: `p.x = 15;`
+
+**解析**: 需要 mut 标记变量可变，然后通过点号访问修改字段。
+</details>
+
+**问题 2** 🟡 (方法语法)
+
+以下哪种方法是正确的？
+
+```rust
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    fn square(size: u32) -> Rectangle {
+        Rectangle { width: size, height: size }
+    }
+}
+```
+
+A) 只有 area 正确  
+B) 只有 square 正确  
+C) 都正确  
+D) 都不正确
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: C) 都正确
+
+**解析**: area 是实例方法（使用&self），square 是关联函数（构造器模式）。
+</details>
+
+**问题 3** 🔴 (结构体更新)
+
+这段代码的输出是什么？
+
+```rust
+#[derive(Debug)]
+struct User {
+    active: bool,
+    username: String,
+}
+
+let user1 = User {
+    active: true,
+    username: String::from("alice"),
+};
+
+let user2 = User {
+    username: String::from("bob"),
+    ..user1
+};
+
+println!("{}", user1.active);
+```
+
+<details>
+<summary>答案与解析</summary>
+
+**答案**: 编译错误！
+
+**解析**: String 不是 Copy 类型，`..user1` 会转移 username 的所有权，导致 user1 无效。
+
+**修复**: 使用 `..user1.clone()` 或改用 `&str`
+</details>
+

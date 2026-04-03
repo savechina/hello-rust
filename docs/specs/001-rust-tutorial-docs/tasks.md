@@ -80,17 +80,17 @@
 - [x] T015 [P] [US1] Write `docs/src/basic/struct.md` based on `src/basic/rectangle.rs` and datatype examples
 - [x] T016 [P] [US1] Expand `docs/src/basic/struct-fields.md` (currently 1 line → 500+ characters)
 - [x] T017 [P] [US1] Expand `docs/src/basic/struct-methods.md` (currently 1 line → 500+ characters)
-- [ ] T018 [P] [US1] Expand `docs/src/basic/enums.md` (currently 1 line → 500+ characters)
-- [ ] T019 [P] [US1] Expand `docs/src/basic/trait.md` based on `src/basic/traits_sample.rs` (69 lines → 500+ characters)
-- [ ] T020 [P] [US1] Expand `docs/src/basic/module.md` based on `src/basic/module_sample.rs` (20 lines → 500+ characters)
-- [ ] T021 [P] [US1] Write `docs/src/basic/generic.md` based on `src/basic/generic_sample.rs`
-- [ ] T022 [P] [US1] Write `docs/src/basic/closure.md` based on `src/basic/closure_sample.rs`
-- [ ] T023 [P] [US1] Write `docs/src/basic/threads.md` based on `src/basic/threads_sample.rs` ⚠️ Must document unsafe patterns
-- [ ] T024 [P] [US1] Write `docs/src/basic/cfg_if.md` based on `src/basic/cfg_if_sample.rs`
-- [ ] T025 [P] [US1] Write `docs/src/basic/pointer.md` based on `src/basic/pointer_sample.rs` ⚠️ Must warn about unsafe code
-- [ ] T026 [P] [US1] Write `docs/src/basic/logger.md` based on `src/basic/logger_sample.rs`
-- [ ] T027 [P] [US1] Write `docs/src/basic/tracing.md` based on `src/basic/tracing_sample.rs`
-- [ ] T028 [P] [US1] Write `docs/src/basic/visiable.md` based on `src/basic/visiable_sample.rs`
+- [x] T018 [P] [US1] Expand `docs/src/basic/enums.md` (currently 1 line → 500+ characters)
+- [x] T019 [P] [US1] Expand `docs/src/basic/trait.md` based on `src/basic/traits_sample.rs` (69 lines → 500+ characters)
+- [x] T020 [P] [US1] Expand `docs/src/basic/module.md` based on `src/basic/module_sample.rs` (20 lines → 500+ characters)
+- [x] T021 [P] [US1] Write `docs/src/basic/generic.md` based on `src/basic/generic_sample.rs`
+- [x] T022 [P] [US1] Write `docs/src/basic/closure.md` based on `src/basic/closure_sample.rs`
+- [x] T023 [P] [US1] Write `docs/src/basic/threads.md` based on `src/basic/threads_sample.rs` ⚠️ Must document unsafe patterns
+- [x] T024 [P] [US1] Write `docs/src/basic/cfg_if.md` based on `src/basic/cfg_if_sample.rs`
+- [x] T025 [P] [US1] Write `docs/src/basic/pointer.md` based on `src/basic/pointer_sample.rs` ⚠️ Must warn about unsafe code
+- [x] T026 [P] [US1] Write `docs/src/basic/logger.md` based on `src/basic/logger_sample.rs`
+- [x] T027 [P] [US1] Write `docs/src/basic/tracing.md` based on `src/basic/tracing_sample.rs`
+- [x] T028 [P] [US1] Write `docs/src/basic/visiable.md` based on `src/basic/visiable_sample.rs`
 
 **Quality Verification**:
 - [ ] T029 [US1] Verify all Basic chapters compile: `cargo build --workspace`
@@ -437,7 +437,7 @@ This delivers:
 
 ### Learning Path Skill Tree - SC-013
 
-- [ ] T126 [P] Create `docs/src/learning_path.md`
+- [x] T126 [P] Create `docs/src/learning_path.md`
   - Visual skill tree with all 15+ chapters
   - Difficulty levels (🟢🟡🔴)
   - Prerequisites clearly marked

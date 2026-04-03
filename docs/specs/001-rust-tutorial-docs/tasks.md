@@ -478,12 +478,12 @@ This delivers:
   - Answers with detailed explanations
   - Difficulty distribution: 50% 🟢, 40% 🟡, 10% 🔴
 
-- [ ] T147 [P] Add "知识检查" section to ownership.md
+- [x] T147 [P] Add "知识检查" section to ownership.md
   - 3 quiz questions focused on ownership rules
   - Include compiler error prediction
   - Include fix-it exercises
 
-- [ ] T148 [P] Add "知识检查" section to struct.md
+- [x] T148 [P] Add "知识检查" section to struct.md
   - 3 quiz questions on struct patterns
   - Include field access scenarios
   - Include visibility questions

@@ -551,7 +551,8 @@ let closure = |y| y + x;  // x 的生命周期被捕获
 
 ---
 
-完整示例：`src/basic/lifetimes_sample.rs`
+完整示例：`src/basic/ownership_sample.rs` - 生命周期和借用  
+相关示例：`src/basic/generic_sample.rs` - 泛型中的生命周期标注
 
 ---
 

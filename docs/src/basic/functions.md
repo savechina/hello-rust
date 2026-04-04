@@ -552,7 +552,8 @@ println!("{}", add_x(3));  // 打印 8
 
 ---
 
-完整示例：`src/basic/functions_sample.rs`
+完整示例：`src/basic/expression_sample.rs` - 函数定义和调用  
+相关示例：`src/basic/generic_sample.rs` - 泛型函数示例
 
 ---
 

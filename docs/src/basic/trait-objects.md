@@ -610,7 +610,8 @@ enum AnimalEnum {
 
 ---
 
-完整示例：`src/basic/trait_objects_sample.rs`
+完整示例：`src/basic/traits_sample.rs` - 特征定义和实现  
+相关示例：`src/basic/generic_sample.rs` - 静态分发 vs 动态分发
 
 ---
 

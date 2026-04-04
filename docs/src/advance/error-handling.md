@@ -512,7 +512,8 @@ fn read_config() -> Result<String> {
 
 ---
 
-完整示例：[src/advance/error_handling_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/error_handling_sample.rs)
+完整示例：[src/advance/tokio_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/tokio_sample.rs) - 异步错误处理模式  
+相关示例：[src/advance/sqlx_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/sqlx_sample.rs) - 数据库错误处理
 
 ---
 

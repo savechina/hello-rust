@@ -38,7 +38,7 @@
     - [Futures 异步编程](./advance/async/futures.md) - Future trait 和组合子
     - [并行计算](./advance/async/rayon.md) - 数据并行处理
     - [MIO](./advance/async/mio.md) - 底层 I/O 库
-    - [CycleRC](./advance/async/cyclerc.md) - 引用计数循环检测
+    - [循环引用](./advance/async/cyclerc.md) - 循环引用检测与解决
   - [数据库](./advance/database/database.md) - SQLx 异步数据库编程
     - [数据库 ORM](./advance/database/diesel.md) - Diesel ORM 框架
     - [SQLx](./advance/database/sqlx.md) - SQLx 异步查询

@@ -47,7 +47,7 @@
 ├── Futures 异步编程 (futures.md)
 ├── 并行计算 (rayon.md)
 ├── MIO 底层 I/O (mio.md)
-└── CycleRC 循环检测 (cyclerc.md)
+└── 循环引用 (cyclerc.md)
 ```
 
 **为什么先学这个？** 现代 Rust 服务几乎都是异步的。Tokio 是事实上的异步运行时。

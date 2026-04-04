@@ -668,7 +668,7 @@ fn parallel_sum(data: &[i32]) -> i32 {
 
 **选择建议**:
 - 想学习底层 I/O → 继续学习 [MIO](mio.md)
-- 想学习循环引用 → 跳到 [CycleRC](cyclerc.md)
+- 想学习循环引用 → 跳到 [循环引用](cyclerc.md)
 
 ## 继续学习
 

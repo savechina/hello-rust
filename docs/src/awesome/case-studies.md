@@ -227,6 +227,6 @@ Mozilla 需要提升 Firefox 的性能和安全性，与 Chrome 竞争。
 
 - 上一步：[Rust 消除的问题](../advance/system/rust-eliminates.md) - Rust 编译时安全优势
 - 下一步：[服务框架](../advance/tools/services.md) - 生产级服务架构
-- 相关：[错误处理](../advance/tools/error-handling.md) - Rust 错误处理最佳实践
+- 相关：[错误处理](../advan../error-handling/error-handling.md) - Rust 错误处理最佳实践
 
 > 💡 **记住**：Rust 不是理论语言——它已经被 Microsoft、Google、AWS 等公司用于生产环境。你学习的每一个 Rust 概念，都在帮助防止真实世界中的安全漏洞！

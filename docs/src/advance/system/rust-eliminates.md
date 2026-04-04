@@ -226,7 +226,7 @@ Rust 通过编译时检查消除了以下类别的问题：
 ## 继续学习
 
 - 上一步：[所有权](../../basic/ownership.md) - Rust 内存安全的核心
-- 下一步：[错误处理](../tools/error-handling.md) - Rust 错误处理最佳实践
+- 下一步：[错误处理](../error-handling/error-handling.md) - Rust 错误处理最佳实践
 - 相关：[指针与 unsafe](../../basic/pointer.md) - 何时需要 unsafe
 
 > 💡 **记住**：Rust 的编译时检查不是限制你，而是保护你。每次编译器报错，它都在帮你防止一个潜在的运行时 bug！

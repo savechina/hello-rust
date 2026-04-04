@@ -29,7 +29,7 @@
 
 ## 前置要求
 
-- [错误处理](../tools/error-handling.md) - Result 和错误传播
+- [错误处理](../error-handling/error-handling.md) - Result 和错误传播
 - [所有权](../../basic/ownership.md) - 所有权基础
 
 ---
@@ -378,6 +378,6 @@ for line in reader.lines() {
 
 - 下一步：[临时文件](tempfile.md)
 - 进阶：[内存映射](memmap.md)
-- 回顾：[错误处理](../tools/error-handling.md)
+- 回顾：[错误处理](../error-handling/error-handling.md)
 
 > 💡 **记住**：始终使用 Path/PathBuf 处理路径，确保跨平台兼容！

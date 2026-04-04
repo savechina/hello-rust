@@ -30,7 +30,7 @@
 学习本章前，你需要理解：
 
 - [异步编程](../async/async.md) - 理解 async/await
-- [错误处理](../tools/error-handling.md) - 理解 Result 和错误传播
+- [错误处理](../error-handling/error-handling.md) - 理解 Result 和错误传播
 - [Serde 序列化](../data/json.md) - 理解结构体序列化
 
 ---

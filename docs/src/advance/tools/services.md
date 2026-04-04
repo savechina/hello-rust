@@ -381,7 +381,7 @@ impl Database for MockDatabase {
 
 - 学习 [依赖注入](../../awesome/dependency_injection.md)
 - 探索 [插件系统](../../awesome/plugin.md)
-- 理解 [错误处理](error-handling.md)
+- 理解 [错误处理](../error-handling/error-handling.md)
 
 ---
 

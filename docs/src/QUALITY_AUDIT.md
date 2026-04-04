@@ -167,7 +167,7 @@ These chapters exemplify the ideal template structure:
 - `advance/testing/macros.md`
 - `advance/testing/mock.md`
 - `advance/testing/rspec.md`
-- `advance/tools/error-handling.md`
+- `advan../error-handling/error-handling.md`
 - `advance/tools/objectstore.md`
 - `advance/web/axum.md`
 - `advance/web/hyper.md`

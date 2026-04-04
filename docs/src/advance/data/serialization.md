@@ -29,7 +29,7 @@
 ## 前置要求
 
 - [结构体](../../basic/struct.md) - 数据类型定义
-- [错误处理](../tools/error-handling.md) - Result 处理
+- [错误处理](../error-handling/error-handling.md) - Result 处理
 
 ---
 

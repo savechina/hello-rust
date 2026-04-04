@@ -28,7 +28,7 @@
 
 - 异步编程 - async/await 基础
 - Tokio 运行时 - Tokio 基础
-- [错误处理](error-handling.md) - 错误处理基础
+- [错误处理](../error-handling/error-handling.md) - 错误处理基础
 
 ---
 

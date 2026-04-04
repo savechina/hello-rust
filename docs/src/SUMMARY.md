@@ -42,17 +42,17 @@
   - [数据库](./advance/database/database.md) - SQLx 异步数据库编程
     - [数据库 ORM](./advance/database/diesel.md) - Diesel ORM 框架
     - [SQLx](./advance/database/sqlx.md) - SQLx 异步查询
-  - [Web 开发]() - Web 开发
+  - [Web 开发]() - Web 服务构建
     - [Web 框架](./advance/web/axum.md) - Axum Web 服务构建
     - [HTTP 库](./advance/web/hyper.md) - Hyper HTTP 底层库
     - [AI 集成](./advance/web/ollama.md) - Ollama 本地 AI 集成
     - [gRPC 服务](./advance/web/grpc.md) - gRPC 远程过程调用
-  - [数据处理]() - 数据处理
+  - [数据处理]() - 序列化与反序列化
+    - [序列化基础](./advance/data/serialization.md) - Serde 框架使用
     - [JSON 序列化](./advance/data/json.md) - JSON 序列化/反序列化
     - [CSV 处理](./advance/data/csv.md) - CSV 文件读写
     - [零拷贝序列化](./advance/data/rkyv.md) - Rkyv 零拷贝优化
-    - [序列化基础](./advance/data/serialization.md) - 序列化概念
-  - [系统编程]() - 系统编程
+  - [系统编程]() - 文件系统与进程管理
     - [文件与目录操作](./advance/system/directory.md) - 文件系统操作
     - [临时文件](./advance/system/tempfile.md) - 临时文件管理
     - [内存映射](./advance/system/memmap.md) - 内存映射文件
@@ -66,16 +66,16 @@
     - [Stdio IPC](./advance/system/stdio-ipc.md) - 标准输入输出进程间通信
     - [CLI 开发](./advance/system/cli.md) - CLI 开发最佳实践
     - [Rust 消除的问题](./advance/system/rust-eliminates.md) - Rust 编译时安全优势
-  - [测试]() - 测试
+  - [测试]() - 单元测试与集成测试
     - [测试基础](./advance/testing/test.md) - 测试基础
     - [模拟测试](./advance/testing/mock.md) - Mock 模拟测试
     - [测试框架](./advance/testing/rspec.md) - RSpec 行为驱动测试
-  - [宏编程]() - 宏编程
+  - [宏编程]() - 声明宏与过程宏
     - [派生宏](./advance/testing/getset.md) - Getters/Setters 派生
     - [声明宏和过程宏](./advance/testing/macros.md) - 宏编程基础
-  - [其他]() - 其他
+  - [错误处理](./advance/error-handling/error-handling.md) - 错误处理最佳实践
+  - [其他工具]() - 对象存储与服务框架
     - [类型别名](./advance/testing/typealias.md) - 类型别名简化
-    - [错误处理](./advance/tools/error-handling.md) - 错误处理最佳实践
     - [对象存储](./advance/tools/objectstore.md) - 对象存储接口
     - [服务框架](./advance/tools/services.md) - 服务框架基础
   - [阶段复习：高级进阶](./advance/review-advance.md)

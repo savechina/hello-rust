@@ -1,25 +1,12 @@
+# Hello Rust documentation configuration
 [book]
 title = "Hello Rust"
 authors = ["RenYan Wei"]
 description = "Rust learning tutorial with comprehensive examples"
 src = "src"
 language = "en"
-# text-direction = "ltr"  # optional
-
-# mdBook 0.5+ has built-in TOC support - no pagetoc needed
-# See: https://github.com/rust-lang/mdBook/pull/2822
-
-[preprocessor.admonish]
-assets_version = "3.1.0"
-
-[preprocessor.alerts]
 
 [output.html]
-default-theme = "light"
 git-repository-url = "https://github.com/savechina/hello-rust"
 git-repository-icon = "fa-github"
-additional-css = ["./assets/css/mdbook-admonish.css"]
-additional-js = []
-
-# Built-in TOC sidebar (mdBook 0.5+)
-# No additional CSS/JS needed for TOC
+# Temporarily disable admonish to fix build

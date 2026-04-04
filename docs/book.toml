@@ -1,4 +1,3 @@
-# Hello Rust documentation configuration
 [book]
 title = "Hello Rust"
 authors = ["RenYan Wei"]
@@ -9,4 +8,6 @@ language = "en"
 [output.html]
 git-repository-url = "https://github.com/savechina/hello-rust"
 git-repository-icon = "fa-github"
-# Temporarily disable admonish to fix build
+default-theme = "light"
+
+# Disable custom fonts

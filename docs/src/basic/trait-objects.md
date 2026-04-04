@@ -121,6 +121,18 @@ fn make_sound_dynamic(animal: &dyn Animal) {
 }
 ```
 
+**虚表 (vtable) 结构**：
+
+```
+Box<dyn Animal>
+├── 数据指针 ──────────→ Dog { name: "旺财" }
+└── 虚表指针 ──────────→ VTable
+                          ├── make_sound: fn(Dog)
+                          ├── drop: fn(Dog)
+                          ├── size: usize
+                          └── align: usize
+```
+
 **对比**：
 
 | 特性         | 静态分发（泛型）     | 动态分发（特征对象）   |

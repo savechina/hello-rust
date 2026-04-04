@@ -100,6 +100,7 @@
     - [命令行待办事项](./projects/todo-cli/README.md)
     - [简易 HTTP 服务器](./projects/http-server/README.md)
     - [多线程爬虫](./projects/web-scraper/README.md)
+    - [IPC 与分布式示例](./projects/binaries/README.md)
 
 # 社区与贡献
 

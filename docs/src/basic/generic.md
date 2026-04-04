@@ -86,10 +86,13 @@ fn max<T: PartialOrd>(a: T, b: T) -> T {
 ```
 编译时：
 泛型代码<T>  +  具体类型 (i32, String)
+     │
+     ├── 特化为 max_i32(a: i32, b: i32) → i32
+     └── 特化为 max_String(a: String, b: String) → String
      ↓
 运行时：
-max_i32(a, b)  ← 专用版本
-max_String(a, b) ← 专用版本
+max_i32(a, b)     ← 专用版本（无泛型开销）
+max_String(a, b)  ← 专用版本（无泛型开销）
 ```
 
 **什么是单态化**：

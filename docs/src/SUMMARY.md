@@ -46,6 +46,7 @@
     - [Web 框架](./advance/web/axum.md) - Axum Web 服务构建
     - [HTTP 库](./advance/web/hyper.md) - Hyper HTTP 底层库
     - [AI 集成](./advance/web/ollama.md) - Ollama 本地 AI 集成
+    - [gRPC 服务](./advance/web/grpc.md) - gRPC 远程过程调用
   - [数据处理]() - 数据处理
     - [JSON 序列化](./advance/data/json.md) - JSON 序列化/反序列化
     - [CSV 处理](./advance/data/csv.md) - CSV 文件读写
@@ -61,6 +62,8 @@
     - [进程管理](./advance/system/process.md) - 进程控制和管理
     - [系统信息](./advance/system/sysinfo.md) - 系统信息获取
     - [资源嵌入](./advance/system/includedir.md) - 编译时资源嵌入
+    - [Unix Domain Socket](./advance/system/uds.md) - Unix 域套接字 IPC
+    - [Stdio IPC](./advance/system/stdio-ipc.md) - 标准输入输出进程间通信
   - [测试]() - 测试
     - [测试基础](./advance/testing/test.md) - 测试基础
     - [模拟测试](./advance/testing/mock.md) - Mock 模拟测试

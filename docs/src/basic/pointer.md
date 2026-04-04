@@ -229,6 +229,64 @@ impl Drop for SafeBuffer {
 }
 ```
 
+### 6. MaybeUninit：未初始化内存
+
+当你需要创建未初始化的内存时（如 C FFI 或性能优化），使用 `MaybeUninit`：
+
+```rust,ignore
+use std::mem::MaybeUninit;
+
+// ❌ 错误：未初始化的 Vec
+let mut data: [u8; 1024] = [0; 1024];  // 初始化为 0
+
+// ✅ 正确：使用 MaybeUninit
+let mut data: [MaybeUninit<u8>; 1024] = MaybeUninit::uninit_array();
+
+// 填充数据
+for i in 0..1024 {
+    data[i].write(i as u8);
+}
+
+// 安全地转换为初始化数组
+let data: [u8; 1024] = unsafe {
+    MaybeUninit::array_assume_init(data)
+};
+```
+
+### 7. ManuallyDrop：阻止自动 Drop
+
+当你想手动控制资源释放时：
+
+```rust,ignore
+use std::mem::ManuallyDrop;
+
+let mut x = ManuallyDrop::new(Box::new(42));
+println!("{}", *x);
+
+// 手动释放
+let boxed: Box<i32> = unsafe { ManuallyDrop::take(&mut x) };
+// 现在 boxed 会正常 drop
+```
+
+### 8. 实现 Send 和 Sync
+
+当你需要让自定义类型跨线程时：
+
+```rust,ignore
+use std::sync::Arc;
+
+struct MyWrapper(*mut i32);
+
+// ❌ 默认不是 Send/Sync
+// 手动实现（需要确保线程安全）
+unsafe impl Send for MyWrapper {}
+unsafe impl Sync for MyWrapper {}
+
+// ✅ 更安全的方式：使用 Arc
+struct SafeWrapper(Arc<i32>);
+// Arc 自动实现 Send 和 Sync
+```
+
 ---
 
 ## 常见错误
@@ -356,10 +414,20 @@ impl<T> Drop for NonNullPtr<T> {
 1. 使用 Miri 工具检测未定义行为：`cargo +nightly miri run`
 2. 启用 AddressSanitizer：`RUSTFLAGS="-Z sanitizer=address" cargo run`
 3. 编写充分的单元测试
+4. 使用 `#[deny(unsafe_op_in_unsafe_fn)]` 强制显式 unsafe
 
 ### Q: 标准库中有多少 unsafe 代码？
 
 **A**: 约 10-15%。像 `Vec`、`String`、`HashMap` 这样的核心数据结构底层都使用 unsafe，但它们提供了安全的公共接口。
+
+### Q: 如何安全地实现自定义集合？
+
+**A**: 遵循以下模式：
+1. 使用 `MaybeUninit` 管理未初始化内存
+2. 在 `Drop` 中正确释放资源
+3. 提供安全的公共接口
+4. 编写充分的测试（包括边界情况）
+5. 使用 Miri 验证未定义行为
 
 ---
 

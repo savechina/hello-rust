@@ -2820,6 +2820,7 @@ dependencies = [
  "tempfile",
  "tera",
  "tokio",
+ "tokio-stream",
  "tracing",
  "tracing-subscriber",
 ]

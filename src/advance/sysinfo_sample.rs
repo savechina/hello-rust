@@ -18,9 +18,14 @@ pub fn sysinfo_sample() {
 
     // CPU 信息
     println!("=== CPU 信息 ===\n");
-    println!("CPU 品牌：{:?}", System::cpu_brand());
-    println!("CPU 核心数：{}", System::physical_core_count().unwrap_or(0));
-    println!("CPU 频率：{} MHz\n", System::cpu_frequency());
+    if let Some(cpu) = system.cpus().first() {
+        println!("CPU 品牌：{:?}", cpu.brand());
+        println!("CPU 频率：{} MHz\n", cpu.frequency());
+    }
+    println!(
+        "CPU 核心数：{}\n",
+        System::physical_core_count().unwrap_or(0)
+    );
 
     // 内存信息
     println!("=== 内存信息 ===\n");
@@ -38,10 +43,7 @@ pub fn sysinfo_sample() {
 
     // 交换空间
     println!("总交换空间：{} MB", system.total_swap() / 1024 / 1024);
-    println!(
-        "可用交换空间：{} MB\n",
-        system.available_swap() / 1024 / 1024
-    );
+    println!("已用交换空间：{} MB\n", system.used_swap() / 1024 / 1024);
 }
 
 /// 进程统计信息
@@ -121,9 +123,9 @@ pub fn hardware_components_sample() {
 
     for component in &components {
         println!("组件：{:?}", component.label());
-        println!("当前温度：{:.1}°C", component.temperature());
-        println!("最高温度：{:.1}°C", component.max());
-        println!("危险温度：{:.1}°C\n", component.critical());
+        println!("当前温度：{:?}°C", component.temperature());
+        println!("最高温度：{:?}°C", component.max());
+        println!("危险温度：{:?}°C\n", component.critical());
     }
 }
 

@@ -67,6 +67,22 @@ pub fn logger_print() {
 
 ---
 
+### Python/Java/C++ vs Rust 对比
+
+如果你有其他语言经验，这个对比会帮助你快速理解：
+
+| 概念       | Python               | Java                   | C++                    | Rust                       | 关键差异                  |
+| ---------- | -------------------- | ---------------------- | ---------------------- | -------------------------- | ------------------------- |
+| 日志框架   | `logging` 模块       | `Log4j` / `SLF4J`      | 无标准                 | `log` crate + 实现         | Rust 分离接口和实现       |
+| 日志级别   | DEBUG/INFO/WARN/ERROR| 同样                   | 无标准                 | trace/debug/info/warn/error | Rust 多了 `trace` 级别    |
+| 配置方式   | `logging.basicConfig()`| 配置文件             | 无标准                 | 环境变量 `RUST_LOG`        | Rust 用环境变量控制       |
+| 初始化     | 自动                 | 需配置                 | 手动                   | 必须调用 `init()`          | Rust 需显式初始化         |
+| 性能影响   | 有开销               | 有开销                 | 有开销                 | 编译时过滤                 | Rust 零开销（编译时）     |
+
+**核心差异**: Python 自带日志，Java 需第三方库，Rust 分离接口（log）和实现（env_logger），编译时可过滤。
+
+---
+
 ## 原理解析
 
 ### 1. 日志级别

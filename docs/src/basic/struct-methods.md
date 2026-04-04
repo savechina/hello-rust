@@ -68,6 +68,22 @@ fn main() {
 
 ---
 
+### Python/Java/C++ vs Rust 对比
+
+如果你有其他语言经验，这个对比会帮助你快速理解：
+
+| 概念         | Python               | Java                   | C++                    | Rust                       | 关键差异                  |
+| ------------ | -------------------- | ---------------------- | ---------------------- | -------------------------- | ------------------------- |
+| 方法定义     | `def method(self):`  | `void method()`        | `void method()`        | `fn method(&self)`         | Rust 用 `impl` 块         |
+| self 参数    | `self` 显式          | `this` 隐式            | `this` 隐式            | `&self` 显式               | Rust 显式且可选引用       |
+| 可变方法     | 无需声明             | 无需声明               | 无需声明               | 需要 `&mut self`           | Rust 需显式可变借用       |
+| 关联函数     | `@staticmethod`      | `static method()`      | `static method()`      | `fn new()` (无 self)       | Rust 无 `static` 关键字   |
+| 方法链       | `return self`        | `return this`          | `return *this`         | `&mut Self`                | Rust 返回引用             |
+
+**核心差异**: Python/Java/C++ 的 `this/self` 隐式传递，Rust 的 `self` 显式且需选择借用方式。
+
+---
+
 ## 原理解析
 
 ### 1. 实现块 (impl)

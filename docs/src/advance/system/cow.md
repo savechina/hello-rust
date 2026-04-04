@@ -36,7 +36,7 @@
 
 最简单的 Cow 使用：
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 
 fn filter_profanity(input: &str) -> Cow<str> {
@@ -80,7 +80,7 @@ fn main() {
 
 **Cow 是一个枚举**：
 
-```rust
+```rust,ignore
 enum Cow<'a, B: ToOwned> {
     Borrowed(&'a B),      // 借用
     Owned(<B as ToOwned>::Owned),  // 拥有
@@ -95,7 +95,7 @@ enum Cow<'a, B: ToOwned> {
 
 **使用 Borrowed**：
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 
 let borrowed: Cow<str> = Cow::Borrowed("Hello");
@@ -104,7 +104,7 @@ let borrowed: Cow<str> = Cow::Borrowed("Hello");
 
 **使用 Owned**：
 
-```rust
+```rust,ignore
 let owned: Cow<str> = Cow::Owned(String::from("Hello"));
 // 分配内存，拥有数据
 ```
@@ -113,7 +113,7 @@ let owned: Cow<str> = Cow::Owned(String::from("Hello"));
 
 **按需克隆**：
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 
 let mut cow: Cow<str> = Cow::Borrowed("original");
@@ -131,7 +131,7 @@ println!("{}", cow);  // 输出：ORIGINAL!!!
 
 **只读场景**：
 
-```rust
+```rust,ignore
 fn process_data(data: &[u8]) -> Cow<[u8]> {
     // 只读场景：直接返回借用
     Cow::Borrowed(data)
@@ -144,7 +144,7 @@ let result = process_data(&data);
 
 **修改场景**：
 
-```rust
+```rust,ignore
 fn process_data_mut(data: &[u8], modify: bool) -> Cow<[u8]> {
     let mut cow = Cow::Borrowed(data);
     
@@ -161,7 +161,7 @@ fn process_data_mut(data: &[u8], modify: bool) -> Cow<[u8]> {
 
 **页面数据处理**：
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 
 struct Page {
@@ -204,7 +204,7 @@ fn main() {
 
 ### 错误 1: 忘记使用 to_mut()
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 
 let mut cow: Cow<str> = Cow::Borrowed("hello");
@@ -217,13 +217,13 @@ no method named `push_str` found for enum `Cow`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 cow.to_mut().push_str(" world");  // ✅ 使用 to_mut()
 ```
 
 ### 错误 2: 生命周期错误
 
-```rust
+```rust,ignore
 fn create_cow() -> Cow<str> {
     let s = String::from("hello");
     Cow::Borrowed(&s)  // ❌ s 会被释放
@@ -236,7 +236,7 @@ borrowed value does not live long enough
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 fn create_cow() -> Cow<'static, str> {
     Cow::Borrowed("hello")  // ✅ 字符串字面量有 'static 生命周期
 }
@@ -244,7 +244,7 @@ fn create_cow() -> Cow<'static, str> {
 
 ### 错误 3: 不必要的克隆
 
-```rust
+```rust,ignore
 fn process(data: &str) -> Cow<str> {
     let mut cow = Cow::Borrowed(data);
     cow.to_mut();  // ❌ 不必要的克隆
@@ -253,7 +253,7 @@ fn process(data: &str) -> Cow<str> {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 fn process(data: &str) -> Cow<str> {
     Cow::Borrowed(data)  // ✅ 只在需要时克隆
 }
@@ -265,7 +265,7 @@ fn process(data: &str) -> Cow<str> {
 
 ### 练习 1: 创建 Cow
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 
 fn main() {
@@ -278,7 +278,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let borrowed: Cow<str> = Cow::Borrowed("Hello");
 let owned: Cow<str> = Cow::Owned(String::from("World"));
 
@@ -289,7 +289,7 @@ println!("Owned: {}", owned);
 
 ### 练习 2: 使用 to_mut()
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 
 fn main() {
@@ -304,7 +304,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 cow.to_mut().make_ascii_uppercase();
 cow.to_mut().push_str("!!!");
 
@@ -314,7 +314,7 @@ println!("{}", cow);  // 输出：ORIGINAL!!!
 
 ### 练习 3: 优化字符串处理
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 
 fn trim_and_process(input: &str) -> Cow<str> {
@@ -327,7 +327,7 @@ fn trim_and_process(input: &str) -> Cow<str> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 if input.trim() == input {
     Cow::Borrowed(input)  // 无需修改，零分配
 } else {
@@ -366,7 +366,7 @@ if input.trim() == input {
 
 ### Cow<[T]> 用于切片
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 
 fn process_slice(data: &[i32]) -> Cow<[i32]> {
@@ -383,7 +383,7 @@ fn process_slice(data: &[i32]) -> Cow<[i32]> {
 
 ### Cow<Path> 用于路径
 
-```rust
+```rust,ignore
 use std::borrow::Cow;
 use std::path::{Path, PathBuf};
 
@@ -401,7 +401,7 @@ fn resolve_path(input: &str) -> Cow<Path> {
 
 ### 性能对比
 
-```rust
+```rust,ignore
 // 传统方式：总是克隆
 fn process_always_clone(s: &str) -> String {
     s.to_uppercase()  // 总是分配

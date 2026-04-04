@@ -33,7 +33,7 @@
 
 ## 第一个例子
 
-```rust
+```rust,ignore
 #[cfg(target_os = "linux")]
 fn get_platform_name() -> &'static str {
     "Linux"
@@ -82,7 +82,7 @@ fn main() {
 
 ### 1. cfg 属性语法
 
-```rust
+```rust,ignore
 // 单个条件
 #[cfg(target_os = "linux")]
 fn linux_only() {}
@@ -112,7 +112,7 @@ fn release_mode() {}
 
 ### 3. cfg_if 宏
 
-```rust
+```rust,ignore
 // 使用 cfg_if crate
 cfg_if::cfg_if! {
     if #[cfg(target_os = "linux")] {
@@ -143,7 +143,7 @@ debug_mode = []
 ```
 
 **代码中使用**:
-```rust
+```rust,ignore
 #[cfg(feature = "logging")]
 fn log(message: &str) {
     println!("[LOG] {}", message);
@@ -173,7 +173,7 @@ cargo build --no-default-features --features debug_mode
 
 ### 错误 1: cfg 语法错误
 
-```rust
+```rust,ignore
 // ❌ 错误：缺少引号
 #[cfg(target_os = linux)]
 fn foo() {}
@@ -185,7 +185,7 @@ fn foo() {}
 
 ### 错误 2: 函数签名不匹配
 
-```rust
+```rust,ignore
 // ❌ 错误：不同平台函数签名不同
 #[cfg(target_os = "linux")]
 fn get_path() -> String { "/home".to_string() }
@@ -203,7 +203,7 @@ fn get_path() -> &'static str { "C:\\" }
 
 ### 错误 3: 忘记处理所有情况
 
-```rust
+```rust,ignore
 // ❌ 错误：只处理了 Linux
 #[cfg(target_os = "linux")]
 fn init() { /* ... */ }
@@ -228,7 +228,7 @@ fn init() { /* 通用初始化 */ }
 
 编写程序打印当前平台信息：
 
-```rust
+```rust,ignore
 // TODO: 实现 get_platform_info() 函数
 // 返回格式："OS: xxx, Arch: xxx"
 ```
@@ -236,7 +236,7 @@ fn init() { /* 通用初始化 */ }
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 fn get_platform_info() -> &'static str {
     cfg_if::cfg_if! {
         if #[cfg(target_os = "linux")] {
@@ -280,7 +280,7 @@ fn get_platform_info() -> &'static str {
 
 实现只在调试模式下打印日志的功能：
 
-```rust
+```rust,ignore
 // TODO: 实现 debug_log() 宏
 // 在 debug_assertions 为 true 时打印日志，否则什么都不做
 ```
@@ -288,7 +288,7 @@ fn get_platform_info() -> &'static str {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 macro_rules! debug_log {
     ($($arg:tt)*) => {
         #[cfg(debug_assertions)]
@@ -316,7 +316,7 @@ fn main() {
 - `cfg` 是**编译时**决定：不匹配的代码根本不存在
 - `if` 是**运行时**决定：所有代码都编译，运行时选择分支
 
-```rust
+```rust,ignore
 // 编译时：不匹配的代码不会被编译
 #[cfg(target_os = "linux")]
 fn linux_only() {}
@@ -346,7 +346,7 @@ fn runtime_check(is_linux: bool) {
 ### 条件编译的实际应用
 
 **Tokio 异步运行时**：
-```rust
+```rust,ignore
 // 只在 Unix 系统上支持信号
 #[cfg(unix)]
 use tokio::signal::unix::{signal, SignalKind};
@@ -357,7 +357,7 @@ use tokio::signal::windows;
 ```
 
 **跨平台路径处理**：
-```rust
+```rust,ignore
 #[cfg(unix)]
 const PATH_SEPARATOR: &str = "/";
 

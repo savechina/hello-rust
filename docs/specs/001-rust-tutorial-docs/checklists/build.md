@@ -6,14 +6,14 @@
 
 ## Requirement Completeness
 
-- [ ] CHK178 - Are mdBook build requirements defined (mdbook build with zero warnings)? [Spec §SC-006]
-- [ ] CHK179 - Are mdBook plugin requirements defined (admonish, alerts, pagetoc versions)? [Spec §Technology]
-- [ ] CHK180 - Are GitHub Pages deployment requirements defined (deployment trigger, branch, process)? [Spec §Technology]
-- [ ] CHK181 - Are local development requirements defined (mdbook serve, preview workflow)? [Research §Quickstart]
+- [x] CHK178 - Are mdBook build requirements defined (mdbook build with zero warnings)? [Spec §SC-006]
+- [x] CHK179 - Are mdBook plugin requirements defined (admonish, alerts, pagetoc versions)? [Spec §Technology]
+- [x] CHK180 - Are GitHub Pages deployment requirements defined (deployment trigger, branch, process)? [Spec §Technology]
+- [x] CHK181 - Are local development requirements defined (mdbook serve, preview workflow)? [Research §Quickstart]
 - [ ] CHK182 - Are build validation requirements defined in CI/CD pipeline? [Gap]
 - [ ] CHK183 - Are link checking requirements defined (internal and external link validation)? [Gap]
 - [ ] CHK184 - Are requirements defined for build performance (build time limits for documentation changes)? [Gap]
-- [ ] CHK185 - Are requirements defined for pre-built HTML in docs/book/ directory (update on every build?)? [Spec §Assumptions]
+- [x] CHK185 - Are requirements defined for pre-built HTML in docs/book/ directory (update on every build?)? [Spec §Assumptions]
 
 ## Requirement Clarity
 

@@ -6,8 +6,8 @@
 
 ## Requirement Completeness
 
-- [ ] CHK044 - Are bilingual terminology requirements defined for ALL technical terms (first use: 中文 (English))? [Spec §Principle 7]
-- [ ] CHK045 - Are glossary/terminology requirements defined per chapter or as centralized resource? [Spec §Chapter Structure §12]
+- [x] CHK044 - Are bilingual terminology requirements defined for ALL technical terms (first use: 中文 (English))? [Spec §Principle 7]
+- [x] CHK045 - Are glossary/terminology requirements defined per chapter or as centralized resource? [Spec §Chapter Structure §12]
 - [ ] CHK046 - Are English translation future-proofing requirements defined (structure, metadata)? [Spec §Assumptions]
 - [ ] CHK047 - Are code comment handling requirements defined (keep English, add Chinese?)? [Gap]
 - [ ] CHK048 - Are error message handling requirements defined (show English compiler output with Chinese explanation)? [Spec §Principle 5]

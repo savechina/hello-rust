@@ -174,7 +174,7 @@ x = 10; // ❌ 编译错误!
 ```
 
 **编译器输出**:
-```texttext
+```text
 error[E0384]: cannot assign twice to immutable variable `x`
  --> src/main.rs:3:5
   |
@@ -207,7 +207,7 @@ const MAX_SIZE = 100; // ❌ 编译错误!
 ```
 
 **编译器输出**:
-```texttext
+```text
 error[E0284]: type annotations needed
  --> src/main.rs:1:7
   |
@@ -233,7 +233,7 @@ fn main() {
 ```
 
 **编译器输出**:
-```text
+```
 warning: unused variable: `unused`
  --> src/main.rs:2:9
   |
@@ -272,7 +272,7 @@ fn main() {
 <summary>点击查看答案</summary>
 
 **输出**:
-```text
+```
 内部：12
 外部：6
 ```

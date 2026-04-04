@@ -66,7 +66,7 @@ println!("{}", s2); // ✅ 可以工作
 
 ### 所有权内存模型
 
-```text
+```
 栈 (Stack)                    堆 (Heap)
 +---------------+          +----------------+
 | s1 (pointer)  |--------->| "hello"        |
@@ -92,7 +92,7 @@ let s2 = s1;  // 移动后:
 
 ### 借用 vs 移动
 
-```text
+```
 移动 (Move):
 s1 ──→ [堆内存]     s2 = s1     s1 ❌  s2 ──→ [堆内存]
 
@@ -151,7 +151,7 @@ println!("{}", s1); // ❌ 编译错误!
 **🤔 为什么这行不编译？**
 
 编译器会告诉你：
-```text
+```
 error[E0382]: borrow of moved value: `s1`
   |
 2 |     let s2 = s1;
@@ -208,7 +208,7 @@ println!("{}", my_string); // ❌ 编译错误！my_string 已经移动给函数
    ```
 
 2. **返回所有权**：
-   ```rust
+   ```rust,ignore
    fn takes_and_returns(s: String) -> String {
        println!("Got: {}", s);
        s // 返回所有权
@@ -231,7 +231,7 @@ fn returns_local_ref() -> &String {
 ```
 
 **编译器输出**:
-```text
+```
 error[E0515]: cannot return reference to local variable `s`
  --> src/main.rs:4:5
   |
@@ -327,7 +327,7 @@ fn main() {
 <summary>点击查看答案</summary>
 
 **答案**：
-```rust
+```rust,ignore
 fn print_and_keep(s: &String) {  // 或者 &str
     println!("Length: {}", s.len());
 }
@@ -594,7 +594,7 @@ fn create_box_and_return_owned() -> Box<i32> {
 
 * 返回智能指针: 如果你需要共享数据，可以将内部创建的数据包装在 Rc 或 Arc 等智能指针中，并返回智能指针的副本。数据的实际所有权由智能指针管理，而你返回的是智能指针的共享引用或智能指针本身（所有权转移）。
 
-```rust
+```rust,ignore
 use std::sync::Arc;
 use std::cell::RefCell;
 
@@ -682,7 +682,7 @@ void process_trade() {
 ```
 
 **Rust 方案**：
-```rust
+```rust,ignore
 fn process_trade() {
     let trade = Trade::new();
     if validate(&trade) {
@@ -703,7 +703,7 @@ fn process_trade() {
 
 **练习**：预测每段代码的输出
 
-```rust
+```rust,ignore
 // A. 移动语义
 let s1 = String::from("hello");
 let s2 = s1;
@@ -797,7 +797,7 @@ s1             [堆内存："hello"] ←────────── s2
 不可变借用 (多个允许):
 &s1 ──→ [data] ←── &s2
 &s3 ──→              ↑
-                     所有者
+                      所有者
 
 可变借用 (独占访问):
 &mut s1 ──→ [data]   ←── 所有者
@@ -818,7 +818,7 @@ s1             [堆内存："hello"] ←────────── s2
 
 以下代码的输出是什么？
 
-```rust
+```rust,ignore
 let s1 = String::from("hello");
 let s2 = s1;
 println!("{}", s2);
@@ -841,7 +841,7 @@ D) 空字符串
 
 这段代码违反了什么规则？
 
-```rust
+```rust,ignore
 let mut s = String::from("hello");
 let r1 = &s;
 let r2 = &s;
@@ -860,7 +860,7 @@ let r3 = &mut s;  // ❌
 
 这个函数的签名应该如何修正？
 
-```rust
+```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
     if x.len() > y.len() { x } else { y }
 }

@@ -203,7 +203,7 @@ let y = x + 1;  // ❌ 编译错误：溢出
 ```
 
 **错误信息**:
-```text
+```
 error: this arithmetic operation will overflow
 ```
 
@@ -225,7 +225,7 @@ let y: f64 = x;  // ❌ 编译错误：类型不匹配
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let y: f64 = x as f64;  // ✅ 显式转换
 ```
 
@@ -237,7 +237,7 @@ let x = array[5];  // ❌ 运行时 panic
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 // 使用 get 方法安全访问
 match array.get(5) {
     Some(value) => println!("{}", value),

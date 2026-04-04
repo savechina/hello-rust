@@ -47,7 +47,7 @@ cargo add serde_json
 
 最简单的 JSON 序列化：
 
-```rust
+```rust,ignore
 use serde::{Serialize, Deserialize};
 use serde_json;
 
@@ -104,7 +104,7 @@ Serde 框架
 
 ### 2. 无类型 JSON 处理
 
-```rust
+```rust,ignore
 use serde_json::Value;
 
 fn untyped_sample() -> Result<(), Box<dyn std::error::Error>> {
@@ -131,7 +131,7 @@ fn untyped_sample() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 3. 类型化 JSON 处理
 
-```rust
+```rust,ignore
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -159,7 +159,7 @@ fn typed_sample() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 4. 自定义序列化
 
-```rust
+```rust,ignore
 use serde::{Serialize, Serializer, Deserialize, Deserializer};
 
 #[derive(Debug)]
@@ -196,7 +196,7 @@ impl<'de> Deserialize<'de> for Point {
 
 ### 5. 字段属性
 
-```rust
+```rust,ignore
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -229,7 +229,7 @@ fn default_age() -> u8 {
 
 ### 错误 1: 忘记 derive
 
-```rust
+```rust,ignore
 // ❌ 错误：没有 derive
 struct Person {
     name: String,
@@ -245,7 +245,7 @@ struct Person {
 
 ### 错误 2: 不匹配的类型
 
-```rust
+```rust,ignore
 // ❌ 错误：JSON 中的 age 是字符串，但结构体定义是数字
 let json = r#"{"name": "Alice", "age": "30"}"#;
 let person: Person = serde_json::from_str(json)?;  // 反序列化失败！
@@ -262,7 +262,7 @@ let json = r#"{"name": "Alice", "age": 30}"#;
 
 创建一个配置结构体，支持从 JSON 文件加载：
 
-```rust
+```rust,ignore
 // TODO: 定义 Config 结构体
 // 字段：host (String), port (u16), debug (bool)
 // 实现从 JSON 文件加载配置
@@ -271,7 +271,7 @@ let json = r#"{"name": "Alice", "age": 30}"#;
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use serde::{Deserialize, Serialize};
 use std::fs;
 

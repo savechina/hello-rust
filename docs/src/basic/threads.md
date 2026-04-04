@@ -39,7 +39,7 @@ Rust 的线程系统就像一位经验丰富的餐厅经理——它在编译时
 
 ## 第一个例子
 
-```rust
+```rust,ignore
 use std::thread;
 use std::time::Duration;
 
@@ -126,7 +126,7 @@ fn main() {
 
 ### 3. Move 闭包
 
-```rust
+```rust,ignore
 let data = vec![1, 2, 3];
 
 // ❌ 错误：data 是引用，可能在线程结束前被释放
@@ -145,7 +145,7 @@ let handle = thread::spawn(move || {
 
 ### 4. 消息传递（通道）
 
-```rust
+```rust,ignore
 use std::sync::mpsc;  // multiple producer, single consumer
 use std::thread;
 
@@ -173,7 +173,7 @@ fn main() {
 
 ### 5. 共享状态（Arc + Mutex）
 
-```rust
+```rust,ignore
 use std::sync::{Arc, Mutex};
 use std::thread;
 
@@ -203,7 +203,7 @@ fn main() {
 
 ### 6. Send 和 Sync Trait
 
-```rust
+```rust,ignore
 // Send: 类型可以安全转移所有权到其他线程
 // Sync: 类型可以安全通过引用共享给其他线程
 
@@ -220,7 +220,7 @@ fn main() {
 
 ### 错误 1: 忽略 join handle
 
-```rust
+```rust,ignore
 let handle = thread::spawn(|| {
     // 一些工作
 });
@@ -234,7 +234,7 @@ handle.join().unwrap();
 
 ### 错误 2: 数据竞争
 
-```rust
+```rust,ignore
 use std::sync::Arc;
 use std::thread;
 
@@ -249,7 +249,7 @@ thread::spawn(move || {
 
 ### 错误 3: 死锁
 
-```rust
+```rust,ignore
 use std::sync::Mutex;
 
 let mutex1 = Mutex::new(1);
@@ -271,7 +271,7 @@ let mutex2 = Mutex::new(2);
 
 使用多线程计算向量中所有数字的和：
 
-```rust
+```rust,ignore
 // TODO: 实现 parallel_sum 函数
 // 将数据分成 4 块，每块用一个线程计算
 // 最后汇总结果
@@ -280,7 +280,7 @@ let mutex2 = Mutex::new(2);
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use std::thread;
 
 fn parallel_sum(data: Vec<i32>) -> i32 {
@@ -314,7 +314,7 @@ fn parallel_sum(data: Vec<i32>) -> i32 {
 ### Q: 如何限制线程数量？
 
 **A**: 使用线程池（如 `rayon` crate）：
-```rust
+```rust,ignore
 use rayon::prelude::*;
 
 let sum: i32 = (1..1000).par_iter().sum();
@@ -370,7 +370,7 @@ let sum: i32 = (1..1000).par_iter().sum();
 1. `Rc<T>` 可以在多线程中使用吗？
 
 2. 这段代码有什么问题？
-```rust
+```rust,ignore
 let data = vec![1, 2, 3];
 let handle = thread::spawn(|| {
     println!("{:?}", data);

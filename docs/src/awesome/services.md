@@ -75,7 +75,7 @@ cargo add async-trait
 
 让我们从最简单的依赖注入开始：
 
-```rust
+```rust,ignore
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -146,7 +146,7 @@ fn main() {
 
 **模式一：具体类型注入（Concrete Injection）**
 
-```rust
+```rust,ignore
 // 使用泛型参数，编译时确定类型
 struct UserService<R: UserRepository> {
     repo: R,
@@ -162,7 +162,7 @@ struct UserService<R: UserRepository> {
 
 **模式二：动态 Trait 注入（Arc 版本）**
 
-```rust
+```rust,ignore
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -213,7 +213,7 @@ impl ServiceContainer {
 
 与 Arc 版本类似，但使用 `Box<dyn Any>` 存储：
 
-```rust
+```rust,ignore
 struct ServiceContainer {
     services: Mutex<HashMap<TypeId, Box<dyn Any + Send + Sync>>>,
 }
@@ -233,7 +233,7 @@ impl ServiceContainer {
 
 ### 2. 编译时插件注册（Inventory）
 
-```rust
+```rust,ignore
 use inventory::submit;
 
 // 定义插件 trait
@@ -276,7 +276,7 @@ fn main() {
 
 **服务注册（使用 rs_consul crate）：**
 
-```rust
+```rust,ignore
 use rs_consul::{Config, Consul, RegisterEntityPayload, RegisterEntityService};
 
 #[tokio::main]
@@ -310,7 +310,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 **自定义 Consul 客户端（生产环境）：**
 
-```rust
+```rust,ignore
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
@@ -371,7 +371,7 @@ impl ConsulClient {
 
 **基础服务端：**
 
-```rust
+```rust,ignore
 mod helloworld {
     tonic::include_proto!("helloworld");
 }
@@ -414,7 +414,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 **基础客户端：**
 
-```rust
+```rust,ignore
 use helloworld::greeter_client::GreeterClient;
 use helloworld::HelloRequest;
 
@@ -438,7 +438,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 **流式 gRPC 服务：**
 
-```rust
+```rust,ignore
 type WatchStream = Pin<Box<dyn Stream<Item = Result<Item, Status>> + Send>>;
 
 #[tonic::async_trait]
@@ -503,7 +503,7 @@ impl Inventory for StoreInventory {
 
 **RunnableService trait：**
 
-```rust
+```rust,ignore
 use async_trait::async_trait;
 use tokio::sync::{oneshot, RwLock};
 
@@ -535,7 +535,7 @@ pub trait RunnableService: Send + Sync + 'static {
 
 **应用框架实现：**
 
-```rust
+```rust,ignore
 pub struct ApplicationFramework<S: RunnableService> {
     service_instance: Arc<S>,
     status_receiver: Arc<RwLock<ServiceStatus>>,
@@ -585,7 +585,7 @@ impl<S: RunnableService> ApplicationFramework<S> {
 
 **生产级服务实现（GreeterService）：**
 
-```rust
+```rust,ignore
 #[async_trait]
 impl RunnableService for GreeterApplicationService {
     type Config = GreeterServiceConfig;
@@ -632,7 +632,7 @@ impl RunnableService for GreeterApplicationService {
 
 ### 错误 1：在 async 上下文中使用 std::sync::Mutex
 
-```rust
+```rust,ignore
 // ❌ 错误：在 async 函数中使用阻塞锁
 async fn bad_example(data: Arc<std::sync::Mutex<i32>>) {
     let mut guard = data.lock().unwrap(); // 阻塞整个线程！
@@ -652,7 +652,7 @@ async fn good_example(data: Arc<tokio::sync::Mutex<i32>>) {
 
 ### 错误 2：服务发现时没有处理空列表
 
-```rust
+```rust,ignore
 // ❌ 危险：没有检查服务列表为空
 let nodes = consul_client.discover_service("my-service").await?;
 let node = &nodes[0]; // panic if empty!
@@ -670,7 +670,7 @@ let node = &nodes[index % nodes.len()]; // 轮询
 
 ### 错误 3：忘记在关闭时从 Consul 注销服务
 
-```rust
+```rust,ignore
 // ❌ 错误：服务关闭后仍残留在 Consul
 async fn run_server() {
     consul.register(&service).await.unwrap();
@@ -692,7 +692,7 @@ async fn run_server() {
 
 ### 错误 4：gRPC 流没有正确处理客户端断开
 
-```rust
+```rust,ignore
 // ❌ 问题：客户端断开后继续发送
 while let Some(item) = rx.recv().await {
     tx.send(Ok(item)).await?; // 可能无限阻塞
@@ -719,7 +719,7 @@ tokio::spawn(async move {
 
 补全以下代码，实现服务注册到 Consul：
 
-```rust
+```rust,ignore
 async fn register_service(
     consul: &ConsulClient,
     name: &str,
@@ -747,7 +747,7 @@ async fn register_service(
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 async fn register_service(
     consul: &ConsulClient,
     name: &str,
@@ -781,7 +781,7 @@ async fn register_service(
 
 补全以下代码，实现基于 Consul 的轮询服务发现：
 
-```rust
+```rust,ignore
 pub struct LoadBalancer {
     consul: ConsulClient,
     service_name: String,
@@ -798,7 +798,7 @@ impl LoadBalancer {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 impl LoadBalancer {
@@ -823,7 +823,7 @@ impl LoadBalancer {
 
 补全以下代码，在收到 Ctrl+C 信号时优雅关闭服务：
 
-```rust
+```rust,ignore
 #[tokio::main]
 async fn main() -> Result<()> {
     let framework = ApplicationFramework::<MyService>::new(config)?;
@@ -835,7 +835,7 @@ async fn main() -> Result<()> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use tokio::signal;
 
 #[tokio::main]
@@ -864,7 +864,7 @@ async fn main() -> Result<()> {
 
 ### 应用场景 1：微服务架构的完整链路
 
-```rust
+```rust,ignore
 // 1. 服务提供者：GreeterService
 pub struct GreeterApplicationService {
     config: GreeterServiceConfig,
@@ -912,7 +912,7 @@ async fn call_greeter(consul: &ConsulClient) -> Result<String> {
 
 ### 应用场景 2：带缓存的服务发现
 
-```rust
+```rust,ignore
 pub struct CachedServiceDiscovery {
     consul: ConsulClient,
     cache: Arc<RwLock<HashMap<String, (Vec<CatalogServiceNode>, Instant)>>>,
@@ -946,7 +946,7 @@ impl CachedServiceDiscovery {
 
 ### 应用场景 3：插件化架构
 
-```rust
+```rust,ignore
 // 使用 inventory 实现编译时插件注册
 inventory::collect!(Plugin);
 
@@ -987,7 +987,7 @@ fn main() {
 2. Consul 的健康检查是否通过（失败的服务会被过滤）
 3. 是否等待了足够的时间（服务注册有延迟）
 
-```rust
+```rust,ignore
 // 调试技巧：打印所有已注册服务
 let services = consul.get_all_registered_service_names(None).await?;
 println!("Registered services: {:?}", services);
@@ -1002,7 +1002,7 @@ println!("Registered services: {:?}", services);
 2. **端口错误**：检查服务端的监听端口
 3. **TLS 配置**：如果使用 TLS，需要配置证书
 
-```rust
+```rust,ignore
 // ✅ 正确
 GreeterClient::connect("http://127.0.0.1:50051").await?;
 
@@ -1016,7 +1016,7 @@ GreeterClient::connect("127.0.0.1:50051").await?;
 
 **A**: `TypeId` 是编译期确定的，确保注册和解析时使用完全相同的类型：
 
-```rust
+```rust,ignore
 // ✅ 一致：注册和解析使用相同类型
 container.register_trait::<dyn LoggerService>(Arc::new(ConsoleLogger));
 let logger = container.resolve_trait::<dyn LoggerService>();
@@ -1032,7 +1032,7 @@ let service = container.resolve::<dyn LoggerService>(); // TypeId::of::<dyn Logg
 
 **A**: 确保你的 `start_service_logic` 是"长期运行"的：
 
-```rust
+```rust,ignore
 async fn start_service_logic(&self, shutdown_rx: oneshot::Receiver<()>) -> Result<()> {
     // ❌ 错误：立即返回
     tokio::spawn(async { /* ... */ });
@@ -1056,7 +1056,7 @@ async fn start_service_logic(&self, shutdown_rx: oneshot::Receiver<()>) -> Resul
 
 使用 Tower 中间件添加通用功能：
 
-```rust
+```rust,ignore
 use tower::{ServiceBuilder, timeout::TimeoutLayer};
 use tower_http::trace::TraceLayer;
 
@@ -1078,7 +1078,7 @@ Server::builder()
 
 添加反射支持，方便调试：
 
-```rust
+```rust,ignore
 let reflection_service = tonic_reflection::server::Builder::configure()
     .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)
     .build_v1()?;
@@ -1096,7 +1096,7 @@ Server::builder()
 
 ### 配置热更新
 
-```rust
+```rust,ignore
 pub struct ConfigWatcher {
     path: PathBuf,
     current: Arc<RwLock<BaseServiceConfig>>,
@@ -1185,7 +1185,7 @@ impl ConfigWatcher {
 
 以下代码的输出是什么？
 
-```rust
+```rust,ignore
 use std::any::TypeId;
 
 trait Service: Any + Send + Sync {}
@@ -1223,7 +1223,7 @@ D) 运行时 panic
 
 以下代码有什么问题？
 
-```rust
+```rust,ignore
 async fn call_service(consul: &ConsulClient) -> Result<String> {
     let nodes = consul.discover_service("my-service").await?;
     let node = &nodes[0]; // 第 0 行
@@ -1247,7 +1247,7 @@ D) B 和 C 都正确
 2. **负载均衡**：生产环境应该使用轮询（round-robin）或随机选择，而不是固定取第一个，以实现负载分散
 
 **修复方案**:
-```rust
+```rust,ignore
 if nodes.is_empty() {
     return Err(anyhow!("No service available"));
 }
@@ -1263,7 +1263,7 @@ let node = &nodes[idx];
 
 以下代码为什么可能导致资源泄漏？
 
-```rust
+```rust,ignore
 #[async_trait]
 impl RunnableService for MyService {
     async fn start_service_logic(
@@ -1298,7 +1298,7 @@ D) B 和 C 都正确
 2. **缺少 shutdown 处理**：没有响应 `shutdown_rx` 信号，无法接受优雅关闭指令
 
 **修复方案**:
-```rust
+```rust,ignore
 async fn start_service_logic(&self, shutdown_rx: oneshot::Receiver<()>) -> Result<(), FrameworkError> {
     self.consul.register_service(&self.registration).await?;
     

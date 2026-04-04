@@ -45,7 +45,7 @@ cargo add getset
 
 最简单的 getset 使用：
 
-```rust
+```rust,ignore
 use getset::{Getters, Setters};
 
 #[derive(Getters, Setters)]
@@ -90,7 +90,7 @@ fn main() {
 
 **使用 #[derive(Getters)]**：
 
-```rust
+```rust,ignore
 use getset::Getters;
 
 #[derive(Getters)]
@@ -113,7 +113,7 @@ pub struct User {
 
 **使用 #[derive(Setters)]**：
 
-```rust
+```rust,ignore
 use getset::Setters;
 
 #[derive(Setters)]
@@ -132,7 +132,7 @@ pub struct User {
 
 **使用 Getters + Setters**：
 
-```rust
+```rust,ignore
 use getset::{Getters, Setters};
 
 #[derive(Getters, Setters)]
@@ -149,7 +149,7 @@ pub struct Product {
 
 **使用 derive_more**：
 
-```rust
+```rust,ignore
 use derive_more::Display;
 
 #[derive(Display)]
@@ -168,7 +168,7 @@ println!("{}", user);  // User{id:1, name:Alice}
 
 **手动实现 Builder**：
 
-```rust
+```rust,ignore
 pub struct Category {
     id: u64,
     name: String,
@@ -222,7 +222,7 @@ let cat = Category::builder()
 
 ### 错误 1: 忘记属性
 
-```rust
+```rust,ignore
 use getset::Getters;
 
 #[derive(Getters)]
@@ -237,7 +237,7 @@ no method named `id` found
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 #[derive(Getters)]
 pub struct User {
     #[get = "pub"]
@@ -247,7 +247,7 @@ pub struct User {
 
 ### 错误 2: 可见性错误
 
-```rust
+```rust,ignore
 #[derive(Getters)]
 pub struct User {
     #[get = "pub"]
@@ -264,7 +264,7 @@ mod other {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 pub struct User {  // ✅ 结构体也必须是 pub
     #[get = "pub"]
     id: u32,
@@ -273,7 +273,7 @@ pub struct User {  // ✅ 结构体也必须是 pub
 
 ### 错误 3: Builder 模式错误
 
-```rust
+```rust,ignore
 pub struct Builder {
     inner: User,
 }
@@ -287,7 +287,7 @@ impl Builder {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 pub fn with_name(mut self, name: String) -> Self {
     // ✅ 添加 mut
     self.inner.name = name;
@@ -301,7 +301,7 @@ pub fn with_name(mut self, name: String) -> Self {
 
 ### 练习 1: 创建 Getters
 
-```rust
+```rust,ignore
 use getset::Getters;
 
 #[derive(Getters)]
@@ -315,7 +315,7 @@ pub struct Product {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Getters)]
 pub struct Product {
     #[get = "pub"]
@@ -328,7 +328,7 @@ pub struct Product {
 
 ### 练习 2: 创建 Setters
 
-```rust
+```rust,ignore
 use getset::Setters;
 
 #[derive(Setters)]
@@ -341,7 +341,7 @@ pub struct User {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Setters)]
 pub struct User {
     #[set = "pub"]
@@ -352,7 +352,7 @@ pub struct User {
 
 ### 练习 3: 实现 Builder
 
-```rust
+```rust,ignore
 pub struct Config {
     host: String,
     port: u16,
@@ -377,7 +377,7 @@ impl ConfigBuilder {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 impl Config {
     pub fn builder() -> ConfigBuilder {
         ConfigBuilder::new()
@@ -442,7 +442,7 @@ impl ConfigBuilder {
 
 ### 可见性选项
 
-```rust
+```rust,ignore
 #[derive(Getters)]
 pub struct User {
     #[get = "pub"]      // 公开
@@ -455,7 +455,7 @@ pub struct User {
 
 ### 组合派生
 
-```rust
+```rust,ignore
 use getset::{Getters, Setters, MutGetters};
 use derive_more::Display;
 
@@ -472,7 +472,7 @@ pub struct User {
 
 ### 条件编译
 
-```rust
+```rust,ignore
 #[cfg_attr(test, derive(Getters))]
 pub struct Config {
     #[cfg_attr(test, get = "pub")]

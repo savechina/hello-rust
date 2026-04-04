@@ -40,7 +40,7 @@
 
 让我们看一个最简单的生命周期示例：
 
-```rust
+```rust,ignore
 fn main() {
     let r;                // ---------+-- 'a (外层作用域)
                           //          |
@@ -147,7 +147,7 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 
 当结构体持有引用时，必须标注生命周期：
 
-```rust
+```rust,ignore
 // ❌ 错误：缺少生命周期
 struct Excerpt {
     part: &str,
@@ -180,7 +180,7 @@ fn main() {
 编译器使用三条规则自动推断生命周期，无需标注：
 
 **规则 1**: 每个引用参数获得独立的生命周期
-```rust
+```rust,ignore
 fn first_word(s: &str) -> &str {
     // 实际被推断为：
     // fn first_word<'a>(s: &'a str) -> &'a str
@@ -188,7 +188,7 @@ fn first_word(s: &str) -> &str {
 ```
 
 **规则 2**: 如果只有一个输入生命周期，它被赋给所有输出生命周期
-```rust
+```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
     // 无法推断，因为有两个输入生命周期
     // 必须手动标注
@@ -196,7 +196,7 @@ fn longest(x: &str, y: &str) -> &str {
 ```
 
 **规则 3**: 如果有 `&self` 或 `&mut self`，`self` 的生命周期被赋给所有输出生命周期
-```rust
+```rust,ignore
 impl<'a> Excerpt<'a> {
     fn level(&self) -> i32 {
         3
@@ -235,7 +235,7 @@ fn get_static() -> &'static str {
 
 ### 错误 1: 悬垂引用
 
-```rust
+```rust,ignore
 // ❌ 错误：返回局部变量的引用
 fn dangling_reference() -> &i32 {
     let x = 5;
@@ -262,7 +262,7 @@ error[E0106]: missing lifetime specifier
 
 ### 错误 2: 生命周期不匹配
 
-```rust
+```rust,ignore
 // ❌ 错误：返回值生命周期不明确
 fn longest(x: &str, y: &str) -> &str {
     if x.len() > y.len() {
@@ -284,7 +284,7 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 
 ### 错误 3: 结构体缺少生命周期
 
-```rust
+```rust,ignore
 // ❌ 错误
 struct Excerpt {
     part: &str,
@@ -312,7 +312,7 @@ help: consider introducing a named lifetime parameter
 
 ### 错误 4: 过度标注生命周期
 
-```rust
+```rust,ignore
 // ❌ 不必要：编译器可以推断
 fn print(s: &str) {
     println!("{}", s);
@@ -336,7 +336,7 @@ fn print(s: &str) {
 
 > 💡 **编译器是你的老师**：先不标注生命周期，让编译器报错。仔细阅读错误信息，它会告诉你需要添加什么！
 
-```rust
+```rust,ignore
 // TODO: 添加生命周期参数
 fn longest(x: &str, y: &str) -> &str {
     if x.len() > y.len() {
@@ -374,7 +374,7 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 
 定义一个持有字符串切片引用的结构体：
 
-```rust
+```rust,ignore
 // TODO: 定义 Excerpt 结构体，包含 part: &str 字段
 
 fn main() {
@@ -405,7 +405,7 @@ struct Excerpt<'a> {
 
 为以下方法添加生命周期：
 
-```rust
+```rust,ignore
 struct Excerpt<'a> {
     part: &'a str,
 }
@@ -422,7 +422,7 @@ impl<'a> Excerpt<'a> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 impl<'a> Excerpt<'a> {
     fn announce_and_return_part(&self, announcement: &str) -> &str {
         println!("Attention please: {}", announcement);
@@ -471,7 +471,7 @@ fn main() {
 ### Q: 生命周期参数名必须是 `'a` 吗？
 
 **A**: 不必须。可以使用任何有效标识符：
-```rust
+```rust,ignore
 fn longest<'lifetime>(x: &'lifetime str, y: &'lifetime str) -> &'lifetime str
 ```
 但约定使用短名称：`'a`, `'b`, `'r` 等。
@@ -479,7 +479,7 @@ fn longest<'lifetime>(x: &'lifetime str, y: &'lifetime str) -> &'lifetime str
 ### Q: 一个函数可以有多个生命周期参数吗？
 
 **A**: 可以：
-```rust
+```rust,ignore
 fn select_first<'a, 'b>(x: &'a str, y: &'b str) -> &'a str {
     x  // 返回值生命周期与 x 相同
 }
@@ -491,7 +491,7 @@ fn select_first<'a, 'b>(x: &'a str, y: &'b str) -> &'a str {
 - 泛型：参数的**类型**
 - 生命周期：引用的**作用域**
 
-```rust
+```rust,ignore
 fn example<T, 'a>(value: T, reference: &'a T) {
     // T 是类型参数
     // 'a 是生命周期参数
@@ -506,7 +506,7 @@ fn example<T, 'a>(value: T, reference: &'a T) {
 
 生命周期可以有约束关系：
 
-```rust
+```rust,ignore
 fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &'a str
 where
     'b: 'a,  // 'b 至少和 'a 一样长
@@ -521,7 +521,7 @@ where
 
 `'static` 不意味着"永远"，而是"程序运行期间"：
 
-```rust
+```rust,ignore
 // 可以存储在静态内存
 const GREETING: &'static str = "Hello!";
 
@@ -536,7 +536,7 @@ fn create_string() -> &'static String {
 
 闭包中的生命周期通常自动推断：
 
-```rust
+```rust,ignore
 let x = 5;
 let closure = |y| y + x;  // x 的生命周期被捕获
 ```
@@ -593,7 +593,7 @@ let closure = |y| y + x;  // x 的生命周期被捕获
 **快速测验**（答案在下方）：
 
 1. 这段代码能编译通过吗？
-```rust
+```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
     if x.len() > y.len() { x } else { y }
 }

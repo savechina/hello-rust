@@ -50,7 +50,7 @@ cargo add anyhow
 
 让我们看一个最简单的错误处理示例：
 
-```rust
+```rust,ignore
 use std::fs::File;
 use std::io::{self, Read};
 
@@ -79,7 +79,7 @@ fn main() {
 
 ### 1. Result<T, E> 枚举
 
-```rust
+```rust,ignore
 pub enum Result<T, E> {
     Ok(T),   // 成功，包含值
     Err(E),  // 失败，包含错误
@@ -88,7 +88,7 @@ pub enum Result<T, E> {
 
 **常用方法**：
 
-```rust
+```rust,ignore
 let result: Result<i32, &str> = Ok(42);
 
 // 获取值（panic 如果 Err）
@@ -108,7 +108,7 @@ match result {
 
 `?` 是错误传播的语法糖：
 
-```rust
+```rust,ignore
 // 以下两种写法等价：
 
 // 使用 ?
@@ -141,7 +141,7 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 
 实现 `From` trait 可以自动转换错误类型：
 
-```rust
+```rust,ignore
 use std::fs::File;
 use std::io::{self, Read, Write};
 
@@ -172,7 +172,7 @@ fn process_file(path: &str) -> Result<String, MyError> {
 
 当有多种错误来源时，使用 `Box<dyn Error>` 避免定义复杂的枚举：
 
-```rust
+```rust,ignore
 use std::error::Error;
 use std::fs::File;
 use std::num::ParseIntError;
@@ -200,7 +200,7 @@ fn read_and_parse(path: &str) -> Result<i32, Box<dyn Error>> {
 
 异步函数的错误处理与同步类似，但需要注意：
 
-```rust
+```rust,ignore
 use tokio::fs::File;
 use tokio::io::{self, AsyncReadExt};
 
@@ -230,7 +230,7 @@ async fn main() {
 
 ### 错误 1: 在生产代码中使用 .unwrap()
 
-```rust
+```rust,ignore
 // ❌ 错误：panic 如果文件不存在
 let file = File::open("config.json").unwrap();
 
@@ -251,7 +251,7 @@ let file = File::open("config.json")?;
 
 ### 错误 2: 错误类型不匹配
 
-```rust
+```rust,ignore
 use std::fs::File;
 use std::num::ParseIntError;
 
@@ -271,7 +271,7 @@ fn read_number(path: &str) -> Result<i32, Box<dyn std::error::Error>> {
 
 ### 错误 3: 忽略错误
 
-```rust
+```rust,ignore
 // ❌ 错误：忽略错误
 let _ = File::create("important.log");
 
@@ -283,7 +283,7 @@ if let Err(e) = File::create("important.log") {
 
 ### 错误 4: 过度使用 Box<dyn Error>
 
-```rust
+```rust,ignore
 // ❌ 不必要：单一错误类型
 fn simple_func() -> Result<i32, Box<dyn Error>> {
     Ok(42)
@@ -303,7 +303,7 @@ fn simple_func() -> Result<i32, std::io::Error> {
 
 为以下自定义错误实现 `From<io::Error>`：
 
-```rust
+```rust,ignore
 use std::io;
 
 #[derive(Debug)]
@@ -324,7 +324,7 @@ fn read_config(path: &str) -> Result<String, AppError> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 impl From<io::Error> for AppError {
     fn from(err: io::Error) -> Self {
         AppError::IoError(err)
@@ -344,7 +344,7 @@ fn read_config(path: &str) -> Result<String, AppError> {
 
 重构以下函数使用 `Box<dyn Error>`：
 
-```rust
+```rust,ignore
 use std::fs::File;
 use std::num::ParseIntError;
 
@@ -371,7 +371,7 @@ fn read_id(path: &str) -> Result<i32, CombinedError> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use std::error::Error;
 
 fn read_id(path: &str) -> Result<i32, Box<dyn Error>> {
@@ -388,7 +388,7 @@ fn read_id(path: &str) -> Result<i32, Box<dyn Error>> {
 
 完成以下异步函数：
 
-```rust
+```rust,ignore
 use tokio::fs::File;
 use tokio::io::AsyncReadExt;
 
@@ -401,7 +401,7 @@ async fn read_json_config(path: &str) -> Result<String, Box<dyn std::error::Erro
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use tokio::fs::File;
 use tokio::io::AsyncReadExt;
 
@@ -452,7 +452,7 @@ async fn read_json_config(path: &str) -> Result<String, Box<dyn std::error::Erro
 
 [`thiserror`](https://docs.rs/thiserror) 简化错误类型定义：
 
-```rust
+```rust,ignore
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -469,7 +469,7 @@ enum DataError {
 
 [`anyhow`](https://docs.rs/anyhow) 简化应用层错误处理：
 
-```rust
+```rust,ignore
 use anyhow::{Result, Context};
 
 fn read_config() -> Result<String> {

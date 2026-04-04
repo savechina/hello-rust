@@ -8,7 +8,7 @@
 
 ### 读取文件
 
-```rust
+```rust,ignore
 use std::fs;
 use std::io::{self, BufRead};
 
@@ -35,7 +35,7 @@ fn read_binary_file() -> io::Result<Vec<u8>> {
 
 ### 写入文件
 
-```rust
+```rust,ignore
 use std::fs::{self, File};
 use std::io::Write;
 
@@ -65,7 +65,7 @@ fn write_binary_data(data: &[u8]) -> io::Result<()> {
 
 ### 文件与目录操作
 
-```rust
+```rust,ignore
 use std::fs;
 use std::path::Path;
 
@@ -100,7 +100,7 @@ fn check_path_exists(path: &str) -> bool {
 
 ### Vec 向量操作
 
-```rust
+```rust,ignore
 // 创建和初始化
 let mut vec: Vec<i32> = Vec::new();
 let vec = vec![1, 2, 3, 4, 5];
@@ -130,7 +130,7 @@ vec.dedup();             // 去重
 
 ### HashMap 哈希表操作
 
-```rust
+```rust,ignore
 use std::collections::HashMap;
 
 // 创建和初始化
@@ -162,7 +162,7 @@ for value in map.values() { /* ... */ }
 
 ### HashSet 哈希集合操作
 
-```rust
+```rust,ignore
 use std::collections::HashSet;
 
 // 创建和初始化
@@ -191,7 +191,7 @@ let difference: HashSet<&i32> = a.difference(&b).collect();      // 差集 {1, 2
 
 ### 创建与转换
 
-```rust
+```rust,ignore
 // 创建字符串
 let s1 = String::new();
 let s2 = String::from("hello");
@@ -211,7 +211,7 @@ let owned: String = slice.to_owned();
 
 ### 字符串修改
 
-```rust
+```rust,ignore
 let mut s = String::from("hello");
 
 // 追加内容
@@ -237,7 +237,7 @@ let last_char = s.pop();  // 弹出最后一个字符
 
 ### 字符串查询
 
-```rust
+```rust,ignore
 let s = "Hello, Rust!";
 
 // 长度和判空
@@ -267,7 +267,7 @@ let first_n = s.chars().take(5).collect::<String>();  // 前5个字符
 
 ### Result 处理
 
-```rust
+```rust,ignore
 use std::fs::File;
 use std::io::{self, Read};
 
@@ -302,7 +302,7 @@ let content = read_file_basic().unwrap_or_else(|err| {
 
 ### Option 处理
 
-```rust
+```rust,ignore
 // 基本用法
 let some_value: Option<i32> = Some(42);
 let none_value: Option<i32> = None;
@@ -335,7 +335,7 @@ if let Some(value) = some_value {
 
 ### 自定义错误类型
 
-```rust
+```rust,ignore
 use std::fmt;
 use std::error::Error;
 
@@ -377,7 +377,7 @@ impl Error for MyError {}
 
 ### async/await 基本用法
 
-```rust
+```rust,ignore
 use tokio::time::{sleep, Duration};
 
 // 定义异步函数
@@ -407,7 +407,7 @@ async fn main() {
 
 ### 并发执行
 
-```rust
+```rust,ignore
 use tokio;
 
 // 顺序执行
@@ -453,7 +453,7 @@ async fn join_all_tasks() {
 
 ### 异步通道
 
-```rust
+```rust,ignore
 use tokio::sync::mpsc;
 
 // 多生产者单消费者通道
@@ -497,7 +497,7 @@ async fn oneshot_example() {
 
 ### TCP 客户端
 
-```rust
+```rust,ignore
 use std::io::{self, Write};
 use std::net::TcpStream;
 
@@ -534,7 +534,7 @@ async fn async_tcp_client() -> io::Result<()> {
 
 ### TCP 服务器
 
-```rust
+```rust,ignore
 use std::io::{self, Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
@@ -571,7 +571,7 @@ fn handle_client(mut stream: TcpStream) {
 
 ### HTTP 客户端
 
-```rust
+```rust,ignore
 // 使用 reqwest (需要添加依赖)
 use reqwest;
 
@@ -605,7 +605,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### JSON 序列化/反序列化
 
-```rust
+```rust,ignore
 use serde::{Deserialize, Serialize};
 
 // 定义结构体
@@ -661,7 +661,7 @@ fn parse_generic_json() {
 
 ### 其他序列化格式
 
-```rust
+```rust,ignore
 // YAML 序列化 (需要添加 serde_yaml 依赖)
 use serde::{Deserialize, Serialize};
 
@@ -725,7 +725,7 @@ fn binary_example() {
 
 ### 单元测试
 
-```rust
+```rust,ignore
 // 在同一文件中编写测试
 #[cfg(test)]
 mod tests {
@@ -773,7 +773,7 @@ mod tests {
 
 ### 集成测试
 
-```rust
+```rust,ignore
 // tests/integration_test.rs
 
 // 导入外部 crate 的公共 API
@@ -801,7 +801,7 @@ fn test_error_case() {
 
 ### 测试辅助工具
 
-```rust
+```rust,ignore
 // 测试前初始化
 #[cfg(test)]
 mod tests {
@@ -851,7 +851,7 @@ mod tests {
 
 ### std::env::args
 
-```rust
+```rust,ignore
 use std::env;
 
 fn main() {
@@ -880,7 +880,7 @@ fn main() {
 
 ### 使用 clap (推荐)
 
-```rust
+```rust,ignore
 use clap::{Arg, Command};
 
 fn main() {
@@ -922,7 +922,7 @@ fn main() {
 
 ### 使用 derive 宏 (更简洁)
 
-```rust
+```rust,ignore
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -964,7 +964,7 @@ fn main() {
 
 ### 读取环境变量
 
-```rust
+```rust,ignore
 use std::env;
 
 fn main() {
@@ -995,7 +995,7 @@ fn main() {
 
 ### 设置环境变量
 
-```rust
+```rust,ignore
 use std::env;
 
 fn main() {
@@ -1018,7 +1018,7 @@ fn main() {
 
 ### 使用 dotenv 加载 .env 文件
 
-```rust
+```rust,ignore
 // 需要添加 dotenv 依赖
 use dotenv::dotenv;
 use std::env;
@@ -1049,7 +1049,7 @@ fn main() {
 
 ### 创建线程
 
-```rust
+```rust,ignore
 use std::thread;
 use std::time::Duration;
 
@@ -1075,7 +1075,7 @@ fn main() {
 
 ### 线程间通信
 
-```rust
+```rust,ignore
 use std::sync::mpsc;
 use std::thread;
 
@@ -1108,7 +1108,7 @@ fn main() {
 
 ### 共享状态
 
-```rust
+```rust,ignore
 use std::sync::{Arc, Mutex};
 use std::thread;
 
@@ -1137,7 +1137,7 @@ fn main() {
 
 ### 线程池
 
-```rust
+```rust,ignore
 use std::thread;
 use std::sync::mpsc;
 use std::sync::{Arc, Mutex};
@@ -1206,7 +1206,7 @@ fn main() {
 
 ### 时间测量
 
-```rust
+```rust,ignore
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 fn main() {
@@ -1241,7 +1241,7 @@ fn main() {
 
 ### 使用 chrono 库
 
-```rust
+```rust,ignore
 // 需要添加 chrono 依赖
 use chrono::{DateTime, Local, Utc, TimeZone, NaiveDate, NaiveTime, Duration};
 
@@ -1288,7 +1288,7 @@ fn main() {
 
 ### 基本匹配
 
-```rust
+```rust,ignore
 // 需要添加 regex 依赖
 use regex::Regex;
 
@@ -1322,7 +1322,7 @@ fn main() {
 
 ### 替换和分组
 
-```rust
+```rust,ignore
 use regex::Regex;
 
 fn main() {
@@ -1364,7 +1364,7 @@ fn main() {
 
 ### 声明宏
 
-```rust
+```rust,ignore
 // 基本宏定义
 macro_rules! say_hello {
     () => {
@@ -1423,7 +1423,7 @@ fn main() {
 
 ### 过程宏
 
-```rust
+```rust,ignore
 // 自定义派生宏 (需要 proc-macro crate)
 use proc_macro::TokenStream;
 use quote::quote;
@@ -1458,7 +1458,7 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
 
 ### 映射与过滤
 
-```rust
+```rust,ignore
 fn main() {
     let numbers = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     
@@ -1488,7 +1488,7 @@ fn main() {
 
 ### 聚合操作
 
-```rust
+```rust,ignore
 fn main() {
     let numbers = vec![1, 2, 3, 4, 5];
     
@@ -1526,7 +1526,7 @@ fn main() {
 
 ### 查找与排序
 
-```rust
+```rust,ignore
 fn main() {
     let numbers = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     
@@ -1571,7 +1571,7 @@ fn main() {
 
 ### Box 堆分配
 
-```rust
+```rust,ignore
 // Box: 堆分配
 let b = Box::new(5);
 println!("Box: {}", b);
@@ -1591,7 +1591,7 @@ println!("{:?}", list);
 
 ### Rc 引用计数
 
-```rust
+```rust,ignore
 use std::rc::Rc;
 
 fn main() {
@@ -1607,7 +1607,7 @@ fn main() {
 
 ### RefCell 内部可变性
 
-```rust
+```rust,ignore
 use std::cell::RefCell;
 
 fn main() {
@@ -1628,7 +1628,7 @@ fn main() {
 
 ### Arc + Mutex 多线程共享
 
-```rust
+```rust,ignore
 use std::sync::{Arc, Mutex};
 use std::thread;
 
@@ -1660,7 +1660,7 @@ fn main() {
 
 ### 随机数生成
 
-```rust
+```rust,ignore
 // 需要添加 rand 依赖
 use rand::Rng;
 use rand::seq::SliceRandom;
@@ -1695,7 +1695,7 @@ fn main() {
 
 ### 命令行颜色输出
 
-```rust
+```rust,ignore
 // 需要添加 colored 依赖
 use colored::Colorize;
 
@@ -1715,7 +1715,7 @@ fn main() {
 
 ### 进度条
 
-```rust
+```rust,ignore
 // 需要添加 indicatif 依赖
 use indicatif::ProgressBar;
 use std::thread;

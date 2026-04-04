@@ -35,7 +35,7 @@
 
 定义一个交通灯枚举：
 
-```rust
+```rust,ignore
 enum TrafficLight {
     Red,
     Yellow,
@@ -65,7 +65,7 @@ fn main() {
 
 ### 1. 枚举定义
 
-```rust
+```rust,ignore
 enum Direction {
     North,
     South,
@@ -78,7 +78,7 @@ enum Direction {
 
 ### 2. 带数据的变体
 
-```rust
+```rust,ignore
 enum Message {
     Quit,  // 无数据
     Move { x: i32, y: i32 },  // 命名字段
@@ -89,7 +89,7 @@ enum Message {
 
 ### 3. 模式匹配
 
-```rust
+```rust,ignore
 fn process_message(msg: Message) {
     match msg {
         Message::Quit => println!("退出"),
@@ -104,7 +104,7 @@ fn process_message(msg: Message) {
 
 Rust 用枚举处理空值：
 
-```rust
+```rust,ignore
 enum Option<T> {
     Some(T),
     None,
@@ -119,7 +119,7 @@ let absent: Option<i32> = None;
 
 错误处理：
 
-```rust
+```rust,ignore
 enum Result<T, E> {
     Ok(T),
     Err(E),
@@ -143,7 +143,7 @@ fn divide(a: i32, b: i32) -> Result<i32, String> {
 - **Product Types（积类型）**: 所有字段同时存在 → 就是 `struct`
 - **Sum Types（和类型）**: 每次只有一个变体有效 → 就是 `enum`
 
-```rust
+```rust,ignore
 // Product Type: 结构体包含所有字段
 struct Point { x: i32, y: i32 }  // x 和 y 同时存在
 
@@ -184,7 +184,7 @@ enum Result<T, E> {
 ```
 
 Rust 枚举（完整 ADT）:
-```rust
+```rust,ignore
 enum Message {
     Quit,                              // 无数据
     Move { x: i32, y: i32 },          // 命名字段
@@ -207,7 +207,7 @@ Rust 的枚举不是简单的整数常量，而是真正的代数数据类型。
 
 ### 错误 1: match 不完整
 
-```rust
+```rust,ignore
 enum Color {
     Red,
     Green,
@@ -230,7 +230,7 @@ error[E0004]: non-exhaustive patterns: `Color::Blue` not covered
 
 **修复**: 处理所有变体
 
-```rust
+```rust,ignore
 match c {
     Color::Red => println!("红色"),
     Color::Green => println("绿色"),
@@ -240,7 +240,7 @@ match c {
 
 ### 错误 2: 忘记解包数据
 
-```rust
+```rust,ignore
 let msg = Message::Write(String::from("hello"));
 
 match msg {
@@ -251,7 +251,7 @@ match msg {
 
 **修复**:
 
-```rust
+```rust,ignore
 match msg {
     Message::Write(text) => println("数据：{}", text),  // ✅
     _ => {}
@@ -260,7 +260,7 @@ match msg {
 
 ### 错误 3: if let 类型错误
 
-```rust
+```rust,ignore
 let some_value = Some(5);
 
 if let Some(x) = some_value {
@@ -279,14 +279,14 @@ if some_value == Some(5) {  // 需要 PartialEq trait
 
 定义一个表示一周七天的枚举：
 
-```rust
+```rust,ignore
 // TODO: 定义 WeekDay 枚举，包含周一到周日
 ```
 
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 enum WeekDay {
     Monday,
     Tuesday,
@@ -303,7 +303,7 @@ enum WeekDay {
 
 为 WeekDay 实现 is_weekend 方法：
 
-```rust
+```rust,ignore
 impl WeekDay {
     fn is_weekend(&self) -> bool {
         // TODO: 周六或周日返回 true
@@ -314,7 +314,7 @@ impl WeekDay {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 fn is_weekend(&self) -> bool {
     matches!(self, WeekDay::Saturday | WeekDay::Sunday)
 }
@@ -393,7 +393,7 @@ fn is_weekend(&self) -> bool {
 
 ### Result 枚举（实际使用）
 
-```rust
+```rust,ignore
 // 数据库操作中的 Result 使用
 // src/advance/sqlx_sample.rs
 
@@ -410,7 +410,7 @@ async fn query_data() -> Result<Vec<User>> {
 
 ### Option 枚举（实际使用）
 
-```rust
+```rust,ignore
 // 查找用户，可能不存在
 fn find_user(id: i64) -> Option<User> {
     // 可能返回 Some(user) 或 None

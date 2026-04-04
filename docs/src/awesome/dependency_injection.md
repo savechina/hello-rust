@@ -49,7 +49,7 @@ cargo add anyhow
 
 最简单的具体类型注入：
 
-```rust
+```rust,ignore
 // 定义 Repository Trait
 trait UserRepository {
     fn get_user(&self, id: u32) -> String;
@@ -114,7 +114,7 @@ Rust 依赖注入
 
 **原理**：使用泛型参数，在编译时确定具体类型。
 
-```rust
+```rust,ignore
 // 编译时确定类型，零运行时开销
 struct UserService<R: UserRepository> {
     repo: R,  // 具体类型，非 trait 对象
@@ -136,7 +136,7 @@ struct UserService<R: UserRepository> {
 
 **原理**：使用 `Arc<dyn Trait>` 包装 trait 对象，支持运行时切换。
 
-```rust
+```rust,ignore
 struct BusinessService {
     logger: Arc<dyn LoggerService>,      // 动态分发
     database: Arc<dyn DatabaseService>,  // 动态分发
@@ -158,7 +158,7 @@ struct BusinessService {
 
 **原理**：与 Arc 类似，但使用 `Box` 独占所有权。
 
-```rust
+```rust,ignore
 struct ServiceContainer {
     services: Mutex<HashMap<TypeId, Box<dyn Any + Send + Sync>>>,
 }
@@ -172,7 +172,7 @@ struct ServiceContainer {
 
 **原理**：基于 `TypeId` 的注册/解析系统，类似 Spring/IoC 容器。
 
-```rust
+```rust,ignore
 struct ServiceContainer {
     services: Mutex<HashMap<TypeId, Arc<dyn Any + Send + Sync>>>,
     factories: Mutex<HashMap<TypeId, Box<dyn Fn(&ServiceContainer) -> Arc<dyn Any + Send + Sync>>>>,
@@ -208,7 +208,7 @@ impl ServiceContainer {
 
 **完整使用示例**：
 
-```rust
+```rust,ignore
 let container = Arc::new(ServiceContainer::new());
 
 // 1. 注册具体服务
@@ -242,7 +242,7 @@ business.perform_task("Process data");
 
 ### 工厂模式与延迟初始化
 
-```rust
+```rust,ignore
 // 工厂在首次 resolve 时执行，之后缓存结果
 container.register_factory::<BusinessService, _>(|container| {
     // 自动解析依赖
@@ -276,7 +276,7 @@ container.register_factory::<BusinessService, _>(|container| {
 
 ### 错误 1: 在异步上下文中使用 std::sync::Mutex
 
-```rust
+```rust,ignore
 // ❌ 错误：阻塞异步运行时
 struct ServiceContainer {
     services: std::sync::Mutex<HashMap<TypeId, Arc<dyn Any>>>,
@@ -290,14 +290,14 @@ struct ServiceContainer {
 
 ### 错误 2: 循环依赖
 
-```rust
+```rust,ignore
 // A 依赖 B，B 依赖 A → 死锁
 // 解决：引入事件总线或消息队列解耦
 ```
 
 ### 错误 3: Trait 对象类型不匹配
 
-```rust
+```rust,ignore
 // ❌ 错误：TypeId 不匹配
 container.register::<Arc<dyn LoggerService>>(Arc::new(ConsoleLogger));
 // 注册和解析必须使用相同的 TypeId

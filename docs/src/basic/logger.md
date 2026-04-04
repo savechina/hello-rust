@@ -33,7 +33,7 @@
 
 ## 第一个例子
 
-```rust
+```rust,ignore
 // src/basic/logger_sample.rs
 
 use env_logger;
@@ -89,7 +89,7 @@ pub fn logger_print() {
 
 Rust 日志有 5 个级别（从低到高）：
 
-```rust
+```rust,ignore
 trace!("最详细的调试信息");  // TRACE - 最详细
 debug!("调试信息");          // DEBUG - 开发时使用
 info!("一般信息");           // INFO - 用户可见
@@ -99,7 +99,7 @@ error!("错误");              // ERROR - 严重影响
 
 ### 2. 初始化日志器
 
-```rust
+```rust,ignore
 fn main() {
     // 方式 1：简单初始化（使用环境变量控制级别）
     env_logger::init();
@@ -133,7 +133,7 @@ RUST_LOG=my_crate=debug,other_crate=info cargo run
 
 ### 错误 1: 忘记初始化
 
-```rust
+```rust,ignore
 fn main() {
     info!("This won't show up!");  // ❌ 没有初始化
 }
@@ -141,7 +141,7 @@ fn main() {
 
 **修复**：必须先初始化
 
-```rust
+```rust,ignore
 fn main() {
     env_logger::init();  // ✅
     info!("Now it works!");
@@ -159,7 +159,7 @@ env_logger = "0.10"
 
 ### 错误 3: 日志级别设置错误
 
-```rust
+```rust,ignore
 env_logger::Builder::new()
     .filter(None, log::LevelFilter::Error)  // ❌ 只显示错误
     .init();
@@ -169,7 +169,7 @@ debug!("This debug won't show");  // 被过滤了
 
 **修复**：根据需求选择级别
 
-```rust
+```rust,ignore
 .filter(None, log::LevelFilter::Debug)  // ✅ 显示 debug 及以上
 ```
 
@@ -179,7 +179,7 @@ debug!("This debug won't show");  // 被过滤了
 
 ### 练习 1: 设置日志级别
 
-```rust
+```rust,ignore
 // TODO: 设置日志级别为 Warn，观察输出变化
 env_logger::Builder::new()
     .filter(None, /* TODO: 这里填什么？ */)
@@ -189,7 +189,7 @@ env_logger::Builder::new()
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 .filter(None, log::LevelFilter::Warn)
 ```
 
@@ -198,7 +198,7 @@ env_logger::Builder::new()
 
 ### 练习 2: 格式化日志
 
-```rust
+```rust,ignore
 // TODO: 使用 format! 宏创建自定义日志消息
 let x = 42;
 info!(/* TODO: 自定义格式 */);
@@ -207,7 +207,7 @@ info!(/* TODO: 自定义格式 */);
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 info!("计算结果：{}", x);
 ```
 </details>
@@ -232,7 +232,7 @@ RUST_LOG=debug cargo run
 
 **A**: 使用 `env_logger` 的 `write_style` 配置：
 
-```rust
+```rust,ignore
 use std::fs::File;
 
 let file = File::create("app.log").unwrap();

@@ -31,7 +31,7 @@
 
 ## 第一个例子
 
-```rust
+```rust,ignore
 // src/basic/tracing_sample.rs
 
 use tracing::{debug, error, info, span, warn, Level};
@@ -92,7 +92,7 @@ pub fn shave_all(yaks: usize) -> usize {
 
 **Span** - 表示一段时间（函数执行、请求处理）：
 
-```rust
+```rust,ignore
 use tracing::{span, Level};
 
 let span = span!(Level::INFO, "my_span");
@@ -104,7 +104,7 @@ let _enter = span.enter();  // 进入 span
 
 **Event** - 表示一个时间点的事件：
 
-```rust
+```rust,ignore
 use tracing::info;
 
 info!("用户登录");  // 事件，没有时间跨度
@@ -114,7 +114,7 @@ info!("用户登录");  // 事件，没有时间跨度
 
 使用 `#[tracing::instrument]` 自动追踪函数：
 
-```rust
+```rust,ignore
 #[tracing::instrument]
 fn process_user(id: u64) -> User {
     // 自动创建 span，记录参数和返回值
@@ -127,7 +127,7 @@ fn process_user(id: u64) -> User {
 
 ### 3. 自定义字段
 
-```rust
+```rust,ignore
 // 在 span 中添加自定义字段
 let span = span!(
     Level::INFO,
@@ -139,7 +139,7 @@ let span = span!(
 
 ### 4. 异步支持
 
-```rust
+```rust,ignore
 #[tracing::instrument]
 async fn fetch_data(url: &str) -> Result<Data, Error> {
     // async 函数也能自动追踪
@@ -153,14 +153,14 @@ async fn fetch_data(url: &str) -> Result<Data, Error> {
 
 ### 错误 1: 忘记 enter
 
-```rust
+```rust,ignore
 let span = span!(Level::INFO, "my_span");
 // ❌ 没有调用 enter()，span 不会生效
 ```
 
 **修复**：
 
-```rust
+```rust,ignore
 let span = span!(Level::INFO, "my_span");
 let _enter = span.enter();  // ✅
 ```
@@ -176,7 +176,7 @@ tracing-subscriber = "0.3"  # 用于输出
 
 ### 错误 3: 在同步代码中使用异步追踪
 
-```rust
+```rust,ignore
 #[tokio::main]
 async fn main() {
     // ❌ 忘记初始化 subscriber
@@ -186,7 +186,7 @@ async fn main() {
 
 **修复**：
 
-```rust
+```rust,ignore
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();  // ✅
@@ -200,7 +200,7 @@ async fn main() {
 
 ### 练习 1: 创建 span
 
-```rust
+```rust,ignore
 // TODO: 为这个函数添加追踪
 fn process_order(order_id: u64) -> Result<(), Error> {
     // TODO: 创建 span，记录 order_id
@@ -215,7 +215,7 @@ fn process_order(order_id: u64) -> Result<(), Error> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let _span = span!(Level::INFO, "process_order", order_id = order_id);
 ```
 </details>
@@ -241,7 +241,7 @@ let _span = span!(Level::INFO, "process_order", order_id = order_id);
 
 **A**:
 
-```rust
+```rust,ignore
 use tracing_subscriber::fmt;
 use std::fs::File;
 

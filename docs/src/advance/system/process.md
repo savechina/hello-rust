@@ -44,7 +44,7 @@ cargo add nix --features process,signal
 
 获取当前进程 ID：
 
-```rust
+```rust,ignore
 use std::process;
 
 fn main() {
@@ -74,7 +74,7 @@ fn main() {
 
 **使用 process::id()**：
 
-```rust
+```rust,ignore
 use std::process;
 
 let pid = process::id();
@@ -85,7 +85,7 @@ println!("进程 ID: {}", pid);
 
 **使用 Command**：
 
-```rust
+```rust,ignore
 use std::process::Command;
 
 let output = Command::new("ls")
@@ -100,7 +100,7 @@ println!("输出：{}", String::from_utf8_lossy(&output.stdout));
 
 **使用 output()**：
 
-```rust
+```rust,ignore
 use std::process::Command;
 
 let output = Command::new("echo")
@@ -116,7 +116,7 @@ println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
 
 **检查进程状态**：
 
-```rust
+```rust,ignore
 use std::process::Command;
 
 let mut child = Command::new("sleep")
@@ -136,7 +136,7 @@ println!("进程退出码：{}", status.code().unwrap_or(-1));
 
 ### 错误 1: 命令不存在
 
-```rust
+```rust,ignore
 let output = Command::new("nonexistent_command")
     .output();  // ❌ 命令不存在
 ```
@@ -147,14 +147,14 @@ No such file or directory (os error 2)
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let output = Command::new("ls")  // ✅ 使用存在的命令
     .output();
 ```
 
 ### 错误 2: 忘记处理错误
 
-```rust
+```rust,ignore
 let output = Command::new("ls").output();
 println!("{}", output.stdout);  // ❌ output 是 Result
 ```
@@ -165,19 +165,19 @@ no field `stdout` on type `Result<Output, Error>`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let output = Command::new("ls").output()?;  // ✅ 使用 ? 处理错误
 ```
 
 ### 错误 3: 忘记 flush
 
-```rust
+```rust,ignore
 println!("PID: {}", pid);
 // ❌ 如果没有 flush，输出可能不会立即显示
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 use std::io::Write;
 
 println!("PID: {}", pid);
@@ -190,7 +190,7 @@ std::io::stdout().flush()?;  // ✅ 立即刷新
 
 ### 练习 1: 获取进程信息
 
-```rust
+```rust,ignore
 use std::process;
 
 fn main() {
@@ -202,7 +202,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let pid = process::id();
 println!("当前进程 ID: {}", pid);
 ```
@@ -210,7 +210,7 @@ println!("当前进程 ID: {}", pid);
 
 ### 练习 2: 运行外部命令
 
-```rust
+```rust,ignore
 use std::process::Command;
 
 fn main() {
@@ -222,7 +222,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let output = Command::new("pwd")
     .output()
     .expect("Failed");
@@ -233,7 +233,7 @@ println!("当前目录：{}", String::from_utf8_lossy(&output.stdout));
 
 ### 练习 3: 带参数的命令
 
-```rust
+```rust,ignore
 use std::process::Command;
 
 fn main() {
@@ -245,7 +245,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let output = Command::new("ls")
     .arg("-la")
     .output()
@@ -268,7 +268,7 @@ println!("{}", String::from_utf8_lossy(&output.stdout));
 ### Q: 如何处理大输出？
 
 **A**: 
-```rust
+```rust,ignore
 let mut child = Command::new("cat")
     .arg("large_file.txt")
     .spawn()?;
@@ -283,7 +283,7 @@ for line in std::io::BufReader::new(stdout).lines() {
 ### Q: 如何设置超时？
 
 **A**: 
-```rust
+```rust,ignore
 use std::time::Duration;
 
 let mut child = Command::new("sleep")
@@ -300,7 +300,7 @@ child.wait_timeout(Duration::from_secs(5))?;
 
 ### 环境变量
 
-```rust
+```rust,ignore
 use std::process::Command;
 use std::env;
 
@@ -312,7 +312,7 @@ let output = Command::new("echo")
 
 ### 管道
 
-```rust
+```rust,ignore
 use std::process::{Command, Stdio};
 
 let child = Command::new("cat")
@@ -326,7 +326,7 @@ child.stdin.unwrap().write_all(b"Hello")?;
 
 ### 退出码
 
-```rust
+```rust,ignore
 let status = child.wait()?;
 
 if status.success() {

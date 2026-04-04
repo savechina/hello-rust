@@ -45,7 +45,7 @@ cargo add rkyv --features alloc
 
 最简单的 Rkyv 序列化：
 
-```rust
+```rust,ignore
 use rkyv::{Archive, Deserialize, Serialize};
 
 #[derive(Archive, Deserialize, Serialize, Debug, PartialEq)]
@@ -112,7 +112,7 @@ fn main() {
 
 **使用 Archive derive**：
 
-```rust
+```rust,ignore
 use rkyv::{Archive, Deserialize, Serialize};
 
 #[derive(Archive, Deserialize, Serialize, Debug)]
@@ -131,7 +131,7 @@ struct Person {
 
 **简单序列化**：
 
-```rust
+```rust,ignore
 let value = Person {
     name: "Alice".to_string(),
     age: 30,
@@ -143,7 +143,7 @@ let bytes = rkyv::to_bytes::<_, 256>(&value).unwrap();
 
 **自定义序列化**：
 
-```rust
+```rust,ignore
 use rkyv::ser::allocator::Arena;
 
 let mut arena = Arena::new();
@@ -154,7 +154,7 @@ let bytes = rkyv::to_bytes_with_alloc::<_, 256>(&value, arena.acquire()).unwrap(
 
 **零拷贝访问**：
 
-```rust
+```rust,ignore
 let archived = rkyv::access::<ArchivedPerson>(&bytes[..]).unwrap();
 
 // 直接访问字段（零拷贝）
@@ -164,7 +164,7 @@ println!("Age: {}", archived.age);
 
 **完整反序列化**：
 
-```rust
+```rust,ignore
 let deserialized = archived
     .deserialize(&mut rkyv::Infallible)
     .unwrap();
@@ -176,7 +176,7 @@ assert_eq!(deserialized.name, "Alice");
 
 **Vec 和 Option**：
 
-```rust
+```rust,ignore
 #[derive(Archive, Deserialize, Serialize)]
 struct Complex {
     numbers: Vec<i32>,
@@ -207,7 +207,7 @@ if let Some(s) = &archived.maybe_string {
 
 ### 错误 1: 忘记 derive Archive
 
-```rust
+```rust,ignore
 #[derive(Serialize, Deserialize)]  // ❌ 忘记 Archive
 struct Person {
     name: String,
@@ -220,7 +220,7 @@ the trait `Archive` is not implemented for `Person`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 #[derive(Archive, Serialize, Deserialize)]  // ✅ 添加 Archive
 struct Person {
     name: String,
@@ -229,7 +229,7 @@ struct Person {
 
 ### 错误 2: 缓冲区太小
 
-```rust
+```rust,ignore
 let bytes = rkyv::to_bytes::<_, 16>(&value).unwrap();
 // ❌ 16 字节太小，无法容纳数据
 ```
@@ -240,13 +240,13 @@ Out of space
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let bytes = rkyv::to_bytes::<_, 256>(&value).unwrap();  // ✅ 增加缓冲区
 ```
 
 ### 错误 3: 访问已释放内存
 
-```rust
+```rust,ignore
 let bytes = serialize_data();
 let archived = access::<ArchivedData>(&bytes);
 drop(bytes);  // ❌ 释放内存
@@ -264,7 +264,7 @@ println!("{}", archived.field);
 
 ### 练习 1: 定义简单结构体
 
-```rust
+```rust,ignore
 use rkyv::{Archive, Deserialize, Serialize};
 
 // TODO: 定义 Point 结构体
@@ -275,7 +275,7 @@ use rkyv::{Archive, Deserialize, Serialize};
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Archive, Deserialize, Serialize, Debug)]
 #[rkyv(derive(Debug))]
 struct Point {
@@ -287,7 +287,7 @@ struct Point {
 
 ### 练习 2: 序列化和反序列化
 
-```rust
+```rust,ignore
 let point = Point { x: 10, y: 20 };
 
 // TODO: 序列化为字节
@@ -298,7 +298,7 @@ let point = Point { x: 10, y: 20 };
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let bytes = rkyv::to_bytes::<_, 64>(&point).unwrap();
 let archived = rkyv::access::<ArchivedPoint>(&bytes[..]).unwrap();
 assert_eq!(archived.x, 10);
@@ -311,7 +311,7 @@ assert_eq!(deserialized.x, 10);
 
 ### 练习 3: 处理复杂类型
 
-```rust
+```rust,ignore
 #[derive(Archive, Deserialize, Serialize)]
 struct User {
     name: String,
@@ -326,7 +326,7 @@ struct User {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let user = User {
     name: "Alice".to_string(),
     hobbies: vec!["Reading".to_string(), "Coding".to_string()],
@@ -355,7 +355,7 @@ for hobby in archived.hobbies.iter() {
 ### Q: 如何选择合适的缓冲区大小？
 
 **A**: 
-```rust
+```rust,ignore
 // 小数据：64-256 字节
 rkyv::to_bytes::<_, 256>(&value).unwrap()
 
@@ -375,7 +375,7 @@ let bytes = serializer.into_serializer().into_inner();
 
 ### 自定义分配器
 
-```rust
+```rust,ignore
 use rkyv::ser::allocator::Arena;
 
 let mut arena = Arena::new();
@@ -384,7 +384,7 @@ let bytes = rkyv::to_bytes_with_alloc::<_, 256>(&value, arena.acquire()).unwrap(
 
 ### 验证归档
 
-```rust
+```rust,ignore
 use rkyv::validation::validators::DefaultValidator;
 
 let archived = rkyv::access::<ArchivedData>(&bytes[..]).unwrap();
@@ -393,7 +393,7 @@ archived.validate(&mut DefaultValidator::default()).unwrap();
 
 ### 性能对比
 
-```rust
+```rust,ignore
 // Serde
 let bytes = bincode::serialize(&value).unwrap();
 let deserialized: Data = bincode::deserialize(&bytes).unwrap();

@@ -49,7 +49,7 @@ cargo add chrono
 
 最常用的 UUID v4 随机生成：
 
-```rust
+```rust,ignore
 use uuid::Uuid;
 
 fn main() {
@@ -78,7 +78,7 @@ fn main() {
 
 ### UUID v4 - 随机生成
 
-```rust
+```rust,ignore
 // 最常用的 UUID 版本，使用加密安全的随机数生成器
 let uuid_v4 = Uuid::new_v4();
 println!("Version 4 UUID: {}", uuid_v4);
@@ -87,7 +87,7 @@ println!("Version 4 UUID: {}", uuid_v4);
 
 ### UUID v3/v5 - 基于名称的确定性生成
 
-```rust
+```rust,ignore
 // 使用命名空间和名称生成确定性 UUID
 // 相同输入总是产生相同输出
 let namespace_url = Uuid::parse_str("6ba7b810-9dad-11d1-80b4-00c04fd430c8")?;
@@ -104,7 +104,7 @@ println!("Version 5 UUID: {}", uuid_v5);
 
 ### UUID v7 - 时间排序（现代标准）
 
-```rust
+```rust,ignore
 // 最简单的 v7 生成方式
 let uuid_v7 = Uuid::now_v7();
 println!("UUID v7: {}", uuid_v7);
@@ -125,7 +125,7 @@ println!("UUID v7 (custom timestamp): {}", uuid_v7_custom);
 
 ### NIL UUID - 特殊值
 
-```rust
+```rust,ignore
 // 全零 UUID，表示"空"或"无效"
 let uuid_nil = Uuid::nil();
 println!("NIL UUID: {}", uuid_nil);
@@ -134,7 +134,7 @@ println!("NIL UUID: {}", uuid_nil);
 
 ### URN 格式和解析
 
-```rust
+```rust,ignore
 // URN (Uniform Resource Name) 格式
 let uuid = Uuid::new_v4();
 println!("URN: {}", uuid.urn());
@@ -150,7 +150,7 @@ match Uuid::parse_str(uuid_str) {
 
 ### 基于业务字段生成 GUID
 
-```rust
+```rust,ignore
 /// 基于多个业务字段生成确定性 GUID
 pub fn generate_guid_from_fields(
     tenant_id: &str,

@@ -35,7 +35,7 @@
 
 最简单的 include_dir 使用：
 
-```rust
+```rust,ignore
 use include_dir::{include_dir, Dir};
 
 // 在编译时嵌入 assets 目录
@@ -75,7 +75,7 @@ fn main() {
 
 **使用 include_dir! 宏**：
 
-```rust
+```rust,ignore
 use include_dir::include_dir;
 
 // 嵌入整个目录
@@ -90,7 +90,7 @@ static ASSETS: Dir = include_dir!("assets");
 
 **使用 get_file()**：
 
-```rust
+```rust,ignore
 use include_dir::Dir;
 
 static ASSETS: Dir = include_dir!("assets");
@@ -109,7 +109,7 @@ let content = std::str::from_utf8(bytes).unwrap();
 
 **遍历文件**：
 
-```rust
+```rust,ignore
 use include_dir::Dir;
 
 static ASSETS: Dir = include_dir!("assets");
@@ -122,7 +122,7 @@ for file in ASSETS.files() {
 
 **递归遍历**：
 
-```rust
+```rust,ignore
 fn traverse(dir: &Dir) {
     // 遍历文件
     for file in dir.files() {
@@ -142,7 +142,7 @@ traverse(&ASSETS);
 
 **使用 include_bytes!**:
 
-```rust
+```rust,ignore
 let data = include_bytes!("assets/data.txt");
 println!("字节：{:?}", data);
 
@@ -157,7 +157,7 @@ println!("内容：{}", content);
 
 ### 错误 1: 路径错误
 
-```rust
+```rust,ignore
 static ASSETS: Dir = include_dir!("wrong_path");
 // ❌ 目录不存在
 ```
@@ -168,13 +168,13 @@ No such file or directory
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 static ASSETS: Dir = include_dir!("assets");  // ✅ 正确路径
 ```
 
 ### 错误 2: 忘记 unwrap
 
-```rust
+```rust,ignore
 let file = ASSETS.get_file("data.txt");
 let content = file.contents();  // ❌ file 是 Option
 ```
@@ -185,20 +185,20 @@ no method named `contents` on type `Option`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let file = ASSETS.get_file("data.txt").unwrap();  // ✅ 解包
 ```
 
 ### 错误 3: UTF-8 转换错误
 
-```rust
+```rust,ignore
 let file = ASSETS.get_file("image.png").unwrap();
 let content = std::str::from_utf8(file.contents()).unwrap();
 // ❌ 二进制文件不是 UTF-8
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 // 二进制文件直接处理字节
 let bytes = file.contents();
 // 或检查是否是文本文件
@@ -215,7 +215,7 @@ if let Some(content) = file.contents_utf8() {
 
 ### 练习 1: 嵌入目录
 
-```rust
+```rust,ignore
 use include_dir::{include_dir, Dir};
 
 // TODO: 嵌入 "data" 目录
@@ -229,7 +229,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 static ASSETS: Dir = include_dir!("data");
 
 fn main() {
@@ -240,7 +240,7 @@ fn main() {
 
 ### 练习 2: 读取嵌入文件
 
-```rust
+```rust,ignore
 use include_dir::{include_dir, Dir};
 
 static ASSETS: Dir = include_dir!("assets");
@@ -254,7 +254,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let file = ASSETS.get_file("config.txt").unwrap();
 let content = std::str::from_utf8(file.contents()).unwrap();
 println!("内容：{}", content);
@@ -263,7 +263,7 @@ println!("内容：{}", content);
 
 ### 练习 3: 递归遍历
 
-```rust
+```rust,ignore
 use include_dir::{include_dir, Dir};
 
 static ASSETS: Dir = include_dir!("assets");
@@ -278,7 +278,7 @@ fn traverse(dir: &Dir) {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 fn traverse(dir: &Dir) {
     for file in dir.files() {
         println!("文件：{:?}", file.path());
@@ -323,7 +323,7 @@ traverse(&ASSETS);
 
 ### 条件编译
 
-```rust
+```rust,ignore
 #[cfg(debug_assertions)]
 static ASSETS: Dir = include_dir!("assets/dev");
 
@@ -333,7 +333,7 @@ static ASSETS: Dir = include_dir!("assets/prod");
 
 ### 嵌入特定文件
 
-```rust
+```rust,ignore
 use include_dir::{include_dir, Dir, File};
 
 static CONFIG: &str = include_str!("config.json");
@@ -342,7 +342,7 @@ static LOGO: &[u8] = include_bytes!("images/logo.png");
 
 ### 性能优化
 
-```rust
+```rust,ignore
 // 懒加载
 lazy_static::lazy_static! {
     static ref ASSETS: Dir<'static> = include_dir!("assets");

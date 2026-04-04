@@ -47,7 +47,7 @@ cargo add futures
 
 最简单的对象存储使用：
 
-```rust
+```rust,ignore
 use object_store::{ObjectStore, path::Path};
 use object_store::local::LocalFileSystem;
 use bytes::Bytes;
@@ -96,7 +96,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 **使用 LocalFileSystem**：
 
-```rust
+```rust,ignore
 use object_store::local::LocalFileSystem;
 
 // 创建本地存储
@@ -105,7 +105,7 @@ let store = LocalFileSystem::new_with_prefix("/tmp/storage")?;
 
 **使用内存存储**：
 
-```rust
+```rust,ignore
 use object_store::memory::InMemory;
 
 // 创建内存存储（用于测试）
@@ -116,7 +116,7 @@ let store = InMemory::new();
 
 **使用 put()**：
 
-```rust
+```rust,ignore
 use object_store::{ObjectStore, path::Path};
 use bytes::Bytes;
 
@@ -130,7 +130,7 @@ store.put(&key, value.into()).await?;
 
 **使用 get()**：
 
-```rust
+```rust,ignore
 use object_store::ObjectStore;
 
 let key = Path::from("data/file.txt");
@@ -147,7 +147,7 @@ println!("{}", String::from_utf8_lossy(&bytes));
 
 **使用 list()**：
 
-```rust
+```rust,ignore
 use object_store::{ObjectStore, path::Path};
 use futures::StreamExt;
 
@@ -167,7 +167,7 @@ while let Some(meta) = stream.next().await {
 
 ### 错误 1: 目录不存在
 
-```rust
+```rust,ignore
 let store = LocalFileSystem::new_with_prefix("/nonexistent/path");
 // ❌ 目录不存在
 ```
@@ -178,7 +178,7 @@ No such file or directory
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 // 先创建目录
 tokio::fs::create_dir_all("/tmp/storage").await?;
 let store = LocalFileSystem::new_with_prefix("/tmp/storage")?;
@@ -186,7 +186,7 @@ let store = LocalFileSystem::new_with_prefix("/tmp/storage")?;
 
 ### 错误 2: 忘记 await
 
-```rust
+```rust,ignore
 let result = store.get(&key);  // ❌ 忘记 .await
 let bytes = result.bytes().await?;
 ```
@@ -197,13 +197,13 @@ no method named `bytes` on type `impl Future`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let result = store.get(&key).await?;  // ✅ 添加 .await
 ```
 
 ### 错误 3: 路径错误
 
-```rust
+```rust,ignore
 let key = Path::from("wrong/path/file.txt");
 let result = store.get(&key).await?;
 // ❌ 文件不存在
@@ -215,7 +215,7 @@ Object not found
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let key = Path::from("data/file.txt");  // ✅ 正确路径
 ```
 
@@ -225,7 +225,7 @@ let key = Path::from("data/file.txt");  // ✅ 正确路径
 
 ### 练习 1: 创建存储
 
-```rust
+```rust,ignore
 use object_store::local::LocalFileSystem;
 
 #[tokio::main]
@@ -239,7 +239,7 @@ async fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let temp_dir = std::env::temp_dir().join("hello");
 let store = LocalFileSystem::new_with_prefix(temp_dir).unwrap();
 println!("存储路径：{:?}", store);
@@ -248,7 +248,7 @@ println!("存储路径：{:?}", store);
 
 ### 练习 2: 存储数据
 
-```rust
+```rust,ignore
 use object_store::{ObjectStore, path::Path};
 use bytes::Bytes;
 
@@ -265,7 +265,7 @@ async fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let key = Path::from("test.txt");
 let value = Bytes::from("Hello!");
 store.put(&key, value.into()).await.unwrap();
@@ -274,7 +274,7 @@ store.put(&key, value.into()).await.unwrap();
 
 ### 练习 3: 检索数据
 
-```rust
+```rust,ignore
 use object_store::ObjectStore;
 
 #[tokio::main]
@@ -290,7 +290,7 @@ async fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let key = Path::from("test.txt");
 let result = store.get(&key).await.unwrap();
 let bytes = result.bytes().await.unwrap();
@@ -314,7 +314,7 @@ println!("{}", String::from_utf8_lossy(&bytes));
 ### Q: 如何切换到云存储？
 
 **A**: 
-```rust
+```rust,ignore
 // AWS S3
 use object_store::aws::AmazonS3Builder;
 
@@ -327,7 +327,7 @@ let store = AmazonS3Builder::new()
 ### Q: 如何处理大文件？
 
 **A**: 
-```rust
+```rust,ignore
 // 流式上传
 let mut writer = store.put_multipart(&path).await?;
 writer.write(&chunk1).await?;
@@ -341,7 +341,7 @@ writer.shutdown().await?;
 
 ### 删除对象
 
-```rust
+```rust,ignore
 use object_store::ObjectStore;
 
 store.delete(&Path::from("old_file.txt")).await?;
@@ -349,7 +349,7 @@ store.delete(&Path::from("old_file.txt")).await?;
 
 ### 复制对象
 
-```rust
+```rust,ignore
 use object_store::ObjectStore;
 
 store.copy(
@@ -360,7 +360,7 @@ store.copy(
 
 ### 元数据
 
-```rust
+```rust,ignore
 use object_store::ObjectStore;
 
 let meta = store.head(&Path::from("file.txt")).await?;

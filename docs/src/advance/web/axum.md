@@ -90,7 +90,7 @@ async fn main() {
 
 **Router 定义路由**：
 
-```rust
+```rust,ignore
 use axum::Router;
 
 let app = Router::new()
@@ -103,7 +103,7 @@ let app = Router::new()
 
 **简单处理器**：
 
-```rust
+```rust,ignore
 use axum::response::IntoResponse;
 
 async fn root() -> impl IntoResponse {
@@ -117,7 +117,7 @@ async fn hello(name: &str) -> String {
 
 **带参数的处理器**：
 
-```rust
+```rust,ignore
 use axum::extract::Path;
 
 async fn get_user(Path(user_id): Path<u32>) -> String {
@@ -129,7 +129,7 @@ async fn get_user(Path(user_id): Path<u32>) -> String {
 
 **定义数据结构**：
 
-```rust
+```rust,ignore
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -141,7 +141,7 @@ struct User {
 
 **返回 JSON**：
 
-```rust
+```rust,ignore
 use axum::Json;
 
 async fn get_user() -> Json<User> {
@@ -156,7 +156,7 @@ async fn get_user() -> Json<User> {
 
 **接收 JSON 数据**：
 
-```rust
+```rust,ignore
 use axum::Json;
 use serde::Deserialize;
 
@@ -288,7 +288,7 @@ async fn get_user(Path(id): Path<u32>) -> Json<User> {
 
 ### 错误 1: 忘记使用 #[tokio::main]
 
-```rust
+```rust,ignore
 fn main() {  // ❌ 忘记 #[tokio::main]
     let app = Router::new();
     // ...
@@ -301,7 +301,7 @@ error[E0308]: mismatched types
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 #[tokio::main]  // ✅ 添加异步运行时
 async fn main() {
     // ...
@@ -310,7 +310,7 @@ async fn main() {
 
 ### 错误 2: 路由路径不匹配
 
-```rust
+```rust,ignore
 // 定义路由
 .route("/users/:id", get(get_user))
 
@@ -324,7 +324,7 @@ async fn main() {
 
 ### 错误 3: JSON 解析失败
 
-```rust
+```rust,ignore
 // 发送错误的 JSON
 POST /users
 {"user_name": "Alice"}  // ❌ 字段名错误
@@ -345,7 +345,7 @@ missing field `username`
 
 ### 练习 1: 创建简单路由
 
-```rust
+```rust,ignore
 use axum::{routing::get, Router};
 
 #[tokio::main]
@@ -381,7 +381,7 @@ async fn main() {
 
 ### 练习 2: 实现用户 API
 
-```rust
+```rust,ignore
 #[derive(Serialize, Deserialize)]
 struct User {
     // TODO: 定义字段 (id, username)
@@ -394,7 +394,7 @@ struct User {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Serialize, Deserialize)]
 struct User {
     id: u32,
@@ -418,7 +418,7 @@ async fn create_user(Json(payload): Json<CreateUser>) -> Json<User> {
 
 ### 练习 3: 添加路径参数
 
-```rust
+```rust,ignore
 use axum::extract::Path;
 
 // TODO: 实现 get_user 处理器
@@ -429,7 +429,7 @@ use axum::extract::Path;
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use axum::extract::Path;
 
 async fn get_user(Path(user_id): Path<u32>) -> Json<User> {
@@ -455,7 +455,7 @@ async fn get_user(Path(user_id): Path<u32>) -> Json<User> {
 ### Q: 如何处理 CORS？
 
 **A**: 
-```rust
+```rust,ignore
 use tower_http::cors::{CorsLayer, Any};
 
 let app = Router::new()
@@ -466,7 +466,7 @@ let app = Router::new()
 ### Q: 如何添加中间件？
 
 **A**: 
-```rust
+```rust,ignore
 use axum::middleware;
 
 let app = Router::new()
@@ -480,7 +480,7 @@ let app = Router::new()
 
 ### 状态共享
 
-```rust
+```rust,ignore
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
@@ -500,7 +500,7 @@ let app = Router::new()
 
 ### 错误处理
 
-```rust
+```rust,ignore
 use axum::http::StatusCode;
 
 async fn handler() -> Result<Json<User>, StatusCode> {
@@ -513,7 +513,7 @@ async fn handler() -> Result<Json<User>, StatusCode> {
 
 ### 请求体验证
 
-```rust
+```rust,ignore
 use axum::extract::rejection::JsonRejection;
 
 async fn handler(

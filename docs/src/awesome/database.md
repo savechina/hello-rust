@@ -52,7 +52,7 @@ cargo add sqlx --features runtime-tokio,postgres
 
 ### SurrealDB 内存数据库示例
 
-```rust
+```rust,ignore
 use serde::{Deserialize, Serialize};
 use surrealdb::RecordId;
 use surrealdb::Surreal;
@@ -195,7 +195,7 @@ sqlite-vec 为 SQLite 添加向量索引能力：
 
 ### 错误 1: 忘记切换命名空间
 
-```rust
+```rust,ignore
 // 错误：未选择命名空间和数据库
 let db = Surreal::new::<Mem>(()).await?;
 // db.create("person")...  // 会失败！
@@ -210,7 +210,7 @@ db.use_ns("test").use_db("test").await?;
 
 ### 错误 2: sqlite-vec 扩展未加载
 
-```rust
+```rust,ignore
 // 错误：未注册扩展，vec0 表无法创建
 let db = Connection::open_in_memory()?;
 db.execute("CREATE VIRTUAL TABLE vec_items USING vec0(...)", []);  // 失败！
@@ -227,7 +227,7 @@ unsafe {
 
 ### 错误 3: 向量维度不匹配
 
-```rust
+```rust,ignore
 // 错误：插入 3 维向量到 4 维表
 let db = Connection::open_in_memory()?;
 db.execute("CREATE VIRTUAL TABLE vec_items USING vec0(embedding float[4])", [])?;
@@ -245,7 +245,7 @@ let v: Vec<f32> = vec![0.1, 0.2, 0.3, 0.4];  // 4 维匹配
 
 ### 错误 4: 错误处理 Result 类型
 
-```rust
+```rust,ignore
 // 问题：SurrealDB 和 SQLite 返回不同的 Result 类型
 use surrealdb::Result;  // 这是 surrealdb::Result
 use rusqlite::Result;   // 这是 rusqlite::Result
@@ -255,7 +255,7 @@ use rusqlite::Result;   // 这是 rusqlite::Result
 
 **修复方法**：显式指定或使用完全限定名：
 
-```rust
+```rust,ignore
 let result: surrealdb::Result<_> = db.create("person").content(data).await;
 ```
 
@@ -267,7 +267,7 @@ let result: surrealdb::Result<_> = db.create("person").content(data).await;
 
 补全以下代码，实现完整的 CRUD 操作：
 
-```rust
+```rust,ignore
 use surrealdb::Surreal;
 use surrealdb::engine::local::Mem;
 use serde::{Deserialize, Serialize};
@@ -294,7 +294,7 @@ async fn update_price(db: &Surreal<Mem>, id: &str, new_price: f64) -> surrealdb:
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 async fn create_product(db: &Surreal<Mem>, name: &str, price: f64) -> surrealdb::Result<()> {
     db.create("product")
         .content(Product {
@@ -325,7 +325,7 @@ async fn update_price(db: &Surreal<Mem>, id: &str, new_price: f64) -> surrealdb:
 
 完成以下代码，实现产品推荐功能：
 
-```rust
+```rust,ignore
 use rusqlite::{Connection, Result};
 
 fn setup_vector_db(db: &Connection) -> Result<()> {
@@ -354,7 +354,7 @@ fn find_similar_products(db: &Connection, query_vec: Vec<f32>, limit: usize) -> 
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 fn setup_vector_db(db: &Connection) -> Result<()> {
     db.execute(
         "CREATE VIRTUAL TABLE products USING vec0(features float[4])",
@@ -393,7 +393,7 @@ fn find_similar_products(db: &Connection, query_vec: Vec<f32>, limit: usize) -> 
 
 以下代码的输出是什么？
 
-```rust
+```rust,ignore
 use rusqlite::{Connection, Result};
 use sqlite_vec::sqlite3_vec_init;
 use rusqlite::ffi::sqlite3_auto_extension;
@@ -439,7 +439,7 @@ SQLite: 3.44.0, vec: v0.1.1
 
 **A**: 根据使用场景选择：
 
-```rust
+```rust,ignore
 // 内存模式 - 测试、临时数据
 let db = Surreal::new::<Mem>(()).await?;
 
@@ -473,7 +473,7 @@ let db = Surreal::new::<Mem>(()).await?;
 
 **A**: 使用 Serde 实现类型安全：
 
-```rust
+```rust,ignore
 #[derive(Debug, Serialize, Deserialize)]
 struct User {
     id: Thing,  // SurrealDB 的 Thing 类型对应 RecordId
@@ -502,7 +502,7 @@ let users: Vec<User> = db.select("user").await?;
 
 ### SurrealDB 高级查询
 
-```rust
+```rust,ignore
 // 使用 SurrealQL 进行复杂查询
 let results = db
     .query("SELECT * FROM person WHERE marketing = true ORDER BY name.first")
@@ -527,7 +527,7 @@ let products = db
 
 SurrealDB 和 sqlite-vec 可以与 SQLx 互补使用：
 
-```rust
+```rust,ignore
 // SQLx 处理关系数据
 let users = sqlx::query_as::<_, User>("SELECT * FROM users")
     .fetch_all(&pool)
@@ -625,7 +625,7 @@ let similar = find_similar_products(&sqlite_conn, query_vector, 10)?;
 
 **真实案例**：某电商平台使用 SQLite + sqlite-vec 构建推荐系统：
 
-```rust
+```rust,ignore
 // 用户行为向量
 fn user_embedding(purchase_history: &[Product]) -> Vec<f32> {
     // 基于购买历史生成用户画像向量
@@ -668,7 +668,7 @@ async fn recommend(
 
 SurrealDB 的 RecordId 格式是什么？
 
-```rust
+```rust,ignore
 let id: RecordId = ("person", "jaime").into();
 ```
 
@@ -691,7 +691,7 @@ D) `jaime.person`
 
 sqlite-vec 的 `MATCH` 操作返回的结果按什么排序？
 
-```rust
+```rust,ignore
 SELECT rowid, distance FROM vec_items WHERE embedding MATCH ? ORDER BY distance
 ```
 

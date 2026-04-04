@@ -10,7 +10,7 @@
 
 ### 练习 1：定义数据模型
 
-```rust
+```rust,ignore
 // TODO: 定义 Task 结构体
 // 字段：id (u64), title (String), completed (bool), created_at (String)
 // 派生：Serialize, Deserialize, Debug, Clone
@@ -22,7 +22,7 @@
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 
@@ -53,7 +53,7 @@ impl TaskStore {
 
 ### 练习 2：实现 CRUD 操作
 
-```rust
+```rust,ignore
 // TODO: 实现 TaskStore 的方法
 // - create_task(&mut self, title: String) -> Task
 // - get_task(&self, id: u64) -> Option<&Task>
@@ -65,7 +65,7 @@ impl TaskStore {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 impl TaskStore {
     fn create_task(&mut self, title: String) -> Task {
         let task = Task {
@@ -104,7 +104,7 @@ impl TaskStore {
 
 ### 练习 3：异步任务处理
 
-```rust
+```rust,ignore
 // TODO: 使用 tokio 实现异步任务保存
 // - save_to_file(&self, path: &str) -> Result<(), Box<dyn Error>>
 // - load_from_file(&mut self, path: &str) -> Result<(), Box<dyn Error>>
@@ -114,7 +114,7 @@ impl TaskStore {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use tokio::fs;
 use std::error::Error;
 
@@ -140,7 +140,7 @@ impl TaskStore {
 
 ### 问题 1：Future 惰性
 
-```rust
+```rust,ignore
 async fn fetch_data() -> String {
     println!("Fetching...");
     "data".to_string()
@@ -188,7 +188,7 @@ Future 是惰性的，不调用 `.await` 或 `block_on` 就不会执行。`fetch
 
 ### 问题 4：宏卫生
 
-```rust
+```rust,ignore
 macro_rules! create_var {
     () => {
         let x = 42;
@@ -216,7 +216,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Serialize, Deserialize)]
 struct User {
     #[serde(rename = "user_name")]

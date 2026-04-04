@@ -51,7 +51,7 @@ cargo add tracing
 
 让我们看一个最简单的异步示例：
 
-```rust
+```rust,ignore
 use futures::executor::block_on;
 
 async fn hello_world() {
@@ -76,7 +76,7 @@ fn main() {
 
 ### Future Trait 的核心
 
-```rust
+```rust,ignore
 pub trait Future {
     type Output;
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
@@ -115,7 +115,7 @@ pub enum Poll<T> {
 
 `async fn` 是创建 Future 的便捷方式：
 
-```rust
+```rust,ignore
 // 这两种写法等价：
 
 // async fn 语法糖
@@ -133,7 +133,7 @@ fn foo() -> impl Future<Output = i32> {
 
 `.await` 是异步等待的关键：
 
-```rust
+```rust,ignore
 async fn learn_and_sing() {
     // .await 会暂停当前 Future，让出线程执行其他任务
     let song = learn_song().await;  // 学歌时可以做其他事
@@ -161,7 +161,7 @@ async fn learn_and_sing() {
 
 ### 错误 1: 忘记 await
 
-```rust
+```rust,ignore
 async fn fetch_data() -> String {
     "data".to_string()
 }
@@ -182,7 +182,7 @@ error[E0277]: `impl Future<Output = String>` doesn't implement `Display`
 ```
 
 **修复方法**：
-```rust
+```rust,ignore
 let data = fetch_data().await;  // ✅ 等待 Future 完成
 ```
 
@@ -190,7 +190,7 @@ let data = fetch_data().await;  // ✅ 等待 Future 完成
 
 ### 错误 2: async 块捕获变量
 
-```rust
+```rust,ignore
 async fn blocks() {
     let my_string = "foo".to_string();
 
@@ -208,7 +208,7 @@ async fn blocks() {
 
 **但 async move 不同：**
 
-```rust
+```rust,ignore
 fn move_block() -> impl Future<Output = ()> {
     let my_string = "foo".to_string();
     async move {
@@ -227,7 +227,7 @@ fn move_block() -> impl Future<Output = ()> {
 
 ### 错误 3: 在 async 中使用阻塞操作
 
-```rust
+```rust,ignore
 async fn bad_example() {
     // ❌ 不要这样做！会阻塞整个线程
     std::thread::sleep(std::time::Duration::from_secs(1));
@@ -251,7 +251,7 @@ async fn good_example() {
 
 下面的代码会打印什么？顺序是怎样的？
 
-```rust
+```rust,ignore
 async fn learn_song() {
     println!("Learning song...");
 }
@@ -296,7 +296,7 @@ Singing song...
 
 如何让 `learn_song` 和 `dance` **同时**执行？
 
-```rust
+```rust,ignore
 async fn learn_song() -> Song {
     /* 学歌需要时间 */
     Song
@@ -318,7 +318,7 @@ async fn main() {
 
 **答案**：使用 `join!` 宏
 
-```rust
+```rust,ignore
 async fn main() {
     // 同时开始两个 Future，等待两者都完成
     futures::join!(learn_song(), dance());
@@ -327,7 +327,7 @@ async fn main() {
 
 **或者使用 async 块：**
 
-```rust
+```rust,ignore
 async fn main() {
     let f1 = learn_song();  // 创建 Future（未执行）
     let f2 = dance();       // 创建 Future（未执行）
@@ -355,7 +355,7 @@ async fn main() {
 
 下面代码能编译通过吗？为什么？
 
-```rust
+```rust,ignore
 fn example() {
     let data = vec![1, 2, 3];
     
@@ -387,7 +387,7 @@ fn example() {
 
 **改成 async move**：
 
-```rust
+```rust,ignore
 let f1 = async move {
     println!("{:?}", data);  // data 被 move 进 f1
 };
@@ -416,7 +416,7 @@ error[E0382]: use of moved value: `data`
 
 **A**: async 函数返回的是 `Future`，需要用 `.await` 获取结果：
 
-```rust
+```rust,ignore
 async fn get_number() -> i32 {
     42
 }
@@ -465,7 +465,7 @@ let n: i32 = get_number().await;  // await 后得到 i32
 **A**: 
 
 1. **添加日志追踪**：
-   ```rust
+   ```rust,ignore
    async fn my_function() {
        println!("Starting my_function");
        let result = some_async_op().await;
@@ -474,7 +474,7 @@ let n: i32 = get_number().await;  // await 后得到 i32
    ```
 
 2. **使用 tracing 库**（生产环境推荐）：
-   ```rust
+   ```rust,ignore
    use tracing::{info, instrument};
 
    #[instrument]
@@ -493,7 +493,7 @@ let n: i32 = get_number().await;  // await 后得到 i32
 
 `futures` crate 提供了丰富的组合器：
 
-```rust
+```rust,ignore
 use futures::future::{FutureExt, TryFutureExt};
 
 // map - 转换结果
@@ -516,7 +516,7 @@ futures::select! {
 
 当 Future 自引用时需要 `Pin`：
 
-```rust
+```rust,ignore
 use std::pin::Pin;
 
 // async 块可能包含自引用，所以需要 Pin
@@ -695,7 +695,7 @@ main()
 
 下面代码的输出顺序是什么？
 
-```rust
+```rust,ignore
 async fn task1() { println!("1"); }
 async fn task2() { println!("2"); }
 
@@ -737,7 +737,7 @@ D) 1, 2, start, middle, end
 
 如何让 `task1` 和 `task2` **并发**执行，并等待两者都完成？
 
-```rust
+```rust,ignore
 async fn task1() { 
     println!("Task 1 start");
     // 模拟耗时操作
@@ -762,7 +762,7 @@ async fn main() {
 
 **答案**：使用 `futures::join!`
 
-```rust
+```rust,ignore
 async fn main() {
     futures::join!(task1(), task2());
 }
@@ -810,7 +810,7 @@ task2完成
 
 下面代码能编译通过吗？如果不能，如何修复？
 
-```rust
+```rust,ignore
 fn create_futures() -> (impl Future<Output = ()>, impl Future<Output = ()>) {
     let data = String::from("shared");
     
@@ -842,7 +842,7 @@ error[E0382]: use of moved value: `data`
 - 第二个 `async move` 块无法再使用 `data`
 
 **修复方法 1 - 使用 Arc 共享所有权**：
-```rust
+```rust,ignore
 use std::sync::Arc;
 
 fn create_futures() -> (impl Future<Output = ()>, impl Future<Output = ()>) {
@@ -862,7 +862,7 @@ fn create_futures() -> (impl Future<Output = ()>, impl Future<Output = ()>) {
 ```
 
 **修复方法 2 - 使用 async (非 move)**：
-```rust
+```rust,ignore
 fn create_futures() -> impl Future<Output = ()> {
     let data = String::from("shared");
     

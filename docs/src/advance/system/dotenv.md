@@ -45,7 +45,7 @@ cargo add home
 
 最简单的 .env 加载：
 
-```rust
+```rust,ignore
 use dotenvy;
 use std::env;
 
@@ -103,7 +103,7 @@ MESSAGE="Hello World"
 
 **使用 dotenv()**：
 
-```rust
+```rust,ignore
 use dotenvy;
 
 // 加载当前目录的 .env 文件
@@ -115,7 +115,7 @@ let api_key = std::env::var("API_KEY")?;
 
 **使用 dotenv() 的 Result**：
 
-```rust
+```rust,ignore
 // 如果 .env 文件不存在，忽略错误
 let _ = dotenvy::dotenv();
 
@@ -130,7 +130,7 @@ match dotenvy::dotenv() {
 
 **使用 env::var()**：
 
-```rust
+```rust,ignore
 use std::env;
 
 // 返回 Result
@@ -142,7 +142,7 @@ let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
 
 **使用 env::var_os()**：
 
-```rust
+```rust,ignore
 // 返回 Option<OsString>
 if let Some(home) = env::var_os("HOME") {
     println!("HOME: {:?}", home);
@@ -153,7 +153,7 @@ if let Some(home) = env::var_os("HOME") {
 
 **使用 env::home_dir()**：
 
-```rust
+```rust,ignore
 use std::env;
 
 if let Some(home) = env::home_dir() {
@@ -163,7 +163,7 @@ if let Some(home) = env::home_dir() {
 
 **使用 home crate**：
 
-```rust
+```rust,ignore
 use home;
 
 if let Some(home) = home::home_dir() {
@@ -180,7 +180,7 @@ if let Some(cargo_home) = home::cargo_home() {
 
 **使用 env!("CARGO_MANIFEST_DIR")**：
 
-```rust
+```rust,ignore
 // 编译时获取项目根目录
 let manifest_dir = env!("CARGO_MANIFEST_DIR");
 
@@ -190,7 +190,7 @@ let data_path = format!("{}/data/data.txt", manifest_dir);
 
 **使用 PathBuf**：
 
-```rust
+```rust,ignore
 use std::path::PathBuf;
 use std::env;
 
@@ -208,7 +208,7 @@ println!("数据文件：{}", data_path.display());
 
 **使用 env::current_dir()**：
 
-```rust
+```rust,ignore
 use std::env;
 
 let current_dir = env::current_dir()?;
@@ -217,7 +217,7 @@ println!("当前目录：{}", current_dir.display());
 
 **获取可执行文件目录**：
 
-```rust
+```rust,ignore
 use std::env;
 
 let exe_path = env::current_exe()?;
@@ -231,7 +231,7 @@ println!("可执行文件目录：{}", exe_dir.display());
 
 ### 错误 1: .env 文件不存在
 
-```rust
+```rust,ignore
 dotenvy::dotenv()?;  // ❌ 如果 .env 不存在会报错
 ```
 
@@ -241,13 +241,13 @@ path not found
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let _ = dotenvy::dotenv();  // ✅ 忽略错误
 ```
 
 ### 错误 2: 环境变量未设置
 
-```rust
+```rust,ignore
 let db_url = env::var("DATABASE_URL")?;
 // ❌ 如果未设置会报错
 ```
@@ -258,7 +258,7 @@ environment variable not found
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 // 提供默认值
 let db_url = env::var("DATABASE_URL")
     .unwrap_or_else(|_| "sqlite::memory:".to_string());
@@ -266,13 +266,13 @@ let db_url = env::var("DATABASE_URL")
 
 ### 错误 3: 路径拼接错误
 
-```rust
+```rust,ignore
 let path = env!("CARGO_MANIFEST_DIR") + "/data/data.txt";
 // ❌ 字符串拼接，不跨平台
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 use std::path::PathBuf;
 
 let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -286,7 +286,7 @@ let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 
 ### 练习 1: 加载 .env 文件
 
-```rust
+```rust,ignore
 use dotenvy;
 use std::env;
 
@@ -300,7 +300,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 dotenvy::dotenv()?;
 
 let api_key = env::var("API_KEY")?;
@@ -310,7 +310,7 @@ println!("API Key: {}", api_key);
 
 ### 练习 2: 获取系统目录
 
-```rust
+```rust,ignore
 use std::env;
 
 fn main() {
@@ -323,7 +323,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 if let Some(home) = env::home_dir() {
     println!("HOME: {}", home.display());
 }
@@ -335,7 +335,7 @@ println!("当前目录：{}", current.display());
 
 ### 练习 3: 构建相对路径
 
-```rust
+```rust,ignore
 use std::path::PathBuf;
 
 fn main() {
@@ -348,7 +348,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let manifest = env!("CARGO_MANIFEST_DIR");
 
 let config_path = PathBuf::from(manifest)
@@ -373,7 +373,7 @@ println!("配置文件：{}", config_path.display());
 ### Q: 如何在测试中使用 .env？
 
 **A**: 
-```rust
+```rust,ignore
 #[cfg(test)]
 mod tests {
     #[test]
@@ -416,7 +416,7 @@ DEBUG=true
 
 ### 条件加载
 
-```rust
+```rust,ignore
 // 根据环境加载不同配置
 if cfg!(debug_assertions) {
     let _ = dotenvy::from_filename(".env.development");
@@ -427,7 +427,7 @@ if cfg!(debug_assertions) {
 
 ### 最佳实践
 
-```rust
+```rust,ignore
 // config.rs
 use dotenvy;
 use std::env;

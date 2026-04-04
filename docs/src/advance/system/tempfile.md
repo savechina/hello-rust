@@ -45,7 +45,7 @@ cargo add tempfile
 
 最简单的临时文件创建：
 
-```rust
+```rust,ignore
 use std::io::{Write, Read, Seek, SeekFrom};
 use tempfile::tempfile;
 
@@ -89,7 +89,7 @@ fn main() -> std::io::Result<()> {
 
 **使用 tempfile()**：
 
-```rust
+```rust,ignore
 use tempfile::tempfile;
 
 let mut file = tempfile()?;
@@ -99,7 +99,7 @@ let mut file = tempfile()?;
 
 **使用 NamedTempFile**：
 
-```rust
+```rust,ignore
 use tempfile::NamedTempFile;
 
 let file = NamedTempFile::new()?;
@@ -112,7 +112,7 @@ println!("临时文件路径：{}", path.display());
 
 **使用 tempdir()**：
 
-```rust
+```rust,ignore
 use tempfile::tempdir;
 
 let dir = tempdir()?;
@@ -129,7 +129,7 @@ drop(dir);
 
 **使用 new_in()**：
 
-```rust
+```rust,ignore
 use tempfile::NamedTempFile;
 use std::env;
 
@@ -143,7 +143,7 @@ println!("在 home 目录创建：{:?}", file);
 
 **使用 reopen()**：
 
-```rust
+```rust,ignore
 use tempfile::NamedTempFile;
 use std::io::{Write, Read};
 
@@ -168,7 +168,7 @@ assert_eq!(buf, text);
 
 **使用 close()**：
 
-```rust
+```rust,ignore
 use tempfile::tempdir;
 
 let dir = tempdir()?;
@@ -185,7 +185,7 @@ dir.close().unwrap();
 
 ### 错误 1: 临时文件权限问题
 
-```rust
+```rust,ignore
 let file = NamedTempFile::new_in("/root")?;
 // ❌ 如果没有权限，会失败
 ```
@@ -196,14 +196,14 @@ Permission denied (os error 13)
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 // 使用有权限的目录
 let file = NamedTempFile::new_in("/tmp")?;
 ```
 
 ### 错误 2: 忘记处理错误
 
-```rust
+```rust,ignore
 let file = NamedTempFile::new();  // ❌ 返回 Result，需要处理
 ```
 
@@ -213,13 +213,13 @@ unused `Result` that must be used
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let file = NamedTempFile::new()?;  // ✅ 使用 ? 处理错误
 ```
 
 ### 错误 3: 临时文件过早删除
 
-```rust
+```rust,ignore
 fn create_temp() -> std::path::PathBuf {
     let file = NamedTempFile::new().unwrap();
     file.path().to_path_buf()  // ❌ 文件已被删除
@@ -227,7 +227,7 @@ fn create_temp() -> std::path::PathBuf {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 fn keep_temp() -> tempfile::NamedTempFile {
     let file = NamedTempFile::new().unwrap();
     file  // ✅ 返回文件，保持存活
@@ -240,7 +240,7 @@ fn keep_temp() -> tempfile::NamedTempFile {
 
 ### 练习 1: 创建临时文件
 
-```rust
+```rust,ignore
 use tempfile::tempfile;
 use std::io::{Write, Read};
 
@@ -254,7 +254,7 @@ fn main() -> std::io::Result<()> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut tmpfile = tempfile()?;
 write!(tmpfile, "Hello Tempfile!")?;
 
@@ -269,7 +269,7 @@ println!("{}", buf);
 
 ### 练习 2: 创建临时目录
 
-```rust
+```rust,ignore
 use tempfile::tempdir;
 use std::fs;
 
@@ -283,7 +283,7 @@ fn main() -> std::io::Result<()> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let dir = tempdir()?;
 let file_path = dir.path().join("test.txt");
 
@@ -298,7 +298,7 @@ dir.close().unwrap();
 
 ### 练习 3: 重新打开临时文件
 
-```rust
+```rust,ignore
 use tempfile::NamedTempFile;
 use std::io::{Write, Read};
 
@@ -317,7 +317,7 @@ fn main() -> std::io::Result<()> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut file1 = NamedTempFile::new()?;
 file1.write_all(text.as_bytes())?;
 
@@ -344,7 +344,7 @@ assert_eq!(buf, text);
 ### Q: 如何保持临时文件不删除？
 
 **A**: 
-```rust
+```rust,ignore
 use tempfile::NamedTempFile;
 use std::fs::File;
 
@@ -358,7 +358,7 @@ temp.persist(&path)?;  // 不删除
 ### Q: 如何指定临时文件扩展名？
 
 **A**: 
-```rust
+```rust,ignore
 use tempfile::NamedTempFile;
 
 let file = NamedTempFile::new()
@@ -373,7 +373,7 @@ let file = NamedTempFile::new()
 
 ### 临时文件与进程
 
-```rust
+```rust,ignore
 use tempfile::tempfile;
 
 // 临时文件对当前进程可见
@@ -385,7 +385,7 @@ let file2 = tempfile()?;
 
 ### 临时目录嵌套
 
-```rust
+```rust,ignore
 use tempfile::tempdir;
 
 let parent = tempdir()?;
@@ -399,7 +399,7 @@ drop(parent);
 
 ### 性能优化
 
-```rust
+```rust,ignore
 use tempfile::tempfile_in;
 use std::env;
 

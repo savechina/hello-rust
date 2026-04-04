@@ -36,7 +36,7 @@
 
 ## 第一个例子
 
-```rust
+```rust,ignore
 fn main() {
     // 最简单的闭包
     let add_one = |x| x + 1;
@@ -77,7 +77,7 @@ fn main() {
 
 ### 1. 闭包语法
 
-```rust
+```rust,ignore
 // 各种闭包形式
 let add = |x, y| x + y;
 let print = || println!("hello");
@@ -85,7 +85,7 @@ let square = |x: i32| -> i32 { x * x };
 ```
 
 **与函数的区别**：
-```rust
+```rust,ignore
 // 函数：必须指定类型
 fn add_fn(x: i32, y: i32) -> i32 {
     x + y
@@ -99,7 +99,7 @@ let add_closure = |x, y| x + y;
 
 **三种捕获方式**：
 
-```rust
+```rust,ignore
 fn main() {
     let x = 42;
     
@@ -120,7 +120,7 @@ fn main() {
 
 闭包自动实现三个 trait,取决于如何捕获环境:
 
-```rust
+```rust,ignore
 // 示例来自 src/basic/closure_sample.rs
 
 // Fn: 只读捕获,可多次调用
@@ -147,7 +147,7 @@ let consumed = consume_string;  // 第一次调用
 
 **Trait 定义**:
 
-```rust
+```rust,ignore
 // 标准库 trait 定义 (简化版)
 trait Fn {
     fn call(&self, args: Args) -> Output;  // 不可变借用 self
@@ -179,7 +179,7 @@ Fn: &self  ──可以──> FnMut: &mut self ──可以──> FnOnce: self
 
 闭包可以作为参数传递,让函数接受"行为"而非仅数据:
 
-```rust
+```rust,ignore
 // 示例来自 src/basic/closure_sample.rs
 
 // 泛型函数接受闭包
@@ -218,7 +218,7 @@ process_and_print(stringify, 42);  // 输出: Number: 42
 
 ### 错误 1：类型推断不一致
 
-```rust
+```rust,ignore
 let closure = |x| x + 1;
 let result1 = closure(5);      // ✅ 推断为 i32
 let result2 = closure(5.0);    // ❌ 错误: 期望 i32 但找到 f64
@@ -234,7 +234,7 @@ error[E0308]: mismatched types
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 // 显式标注类型
 let closure = |x: i32| x + 1;
 ```
@@ -243,7 +243,7 @@ let closure = |x: i32| x + 1;
 
 ### 错误 2：可变借用冲突
 
-```rust
+```rust,ignore
 let mut counter = 0;
 let mut increment = || counter += 1;
 
@@ -264,7 +264,7 @@ error[E0502]: cannot borrow `counter` as immutable because it is also borrowed a
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let mut counter = 0;
 let mut increment = || counter += 1;
 
@@ -276,14 +276,14 @@ println!("{}", counter);  // ✅ 借用已释放
 
 ### 错误 3：move 后使用
 
-```rust
+```rust,ignore
 let x = String::from("hello");
 let closure = move || println!("{}", x);  // move 转移所有权
 println!("{}", x);  // ❌ 错误: x 已被移动
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let x = String::from("hello");
 let closure = || println!("{}", &x);  // 借用,不转移
 println!("{}", x);  // ✅ x 仍可用
@@ -293,7 +293,7 @@ println!("{}", x);  // ✅ x 仍可用
 
 ### 错误 4：FnOnce 被重复调用
 
-```rust
+```rust,ignore
 let text = String::from("Hello");
 let consume = move || text;  // 实现 FnOnce
 
@@ -313,7 +313,7 @@ error[E0382]: use of moved value: `consume`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 // 方法 1: 不使用 move
 let text = String::from("Hello");
 let print = || println!("{}", &text);
@@ -338,7 +338,7 @@ let print_clone = || {
 
 实现一个计算器闭包,捕获基础值并累加:
 
-```rust
+```rust,ignore
 fn main() {
     let base = 10;
     
@@ -353,7 +353,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let base = 10;
 let add_to_base = |x: i32| x + base;
 
@@ -368,7 +368,7 @@ println!("{}", add_to_base(20));  // 输出: 30
 
 实现一个累加器闭包,每次调用递增:
 
-```rust
+```rust,ignore
 fn main() {
     let mut total = 0;
     
@@ -384,7 +384,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut total = 0;
 let mut accumulate = |x: i32| {
     total += x;
@@ -403,7 +403,7 @@ println!("{}", accumulate(3));   // 输出: 18
 
 实现 `apply_operation` 函数,接受不同操作的闭包:
 
-```rust
+```rust,ignore
 fn apply_operation<F>(f: F, value: i32) -> i32
 // TODO: 添加 trait 约束
 {
@@ -422,7 +422,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 fn apply_operation<F>(f: F, value: i32) -> i32
 where
     F: Fn(i32) -> i32,
@@ -446,7 +446,7 @@ fn main() {
 
 使用闭包过滤数字集合:
 
-```rust
+```rust,ignore
 let numbers = vec![1, 2, 3, 4, 5, 6];
 
 // TODO: 过滤出偶数
@@ -462,7 +462,7 @@ println!("{:?}", evens);  // 应输出: [2, 4, 6]
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let numbers = vec![1, 2, 3, 4, 5, 6];
 
 let evens: Vec<i32> = numbers
@@ -485,7 +485,7 @@ println!("{:?}", evens);  // 输出: [2, 4, 6]
 
 **A**: 作为参数时根据需求选择:
 
-```rust
+```rust,ignore
 // Fn: 只读,可多次调用 (最灵活)
 fn process_fn<F>(f: F) where F: Fn() {
     f();
@@ -512,7 +512,7 @@ fn process_once<F>(f: F) where F: FnOnce() {
 
 **A**: 
 
-```rust
+```rust,ignore
 // 函数: 不能捕获环境
 fn add_fn(x: i32, factor: i32) -> i32 {
     x + factor
@@ -539,7 +539,7 @@ let fn_ptr: fn(i32) -> i32 = add_fn;
 
 **A**: 当闭包需要离开定义作用域时:
 
-```rust
+```rust,ignore
 // 1. 返回闭包: 必须 move
 fn create_closure() -> impl Fn() -> String {
     let text = String::from("Hello");
@@ -562,7 +562,7 @@ let closure = move || {
 
 **A**: 
 
-```rust
+```rust,ignore
 // 闭包类型是匿名的
 let closure = |x| x + 1;
 // 类型: impl Fn(i32) -> i32
@@ -597,7 +597,7 @@ let fn_ptr: fn(i32) -> i32 = |x| x + 1;  // 不捕获环境的闭包
 
 以下代码的输出是什么?
 
-```rust
+```rust,ignore
 let add_one = |x: i32| x + 1;
 let result = add_one(5);
 println!("Result: {}", result);
@@ -620,7 +620,7 @@ D) `运行时错误`
 
 这段代码会输出什么?
 
-```rust
+```rust,ignore
 let captured_value = 10;
 let add_captured = |x: i32| x + captured_value;
 let result = add_captured(5);
@@ -644,7 +644,7 @@ D) `编译错误`
 
 以下哪个闭包实现 `FnOnce`?
 
-```rust
+```rust,ignore
 // A
 let x = 5;
 let a = || println!("{}", x);
@@ -673,7 +673,7 @@ let c = move || z;  // 返回 z
 
 如何修复这段代码使其可编译?
 
-```rust
+```rust,ignore
 let mut counter = 0;
 let mut increment = |x: i32| {
     counter += x;
@@ -696,7 +696,7 @@ println!("After apply_mut: {}", counter);  // ❌ 错误
 
 **答案**: 在调用 `apply_mut` 后,`increment` 的借用已释放
 
-```rust
+```rust,ignore
 let mut counter = 0;
 let mut increment = |x: i32| {
     counter += x;

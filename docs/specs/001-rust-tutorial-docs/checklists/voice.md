@@ -6,12 +6,12 @@
 
 ## Requirement Completeness
 
-- [ ] CHK131 - Are tone requirements defined for all chapter sections (encouraging, supportive, non-condescending)? [Spec §Tone and Voice]
+- [x] CHK131 - Are tone requirements defined for all chapter sections (encouraging, supportive, non-condescending)? [Spec §Tone and Voice]
 - [ ] CHK132 - Are "we" language requirements defined (using "让我们" vs "你应该")? [Spec §Tone and Voice]
-- [ ] CHK133 - Are forbidden word/phrase requirements defined (避免"显然"、"简单"、"只需")? [Spec §Tone and Voice]
-- [ ] CHK134 - Are difficulty acknowledgment requirements defined (认可难度，正常化困难)? [Spec §Tone and Voice]
+- [x] CHK133 - Are forbidden word/phrase requirements defined (避免"显然"、"简单"、"只需")? [Spec §Tone and Voice]
+- [x] CHK134 - Are difficulty acknowledgment requirements defined (认可难度，正常化困难)? [Spec §Tone and Voice]
 - [ ] CHK135 - Are celebration requirements defined for learner achievements (庆祝小进步)? [Spec §Tone and Voice]
-- [ ] CHK136 - Are paragraph length requirements defined (2-4 sentences, max 20 characters per sentence)? [Spec §Chinese Writing, §Cognitive Load]
+- [x] CHK136 - Are paragraph length requirements defined (2-4 sentences, max 20 characters per sentence)? [Spec §Chinese Writing, §Cognitive Load]
 - [ ] CHK137 - Are conceptual density requirements defined (one concept per paragraph)? [Spec §Cognitive Load]
 - [ ] CHK138 - Are code example length requirements defined (max 15 lines per example)? [Spec §Cognitive Load]
 

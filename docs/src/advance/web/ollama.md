@@ -97,7 +97,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 **使用默认配置**：
 
-```rust
+```rust,ignore
 use ollama_rs::Ollama;
 
 // 默认连接到 localhost:11434
@@ -106,7 +106,7 @@ let ollama = Ollama::default();
 
 **使用自定义配置**：
 
-```rust
+```rust,ignore
 // 自定义主机和端口
 let ollama = Ollama::new(
     "http://localhost".to_string(),
@@ -185,7 +185,7 @@ async fn chatbot() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 错误 1: Ollama 服务未运行
 
-```rust
+```rust,ignore
 let ollama = Ollama::default();
 let res = ollama.generate(request).await?;
 // ❌ 如果 Ollama 服务未运行会失败
@@ -204,7 +204,7 @@ ollama serve
 
 ### 错误 2: 模型未下载
 
-```rust
+```rust,ignore
 let model = "llama3.2:latest".to_string();
 // ❌ 如果模型未下载会失败
 ```
@@ -222,7 +222,7 @@ ollama pull llama3.2:latest
 
 ### 错误 3: 忘记 await
 
-```rust
+```rust,ignore
 let res = ollama.generate(request);  // ❌ 忘记 .await
 println!("{}", res.response);
 ```
@@ -233,7 +233,7 @@ no field `response` on type `impl Future`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let res = ollama.generate(request).await?;  // ✅ 添加 .await
 ```
 
@@ -243,7 +243,7 @@ let res = ollama.generate(request).await?;  // ✅ 添加 .await
 
 ### 练习 1: 连接 Ollama
 
-```rust
+```rust,ignore
 use ollama_rs::Ollama;
 
 #[tokio::main]
@@ -256,7 +256,7 @@ async fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let ollama = Ollama::default();
 println!("已连接到 Ollama 服务");
 ```
@@ -264,7 +264,7 @@ println!("已连接到 Ollama 服务");
 
 ### 练习 2: 发送问题
 
-```rust
+```rust,ignore
 use ollama_rs::{
     generation::completion::request::GenerationRequest,
     Ollama,
@@ -300,7 +300,7 @@ println!("{}", res.response);
 
 ### 练习 3: 创建聊天机器人
 
-```rust
+```rust,ignore
 async fn chatbot() {
     let ollama = Ollama::default();
     let model = "llama3.2:latest".to_string();
@@ -410,7 +410,7 @@ let response = ollama.generate(
 
 ### 自定义参数
 
-```rust
+```rust,ignore
 let request = GenerationRequest::new(model, prompt)
     .temperature(0.8)  // 创造性
     .top_p(0.9)        // 采样

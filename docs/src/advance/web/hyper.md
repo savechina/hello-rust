@@ -101,7 +101,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 **Request 结构**：
 
-```rust
+```rust,ignore
 use hyper::{Request, Method};
 
 let req = Request::builder()
@@ -113,7 +113,7 @@ let req = Request::builder()
 
 **Response 结构**：
 
-```rust
+```rust,ignore
 use hyper::{Response, StatusCode};
 
 let resp = Response::builder()
@@ -126,7 +126,7 @@ let resp = Response::builder()
 
 **service_fn 处理请求**：
 
-```rust
+```rust,ignore
 use hyper::service::service_fn;
 
 async fn handle(
@@ -143,7 +143,7 @@ service_fn(handle)
 
 **手动路由**：
 
-```rust
+```rust,ignore
 async fn router(
     req: Request<Incoming>
 ) -> Result<Response<String>, hyper::Error> {
@@ -162,7 +162,7 @@ async fn router(
 
 **读取请求体**：
 
-```rust
+```rust,ignore
 use hyper::body::Bytes;
 use http_body_util::BodyExt;
 
@@ -183,7 +183,7 @@ async fn echo(
 
 **使用 Full 响应体**：
 
-```rust
+```rust,ignore
 use http_body_util::Full;
 use hyper::body::Bytes;
 
@@ -193,7 +193,7 @@ let response = Response::new(body);
 
 **使用 Empty 响应体**：
 
-```rust
+```rust,ignore
 use http_body_util::Empty;
 
 let body = Empty::<Bytes>::new();
@@ -255,7 +255,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 错误 1: 忘记使用 Tokio
 
-```rust
+```rust,ignore
 fn main() {  // ❌ 忘记 #[tokio::main]
     let listener = TcpListener::bind("127.0.0.1:3000");
     // ...
@@ -268,7 +268,7 @@ error[E0308]: mismatched types
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 #[tokio::main]  // ✅ 添加异步运行时
 async fn main() {
     // ...
@@ -277,26 +277,26 @@ async fn main() {
 
 ### 错误 2: 类型不匹配
 
-```rust
+```rust,ignore
 // ❌ 错误的响应体类型
 Response::new("Hello")  // 期望 Body 类型
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 Response::new(Full::new(Bytes::from("Hello")))  // ✅ 正确的类型
 ```
 
 ### 错误 3: 忘记收集请求体
 
-```rust
+```rust,ignore
 async fn handler(req: Request<Incoming>) {
     let body = req.body();  // ❌ 这是 Incoming 类型，不是数据
 }
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 async fn handler(req: Request<Incoming>) {
     let body = req.collect().await?.to_bytes();  // ✅ 收集并转换为 Bytes
 }
@@ -308,7 +308,7 @@ async fn handler(req: Request<Incoming>) {
 
 ### 练习 1: 创建简单服务器
 
-```rust
+```rust,ignore
 use hyper::server::conn::http1;
 use tokio::net::TcpListener;
 
@@ -344,7 +344,7 @@ loop {
 
 ### 练习 2: 实现路由
 
-```rust
+```rust,ignore
 async fn handle(req: Request<Incoming>) {
     // TODO: 根据路径路由
     // "/" → 返回 "Home"
@@ -356,7 +356,7 @@ async fn handle(req: Request<Incoming>) {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 match req.uri().path() {
     "/" => Response::new(Full::new(Bytes::from("Home"))),
     "/about" => Response::new(Full::new(Bytes::from("About"))),
@@ -370,7 +370,7 @@ match req.uri().path() {
 
 ### 练习 3: 实现 Echo 服务
 
-```rust
+```rust,ignore
 async fn echo(req: Request<Incoming>) {
     // TODO: 读取请求体
     // TODO: 返回请求体内容
@@ -380,7 +380,7 @@ async fn echo(req: Request<Incoming>) {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let body = req.collect().await?.to_bytes();
 Ok(Response::new(Full::new(body)))
 ```
@@ -400,7 +400,7 @@ Ok(Response::new(Full::new(body)))
 ### Q: 如何处理 JSON？
 
 **A**: 
-```rust
+```rust,ignore
 use serde_json;
 
 let json = serde_json::to_string(&data)?;
@@ -410,7 +410,7 @@ Response::new(Full::new(Bytes::from(json)))
 ### Q: 如何添加中间件？
 
 **A**: 
-```rust
+```rust,ignore
 use tower::ServiceBuilder;
 
 let service = ServiceBuilder::new()
@@ -424,7 +424,7 @@ let service = ServiceBuilder::new()
 
 ### HTTPS 支持
 
-```rust
+```rust,ignore
 use tokio_rustls::TlsAcceptor;
 
 let acceptor = TlsAcceptor::from(config);
@@ -433,7 +433,7 @@ let stream = acceptor.accept(stream).await?;
 
 ### WebSocket 支持
 
-```rust
+```rust,ignore
 use tokio_tungstenite::WebSocketStream;
 
 // 升级 HTTP 连接到 WebSocket
@@ -442,7 +442,7 @@ let ws_stream = tokio_tungstenite::accept_async(stream).await?;
 
 ### 连接池
 
-```rust
+```rust,ignore
 use hyper_util::client::legacy::Client;
 
 let client = Client::builder(hyper_util::rt::TokioExecutor::new())

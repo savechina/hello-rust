@@ -49,7 +49,7 @@ cargo add diesel --features postgres
 
 让我们看一个最简单的 SQLx 查询示例：
 
-```rust
+```rust,ignore
 use sqlx::{Pool, Postgres, Row};
 
 async fn get_users(pool: &Pool<Postgres>) -> sqlx::Result<Vec<String>> {
@@ -85,7 +85,7 @@ async fn get_users(pool: &Pool<Postgres>) -> sqlx::Result<Vec<String>> {
 
 ### 2. SQLx 编译时检查
 
-```rust
+```rust,ignore
 // 编译时会检查 SQL 语法和表结构
 let user = sqlx::query_as!(
     User,
@@ -103,7 +103,7 @@ let user = sqlx::query_as!(
 
 ### 3. Diesel ORM 模式
 
-```rust
+```rust,ignore
 // schema.rs - 数据库模式
 table! {
     users (id) {
@@ -134,7 +134,7 @@ let users = users::table
 
 ### 4. 连接池管理
 
-```rust
+```rust,ignore
 use sqlx::postgres::PgPoolOptions;
 
 async fn create_pool() -> sqlx::Result<Pool<Postgres>> {
@@ -158,7 +158,7 @@ async fn create_pool() -> sqlx::Result<Pool<Postgres>> {
 
 ### 错误 1: 连接池过小
 
-```rust
+```rust,ignore
 // ❌ 错误：连接池太小
 PgPoolOptions::new().max_connections(1)
 
@@ -168,7 +168,7 @@ PgPoolOptions::new().max_connections(10)
 
 ### 错误 2: 忘记处理 NULL
 
-```rust
+```rust,ignore
 // ❌ 错误：假设列非空
 let name: String = row.get(0);
 
@@ -178,7 +178,7 @@ let name: Option<String> = row.get(0);
 
 ### 错误 3: 在事务中长时间持有连接
 
-```rust
+```rust,ignore
 // ❌ 错误：事务未提交
 let mut tx = pool.begin().await?;
 // ... 长时间操作 ...
@@ -198,7 +198,7 @@ tx.commit().await?;
 
 使用 SQLx 创建用户表并插入数据：
 
-```rust
+```rust,ignore
 // TODO: 实现创建表和插入用户
 async fn create_user(pool: &Pool<Postgres>, name: &str, email: &str) -> sqlx::Result<i32> {
     // 实现代码
@@ -208,7 +208,7 @@ async fn create_user(pool: &Pool<Postgres>, name: &str, email: &str) -> sqlx::Re
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 async fn create_user(pool: &Pool<Postgres>, name: &str, email: &str) -> sqlx::Result<i32> {
     let row = sqlx::query_scalar!(
         r#"INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id"#,

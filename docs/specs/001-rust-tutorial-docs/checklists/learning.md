@@ -6,20 +6,20 @@
 
 ## Requirement Completeness
 
-- [ ] CHK001 - Are learning objectives defined for every chapter with 3-5 specific measurable outcomes? [Spec §FR-006]
-- [ ] CHK002 - Are prerequisites clearly specified for each chapter to establish knowledge dependencies? [Spec §FR-011]
-- [ ] CHK003 - Are progress indicators defined so learners can track their advancement through chapters? [Gap]
-- [ ] CHK004 - Are knowledge checkpoints defined at section boundaries (Basic → Advance → Awesome)? [Gap]
-- [ ] CHK005 - Are learning outcomes mapped to real-world applications (what learner can DO after each chapter)? [Spec §User Story 1-5]
-- [ ] CHK006 - Are hands-on practice exercises defined with clear difficulty progression within each chapter? [Spec §FR-007]
-- [ ] CHK007 - Are common mistakes and error scenarios explicitly documented for each concept? [Spec §FR-010]
-- [ ] CHK008 - Are troubleshooting scenarios defined with symptom-based solutions? [Spec §Edge Cases]
+- [x] CHK001 - Are learning objectives defined for every chapter with 3-5 specific measurable outcomes? [Spec §FR-006]
+- [x] CHK002 - Are prerequisites clearly specified for each chapter to establish knowledge dependencies? [Spec §FR-011]
+- [x] CHK003 - Are progress indicators defined so learners can track their advancement through chapters? [Gap]
+- [x] CHK004 - Are knowledge checkpoints defined at section boundaries (Basic → Advance → Awesome)? [Gap]
+- [x] CHK005 - Are learning outcomes mapped to real-world applications (what learner can DO after each chapter)? [Spec §User Story 1-5]
+- [x] CHK006 - Are hands-on practice exercises defined with clear difficulty progression within each chapter? [Spec §FR-007]
+- [x] CHK007 - Are common mistakes and error scenarios explicitly documented for each concept? [Spec §FR-010]
+- [x] CHK008 - Are troubleshooting scenarios defined with symptom-based solutions? [Spec §Edge Cases]
 
 ## Requirement Clarity
 
-- [ ] CHK009 - Is "minimum 500 Chinese characters per chapter" quantified with clear measurement criteria? [Clarity, Spec §SC-001/002]
-- [ ] CHK010 - Is "3-5 specific learning outcomes" defined with specificity requirements? [Clarity, Spec §FR-006]
-- [ ] CHK011 - Are exercise difficulty levels (beginner/intermediate/advanced) defined with measurable criteria? [Ambiguity]
+- [x] CHK009 - Is "minimum 500 Chinese characters per chapter" quantified with clear measurement criteria? [Clarity, Spec §SC-001/002]
+- [x] CHK010 - Is "3-5 specific learning outcomes" defined with specificity requirements? [Clarity, Spec §FR-006]
+- [x] CHK011 - Are exercise difficulty levels (beginner/intermediate/advanced) defined with measurable criteria? [Ambiguity]
 - [ ] CHK012 - Is "compilation errors" scope defined (which errors, how many examples)? [Clarity, Spec §FR-010]
 - [ ] CHK013 - Is "zero Rust experience" defined with specific excluded knowledge areas? [Ambiguity, Spec §Assumptions]
 
@@ -27,7 +27,7 @@
 
 - [ ] CHK014 - Are learning objective requirements consistent across all 5 user stories? [Consistency, Spec §User Story 1-5]
 - [ ] CHK015 - Are prerequisite requirements aligned between FR-011 and the learning path in research.md? [Consistency]
-- [ ] CHK016 - Is the 12-section chapter template structure consistently applied across all documentation types? [Gap]
+- [x] CHK016 - Is the 12-section chapter template structure consistently applied across all documentation types? [Gap]
 - [ ] CHK017 - Are exercise requirements consistent between "动手练习" (FR-007) and "Independent Test" criteria? [Consistency]
 
 ## Acceptance Criteria Quality

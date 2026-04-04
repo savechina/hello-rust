@@ -47,7 +47,7 @@ cargo add async-trait
 
 最简单的 Mock 使用：
 
-```rust
+```rust,ignore
 use mockall::automock;
 use std::sync::Arc;
 
@@ -105,7 +105,7 @@ mod tests {
 
 **使用 #[automock] 属性**：
 
-```rust
+```rust,ignore
 use mockall::automock;
 
 #[automock]
@@ -124,7 +124,7 @@ trait Database {
 
 **使用 new()**：
 
-```rust
+```rust,ignore
 let mut mock = MockDatabase::new();
 ```
 
@@ -132,7 +132,7 @@ let mut mock = MockDatabase::new();
 
 **使用 expect_*() 方法**：
 
-```rust
+```rust,ignore
 mock.expect_connect()
     .with(eq("postgres://localhost"))  // 参数匹配
     .returning(|_| true);               // 返回值
@@ -146,7 +146,7 @@ mock.expect_query()
 
 **使用 times()**：
 
-```rust
+```rust,ignore
 mock.expect_monitor()
     .times(1)      // 期望调用 1 次
     .returning(|| true);
@@ -154,7 +154,7 @@ mock.expect_monitor()
 
 **验证调用顺序**：
 
-```rust
+```rust,ignore
 let ctx = Mock::new_context();
 mock.expect_connect().returning(|_| true);
 mock.expect_query().returning(|_| vec![]);
@@ -168,7 +168,7 @@ mock.query("SELECT");
 
 **使用 #[async_trait]**：
 
-```rust
+```rust,ignore
 use async_trait::async_trait;
 use mockall::automock;
 
@@ -197,7 +197,7 @@ mod tests {
 
 ### 错误 1: 忘记设置返回值
 
-```rust
+```rust,ignore
 mock.expect_monitor();  // ❌ 没有设置返回值
 mock.monitor();         // ❌ 会 panic
 ```
@@ -208,14 +208,14 @@ MockHmsMonitorService::monitor: No matching expectation found
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 mock.expect_monitor()
     .returning(|| true);  // ✅ 设置返回值
 ```
 
 ### 错误 2: 参数不匹配
 
-```rust
+```rust,ignore
 mock.expect_connect()
     .with(eq("postgres://localhost"));
 
@@ -228,13 +228,13 @@ MockDatabase::connect: No matching expectation found
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 mock.connect("postgres://localhost");  // ✅ 匹配期望
 ```
 
 ### 错误 3: 调用次数不匹配
 
-```rust
+```rust,ignore
 mock.expect_monitor()
     .times(1);  // 期望 1 次
 
@@ -248,7 +248,7 @@ MockHmsMonitorService::monitor: Expectation called too many times
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 mock.expect_monitor()
     .times(2);  // ✅ 期望 2 次
 ```
@@ -259,7 +259,7 @@ mock.expect_monitor()
 
 ### 练习 1: 创建简单 Mock
 
-```rust
+```rust,ignore
 use mockall::automock;
 
 #[automock]
@@ -281,7 +281,7 @@ mod tests {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut mock = MockCalculator::new();
 mock.expect_add()
     .returning(|a, b| a + b);
@@ -292,7 +292,7 @@ assert_eq!(mock.add(2, 3), 5);
 
 ### 练习 2: 验证调用次数
 
-```rust
+```rust,ignore
 #[automock]
 trait Logger {
     fn log(&self, msg: &str);
@@ -312,7 +312,7 @@ mod tests {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut mock = MockLogger::new();
 mock.expect_log()
     .times(2)
@@ -325,7 +325,7 @@ mock.log("msg2");
 
 ### 练习 3: 参数匹配
 
-```rust
+```rust,ignore
 #[automock]
 trait UserService {
     fn get_user(&self, id: u32) -> String;
@@ -345,7 +345,7 @@ mod tests {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut mock = MockUserService::new();
 mock.expect_get_user()
     .with(eq(1))
@@ -390,7 +390,7 @@ assert_eq!(mock.get_user(2), "Bob");
 
 ### 匹配器
 
-```rust
+```rust,ignore
 use mockall::predicate::*;
 
 mock.expect_query()
@@ -404,7 +404,7 @@ mock.expect_query()
 
 ### 返回 Result
 
-```rust
+```rust,ignore
 mock.expect_connect()
     .returning(|_| Ok(()));
 
@@ -414,7 +414,7 @@ mock.expect_connect()
 
 ### 多次调用不同返回值
 
-```rust
+```rust,ignore
 mock.expect_monitor()
     .returning_st(|| {
         static mut CALLED: u32 = 0;

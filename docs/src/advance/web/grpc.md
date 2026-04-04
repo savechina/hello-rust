@@ -286,7 +286,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 错误 1: 忘记启动服务器
 
-```rust
+```rust,ignore
 // ❌ 错误：客户端连接时服务器未启动
 let mut client = GreeterClient::connect("http://127.0.0.1:50051").await?;
 // 连接失败！
@@ -298,7 +298,7 @@ let mut client = GreeterClient::connect("http://127.0.0.1:50051").await?;
 
 ### 错误 2: 端口冲突
 
-```rust
+```rust,ignore
 // ❌ 错误：端口已被占用
 let addr = "127.0.0.1:9001".parse()?;
 // 如果 9001 端口已被其他服务占用，会失败
@@ -313,7 +313,7 @@ struct Args {
 
 ### 错误 3: 未处理连接错误
 
-```rust
+```rust,ignore
 // ❌ 错误：直接 unwrap
 let mut client = GreeterClient::connect("http://127.0.0.1:50051").await.unwrap();
 
@@ -329,7 +329,7 @@ let mut client = GreeterClient::connect("http://127.0.0.1:50051").await?;
 
 在 Greeter 服务中添加 `SayHelloMultiple` 方法，接受一个名字列表并返回多个问候：
 
-```rust
+```rust,ignore
 // TODO: 在 .proto 文件中定义
 // rpc SayHelloMultiple (NamesRequest) returns (stream HelloReply);
 
@@ -339,7 +339,7 @@ let mut client = GreeterClient::connect("http://127.0.0.1:50051").await?;
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 async fn say_hello_multiple(
     &self,
     request: Request<NamesRequest>,

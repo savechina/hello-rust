@@ -6,14 +6,14 @@
 
 ## Requirement Completeness
 
-- [ ] CHK085 - Are code compilation requirements defined for ALL examples (zero compilation errors)? [Spec §SC-005]
-- [ ] CHK086 - Are Rust version requirements defined (2024 edition, minimum compiler version)? [Spec §Assumptions]
+- [x] CHK085 - Are code compilation requirements defined for ALL examples (zero compilation errors)? [Spec §SC-005]
+- [x] CHK086 - Are Rust version requirements defined (2024 edition, minimum compiler version)? [Spec §Assumptions]
 - [ ] CHK087 - Are documentation requirements defined for unsafe code patterns (static mut, transmute, from_utf8_unchecked)? [Spec §Edge Cases, Research §CRITICAL ISSUES]
 - [ ] CHK088 - Are async best practices requirements defined (tokio::sync::Mutex vs std::sync::Mutex)? [Research §Critical Issues]
 - [ ] CHK089 - Are hardcoded value handling requirements defined (IP addresses, socket paths)? [Research §Hardcoded Values]
 - [ ] CHK090 - Are code sample modification requirements defined (no changes to .rs files)? [Spec §Assumptions]
 - [ ] CHK091 - Are dependency version pinning requirements defined (Cargo.toml crate versions)? [Spec §Edge Cases]
-- [ ] CHK092 - Are existing test module preservation requirements defined (#[cfg(test)])? [Spec §FR-012]
+- [x] CHK092 - Are existing test module preservation requirements defined (#[cfg(test)])? [Spec §FR-012]
 
 ## Requirement Clarity
 

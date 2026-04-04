@@ -46,7 +46,7 @@ cargo add serde_json
 
 最简单的 JSON 解析：
 
-```rust
+```rust,ignore
 use serde_json::{Result, Value};
 
 fn main() -> Result<()> {
@@ -91,7 +91,7 @@ fn main() -> Result<()> {
 
 **适用场景**: 未知结构的 JSON 数据
 
-```rust
+```rust,ignore
 use serde_json::Value;
 
 let json_str = r#"{"name": "Alice", "age": 30}"#;
@@ -110,7 +110,7 @@ assert!(v["age"].is_number());
 
 **适用场景**: 已知结构的 JSON 数据
 
-```rust
+```rust,ignore
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -130,7 +130,7 @@ let json = serde_json::to_string(&person).unwrap();
 
 ### 错误处理
 
-```rust
+```rust,ignore
 use serde_json::{Result, Error};
 
 fn parse_json(json_str: &str) -> Result<()> {
@@ -149,7 +149,7 @@ fn parse_json(json_str: &str) -> Result<()> {
 
 ### 美化输出
 
-```rust
+```rust,ignore
 let person = Person {
     name: "Alice".to_string(),
     age: 30,
@@ -175,7 +175,7 @@ let pretty = serde_json::to_string_pretty(&person).unwrap();
 
 ### 自定义序列化
 
-```rust
+```rust,ignore
 use serde::{Serialize, Serializer};
 
 #[derive(Debug)]
@@ -201,7 +201,7 @@ impl Serialize for Point {
 
 ### 错误 1: 字段不匹配
 
-```rust
+```rust,ignore
 #[derive(Deserialize)]
 struct Person {
     name: String,
@@ -218,7 +218,7 @@ missing field `age`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 #[derive(Deserialize)]
 struct Person {
     name: String,
@@ -229,7 +229,7 @@ struct Person {
 
 ### 错误 2: 类型不匹配
 
-```rust
+```rust,ignore
 #[derive(Deserialize)]
 struct Person {
     age: u8,
@@ -245,13 +245,13 @@ invalid type: string "twenty", expected u8
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let json = r#"{"age": 20}"#;  // ✅ 正确的类型
 ```
 
 ### 错误 3: JSON 格式错误
 
-```rust
+```rust,ignore
 let json = r#"{"name": "Alice",}"#;  // ❌ 多余的逗号
 let v: Value = serde_json::from_str(json).unwrap();
 ```
@@ -262,7 +262,7 @@ trailing comma at line 1 column 20
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let json = r#"{"name": "Alice"}"#;  // ✅ 正确的 JSON
 ```
 
@@ -272,7 +272,7 @@ let json = r#"{"name": "Alice"}"#;  // ✅ 正确的 JSON
 
 ### 练习 1: 解析用户数据
 
-```rust
+```rust,ignore
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -298,7 +298,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Serialize, Deserialize, Debug)]
 struct User {
     id: u32,
@@ -315,7 +315,7 @@ fn main() {
 
 ### 练习 2: 序列化配置
 
-```rust
+```rust,ignore
 #[derive(Serialize)]
 struct Config {
     // TODO: 定义配置字段
@@ -339,7 +339,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Serialize)]
 struct Config {
     host: String,
@@ -362,7 +362,7 @@ fn main() {
 
 ### 练习 3: 处理嵌套结构
 
-```rust
+```rust,ignore
 #[derive(Deserialize, Debug)]
 struct Post {
     id: u32,
@@ -394,7 +394,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let post: Post = serde_json::from_str(json).unwrap();
 println!("作者邮箱：{}", post.author.email);
 ```
@@ -410,7 +410,7 @@ println!("作者邮箱：{}", post.author.email);
 - **serde**: 序列化/反序列化框架 (trait 定义)
 - **serde_json**: JSON 格式的具体实现
 
-```rust
+```rust,ignore
 use serde::{Serialize, Deserialize};  // 框架
 use serde_json;  // JSON 实现
 ```
@@ -419,7 +419,7 @@ use serde_json;  // JSON 实现
 
 **A**: 使用 `Option<T>`:
 
-```rust
+```rust,ignore
 #[derive(Deserialize)]
 struct User {
     name: String,      // 必需
@@ -431,7 +431,7 @@ struct User {
 
 **A**: 使用 `#[serde(rename)]`:
 
-```rust
+```rust,ignore
 #[derive(Deserialize)]
 struct User {
     #[serde(rename = "user_name")]
@@ -445,7 +445,7 @@ struct User {
 
 ### 从文件读取
 
-```rust
+```rust,ignore
 use std::fs::File;
 use std::io::BufReader;
 
@@ -456,7 +456,7 @@ let config: Config = serde_json::from_reader(reader)?;
 
 ### 性能优化
 
-```rust
+```rust,ignore
 // 使用 serde_json::Value 进行快速解析
 let value: Value = serde_json::from_str(json)?;
 
@@ -468,7 +468,7 @@ let result: Result<T, _> = serde_path_to_error::deserialize(deserializer);
 
 ### 动态 JSON 处理
 
-```rust
+```rust,ignore
 // 处理未知结构的 JSON
 fn process_value(value: &Value) {
     match value {

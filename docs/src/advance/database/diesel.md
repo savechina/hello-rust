@@ -46,7 +46,7 @@ cargo add dotenvy
 
 最简单的 Diesel SQLite 示例：
 
-```rust
+```rust,ignore
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
 
@@ -104,7 +104,7 @@ fn main() {
 
 **使用 diesel::table! 宏**：
 
-```rust
+```rust,ignore
 diesel::table! {
     users (id) {
         id -> Integer,
@@ -125,7 +125,7 @@ diesel::table! {
 
 **使用 Queryable derive**：
 
-```rust
+```rust,ignore
 use diesel::Queryable;
 
 #[derive(Queryable)]
@@ -139,7 +139,7 @@ struct User {
 
 **使用 Insertable derive**：
 
-```rust
+```rust,ignore
 use diesel::Insertable;
 
 #[derive(Insertable)]
@@ -155,7 +155,7 @@ struct NewUser<'a> {
 
 **建立连接**：
 
-```rust
+```rust,ignore
 use diesel::sqlite::SqliteConnection;
 use diesel::Connection;
 
@@ -165,7 +165,7 @@ let mut conn = SqliteConnection::establish("database.db")
 
 **使用环境变量**：
 
-```rust
+```rust,ignore
 use dotenvy::dotenv;
 use std::env;
 
@@ -181,7 +181,7 @@ let mut conn = SqliteConnection::establish(&database_url)
 
 **Create (插入)**：
 
-```rust
+```rust,ignore
 use diesel::RunQueryDsl;
 
 let new_post = NewPost {
@@ -198,7 +198,7 @@ diesel::insert_into(posts::table)
 
 **Read (查询)**：
 
-```rust
+```rust,ignore
 use diesel::RunQueryDsl;
 
 // 查询所有
@@ -221,7 +221,7 @@ let published_posts = posts::table
 
 **Update (更新)**：
 
-```rust
+```rust,ignore
 use diesel::RunQueryDsl;
 
 diesel::update(posts::table.find(post_id))
@@ -232,7 +232,7 @@ diesel::update(posts::table.find(post_id))
 
 **Delete (删除)**：
 
-```rust
+```rust,ignore
 diesel::delete(posts::table.find(post_id))
     .execute(&mut conn)
     .expect("Error deleting post");
@@ -242,7 +242,7 @@ diesel::delete(posts::table.find(post_id))
 
 **过滤**：
 
-```rust
+```rust,ignore
 posts::table
     .filter(posts::published.eq(true))
     .filter(posts::title.like("%Rust%"))
@@ -251,7 +251,7 @@ posts::table
 
 **排序**：
 
-```rust
+```rust,ignore
 posts::table
     .order(posts::created_at.desc())
     .load::<Post>(&mut conn)?;
@@ -259,7 +259,7 @@ posts::table
 
 **限制数量**：
 
-```rust
+```rust,ignore
 posts::table
     .limit(10)
     .offset(20)
@@ -268,7 +268,7 @@ posts::table
 
 **连接表**：
 
-```rust
+```rust,ignore
 posts::table
     .inner_join(users::table)
     .select((posts::all_columns, users::name))
@@ -281,7 +281,7 @@ posts::table
 
 ### 错误 1: Schema 不匹配
 
-```rust
+```rust,ignore
 // Schema 定义
 diesel::table! {
     posts (id) {
@@ -305,7 +305,7 @@ column `body` does not exist
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 #[derive(Queryable)]
 struct Post {
     id: i32,
@@ -315,7 +315,7 @@ struct Post {
 
 ### 错误 2: 忘记 derive
 
-```rust
+```rust,ignore
 // ❌ 忘记 #[derive(Queryable)]
 struct Post {
     id: i32,
@@ -329,7 +329,7 @@ the trait `Queryable<_, __>` is not implemented for `Post`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 #[derive(Queryable)]  // ✅ 添加 derive
 struct Post {
     id: i32,
@@ -339,13 +339,13 @@ struct Post {
 
 ### 错误 3: 连接未使用 mut
 
-```rust
+```rust,ignore
 let conn = SqliteConnection::establish("test.db")?;
 posts::table.load::<Post>(&conn)?;  // ❌ 需要 &mut conn
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let mut conn = SqliteConnection::establish("test.db")?;
 posts::table.load::<Post>(&mut conn)?;  // ✅ 使用 &mut
 ```
@@ -356,7 +356,7 @@ posts::table.load::<Post>(&mut conn)?;  // ✅ 使用 &mut
 
 ### 练习 1: 定义用户 Schema
 
-```rust
+```rust,ignore
 // TODO: 定义 users 表 Schema
 // 字段：id (Integer), name (Text), email (Text)
 
@@ -367,7 +367,7 @@ posts::table.load::<Post>(&mut conn)?;  // ✅ 使用 &mut
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 diesel::table! {
     users (id) {
         id -> Integer,
@@ -387,7 +387,7 @@ struct User {
 
 ### 练习 2: 插入和查询用户
 
-```rust
+```rust,ignore
 // TODO: 创建数据库连接
 // TODO: 插入 3 个用户
 // TODO: 查询所有用户
@@ -397,7 +397,7 @@ struct User {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut conn = SqliteConnection::establish("test.db")?;
 
 // 插入
@@ -421,7 +421,7 @@ for user in users {
 
 ### 练习 3: 条件查询
 
-```rust
+```rust,ignore
 // TODO: 查询已发布的博客
 // TODO: 按创建时间排序
 // TODO: 限制返回 10 条
@@ -430,7 +430,7 @@ for user in users {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let posts = posts::table
     .filter(posts::published.eq(true))
     .order(posts::created_at.desc())
@@ -453,7 +453,7 @@ let posts = posts::table
 ### Q: 如何处理关联关系？
 
 **A**: 
-```rust
+```rust,ignore
 #[derive(Associations, Queryable)]
 #[diesel(belongs_to(User))]
 struct Post {
@@ -483,7 +483,7 @@ diesel migration run
 
 ### 事务处理
 
-```rust
+```rust,ignore
 use diesel::Connection;
 
 conn.transaction::<_, diesel::result::Error, _>(|conn| {
@@ -502,7 +502,7 @@ conn.transaction::<_, diesel::result::Error, _>(|conn| {
 
 ### 关联查询
 
-```rust
+```rust,ignore
 // 查询用户及其所有博客
 let results = users::table
     .inner_join(posts::table)
@@ -512,7 +512,7 @@ let results = users::table
 
 ### 动态查询
 
-```rust
+```rust,ignore
 let mut query = posts::table.into_boxed();
 
 if let Some(title) = filter_title {

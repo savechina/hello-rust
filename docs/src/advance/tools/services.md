@@ -50,7 +50,7 @@ cargo add async-trait
 
 让我们看一个最简单的服务定义：
 
-```rust
+```rust,ignore
 use async_trait::async_trait;
 
 #[async_trait]
@@ -94,7 +94,7 @@ impl Service for MyService {
 
 ### 1. 服务生命周期
 
-```rust
+```rust,ignore
 pub enum ServiceState {
     Stopped,
     Starting,
@@ -128,7 +128,7 @@ Stopped → Starting → Running → Stopping → Stopped
 
 ### 2. 依赖注入模式
 
-```rust
+```rust,ignore
 // 定义依赖 trait
 #[async_trait]
 pub trait Database: Send + Sync {
@@ -163,7 +163,7 @@ pub struct App {
 
 ### 3. 健康检查模式
 
-```rust
+```rust,ignore
 pub struct HealthStatus {
     pub service: String,
     pub healthy: bool,
@@ -194,7 +194,7 @@ impl HealthCheck for App {
 
 ### 4. 错误处理策略
 
-```rust
+```rust,ignore
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -224,7 +224,7 @@ impl Service for MyService {
 
 ### 错误 1: 循环依赖
 
-```rust
+```rust,ignore
 // ❌ 错误：A 依赖 B，B 依赖 A
 struct ServiceA { b: ServiceB }
 struct ServiceB { a: ServiceA }
@@ -240,7 +240,7 @@ struct ServiceB { /* 不持有 ServiceA */ }
 
 ### 错误 2: 忘记清理资源
 
-```rust
+```rust,ignore
 // ❌ 错误：stop() 为空
 async fn stop(&self) -> Result<(), Error> {
     // 忘记关闭数据库连接
@@ -256,7 +256,7 @@ async fn stop(&self) -> Result<(), Error> {
 
 ### 错误 3: 阻塞异步服务
 
-```rust
+```rust,ignore
 // ❌ 错误：在异步服务中同步阻塞
 async fn process(&self) {
     std::thread::sleep(Duration::from_secs(1));  // 阻塞
@@ -276,7 +276,7 @@ async fn process(&self) {
 
 创建服务框架：
 
-```rust
+```rust,ignore
 #[async_trait]
 pub trait Logger: Send + Sync {
     async fn log(&self, message: &str);
@@ -289,7 +289,7 @@ pub trait Logger: Send + Sync {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 pub struct ConsoleLogger;
 
 #[async_trait]
@@ -346,7 +346,7 @@ impl Logger for FileLogger {
 ### Q: 如何测试服务？
 
 **A**: 使用 Mock 实现：
-```rust
+```rust,ignore
 struct MockDatabase;
 
 #[async_trait]

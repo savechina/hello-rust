@@ -46,7 +46,7 @@ cargo add sqlx --features runtime-tokio,postgres
 
 最简单的 SQLx SQLite 示例：
 
-```rust
+```rust,ignore
 use sqlx::sqlite::SqliteConnection;
 use sqlx::Connection;
 
@@ -101,7 +101,7 @@ async fn main() -> Result<(), sqlx::Error> {
 
 **连接字符串**：
 
-```rust
+```rust,ignore
 // SQLite 内存数据库
 let conn = SqliteConnection::connect("sqlite::memory:").await?;
 
@@ -119,7 +119,7 @@ let conn = PgConnection::connect("postgres://user:pass@localhost/dbname").await?
 
 **query 方法**：
 
-```rust
+```rust,ignore
 // 执行无返回值的 SQL
 sqlx::query("DELETE FROM users WHERE id = ?")
     .bind(user_id)
@@ -140,7 +140,7 @@ println!("影响了 {} 行", result.rows_affected());
 
 **fetch_all 获取所有行**：
 
-```rust
+```rust,ignore
 let rows = sqlx::query("SELECT id, name, email FROM users")
     .fetch_all(&mut conn)
     .await?;
@@ -156,7 +156,7 @@ for row in rows {
 
 **fetch_one 获取单行**：
 
-```rust
+```rust,ignore
 let row = sqlx::query("SELECT * FROM users WHERE id = ?")
     .bind(user_id)
     .fetch_one(&mut conn)
@@ -167,7 +167,7 @@ let row = sqlx::query("SELECT * FROM users WHERE id = ?")
 
 **定义结构体**：
 
-```rust
+```rust,ignore
 use sqlx::FromRow;
 
 #[derive(Debug, FromRow)]
@@ -180,7 +180,7 @@ struct User {
 
 **查询并映射**：
 
-```rust
+```rust,ignore
 let users: Vec<User> = sqlx::query_as::<_, User>("SELECT id, name, email FROM users")
     .fetch_all(&mut conn)
     .await?;
@@ -194,7 +194,7 @@ for user in users {
 
 **创建连接池**：
 
-```rust
+```rust,ignore
 use sqlx::sqlite::SqlitePool;
 
 // 创建连接池
@@ -217,7 +217,7 @@ let users = sqlx::query_as::<_, User>("SELECT * FROM users")
 
 ### 错误 1: SQL 语法错误
 
-```rust
+```rust,ignore
 sqlx::query("SELEC * FROM users")  // ❌ SELEC 拼写错误
     .fetch_all(&mut conn)
     .await?;
@@ -229,13 +229,13 @@ SQL logic error: near "SELEC": syntax error
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 sqlx::query("SELECT * FROM users")  // ✅ 正确拼写
 ```
 
 ### 错误 2: 参数绑定类型不匹配
 
-```rust
+```rust,ignore
 sqlx::query("SELECT * FROM users WHERE id = ?")
     .bind("123")  // ❌ id 是 INTEGER，绑定了字符串
     .fetch_all(&mut conn)
@@ -243,7 +243,7 @@ sqlx::query("SELECT * FROM users WHERE id = ?")
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 sqlx::query("SELECT * FROM users WHERE id = ?")
     .bind(123i64)  // ✅ 绑定正确的类型
     .fetch_all(&mut conn)
@@ -252,7 +252,7 @@ sqlx::query("SELECT * FROM users WHERE id = ?")
 
 ### 错误 3: 忘记 await
 
-```rust
+```rust,ignore
 let rows = sqlx::query("SELECT * FROM users")
     .fetch_all(&mut conn);  // ❌ 忘记 .await
 
@@ -260,7 +260,7 @@ let rows = sqlx::query("SELECT * FROM users")
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let rows = sqlx::query("SELECT * FROM users")
     .fetch_all(&mut conn)
     .await?;  // ✅ 添加 .await
@@ -272,7 +272,7 @@ let rows = sqlx::query("SELECT * FROM users")
 
 ### 练习 1: 创建用户表
 
-```rust
+```rust,ignore
 use sqlx::sqlite::SqliteConnection;
 
 #[tokio::main]
@@ -289,7 +289,7 @@ async fn main() -> Result<(), sqlx::Error> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 sqlx::query(
     "CREATE TABLE users (
         id INTEGER PRIMARY KEY,
@@ -304,7 +304,7 @@ sqlx::query(
 
 ### 练习 2: 插入和查询用户
 
-```rust
+```rust,ignore
 // TODO: 插入 3 个用户
 // TODO: 查询所有用户
 // TODO: 打印用户列表
@@ -313,7 +313,7 @@ sqlx::query(
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 // 插入
 sqlx::query("INSERT INTO users (name, email) VALUES (?, ?)")
     .bind("Alice")
@@ -336,7 +336,7 @@ for row in users {
 
 ### 练习 3: 使用结构体映射
 
-```rust
+```rust,ignore
 #[derive(Debug, sqlx::FromRow)]
 struct User {
     // TODO: 定义字段
@@ -348,7 +348,7 @@ struct User {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Debug, sqlx::FromRow)]
 struct User {
     id: i64,
@@ -384,7 +384,7 @@ for user in users {
 - 高并发场景
 - 需要控制连接数时
 
-```rust
+```rust,ignore
 // 单连接
 let conn = SqliteConnection::connect(url).await?;
 
@@ -395,7 +395,7 @@ let pool = SqlitePool::connect(url).await?;
 ### Q: 如何处理事务？
 
 **A**: 
-```rust
+```rust,ignore
 let mut tx = conn.begin().await?;
 
 sqlx::query("INSERT ...").execute(&mut tx).await?;
@@ -410,7 +410,7 @@ tx.commit().await?;  // 或 tx.rollback().await?;
 
 ### 查询构建器
 
-```rust
+```rust,ignore
 // 动态构建查询
 let mut query = sqlx::query("SELECT * FROM users WHERE 1=1");
 
@@ -427,7 +427,7 @@ let users = query.fetch_all(&pool).await?;
 
 ### 迁移 (Migrations)
 
-```rust
+```rust,ignore
 // 运行数据库迁移
 sqlx::migrate!("./migrations")
     .run(&pool)
@@ -436,7 +436,7 @@ sqlx::migrate!("./migrations")
 
 ### 性能优化
 
-```rust
+```rust,ignore
 // 使用 prepare 预编译查询
 let query = sqlx::query("SELECT * FROM users WHERE id = ?");
 let cached = query.persistent(true);

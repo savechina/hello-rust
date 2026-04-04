@@ -61,7 +61,7 @@ cargo add dlopen
 
 使用 `inventory` crate 实现编译时插件注册：
 
-```rust
+```rust,ignore
 use inventory::submit;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -174,7 +174,7 @@ Rust 插件系统
 
 **完整示例**（来自项目代码）：
 
-```rust
+```rust,ignore
 use inventory::submit;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -265,7 +265,7 @@ fn inventory_main() {
 
 **原理**：运行时加载 `.so`（Linux）、`.dylib`（macOS）、`.dll`（Windows）文件，通过符号名查找函数。
 
-```rust
+```rust,ignore
 use libloading::{Library, Symbol};
 
 // 定义插件函数签名
@@ -294,7 +294,7 @@ fn load_plugin(path: &str) -> Result<(), Box<dyn std::error::Error>> {
 
 **插件端代码**（需要编译为 `cdylib`）：
 
-```rust
+```rust,ignore
 // Cargo.toml: [lib] crate-type = ["cdylib"]
 
 #[no_mangle]
@@ -313,7 +313,7 @@ pub extern "C" fn plugin_execute(_handle: *mut std::os::raw::c_void) {
 
 **原理**：使用 `dlopen` 加载 C 兼容的动态库，适合跨语言插件。
 
-```rust
+```rust,ignore
 use dlopen::symbor::Library;
 use dlopen_derive::StructSymbols;
 
@@ -398,7 +398,7 @@ load    init    register  execute  unload
 
 Extism 是目前 Rust 生态最流行的 WASM 插件框架：
 
-```rust
+```rust,ignore
 use extism::{Manifest, Plugin, Wasm};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -426,7 +426,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 错误 1: inventory 插件未注册
 
-```rust
+```rust,ignore
 // ❌ 错误：忘记调用 collect!
 // inventory::collect!(InventoryPlugin);  // 缺少这行！
 
@@ -436,7 +436,7 @@ inventory::collect!(InventoryPlugin);
 
 ### 错误 2: libloading 符号查找失败
 
-```rust
+```rust,ignore
 // ❌ 错误：符号名不匹配
 let func: Symbol<FnType> = lib.get(b"wrong_name")?;
 
@@ -447,7 +447,7 @@ pub extern "C" fn plugin_init() { ... }
 
 ### 错误 3: 动态库 ABI 不兼容
 
-```rust
+```rust,ignore
 // ❌ 错误：使用 Rust ABI（不稳定）
 pub fn plugin_init() { ... }
 
@@ -464,7 +464,7 @@ pub extern "C" fn plugin_init() { ... }
 
 在 inventory 示例中添加一个 "clear" 操作插件，清空所有物品：
 
-```rust
+```rust,ignore
 // TODO: 实现 ClearAll 插件
 // 1. 定义 ClearAll 结构体
 // 2. 实现 InventoryOp trait
@@ -474,7 +474,7 @@ pub extern "C" fn plugin_init() { ... }
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 struct ClearAll;
 impl InventoryOp for ClearAll {
     fn name(&self) -> &'static str { "clear" }
@@ -496,7 +496,7 @@ inventory::submit! {
 
 为一个日志系统设计插件接口，支持不同的日志输出方式（控制台、文件、网络）：
 
-```rust
+```rust,ignore
 // TODO: 定义 LoggerPlugin trait
 // TODO: 定义插件注册结构体
 // TODO: 实现 ConsoleLogger 插件
@@ -505,7 +505,7 @@ inventory::submit! {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use inventory::submit;
 
 trait LoggerPlugin: Send + Sync {

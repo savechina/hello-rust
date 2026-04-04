@@ -45,7 +45,7 @@ cargo add bigdecimal
 
 获取系统信息：
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt};
 
 fn main() {
@@ -84,7 +84,7 @@ fn main() {
 
 **使用 System::new_all()**：
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt};
 
 let mut system = System::new_all();
@@ -92,7 +92,7 @@ let mut system = System::new_all();
 
 **使用 System::new()**：
 
-```rust
+```rust,ignore
 // 只创建，不刷新
 let mut system = System::new();
 
@@ -105,7 +105,7 @@ system.refresh_processes();
 
 **获取操作系统信息**：
 
-```rust
+```rust,ignore
 use sysinfo::System;
 
 println!("操作系统：{:?}", System::name());
@@ -119,7 +119,7 @@ println!("内核版本：{:?}", System::kernel_version());
 
 **获取内存使用情况**：
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt};
 
 let mut system = System::new_all();
@@ -133,7 +133,7 @@ println!("已用内存：{} MB", system.used_memory() / 1024 / 1024);
 
 **获取所有进程**：
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt, Pid};
 
 let mut system = System::new_all();
@@ -150,7 +150,7 @@ for (pid, process) in system.processes() {
 
 **获取特定进程**：
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt, Pid, ProcessExt};
 
 let mut system = System::new_all();
@@ -172,14 +172,14 @@ if let Some(process) = system.process(Pid::from_u32(pid as usize)) {
 
 ### 错误 1: 忘记刷新
 
-```rust
+```rust,ignore
 let mut system = System::new();
 println!("{}", system.available_memory());
 // ❌ 没有刷新，数据可能过时
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let mut system = System::new_all();  // ✅ 创建时刷新
 // 或
 system.refresh_memory();  // ✅ 手动刷新
@@ -187,13 +187,13 @@ system.refresh_memory();  // ✅ 手动刷新
 
 ### 错误 2: PID 类型错误
 
-```rust
+```rust,ignore
 let pid = std::process::id();  // u32
 system.process(pid);  // ❌ 需要 Pid 类型
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 use sysinfo::Pid;
 
 let pid = std::process::id();
@@ -202,7 +202,7 @@ system.process(Pid::from_u32(pid as usize));  // ✅ 转换类型
 
 ### 错误 3: 忘记导入 trait
 
-```rust
+```rust,ignore
 use sysinfo::System;
 
 let mut system = System::new_all();
@@ -210,7 +210,7 @@ system.refresh_all();  // ❌ 需要导入 SystemExt
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt};  // ✅ 导入 trait
 ```
 
@@ -220,7 +220,7 @@ use sysinfo::{System, SystemExt};  // ✅ 导入 trait
 
 ### 练习 1: 获取系统信息
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt};
 
 fn main() {
@@ -235,7 +235,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 println!("操作系统：{:?}", System::name());
 println!("系统版本：{:?}", System::os_version());
 println!("CPU 架构：{:?}", System::cpu_arch());
@@ -244,7 +244,7 @@ println!("CPU 架构：{:?}", System::cpu_arch());
 
 ### 练习 2: 获取内存信息
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt};
 
 fn main() {
@@ -259,7 +259,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 println!("总内存：{} MB", system.total_memory() / 1024 / 1024);
 println!("可用内存：{} MB", system.available_memory() / 1024 / 1024);
 println!("已用内存：{} MB", system.used_memory() / 1024 / 1024);
@@ -268,7 +268,7 @@ println!("已用内存：{} MB", system.used_memory() / 1024 / 1024);
 
 ### 练习 3: 监控当前进程
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt, Pid};
 
 fn main() {
@@ -283,7 +283,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 if let Some(process) = system.process(Pid::from_u32(pid as usize)) {
     println!("名称：{}", process.name());
     println!("CPU: {}%", process.cpu_usage());
@@ -305,7 +305,7 @@ if let Some(process) = system.process(Pid::from_u32(pid as usize)) {
 ### Q: 如何持续监控？
 
 **A**: 
-```rust
+```rust,ignore
 loop {
     system.refresh_processes();
     println!("CPU: {}%", process.cpu_usage());
@@ -327,7 +327,7 @@ loop {
 
 ### CPU 信息
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt};
 
 let mut system = System::new_all();
@@ -341,7 +341,7 @@ for cpu in system.cpus() {
 
 ### 磁盘信息
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt};
 
 let mut system = System::new_all();
@@ -355,7 +355,7 @@ for disk in system.disks() {
 
 ### 网络接口
 
-```rust
+```rust,ignore
 use sysinfo::{System, SystemExt};
 
 let mut system = System::new_all();

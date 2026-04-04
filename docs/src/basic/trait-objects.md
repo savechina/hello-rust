@@ -40,7 +40,7 @@
 
 让我们看一个最简单的特征对象示例：
 
-```rust
+```rust,ignore
 trait Animal {
     fn make_sound(&self);
 }
@@ -99,7 +99,7 @@ fn main() {
 
 ### 1. dyn Trait 语法
 
-```rust
+```rust,ignore
 // 特征对象类型
 let animal: Box<dyn Animal>;
 
@@ -121,7 +121,7 @@ fn modify(animal: &mut dyn Animal) {
 
 ### 2. 动态分发 vs 静态分发
 
-```rust
+```rust,ignore
 // 静态分发（泛型）- 编译时确定
 fn make_sound_static<T: Animal>(animal: T) {
     animal.make_sound();  // 编译时生成具体代码
@@ -160,7 +160,7 @@ Box<dyn Animal>
 1. 指向实际数据的指针
 2. 指向虚表（vtable）的指针
 
-```rust
+```rust,ignore
 // 概念示意图
 Box<dyn Animal> {
     data: Dog,           // 实际数据
@@ -182,7 +182,7 @@ Box<dyn Animal> {
 
 不是所有 trait 都能成为特征对象。必须满足**对象安全**规则：
 
-```rust
+```rust,ignore
 // ✅ 对象安全的 trait
 trait Animal {
     fn make_sound(&self);
@@ -209,7 +209,7 @@ trait NotObjectSafe {
 
 ### 5. 在集合中使用特征对象
 
-```rust
+```rust,ignore
 trait Shape {
     fn area(&self) -> f64;
     fn perimeter(&self) -> f64;
@@ -245,7 +245,7 @@ fn main() {
 
 ### 错误 1: 特征对象不是对象安全的
 
-```rust
+```rust,ignore
 // ❌ 错误：trait 不是对象安全的
 trait Cloneable {
     fn clone(&self) -> Self;  // 返回 Self
@@ -274,7 +274,7 @@ error[E0038]: the trait `Cloneable` cannot be made into an object
 
 ### 错误 2: 忘记使用 Box
 
-```rust
+```rust,ignore
 // ❌ 错误：特征对象大小未知
 let animal: dyn Animal = Dog;
 
@@ -285,7 +285,7 @@ let animal_ref: &dyn Animal = &Dog;
 
 ### 错误 3: 混用泛型和特征对象
 
-```rust
+```rust,ignore
 // ❌ 错误：语法混淆
 fn process<T: Animal>(animal: T) {
     // 这是泛型，不是特征对象
@@ -300,7 +300,7 @@ fn process_obj(animal: &dyn Animal) {
 
 ### 错误 4: 特征对象没有 dyn 关键字
 
-```rust
+```rust,ignore
 // ❌ 旧语法（已废弃但仍可用）
 let animal: Box<Animal> = Box::new(Dog);
 
@@ -318,7 +318,7 @@ let animal: Box<dyn Animal> = Box::new(Dog);
 
 > 💡 **编译器是你的老师**：先尝试不使用 `dyn`，让编译器告诉你为什么需要它！
 
-```rust
+```rust,ignore
 // TODO: 定义 Payment trait，包含 pay(&self) -> bool 方法
 
 struct CreditCard;
@@ -343,7 +343,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 trait Payment {
     fn pay(&self) -> bool;
 }
@@ -375,7 +375,7 @@ impl Payment for PayPal {
 
 > 💡 **提示**：想想 `&[T]` 切片语法，特征对象的切片应该怎么写？
 
-```rust
+```rust,ignore
 trait Drawable {
     fn draw(&self);
 }
@@ -410,7 +410,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 fn draw_all(shapes: &[Box<dyn Drawable>]) {
     for shape in shapes {
         shape.draw();
@@ -425,7 +425,7 @@ fn draw_all(shapes: &[Box<dyn Drawable>]) {
 
 判断以下 trait 是否可以作为特征对象：
 
-```rust
+```rust,ignore
 // 1.
 trait A {
     fn method(&self);
@@ -463,7 +463,7 @@ trait D {
 
 重写以下代码，分别使用泛型和特征对象：
 
-```rust
+```rust,ignore
 trait Printer {
     fn print(&self);
 }
@@ -479,7 +479,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 // 泛型版本（静态分发）
 fn print_item<T: Printer>(item: &T) {
     item.print();
@@ -530,7 +530,7 @@ fn print_item_dyn(item: &dyn Printer) {
 
 **A**: 可以，需要标注：
 
-```rust
+```rust,ignore
 fn process(obj: &dyn Trait + Send + Sync) {
     // obj 可以跨线程发送
 }
@@ -544,7 +544,7 @@ fn process(obj: &dyn Trait + Send + Sync) {
 
 特征对象可以实现多个 trait：
 
-```rust
+```rust,ignore
 trait Foo {
     fn foo(&self);
 }
@@ -564,7 +564,7 @@ fn process(obj: &dyn Foo + Bar) {
 
 使用 `AsRef` 或 `Into` 进行转换：
 
-```rust
+```rust,ignore
 trait Animal {
     fn name(&self) -> &str;
 }
@@ -585,7 +585,7 @@ let animal: &dyn Animal = &dog;  // 自动转换
 
 对于已知类型集合，枚举可能更好：
 
-```rust
+```rust,ignore
 // 特征对象
 let animals: Vec<Box<dyn Animal>> = vec![...];
 
@@ -648,7 +648,7 @@ enum AnimalEnum {
 **快速测验**（答案在下方）：
 
 1. 这段代码能编译通过吗？
-```rust
+```rust,ignore
 trait Foo { fn bar(&self) -> Self; }
 let obj: Box<dyn Foo>;
 ```

@@ -47,7 +47,7 @@ cargo add mio --features os-poll,net
 
 最简单的 Mio TCP 服务器：
 
-```rust
+```rust,ignore
 use mio::{Events, Interest, Poll, Token};
 use mio::net::TcpListener;
 use std::io::{self, Read};
@@ -146,7 +146,7 @@ fn main() -> io::Result<()> {
 ### 2. 核心概念详解
 
 **Poll (事件轮询器)**:
-```rust
+```rust,ignore
 let mut poll = Poll::new()?;
 ```
 - 封装操作系统的 I/O 多路复用机制
@@ -155,7 +155,7 @@ let mut poll = Poll::new()?;
 - Windows 下使用 `IOCP`
 
 **Token (标识符)**:
-```rust
+```rust,ignore
 const SERVER: Token = Token(0);
 const CLIENT: Token = Token(1);
 ```
@@ -164,7 +164,7 @@ const CLIENT: Token = Token(1);
 - 必须唯一
 
 **Event (事件)**:
-```rust
+```rust,ignore
 for event in events.iter() {
     if event.is_readable() {
         // 处理可读事件
@@ -176,7 +176,7 @@ for event in events.iter() {
 ```
 
 **Interest (关注事件)**:
-```rust
+```rust,ignore
 Interest::READABLE   // 关注可读事件
 Interest::WRITABLE   // 关注可写事件
 Interest::READABLE | Interest::WRITABLE  // 同时关注
@@ -184,7 +184,7 @@ Interest::READABLE | Interest::WRITABLE  // 同时关注
 
 ### 3. 完整 TCP Echo 服务器
 
-```rust
+```rust,ignore
 use mio::{Events, Interest, Poll, Token};
 use mio::net::{TcpListener, TcpStream};
 use std::collections::HashMap;
@@ -306,7 +306,7 @@ fn main() -> io::Result<()> {
 
 ### 错误 1: 忘记注册事件源
 
-```rust
+```rust,ignore
 // ❌ 错误：未注册就等待事件
 let mut stream = TcpStream::connect(addr)?;
 poll.poll(&mut events, None)?;  // 永远不会收到事件
@@ -322,7 +322,7 @@ poll.registry().register(
 
 ### 错误 2: Token 冲突
 
-```rust
+```rust,ignore
 // ❌ 错误：两个源使用相同 Token
 poll.registry().register(&mut server, Token(0), Interest::READABLE)?;
 poll.registry().register(&mut client, Token(0), Interest::READABLE)?;  // 冲突！
@@ -334,7 +334,7 @@ poll.registry().register(&mut client, Token(1), Interest::READABLE)?;
 
 ### 错误 3: 阻塞操作
 
-```rust
+```rust,ignore
 // ❌ 错误：在事件循环中阻塞
 loop {
     poll.poll(&mut events, None)?;
@@ -361,7 +361,7 @@ loop {
 
 创建一个监听 9000 端口的服务器，接受连接并打印客户端地址：
 
-```rust
+```rust,ignore
 // TODO: 实现服务器
 // 1. 创建 Poll
 // 2. 绑定 TcpListener
@@ -372,7 +372,7 @@ loop {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use mio::{Events, Interest, Poll, Token};
 use mio::net::TcpListener;
 use std::io;

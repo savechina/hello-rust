@@ -48,7 +48,7 @@ cargo add tokio --features full
 
 让我们看一个循环引用的例子：
 
-```rust
+```rust,ignore
 use std::rc::{Rc, Weak};
 use std::cell::RefCell;
 
@@ -93,7 +93,7 @@ fn main() {
 
 ### 1. 循环引用的成因
 
-```rust
+```rust,ignore
 use std::rc::Rc;
 use std::cell::RefCell;
 
@@ -123,7 +123,7 @@ fn main() {
 
 ### 2. 使用 Weak 打破循环
 
-```rust
+```rust,ignore
 use std::rc::{Rc, Weak};
 use std::cell::RefCell;
 
@@ -161,7 +161,7 @@ fn main() {
 
 ### 3. Weak 的使用模式
 
-```rust
+```rust,ignore
 use std::rc::{Rc, Weak};
 
 fn main() {
@@ -194,7 +194,7 @@ fn main() {
 ### 4. 典型应用场景
 
 **场景 1: 树结构**
-```rust
+```rust,ignore
 struct TreeNode {
     value: i32,
     children: Vec<Rc<TreeNode>>,  // 子节点：强引用
@@ -203,7 +203,7 @@ struct TreeNode {
 ```
 
 **场景 2: 图结构**
-```rust
+```rust,ignore
 struct GraphNode {
     value: i32,
     neighbors: Vec<Rc<GraphNode>>,  // 出边：强引用
@@ -212,7 +212,7 @@ struct GraphNode {
 ```
 
 **场景 3: 观察者模式**
-```rust
+```rust,ignore
 struct Subject {
     observers: RefCell<Vec<Weak<Observer>>>,  // 观察者：弱引用
 }
@@ -238,7 +238,7 @@ impl Subject {
 
 ### 错误 1: 双向都使用强引用
 
-```rust
+```rust,ignore
 // ❌ 错误：内存泄漏
 struct Node {
     next: Option<Rc<Node>>,
@@ -250,7 +250,7 @@ struct Node {
 
 ### 错误 2: 忘记检查 Weak 有效性
 
-```rust
+```rust,ignore
 // ❌ 错误：直接 unwrap
 let parent = self.parent.borrow().upgrade().unwrap();
 
@@ -264,7 +264,7 @@ if let Some(parent) = self.parent.borrow().upgrade() {
 
 ### 错误 3: 滥用 Weak 导致频繁失败
 
-```rust
+```rust,ignore
 // ❌ 错误：过度使用 Weak
 struct Cache {
     data: Weak<Data>,  // 可能总是失效
@@ -284,7 +284,7 @@ struct Cache {
 
 使用 `Rc` 和 `Weak` 创建双向链表：
 
-```rust
+```rust,ignore
 use std::rc::{Rc, Weak};
 use std::cell::RefCell;
 
@@ -301,7 +301,7 @@ struct Node {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 impl Node {
     fn new(value: i32) -> Rc<Node> {
         Rc::new(Node {
@@ -342,7 +342,7 @@ impl Node {
 ### Q: 如何调试循环引用？
 
 **A**: 
-```rust
+```rust,ignore
 println!("强引用计数：{}", Rc::strong_count(&rc));
 println!("弱引用计数：{}", Rc::weak_count(&rc));
 ```

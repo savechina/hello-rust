@@ -128,7 +128,7 @@ fn makes_copy(some_integer: i32) {
 
 ### 3. 返回值与隐式返回
 
-```rust
+```rust,ignore
 // ✅ 隐式返回（推荐）
 fn add(a: i32, b: i32) -> i32 {
     a + b  // 无分号
@@ -216,7 +216,7 @@ fn add(a: i32, b: i32) -> i32 {
 ```
 
 **编译器输出**:
-```text
+```
 error[E0308]: mismatched types
   --> src/main.rs:4:5
    |
@@ -242,7 +242,7 @@ fn add(a: i32, b: i32) -> i32 {
 ```
 
 **编译器输出**:
-```text
+```
 error[E0308]: mismatched types
  --> src/main.rs:3:5
   |

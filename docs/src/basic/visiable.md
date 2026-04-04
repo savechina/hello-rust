@@ -31,7 +31,7 @@
 
 ## 第一个例子
 
-```rust
+```rust,ignore
 // src/basic/visiable_sample.rs
 
 // 私有的结构体，带有一个公有的字段
@@ -102,7 +102,7 @@ The open box contains: public information
 
 Rust 有 3 种主要可见性：
 
-```rust
+```rust,ignore
 // 私有（默认）
 struct PrivateStruct;  // 只在当前模块内可用
 
@@ -116,7 +116,7 @@ pub(super) struct ParentPublic;  // 只在父模块内公有
 
 ### 2. 结构体字段可见性
 
-```rust
+```rust,ignore
 pub struct User {
     pub name: String,      // 公有字段
     pub(crate) email: String,  // crate 内公有
@@ -130,7 +130,7 @@ pub struct User {
 
 ### 3. 私有构造器模式
 
-```rust
+```rust,ignore
 pub struct Database {
     connection: String,  // 私有
 }
@@ -156,7 +156,7 @@ let db = Database::connect("postgres://localhost");  // ✅
 
 ### 错误 1: 结构体公有但字段私有
 
-```rust
+```rust,ignore
 pub struct Point {
     x: i32,  // ❌ 私有字段
     y: i32,
@@ -169,7 +169,7 @@ fn main() {
 
 **修复**：
 
-```rust
+```rust,ignore
 pub struct Point {
     pub x: i32,  // ✅
     pub y: i32,
@@ -178,7 +178,7 @@ pub struct Point {
 
 ### 错误 2: 忘记 pub
 
-```rust
+```rust,ignore
 mod my_module {
     fn public_function() {}  // ❌ 实际是私有的
 }
@@ -186,7 +186,7 @@ mod my_module {
 
 **修复**：
 
-```rust
+```rust,ignore
 mod my_module {
     pub fn public_function() {}  // ✅
 }
@@ -194,7 +194,7 @@ mod my_module {
 
 ### 错误 3: 过度使用 pub
 
-```rust
+```rust,ignore
 // ❌ 所有字段都公有，破坏了封装
 pub struct User {
     pub password: String,  // 不应该公开！
@@ -204,7 +204,7 @@ pub struct User {
 
 **修复**：
 
-```rust
+```rust,ignore
 pub struct User {
     username: String,    // ✅ 私有
     password: String,    // ✅ 私有
@@ -225,7 +225,7 @@ impl User {
 
 为这个银行账户结构设计可见性：
 
-```rust
+```rust,ignore
 // TODO: 添加适当的 pub 修饰符
 struct BankAccount {
     account_number: String,  // 应该公有吗？
@@ -243,7 +243,7 @@ struct BankAccount {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 pub struct BankAccount {
     pub account_number: String,  // 账户号可以公开
     balance: f64,               // 余额私有
@@ -279,7 +279,7 @@ impl BankAccount {
 
 **A**: 
 
-```rust
+```rust,ignore
 pub struct Parser {
     data: String,
 }

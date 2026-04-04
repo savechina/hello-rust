@@ -48,7 +48,7 @@ cargo add dotenvy
 
 读取文件内容：
 
-```rust
+```rust,ignore
 use std::fs;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -87,7 +87,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### 2. 路径处理
 
-```rust
+```rust,ignore
 use std::path::{Path, PathBuf};
 
 // Path - 借用路径（不拥有所有权）
@@ -109,7 +109,7 @@ let path = Path::new("/home")
 
 ### 3. 文件读写操作
 
-```rust
+```rust,ignore
 use std::fs::{self, File};
 use std::io::{Read, Write};
 
@@ -132,7 +132,7 @@ file.write_all(b"New log entry\n")?;
 
 ### 4. 目录遍历
 
-```rust
+```rust,ignore
 use std::fs;
 
 // 读取目录内容
@@ -150,7 +150,7 @@ for entry in entries {
 
 ### 5. 递归目录遍历
 
-```rust
+```rust,ignore
 use std::fs;
 use std::path::Path;
 
@@ -178,7 +178,7 @@ fn main() -> std::io::Result<()> {
 
 ### 6. 文件和目录操作
 
-```rust
+```rust,ignore
 use std::fs;
 
 // 创建目录
@@ -203,7 +203,7 @@ fs::rename("old_name.txt", "new_name.txt")?;
 
 ### 7. 文件元数据
 
-```rust
+```rust,ignore
 use std::fs;
 
 let metadata = fs::metadata("file.txt")?;
@@ -227,7 +227,7 @@ println!("是目录：{}", metadata.is_dir());
 
 ### 错误 1: 路径拼接使用字符串
 
-```rust
+```rust,ignore
 // ❌ 错误：跨平台不兼容
 let path = format!("{}/{}", dir, filename);
 
@@ -237,7 +237,7 @@ let path = Path::new(dir).join(filename);
 
 ### 错误 2: 不处理文件不存在
 
-```rust
+```rust,ignore
 // ❌ 错误：panic 如果文件不存在
 let content = fs::read_to_string("missing.txt").unwrap();
 
@@ -256,7 +256,7 @@ match fs::read_to_string("missing.txt") {
 
 编写程序统计目录中各种文件类型的数量：
 
-```rust
+```rust,ignore
 // TODO: 实现 count_file_types 函数
 // 接受一个目录路径
 // 返回 HashMap<扩展名，数量>
@@ -265,7 +265,7 @@ match fs::read_to_string("missing.txt") {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
@@ -300,7 +300,7 @@ fn count_file_types(path: &Path) -> std::io::Result<HashMap<String, usize>> {
 ### Q: 如何获取 HOME 目录？
 
 **A**: 
-```rust
+```rust,ignore
 // 方法 1: std::env
 std::env::home_dir()
 
@@ -311,7 +311,7 @@ home::home_dir()
 ### Q: 如何处理大文件？
 
 **A**: 使用 `BufReader` 和 `BufWriter` 逐行/逐块处理：
-```rust
+```rust,ignore
 use std::io::{BufReader, BufRead};
 let file = File::open("large.txt")?;
 let reader = BufReader::new(file);

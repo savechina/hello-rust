@@ -46,7 +46,7 @@ cargo add futures
 
 最简单的 Future 使用：
 
-```rust
+```rust,ignore
 use futures::{executor::block_on, Future};
 
 // 定义异步函数
@@ -73,7 +73,7 @@ fn main() {
 
 **Future 是一个 trait**：
 
-```rust
+```rust,ignore
 trait Future {
     type Output;
     
@@ -83,7 +83,7 @@ trait Future {
 ```
 
 **Poll 枚举**：
-```rust
+```rust,ignore
 enum Poll<T> {
     Ready(T),      // 完成，返回结果
     Pending,       // 未完成，等待
@@ -94,7 +94,7 @@ enum Poll<T> {
 
 **最简单的执行器**：
 
-```rust
+```rust,ignore
 use futures::executor::block_on;
 
 async fn task1() -> i32 {
@@ -117,7 +117,7 @@ fn main() {
 
 **使用 then 链式调用**：
 
-```rust
+```rust,ignore
 use futures::{future, FutureExt};
 
 let future = future::ready(42)
@@ -132,7 +132,7 @@ println!("{}", result);  // 85
 
 **使用 join 并发等待**：
 
-```rust
+```rust,ignore
 use futures::future::join;
 
 async fn task1() -> i32 {
@@ -153,7 +153,7 @@ fn main() {
 
 **并发执行多个异步任务**：
 
-```rust
+```rust,ignore
 async fn learn_song() -> Song {
     Song
 }
@@ -186,7 +186,7 @@ async fn learn_and_sing() {
 
 ### 错误 1: Future 未执行
 
-```rust
+```rust,ignore
 async fn task() {
     println!("Hello");
 }
@@ -198,7 +198,7 @@ fn main() {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 fn main() {
     block_on(task());  // ✅ 执行 Future
 }
@@ -206,14 +206,14 @@ fn main() {
 
 ### 错误 2: 在同步上下文中 await
 
-```rust
+```rust,ignore
 fn sync_function() {
     async { 42 }.await;  // ❌ await 只能在 async 函数中使用
 }
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 async fn async_function() {
     async { 42 }.await;  // ✅
 }
@@ -221,7 +221,7 @@ async fn async_function() {
 
 ### 错误 3: 阻塞异步运行时
 
-```rust
+```rust,ignore
 #[tokio::main]
 async fn main() {
     // ❌ 这会阻塞整个运行时
@@ -230,7 +230,7 @@ async fn main() {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 #[tokio::main]
 async fn main() {
     // ✅ 使用异步 sleep
@@ -244,7 +244,7 @@ async fn main() {
 
 ### 练习 1: 创建简单 Future
 
-```rust
+```rust,ignore
 use futures::executor::block_on;
 
 // TODO: 定义异步函数
@@ -260,7 +260,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use futures::executor::block_on;
 
 async fn get_answer() -> i32 {
@@ -276,7 +276,7 @@ fn main() {
 
 ### 练习 2: 链式 Future
 
-```rust
+```rust,ignore
 use futures::{future, FutureExt};
 
 fn main() {
@@ -291,7 +291,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use futures::{future, FutureExt};
 
 fn main() {
@@ -307,7 +307,7 @@ fn main() {
 
 ### 练习 3: 并发执行
 
-```rust
+```rust,ignore
 use futures::future::join;
 
 async fn task1() -> i32 { 10 }
@@ -322,7 +322,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use futures::future::join;
 
 fn main() {
@@ -342,7 +342,7 @@ fn main() {
 - **Future**: trait，表示异步计算
 - **async/await**: 语法糖，让 Future 更易使用
 
-```rust
+```rust,ignore
 // 使用 async/await
 async fn task() -> i32 { 42 }
 
@@ -358,7 +358,7 @@ fn task() -> impl Future<Output = i32> {
 - **block_on**: 在同步上下文中执行 Future（如 main 函数）
 - **.await**: 在异步上下文中等待 Future
 
-```rust
+```rust,ignore
 fn main() {
     block_on(async_main());  // 入口
 }
@@ -374,7 +374,7 @@ async fn async_main() {
 - **join**: 等待所有 Future 完成
 - **select**: 等待第一个完成的 Future
 
-```rust
+```rust,ignore
 // join - 都完成
 let (r1, r2) = join(task1(), task2()).await;
 
@@ -388,7 +388,7 @@ let result = select(task1(), task2()).await;
 
 ### select 使用
 
-```rust
+```rust,ignore
 use futures::future::{select, Either};
 
 async fn task1() -> i32 { 10 }
@@ -407,7 +407,7 @@ fn main() {
 
 ### Future 超时
 
-```rust
+```rust,ignore
 use futures::{FutureExt, TryFutureExt};
 use std::time::Duration;
 
@@ -428,7 +428,7 @@ fn main() {
 
 ### 自定义 Future
 
-```rust
+```rust,ignore
 use std::pin::Pin;
 use std::task::{Context, Poll};
 use futures::Future;

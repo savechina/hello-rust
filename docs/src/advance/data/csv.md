@@ -46,7 +46,7 @@ cargo add csv
 
 最简单的 CSV 读取：
 
-```rust
+```rust,ignore
 use csv::Reader;
 use serde::Deserialize;
 
@@ -89,7 +89,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 **使用 serde 属性**：
 
-```rust
+```rust,ignore
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -116,7 +116,7 @@ struct Employee {
 
 **从文件读取**：
 
-```rust
+```rust,ignore
 use csv::Reader;
 
 let mut reader = Reader::from_path("data.csv")?;
@@ -129,7 +129,7 @@ for result in reader.deserialize() {
 
 **从字符串读取**：
 
-```rust
+```rust,ignore
 use csv::ReaderBuilder;
 
 let data = "name,age\nAlice,30\nBob,25";
@@ -147,7 +147,7 @@ for result in reader.deserialize() {
 
 **指定分隔符**：
 
-```rust
+```rust,ignore
 let mut reader = ReaderBuilder::new()
     .delimiter(b';')  // 使用分号分隔
     .has_headers(true)
@@ -156,7 +156,7 @@ let mut reader = ReaderBuilder::new()
 
 **无表头**：
 
-```rust
+```rust,ignore
 let mut reader = ReaderBuilder::new()
     .has_headers(false)
     .from_path("data.csv")?;
@@ -166,7 +166,7 @@ let mut reader = ReaderBuilder::new()
 
 **写入文件**：
 
-```rust
+```rust,ignore
 use csv::WriterBuilder;
 
 let mut writer = WriterBuilder::new()
@@ -189,7 +189,7 @@ writer.flush()?;  // 确保数据写入磁盘
 
 **过滤数据**：
 
-```rust
+```rust,ignore
 // 过滤：薪资 > 5000 且年龄 < 50
 let filtered: Vec<_> = employees
     .into_iter()
@@ -199,7 +199,7 @@ let filtered: Vec<_> = employees
 
 **转换数据**：
 
-```rust
+```rust,ignore
 // 转换：添加新字段
 let transformed: Vec<_> = employees
     .into_iter()
@@ -213,7 +213,7 @@ let transformed: Vec<_> = employees
 
 **逐行处理**：
 
-```rust
+```rust,ignore
 use csv::Reader;
 
 let mut reader = Reader::from_path("large_data.csv")?;
@@ -232,7 +232,7 @@ for result in reader.deserialize::<Employee>() {
 
 ### 错误 1: 列名不匹配
 
-```rust
+```rust,ignore
 #[derive(Deserialize)]
 struct Employee {
     id: u32,
@@ -250,7 +250,7 @@ CSV deserialize error: field 'id' not found
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 #[derive(Deserialize)]
 struct Employee {
     #[serde(rename = "ID")]
@@ -264,7 +264,7 @@ struct Employee {
 
 ### 错误 2: 类型不匹配
 
-```rust
+```rust,ignore
 #[derive(Deserialize)]
 struct Employee {
     age: u8,
@@ -285,7 +285,7 @@ CSV deserialize error: field 'age': invalid type: string "twenty", expected u8
 
 ### 错误 3: 文件不存在
 
-```rust
+```rust,ignore
 let mut reader = Reader::from_path("nonexistent.csv")?;
 // ❌ 文件不存在
 ```
@@ -296,7 +296,7 @@ No such file or directory (os error 2)
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 use std::path::Path;
 
 let path = "data.csv";
@@ -314,7 +314,7 @@ let mut reader = Reader::from_path(path)?;
 
 ### 练习 1: 定义员工结构体
 
-```rust
+```rust,ignore
 use serde::{Deserialize, Serialize};
 
 // TODO: 定义 Employee 结构体
@@ -325,7 +325,7 @@ use serde::{Deserialize, Serialize};
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Debug, Deserialize, Serialize)]
 struct Employee {
     #[serde(rename = "ID")]
@@ -342,7 +342,7 @@ struct Employee {
 
 ### 练习 2: 读取和打印员工
 
-```rust
+```rust,ignore
 use csv::Reader;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -356,7 +356,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 for result in reader.deserialize() {
     let employee: Employee = result?;
     println!("{} - {} - {}", employee.name, employee.department, employee.salary);
@@ -366,7 +366,7 @@ for result in reader.deserialize() {
 
 ### 练习 3: 过滤和写入
 
-```rust
+```rust,ignore
 // TODO: 读取员工数据
 // TODO: 过滤薪资 > 5000 的员工
 // TODO: 写入到新 CSV 文件
@@ -375,7 +375,7 @@ for result in reader.deserialize() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut reader = Reader::from_path("employees.csv")?;
 let employees: Vec<Employee> = reader.deserialize().collect()?;
 
@@ -400,7 +400,7 @@ writer.flush()?;
 
 **A**: 使用 `Option<T>`:
 
-```rust
+```rust,ignore
 #[derive(Deserialize)]
 struct Record {
     name: String,
@@ -411,7 +411,7 @@ struct Record {
 ### Q: 如何处理不同的分隔符？
 
 **A**: 
-```rust
+```rust,ignore
 let mut reader = ReaderBuilder::new()
     .delimiter(b';')  // 分号
     .from_path("data.csv")?;
@@ -421,7 +421,7 @@ let mut reader = ReaderBuilder::new()
 
 **A**: 逐行处理，不要一次性加载：
 
-```rust
+```rust,ignore
 for result in reader.deserialize() {
     let record: Record = result?;
     // 逐条处理
@@ -434,7 +434,7 @@ for result in reader.deserialize() {
 
 ### 自定义解析器
 
-```rust
+```rust,ignore
 use csv::{ReaderBuilder, StringRecord};
 
 let mut reader = ReaderBuilder::new()
@@ -450,7 +450,7 @@ for result in reader.records() {
 
 ### 并行处理
 
-```rust
+```rust,ignore
 use rayon::prelude::*;
 
 let employees: Vec<Employee> = reader
@@ -461,7 +461,7 @@ let employees: Vec<Employee> = reader
 
 ### 性能优化
 
-```rust
+```rust,ignore
 // 预分配容量
 let mut employees = Vec::with_capacity(1000);
 

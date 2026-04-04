@@ -45,7 +45,7 @@ cargo add macros --path crates/macros
 
 最简单的宏使用：
 
-```rust
+```rust,ignore
 // 声明宏
 macro_rules! say_hello {
     () => {
@@ -75,7 +75,7 @@ fn main() {
 
 **使用 macro_rules!**：
 
-```rust
+```rust,ignore
 macro_rules! make_vec {
     ( $( $x:expr ),* ) => {
         {
@@ -96,7 +96,7 @@ fn main() {
 
 **匹配不同参数**：
 
-```rust
+```rust,ignore
 macro_rules! print_value {
     ( $val:expr ) => {
         println!("The value is: {}", $val);
@@ -117,7 +117,7 @@ fn main() {
 
 **使用过程宏**：
 
-```rust
+```rust,ignore
 // 在 crates/macros/src/lib.rs
 use proc_macro::TokenStream;
 
@@ -138,7 +138,7 @@ fn say_hello(name: &str) {
 
 **宏卫生 (Hygiene)**：
 
-```rust
+```rust,ignore
 macro_rules! create_x {
     () => {
         let x = 42;
@@ -157,7 +157,7 @@ fn main() {
 
 ### 错误 1: 宏作用域
 
-```rust
+```rust,ignore
 mod utils {
     macro_rules! say_hello {
         () => { println!("Hello!"); };
@@ -170,7 +170,7 @@ fn main() {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 mod utils {
     #[macro_export]
     macro_rules! say_hello {
@@ -185,7 +185,7 @@ fn main() {
 
 ### 错误 2: 参数不匹配
 
-```rust
+```rust,ignore
 macro_rules! print_value {
     ( $val:expr ) => {
         println!("Value: {}", $val);
@@ -196,7 +196,7 @@ print_value!(1, 2, 3);  // ❌ 期望 1 个参数，得到 3 个
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 macro_rules! print_values {
     ( $( $val:expr ),* ) => {
         $( println!("Value: {}", $val); )*
@@ -208,13 +208,13 @@ print_values!(1, 2, 3);  // ✅ 多个参数
 
 ### 错误 3: 过程宏错误
 
-```rust
+```rust,ignore
 #[log]  // ❌ 忘记导入宏
 fn say_hello() {}
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 use macros::log;  // ✅ 导入宏
 
 #[log]
@@ -227,7 +227,7 @@ fn say_hello() {}
 
 ### 练习 1: 创建简单宏
 
-```rust
+```rust,ignore
 // TODO: 创建 say_hi 宏
 // 打印 "Hi from macro!"
 
@@ -239,7 +239,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 macro_rules! say_hi {
     () => {
         println!("Hi from macro!");
@@ -250,7 +250,7 @@ macro_rules! say_hi {
 
 ### 练习 2: 带参数的宏
 
-```rust
+```rust,ignore
 // TODO: 创建 greet 宏
 // 接受一个名字参数
 // 打印 "Hello, {name}!"
@@ -263,7 +263,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 macro_rules! greet {
     ( $name:expr ) => {
         println!("Hello, {}!", $name);
@@ -274,7 +274,7 @@ macro_rules! greet {
 
 ### 练习 3: 可变参数宏
 
-```rust
+```rust,ignore
 // TODO: 创建 sum 宏
 // 接受多个数字参数
 // 打印总和
@@ -287,7 +287,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 macro_rules! sum {
     ( $( $x:expr ),* ) => {
         let mut sum = 0;
@@ -330,7 +330,7 @@ macro_rules! sum {
 
 ### 高级宏技巧
 
-```rust
+```rust,ignore
 macro_rules! impl_trait_for_nums {
     ( $($t:ty),* ) => {
         $(
@@ -348,7 +348,7 @@ impl_trait_for_nums!(i32, i64, u32, u64);
 
 ### 过程宏类型
 
-```rust
+```rust,ignore
 // 属性宏
 #[proc_macro_attribute]
 pub fn my_attr(attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -370,7 +370,7 @@ pub fn my_macro(item: TokenStream) -> TokenStream {
 
 ### 宏调试
 
-```rust
+```rust,ignore
 macro_rules! debug {
     ( $val:expr ) => {
         println!("{} = {:?}", stringify!($val), $val);

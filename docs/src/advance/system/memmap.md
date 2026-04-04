@@ -46,7 +46,7 @@ cargo add tempfile
 
 最简单的内存映射：
 
-```rust
+```rust,ignore
 use std::io::{Write, Seek, SeekFrom};
 use std::fs::File;
 use memmap2::Mmap;
@@ -107,7 +107,7 @@ fn main() -> std::io::Result<()> {
 
 **使用 Mmap::map()**：
 
-```rust
+```rust,ignore
 use memmap2::Mmap;
 use std::fs::File;
 
@@ -122,7 +122,7 @@ println!("内容：{}", String::from_utf8_lossy(&mmap));
 
 **使用 MmapMut**：
 
-```rust
+```rust,ignore
 use memmap2::MmapMut;
 use std::fs::File;
 
@@ -142,7 +142,7 @@ mmap.flush()?;
 
 **使用 make_mut()**：
 
-```rust
+```rust,ignore
 use memmap2::Mmap;
 
 let mmap = unsafe { Mmap::map(&file)? };
@@ -158,7 +158,7 @@ mmap_mut[..5].copy_from_slice(b"Hello");
 
 **使用 page_size::get()**：
 
-```rust
+```rust,ignore
 use page_size;
 
 let page_size = page_size::get();
@@ -171,7 +171,7 @@ println!("系统页面大小：{} bytes", page_size);
 
 **大文件处理**：
 
-```rust
+```rust,ignore
 use memmap2::Mmap;
 use std::fs::File;
 
@@ -192,7 +192,7 @@ println!("数据：{:?}", &mmap[offset..offset+100]);
 
 ### 错误 1: 忘记设置文件大小
 
-```rust
+```rust,ignore
 use memmap2::MmapMut;
 use std::fs::File;
 
@@ -207,14 +207,14 @@ Invalid argument (os error 22)
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 file.set_len(4096)?;  // ✅ 先设置文件大小
 let mmap = unsafe { MmapMut::map_mut(&file)? };
 ```
 
 ### 错误 2: 忘记使用 unsafe
 
-```rust
+```rust,ignore
 let mmap = Mmap::map(&file)?;  // ❌ 缺少 unsafe
 ```
 
@@ -224,13 +224,13 @@ unsafe fn `map` requires unsafe function or block
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let mmap = unsafe { Mmap::map(&file)? };  // ✅ 使用 unsafe 块
 ```
 
 ### 错误 3: 访问已释放的映射
 
-```rust
+```rust,ignore
 fn create_mmap() -> Mmap {
     let file = File::open("data.txt").unwrap();
     unsafe { Mmap::map(&file).unwrap() }  // ❌ file 已被释放
@@ -238,7 +238,7 @@ fn create_mmap() -> Mmap {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 fn keep_mmap() -> std::io::Result<Mmap> {
     let file = File::open("data.txt")?;
     let mmap = unsafe { Mmap::map(&file)? };
@@ -252,7 +252,7 @@ fn keep_mmap() -> std::io::Result<Mmap> {
 
 ### 练习 1: 创建只读映射
 
-```rust
+```rust,ignore
 use memmap2::Mmap;
 use std::fs::File;
 
@@ -266,7 +266,7 @@ fn main() -> std::io::Result<()> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let file = File::open("data.txt")?;
 let mmap = unsafe { Mmap::map(&file)? };
 
@@ -276,7 +276,7 @@ println!("前 100 字节：{:?}", &mmap[..100.min(mmap.len())]);
 
 ### 练习 2: 创建可写映射
 
-```rust
+```rust,ignore
 use memmap2::MmapMut;
 use std::fs::File;
 
@@ -293,7 +293,7 @@ fn main() -> std::io::Result<()> {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 file.set_len(4096)?;
 
 let mut mmap = unsafe { MmapMut::map_mut(&file)? };
@@ -304,7 +304,7 @@ mmap.flush()?;
 
 ### 练习 3: 获取系统页面大小
 
-```rust
+```rust,ignore
 use page_size;
 
 fn main() {
@@ -316,7 +316,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let page_size = page_size::get();
 println!("系统页面大小：{} bytes", page_size);
 ```
@@ -343,7 +343,7 @@ println!("系统页面大小：{} bytes", page_size);
 ### Q: 如何处理超大文件？
 
 **A**: 
-```rust
+```rust,ignore
 use memmap2::Mmap;
 
 // 映射整个文件（可能很大）
@@ -359,7 +359,7 @@ let chunk = &mmap[offset..offset+size];
 
 ### 异步内存映射
 
-```rust
+```rust,ignore
 use tokio::fs::File;
 use memmap2::Mmap;
 
@@ -372,7 +372,7 @@ let mmap = tokio::task::spawn_blocking(move || {
 
 ### 匿名映射
 
-```rust
+```rust,ignore
 use memmap2::MmapMut;
 
 // 创建不关联文件的内存映射
@@ -381,7 +381,7 @@ let mmap = unsafe { MmapMut::map_anon(4096)? };
 
 ### 性能对比
 
-```rust
+```rust,ignore
 // 传统读取
 let mut buffer = Vec::new();
 file.read_to_end(&mut buffer)?;

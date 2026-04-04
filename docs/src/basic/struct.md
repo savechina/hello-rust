@@ -37,7 +37,7 @@
 
 让我们定义一个简单的矩形结构体：
 
-```rust
+```rust,ignore
 struct Rectangle {
     width: u32,
     height: u32,
@@ -72,7 +72,7 @@ fn main() {
 
 ### 2. 定义结构体
 
-```rust
+```rust,ignore
 struct User {
     username: String,
     email: String,
@@ -92,7 +92,7 @@ struct User {
 
 创建结构体使用**字段初始化语法**：
 
-```rust
+```rust,ignore
 let user1 = User {
     email: String::from("someone@example.com"),
     username: String::from("alice"),
@@ -103,7 +103,7 @@ let user1 = User {
 
 **字段顺序重要吗？**：
 
-```rust
+```rust,ignore
 // 这些是等价的！
 let user1 = User {
     email: String::from("test@example.com"),
@@ -126,7 +126,7 @@ let user2 = User {
 
 使用**点号**访问：
 
-```rust
+```rust,ignore
 let user = User {
     email: String::from("test@example.com"),
     username: String::from("alice"),
@@ -142,7 +142,7 @@ user.active = false;  // ✅ 可以修改（如果变量是可变的）
 
 **所有权规则**：
 
-```rust
+```rust,ignore
 let user1 = User {
     email: String::from("test@example.com"),
     username: String::from("alice"),
@@ -159,7 +159,7 @@ println!("{}", email);     // ✅ 可以
 
 当变量名和字段名**相同时**，可以简写：
 
-```rust
+```rust,ignore
 fn build_user(email: String, username: String) -> User {
     User {
         email: email,     // 重复
@@ -189,7 +189,7 @@ fn build_user(email: String, username: String) -> User {
 
 使用已有实例创建新实例：
 
-```rust
+```rust,ignore
 let user1 = User {
     email: String::from("test@example.com"),
     username: String::from("alice"),
@@ -210,7 +210,7 @@ let user2 = User {
 
 **注意**：
 
-```rust
+```rust,ignore
 // println!("{}", user1.username); // ❌ 错误！已经移动给 user2
 println!("{}", user1.email); // ✅ 可以，email 是新创建的
 ```
@@ -219,7 +219,7 @@ println!("{}", user1.email); // ✅ 可以，email 是新创建的
 
 当结构体只有**一个字段**，或者你不想给字段命名时：
 
-```rust
+```rust,ignore
 struct Color(i32, i32, i32);  // RGB
 struct Point(i32, i32, i32);  // 3D 坐标
 
@@ -240,7 +240,7 @@ println!("原点：({},{},{})", origin.0, origin.1, origin.2);
 
 没有任何字段的结构体：
 
-```rust
+```rust,ignore
 struct AlwaysEqual;
 
 fn main() {
@@ -280,7 +280,7 @@ class Cashier extends Employee {
 
 Rust 用 trait + 组合解决这个问题。每个员工有不同的能力组合：
 
-```rust
+```rust,ignore
 // Rust 的组合模式
 trait Cook {
     fn cook(&self);
@@ -331,7 +331,7 @@ class SwimmingFlyingCharacter extends FlyingCharacter {
 }
 ```
 
-```rust
+```rust,ignore
 // Rust: 灵活组合
 trait Move { fn move(&self); }
 trait Fly { fn fly(&self); }
@@ -359,7 +359,7 @@ impl Swim for Dragon { fn swim(&self) {} }
 
 ### 错误 1: 忘记字段类型
 
-```rust
+```rust,ignore
 struct User {
     username,  // ❌ 编译错误!
     email,
@@ -378,7 +378,7 @@ error: expected `:`, found `,`
 **修复方法**：
 
 添加类型注解：
-```rust
+```rust,ignore
 struct User {
     username: String,  // ✅
     email: String,
@@ -389,7 +389,7 @@ struct User {
 
 ### 错误 2: 移动后使用字段
 
-```rust
+```rust,ignore
 let user1 = User {
     email: String::from("test@example.com"),
     username: String::from("alice"),
@@ -420,13 +420,13 @@ error[E0382]: borrow of partially moved value: `user1`
 **修复方法**：
 
 1. **使用引用而不是移动**：
-   ```rust
+   ```rust,ignore
    let user2 = &user1; // 借用，不移动
    println!("{}", user1.username); // ✅ 可以
    ```
 
 2. **不要使用更新语法**，手动复制所有字段：
-   ```rust
+   ```rust,ignore
    let user2 = User {
        email: String::from("another@example.com"),
        username: user1.username.clone(), // 克隆
@@ -439,7 +439,7 @@ error[E0382]: borrow of partially moved value: `user1`
 
 ### 错误 3: 试图修改不可变结构体
 
-```rust
+```rust,ignore
 let user = User {
     email: String::from("test@example.com"),
     username: String::from("alice"),
@@ -465,7 +465,7 @@ error[E0594]: cannot assign to `user.active`, as `user` is not declared as mutab
 **修复方法**：
 
 声明为可变：
-```rust
+```rust,ignore
 let mut user = User {  // 添加 mut
     email: String::from("test@example.com"),
     username: String::from("alice"),
@@ -484,7 +484,7 @@ user.active = false; // ✅ 现在可以了
 
 预测下面代码哪些会编译通过：
 
-```rust
+```rust,ignore
 struct Person {
     name: String,
     age: u32,
@@ -523,7 +523,7 @@ fn main() {
 
 使用更新语法补全代码，使得 `user2` 的 `email` 不同，其他字段和 `user1` 相同：
 
-```rust
+```rust,ignore
 struct User {
     email: String,
     username: String,
@@ -547,7 +547,7 @@ fn main() {
 <summary>点击查看答案</summary>
 
 **答案**:
-```rust
+```rust,ignore
 let user2 = User {
     email: String::from("another@example.com"),
     ..user1
@@ -564,7 +564,7 @@ let user2 = User {
 
 使用字段初始化简写重写函数：
 
-```rust
+```rust,ignore
 fn create_point(x: i32, y: i32, z: i32) -> Point {
     Point {
         x: x,
@@ -578,7 +578,7 @@ fn create_point(x: i32, y: i32, z: i32) -> Point {
 <summary>点击查看答案</summary>
 
 **答案**:
-```rust
+```rust,ignore
 fn create_point(x: i32, y: i32, z: i32) -> Point {
     Point {
         x,  // 简写！
@@ -611,7 +611,7 @@ fn create_point(x: i32, y: i32, z: i32) -> Point {
 - 字段有固定顺序且很明显
 
 示例：
-```rust
+```rust,ignore
 // ✅ 结构体 - 字段有不同含义
 struct Person {
     name: String,
@@ -629,7 +629,7 @@ struct Point(i32, i32, i32);
 
 **A**: 使用 `#[derive(Debug)]` 属性：
 
-```rust
+```rust,ignore
 #[derive(Debug)]
 struct User {
     username: String,
@@ -656,7 +656,7 @@ User { username: "alice", email: "test@example.com" }
 
 **A**: ✅ 可以！使用访问控制：
 
-```rust
+```rust,ignore
 mod user_module {
     pub struct User {
         pub username: String,  // 公开
@@ -684,7 +684,7 @@ mod user_module {
 
 结构体可以有**方法** - 这是下一章节的内容，先预览一下：
 
-```rust
+```rust,ignore
 impl Rectangle {
     fn area(&self) -> u32 {
         self.width * self.height
@@ -705,7 +705,7 @@ println!("面积：{}", rect.area());  // 方法
 
 当结构体包含**引用**时，需要生命周期标注：
 
-```rust
+```rust,ignore
 struct RectangleRef<'a> {
     width: &'a u32,
     height: &'a u32,
@@ -787,7 +787,7 @@ struct RectangleRef<'a> {
 ## 💡 小知识：结构体 vs 元组
 
 **元组的问题**：
-```rust
+```rust,ignore
 // 元组表示用户
 let user = ("Alice", 30, "alice@example.com");
 
@@ -798,7 +798,7 @@ println!("邮箱：{}", user.2);  // 2 是什么？
 ```
 
 **结构体的优势**：
-```rust
+```rust,ignore
 // 结构体表示用户
 struct User {
     name: String,
@@ -823,7 +823,7 @@ println!("邮箱：{}", user.email);   // ✅
 - **结构体**: 有明确含义的数据、需要长期存储
 
 **元组结构体** (混合方案)：
-```rust
+```rust,ignore
 struct Color(i32, i32, i32);  // RGB
 let black = Color(0, 0, 0);
 println!("R: {}", black.0);  // 仍用数字索引
@@ -835,7 +835,7 @@ println!("R: {}", black.0);  // 仍用数字索引
 
 **场景**：RPG 游戏角色定义
 
-```rust
+```rust,ignore
 struct Character {
     name: String,           // 角色名
     level: u32,             // 等级
@@ -889,7 +889,7 @@ fn main() {
 
 **练习**：为图书管理系统设计结构体
 
-```rust
+```rust,ignore
 // TODO: 定义 Book 结构体
 // 字段：title, author, year, isbn, available
 
@@ -906,7 +906,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 struct Book {
     title: String,
     author: String,
@@ -1012,7 +1012,7 @@ user2 有效 (拥有新 username)
 
 如何修改结构体字段的值？
 
-```rust
+```rust,ignore
 struct Point {
     x: i32,
     y: i32,
@@ -1034,7 +1034,7 @@ let mut p = Point { x: 5, y: 10 };
 
 以下哪种方法是正确的？
 
-```rust
+```rust,ignore
 impl Rectangle {
     fn area(&self) -> u32 {
         self.width * self.height
@@ -1063,7 +1063,7 @@ D) 都不正确
 
 这段代码的输出是什么？
 
-```rust
+```rust,ignore
 #[derive(Debug)]
 struct User {
     active: bool,

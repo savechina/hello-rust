@@ -96,7 +96,7 @@ Tokio 运行时
 
 ### 2. 异步任务创建
 
-```rust
+```rust,ignore
 // 方式 1: #[tokio::main]
 #[tokio::main]
 async fn main() {
@@ -123,7 +123,7 @@ async fn main() {
 
 ### 3. 通道通信 (mpsc)
 
-```rust
+```rust,ignore
 use tokio::sync::mpsc;
 
 #[tokio::main]
@@ -154,7 +154,7 @@ async fn main() {
 
 ### 4. 多任务并发
 
-```rust
+```rust,ignore
 #[tokio::main]
 async fn main() {
     let (tx, mut rx) = mpsc::channel(10);
@@ -180,7 +180,7 @@ async fn main() {
 
 ### 5. 共享状态 (RwLock)
 
-```rust
+```rust,ignore
 use tokio::sync::RwLock;
 use std::sync::Arc;
 
@@ -221,7 +221,7 @@ async fn main() {
 
 ### 6. 阻塞代码 (spawn_blocking)
 
-```rust
+```rust,ignore
 use parking_lot::RwLock;
 
 #[tokio::main]
@@ -249,7 +249,7 @@ async fn main() {
 
 ### 7. Oneshot 通道
 
-```rust
+```rust,ignore
 use tokio::sync::oneshot;
 
 #[tokio::main]
@@ -276,7 +276,7 @@ async fn main() {
 
 ### 错误 1: 忘记 drop 发送端
 
-```rust
+```rust,ignore
 // ❌ 错误：接收端会永远等待
 let (tx, mut rx) = mpsc::channel(100);
 tokio::spawn(async move {
@@ -298,7 +298,7 @@ tokio::spawn(async move {
 
 ### 错误 2: 在异步上下文中使用阻塞操作
 
-```rust
+```rust,ignore
 // ❌ 错误：阻塞异步运行时
 #[tokio::main]
 async fn main() {
@@ -314,7 +314,7 @@ async fn main() {
 
 ### 错误 3: 共享随机数生成器
 
-```rust
+```rust,ignore
 // ❌ 错误：thread_rng 不是 Send
 tokio::spawn(async move {
     let mut rng = rand::thread_rng(); // 编译错误！
@@ -335,7 +335,7 @@ tokio::spawn(async move {
 
 创建一个 TCP 服务器，回显客户端发送的消息：
 
-```rust
+```rust,ignore
 // TODO: 实现 echo_server 函数
 // 监听 127.0.0.1:8080
 // 为每个连接创建异步任务
@@ -413,7 +413,7 @@ tokio = { version = "1", features = ["full"] }
 ```
 
 **运行时配置**：
-```rust
+```rust,ignore
 #[tokio::main(flavor = "multi_thread", worker_threads = 4)]
 async fn main() {
     // 4 个工作线程

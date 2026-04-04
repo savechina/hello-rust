@@ -70,7 +70,7 @@ cargo add serde_json
 
 让我们看一个最简单的 MQTT 同步客户端示例：
 
-```rust
+```rust,ignore
 use rumqttc::{Client, MqttOptions, QoS};
 use std::time::Duration;
 
@@ -183,7 +183,7 @@ Publisher                           Broker                          Subscriber
 
 MQTT Broker 是消息的中转站，负责接收发布者的消息并转发给订阅者：
 
-```rust
+```rust,ignore
 // 连接到本地 MQTT Broker
 let mut mqttoptions = MqttOptions::new("client-id", "127.0.0.1", 1883);
 
@@ -197,7 +197,7 @@ mqttoptions.set_keep_alive(Duration::from_secs(5));
 
 主题是消息的地址，使用层级结构：
 
-```rust
+```rust,ignore
 // 简单主题
 let topic = "sensors/temperature";
 
@@ -217,7 +217,7 @@ client.subscribe("home/#", QoS::AtMostOnce).unwrap(); // # 匹配多级
 | 1 | AtLeastOnce | 至少一次，需确认 | 关键数据，允许重复 |
 | 2 | ExactlyOnce | 恰好一次，四次握手 | 关键命令，不可重复 |
 
-```rust
+```rust,ignore
 use rumqttc::QoS;
 
 // QoS 0: 发送即忘
@@ -256,7 +256,7 @@ client.publish("payment/confirm", QoS::ExactlyOnce, false, payload).unwrap();
 
 ### 异步客户端完整示例
 
-```rust
+```rust,ignore
 use rumqttc::{AsyncClient, Event, MqttOptions, Packet, QoS};
 
 #[tokio::main]
@@ -330,7 +330,7 @@ async fn main() {
 
 ### 错误 1: 忘记处理连接保持
 
-```rust
+```rust,ignore
 // ❌ 错误：没有设置 keep_alive
 let mqttoptions = MqttOptions::new("client", "broker", 1883);
 
@@ -343,7 +343,7 @@ mqttoptions.set_keep_alive(Duration::from_secs(5));
 
 ### 错误 2: 同步客户端在异步上下文中使用
 
-```rust
+```rust,ignore
 // ❌ 错误：在 async 函数中使用同步 Client
 async fn bad_example() {
     let (client, _) = Client::new(mqttoptions, 10); // 阻塞！
@@ -359,7 +359,7 @@ async fn good_example() {
 
 ### 错误 3: 没有处理连接断开和重连
 
-```rust
+```rust,ignore
 // ❌ 错误：连接断开时直接退出
 loop {
     let notification = connection.iter().next().unwrap(); // 断开时 panic
@@ -380,7 +380,7 @@ loop {
 
 ### 错误 4: 主题名称包含非法字符
 
-```rust
+```rust,ignore
 // ❌ 错误：主题包含空格和特殊字符
 let topic = "my topic with spaces";
 
@@ -399,7 +399,7 @@ let topic = "my/topic/with/hierarchy";
 
 下面的代码有什么问题？
 
-```rust
+```rust,ignore
 fn main() {
     let mqttoptions = MqttOptions::new("client", "127.0.0.1", 1883);
     let (client, mut connection) = Client::new(mqttoptions, 10);
@@ -427,7 +427,7 @@ fn main() {
 
 **修复方案**：
 
-```rust
+```rust,ignore
 use rumqttc::{Client, MqttOptions, QoS, Packet, Event};
 use std::time::Duration;
 use std::thread;
@@ -468,7 +468,7 @@ fn main() {
 
 补全下面的代码，实现一个简单的温度监控器：
 
-```rust
+```rust,ignore
 #[tokio::main]
 async fn main() {
     let mut mqttoptions = MqttOptions::new("temp-monitor", "127.0.0.1", 1883);
@@ -489,7 +489,7 @@ async fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use rumqttc::{AsyncClient, MqttOptions, QoS, Packet, Event};
 
 #[tokio::main]
@@ -537,7 +537,7 @@ async fn main() {
 
 预测以下代码中消息的传输可靠性（假设网络不稳定）：
 
-```rust
+```rust,ignore
 // 传感器 A：QoS 0
 client.publish("sensor/a", QoS::AtMostOnce, false, vec![1]).await.unwrap();
 
@@ -579,7 +579,7 @@ client.publish("sensor/c", QoS::ExactlyOnce, false, vec![3]).await.unwrap();
 
 ### 应用场景 1: 智能家居控制中心
 
-```rust
+```rust,ignore
 use rumqttc::{AsyncClient, MqttOptions, QoS, Packet, Event};
 use std::collections::HashMap;
 use tokio::sync::RwLock;
@@ -621,7 +621,7 @@ async fn main() {
 
 ### 应用场景 2: 传感器数据采集
 
-```rust
+```rust,ignore
 use rumqttc::{AsyncClient, MqttOptions, QoS};
 use tokio::time::{interval, Duration};
 use rand::Rng;
@@ -664,7 +664,7 @@ async fn main() {
 
 ### 应用场景 3: 带遗嘱消息的客户端
 
-```rust
+```rust,ignore
 use rumqttc::{AsyncClient, LastWill, MqttOptions, QoS};
 
 #[tokio::main]
@@ -745,7 +745,7 @@ async fn main() {
 
 **A**: 使用背压控制和合理配置：
 
-```rust
+```rust,ignore
 // 增大接收缓冲区
 let (client, eventloop) = AsyncClient::new(mqttoptions, 100); // 缓冲区 100
 
@@ -781,7 +781,7 @@ for _ in 0..4 {
 
 MQTT 5.0 相比 3.1.1 增加了许多功能：
 
-```rust
+```rust,ignore
 // 消息过期时间
 let properties = PublishProperties {
     message_expiry_interval: Some(60), // 60秒后过期
@@ -797,7 +797,7 @@ let user_properties = vec![
 
 ### TLS 加密连接
 
-```rust
+```rust,ignore
 use rumqttc::{MqttOptions, Transport};
 
 let mut mqttoptions = MqttOptions::new("secure-client", "broker.example.com", 8883);

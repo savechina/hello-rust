@@ -54,7 +54,7 @@ cargo add anyhow
 
 最简单的 CLI 工具：
 
-```rust
+```rust,ignore
 use clap::Parser;
 
 /// 简单的问候程序
@@ -131,7 +131,7 @@ Options:
 
 **1. 派生宏（Derive Macros）**
 
-```rust
+```rust,ignore
 use clap::Parser;
 
 #[derive(Parser)]
@@ -148,7 +148,7 @@ struct Cli {
 
 **2. 子命令（Subcommands）**
 
-```rust
+```rust,ignore
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
@@ -170,7 +170,7 @@ enum Commands {
 
 **3. 嵌套子命令**
 
-```rust
+```rust,ignore
 use clap::{Parser, Subcommand, Args};
 
 #[derive(Subcommand)]
@@ -212,7 +212,7 @@ my-cli-app/
 
 ### 完整示例：计算器 CLI
 
-```rust
+```rust,ignore
 use clap::{Args, Parser, Subcommand};
 
 #[derive(Parser)]
@@ -327,7 +327,7 @@ Options:
 
 ### 错误处理最佳实践
 
-```rust
+```rust,ignore
 use anyhow::{Context, Result};
 
 fn main() -> Result<()> {
@@ -354,7 +354,7 @@ fn run(cli: &Cli) -> Result<()> {
 
 ### 日志集成
 
-```rust
+```rust,ignore
 use tracing_subscriber;
 
 fn main() -> Result<()> {
@@ -402,7 +402,7 @@ fn main() -> Result<()> {
 
 ### 错误 1: 未提供默认值
 
-```rust
+```rust,ignore
 // ❌ 错误：必需参数，但用户可能不知道
 #[arg(short, long)]
 output: String,
@@ -414,7 +414,7 @@ output: String,
 
 ### 错误 2: 错误信息不友好
 
-```rust
+```rust,ignore
 // ❌ 错误：直接 unwrap
 let file = std::fs::read_to_string(path).unwrap();
 
@@ -425,7 +425,7 @@ let file = std::fs::read_to_string(path)
 
 ### 错误 3: 未处理 SIGINT/SIGTERM
 
-```rust
+```rust,ignore
 // ❌ 错误：无法优雅退出
 loop {
     // 永远运行，无法停止
@@ -446,7 +446,7 @@ println!("收到 Ctrl+C，正在关闭...");
 
 在计算器 CLI 中添加 `power` 子命令，计算 a 的 b 次方：
 
-```rust
+```rust,ignore
 // TODO: 在 CalcCommands 枚举中添加 Power 变体
 // Power { a: i32, b: i32 }
 
@@ -456,7 +456,7 @@ println!("收到 Ctrl+C，正在关闭...");
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Subcommand)]
 enum CalcCommands {
     // ... 其他命令

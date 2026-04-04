@@ -37,7 +37,7 @@
 
 定义一个矩形结构体并添加计算面积的方法：
 
-```rust
+```rust,ignore
 struct Rectangle {
     width: u32,
     height: u32,
@@ -90,7 +90,7 @@ fn main() {
 
 使用 `impl` 关键字为结构体添加方法：
 
-```rust
+```rust,ignore
 struct Point {
     x: f64,
     y: f64,
@@ -109,7 +109,7 @@ impl Point {
 
 **`&self` - 借用（不修改）**：
 
-```rust
+```rust,ignore
 impl Rectangle {
     fn area(&self) -> u32 {  // 只读，不修改
         self.width * self.height
@@ -122,7 +122,7 @@ println!("{}", rect.area()); // rect 仍然可用
 
 **`&mut self` - 可变借用（修改）**：
 
-```rust
+```rust,ignore
 impl Rectangle {
     fn double_width(&mut self) {
         self.width *= 2;  // 修改字段
@@ -135,7 +135,7 @@ rect.double_width();  // rect 现在 width=60
 
 **`self` - 获取所有权（消耗）**：
 
-```rust
+```rust,ignore
 impl Rectangle {
     fn into_components(self) -> (u32, u32) {
         (self.width, self.height)  // 消耗 rect
@@ -150,7 +150,7 @@ let (w, h) = rect.into_components(); // rect 不能再使用
 
 关联函数（类似其他语言的静态方法）：
 
-```rust
+```rust,ignore
 impl Point {
     // 关联函数 (没有 self 参数)
     fn new(x: f64, y: f64) -> Point {
@@ -174,7 +174,7 @@ fn main() {
 
 可以使用多个 `impl` 块：
 
-```rust
+```rust,ignore
 impl Point {
     fn new(x: f64, y: f64) -> Point {
         Point { x, y }
@@ -194,7 +194,7 @@ impl Point {
 
 通过返回 `&mut Self` 实现方法链：
 
-```rust
+```rust,ignore
 impl Rectangle {
     fn set_width(&mut self, width: u32) -> &mut Self {
         self.width = width;
@@ -217,7 +217,7 @@ rect.set_width(100).set_height(200);  // 链式调用
 
 ### 错误 1: 忘记 `&`
 
-```rust
+```rust,ignore
 impl Rectangle {
     fn area(self) -> u32 {  // ❌ 会消耗 rect
         self.width * self.height
@@ -231,13 +231,13 @@ println!("{}", rect.area());
 
 **修复**：使用 `&self`
 
-```rust
+```rust,ignore
 fn area(&self) -> u32 {  // ✅ 借用，不消耗
 ```
 
 ### 错误 2: 忘记 `mut`
 
-```rust
+```rust,ignore
 fn main() {
     let rect = Rectangle { width: 30, height: 50 };
     rect.double_width();  // ❌ 错误！rect 不是可变的
@@ -246,21 +246,21 @@ fn main() {
 
 **修复**：声明为 `mut`
 
-```rust
+```rust,ignore
 let mut rect = Rectangle { width: 30, height: 50 };
 rect.double_width();  // ✅
 ```
 
 ### 错误 3: 错误使用关联函数
 
-```rust
+```rust,ignore
 let p1 = Point { x: 0.0, y: 0.0 };
 p1.new(1.0, 1.0);  // ❌ 错误！new 是关联函数
 ```
 
 **修复**：使用结构体名调用
 
-```rust
+```rust,ignore
 let p1 = Point::new(0.0, 0.0);  // ✅
 ```
 
@@ -272,7 +272,7 @@ let p1 = Point::new(0.0, 0.0);  // ✅
 
 为 `Person` 结构体实现 `greet` 方法：
 
-```rust
+```rust,ignore
 struct Person {
     name: String,
 }
@@ -290,7 +290,7 @@ fn main() {
 <details>
 <summary>点击查看实现</summary>
 
-```rust
+```rust,ignore
 fn greet(&self) {
     println!("Hello, my name is {}", self.name);
 }
@@ -301,7 +301,7 @@ fn greet(&self) {
 
 为 `Counter` 结构体实现 `increment` 方法：
 
-```rust
+```rust,ignore
 struct Counter {
     count: u32,
 }
@@ -314,7 +314,7 @@ impl Counter {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 fn increment(&mut self) {
     self.count += 1;
 }
@@ -341,7 +341,7 @@ fn increment(&mut self) {
 
 **A**: ✅ 可以！默认私有：
 
-```rust
+```rust,ignore
 impl Rectangle {
     fn internal_helper(&self) { /* 私有方法 */ }
     pub fn public_method(&self) { /* 公有方法 */ }

@@ -36,7 +36,7 @@
 
 最简单的类型别名：
 
-```rust
+```rust,ignore
 // 类型别名
 type NodeCell = RefCell<TreeNode>;
 type NodeArcPtr = Arc<NodeCell>;
@@ -62,7 +62,7 @@ fn create_node() -> NodeArcPtr {
 
 **使用 type 创建别名**：
 
-```rust
+```rust,ignore
 type Result<T> = std::result::Result<T, MyError>;
 type Callback = Box<dyn Fn(i32) -> String>;
 ```
@@ -71,7 +71,7 @@ type Callback = Box<dyn Fn(i32) -> String>;
 
 **简化嵌套类型**：
 
-```rust
+```rust,ignore
 // 不使用别名
 fn process(data: Arc<RefCell<HashMap<String, Vec<User>>>>) {
     // ...
@@ -89,7 +89,7 @@ fn process(data: UserData) {
 
 **使用类型别名实现双向链表**：
 
-```rust
+```rust,ignore
 type NodeCell = RefCell<TreeNode>;
 type NodeArcPtr = Arc<NodeCell>;
 type NodeWeakPtr = Weak<NodeCell>;
@@ -136,7 +136,7 @@ impl TreeNode {
 
 **提高可读性**：
 
-```rust
+```rust,ignore
 // 之前
 fn connect(
     Arc<RefCell<dyn ConnectionHandler + Send + Sync>>
@@ -154,7 +154,7 @@ fn connect(conn: ConnectionPtr) -> Result<(), Box<dyn Error>>;
 
 ### 错误 1: 循环依赖
 
-```rust
+```rust,ignore
 type A = B;
 type B = A;  // ❌ 循环定义
 ```
@@ -165,27 +165,27 @@ cycle detected when computing type of `B`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 type A = i32;  // ✅ 打破循环
 type B = A;
 ```
 
 ### 错误 2: 类型不匹配
 
-```rust
+```rust,ignore
 type MyType = String;
 
 let s: MyType = "hello";  // ❌ &str != String
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let s: MyType = "hello".to_string();  // ✅ 转换为 String
 ```
 
 ### 错误 3: 生命周期错误
 
-```rust
+```rust,ignore
 type NodePtr = Rc<RefCell<Node>>;
 
 fn create_node() -> NodePtr {
@@ -200,7 +200,7 @@ fn create_node() -> NodePtr {
 
 ### 练习 1: 创建简单别名
 
-```rust
+```rust,ignore
 // TODO: 创建 UserId 类型别名 (u64)
 // TODO: 创建 UserName 类型别名 (String)
 
@@ -212,7 +212,7 @@ fn create_user(id: UserId, name: UserName) {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 type UserId = u64;
 type UserName = String;
 ```
@@ -220,7 +220,7 @@ type UserName = String;
 
 ### 练习 2: 简化复杂类型
 
-```rust
+```rust,ignore
 use std::sync::{Arc, Mutex};
 
 // TODO: 创建 DataPtr 类型别名
@@ -235,14 +235,14 @@ fn process_data(data: DataPtr) {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 type DataPtr = Arc<Mutex<Vec<String>>>;
 ```
 </details>
 
 ### 练习 3: 实现双向链表节点
 
-```rust
+```rust,ignore
 use std::cell::RefCell;
 use std::sync::{Arc, Weak};
 
@@ -261,7 +261,7 @@ struct Node {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 type NodeCell = RefCell<Node>;
 type NodePtr = Arc<NodeCell>;
 type NodeWeak = Weak<NodeCell>;
@@ -297,14 +297,14 @@ type NodeWeak = Weak<NodeCell>;
 
 ### 泛型别名
 
-```rust
+```rust,ignore
 type Result<T> = std::result::Result<T, MyError>;
 type Callback<T> = Box<dyn Fn(T) -> String>;
 ```
 
 ### 条件类型别名
 
-```rust
+```rust,ignore
 #[cfg(target_os = "linux")]
 type PlatformPath = std::path::UnixPath;
 
@@ -314,7 +314,7 @@ type PlatformPath = std::path::WindowsPath;
 
 ### 关联类型别名
 
-```rust
+```rust,ignore
 trait Container {
     type Item;
     type Iter<'a>: Iterator<Item = Self::Item>

@@ -33,7 +33,7 @@
 
 定义一个可以"叫"的特征：
 
-```rust
+```rust,ignore
 trait Speak {
     fn speak(&self) -> &str;
 }
@@ -64,7 +64,7 @@ fn make_sound(animal: &impl Speak) {
 
 ### 1. 特征定义
 
-```rust
+```rust,ignore
 trait Summary {
     fn summarize(&self) -> String;
 }
@@ -72,7 +72,7 @@ trait Summary {
 
 ### 2. 特征实现
 
-```rust
+```rust,ignore
 struct NewsArticle {
     headline: String,
     location: String,
@@ -87,7 +87,7 @@ impl Summary for NewsArticle {
 
 ### 3. 默认方法
 
-```rust
+```rust,ignore
 trait Summary {
     fn summarize(&self) -> String {
         String::from("(Read more...)")  // 默认实现
@@ -97,7 +97,7 @@ trait Summary {
 
 ### 4. 特征约束
 
-```rust
+```rust,ignore
 fn notify(item: &impl Summary) {
     println!("{}", item.summarize());
 }
@@ -110,7 +110,7 @@ fn notify<T: Summary>(item: &T) {
 
 ### 5. 多个约束
 
-```rust
+```rust,ignore
 fn notify<T: Summary + Clone>(item: &T) {
     // T 必须同时实现 Summary 和 Clone
 }
@@ -122,7 +122,7 @@ fn notify<T: Summary + Clone>(item: &T) {
 
 ### 错误 1: 忘记实现必需方法
 
-```rust
+```rust,ignore
 trait Summary {
     fn summarize(&self) -> String;
 }
@@ -136,7 +136,7 @@ impl Summary for Article {
 
 ### 错误 2: 方法签名不匹配
 
-```rust
+```rust,ignore
 impl Summary for Article {
     fn summarize(&self) -> &str {  // ❌ 返回类型应该是 String
         "summary"
@@ -146,7 +146,7 @@ impl Summary for Article {
 
 ### 错误 3: 自相矛盾的特征约束
 
-```rust
+```rust,ignore
 fn process<T: Summary + !Summary>(item: &T) {
     // ❌ 逻辑矛盾
 }
@@ -160,14 +160,14 @@ fn process<T: Summary + !Summary>(item: &T) {
 
 定义一个可飞行的特征：
 
-```rust
+```rust,ignore
 // TODO: 定义 Fly 特征，包含 fly 方法
 ```
 
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 trait Fly {
     fn fly(&self) -> &str;
 }
@@ -211,7 +211,7 @@ trait Fly {
 
 ### 实际代码示例
 
-```rust
+```rust,ignore
 // src/basic/traits_sample.rs
 
 /// Printable 特性示例
@@ -243,7 +243,7 @@ fn main() {
 
 ### 特性继承
 
-```rust
+```rust,ignore
 // 定义 Trait A
 trait A {
     fn method_a(&self);
@@ -272,7 +272,7 @@ impl A for MyStruct {
 
 ### 对象安全警告
 
-```rust
+```rust,ignore
 // ⚠️ 注意：这个方法不是对象安全的
 trait UnObjectSafeTrait {
     fn create() -> Self;  // Error: 不能对象安全

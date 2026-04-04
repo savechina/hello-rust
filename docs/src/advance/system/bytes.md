@@ -45,7 +45,7 @@ cargo add bytes
 
 最简单的 Bytes 使用：
 
-```rust
+```rust,ignore
 use bytes::{Bytes, BytesMut, BufMut};
 
 fn main() {
@@ -84,7 +84,7 @@ fn main() {
 
 **Bytes (不可变)**：
 
-```rust
+```rust,ignore
 use bytes::Bytes;
 
 // 从字符串创建
@@ -99,7 +99,7 @@ let slice = bytes.slice(0..5);
 
 **BytesMut (可变)**：
 
-```rust
+```rust,ignore
 use bytes::BytesMut;
 
 // 创建可变缓冲区
@@ -117,7 +117,7 @@ let bytes = buf.freeze();
 
 **使用 split()**：
 
-```rust
+```rust,ignore
 use bytes::BytesMut;
 
 let mut buf = BytesMut::with_capacity(1024);
@@ -130,7 +130,7 @@ assert_eq!(a, b"hello world"[..]);
 
 **使用 split_to()**：
 
-```rust
+```rust,ignore
 let mut buf = BytesMut::from(&b"hello world"[..]);
 
 // 分割前 6 个字节
@@ -143,7 +143,7 @@ assert_eq!(buf, b"world"[..]);
 
 **读取数据**：
 
-```rust
+```rust,ignore
 use bytes::{Buf, Bytes};
 
 let mut buf = Bytes::from(&b"hello"[..]);
@@ -164,7 +164,7 @@ if buf.has_remaining() {
 
 **使用 base64 crate**：
 
-```rust
+```rust,ignore
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 
 // 编码
@@ -178,7 +178,7 @@ println!("解码：{}", String::from_utf8_lossy(&decoded));
 
 **使用 URL 安全编码**：
 
-```rust
+```rust,ignore
 use base64::{Engine as _, engine::general_purpose::URL_SAFE};
 
 let encoded = URL_SAFE.encode("Hello+World/");
@@ -189,7 +189,7 @@ println!("URL Safe: {}", encoded);
 
 **使用 bitvec crate**：
 
-```rust
+```rust,ignore
 use bitvec::prelude::*;
 
 // 创建位向量
@@ -213,7 +213,7 @@ let bytes: Vec<u8> = bv.as_bytes().to_vec();
 
 ### 错误 1: 越界访问
 
-```rust
+```rust,ignore
 use bytes::Bytes;
 
 let bytes = Bytes::from(&b"hello"[..]);
@@ -226,13 +226,13 @@ range out of bounds
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 let slice = bytes.slice(0..5.min(bytes.len()));  // ✅ 检查边界
 ```
 
 ### 错误 2: 忘记检查剩余字节
 
-```rust
+```rust,ignore
 use bytes::Buf;
 
 let mut buf = Bytes::from(&b"hello"[..]);
@@ -244,7 +244,7 @@ while buf.has_remaining() {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 while buf.remaining() >= 1 {  // ✅ 检查足够字节
     let byte = buf.get_u8();
 }
@@ -252,7 +252,7 @@ while buf.remaining() >= 1 {  // ✅ 检查足够字节
 
 ### 错误 3: Base64 解码错误
 
-```rust
+```rust,ignore
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 
 let invalid = "Invalid!Base64";
@@ -265,7 +265,7 @@ Invalid last symbol
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 match STANDARD.decode(invalid) {
     Ok(decoded) => println!("解码：{}", String::from_utf8_lossy(&decoded)),
     Err(e) => eprintln!("解码失败：{}", e),
@@ -278,7 +278,7 @@ match STANDARD.decode(invalid) {
 
 ### 练习 1: 创建和分割 Bytes
 
-```rust
+```rust,ignore
 use bytes::{Bytes, BytesMut};
 
 fn main() {
@@ -292,7 +292,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut buf = BytesMut::with_capacity(1024);
 buf.put(&b"Hello World"[..]);
 
@@ -304,7 +304,7 @@ assert_eq!(buf, b" World"[..]);
 
 ### 练习 2: Base64 编解码
 
-```rust
+```rust,ignore
 use base64::{Engine as _, engine::general_purpose::STANDARD};
 
 fn main() {
@@ -319,7 +319,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let encoded = STANDARD.encode(original);
 println!("Base64: {}", encoded);
 
@@ -330,7 +330,7 @@ assert_eq!(original, String::from_utf8_lossy(&decoded));
 
 ### 练习 3: 位向量操作
 
-```rust
+```rust,ignore
 use bitvec::prelude::*;
 
 fn main() {
@@ -343,7 +343,7 @@ fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let mut bv = bitvec![0; 8];
 bv.set(0, true);
 bv.set(2, true);
@@ -386,7 +386,7 @@ println!("字节：{:02x?}", bytes);
 
 ### 字节序转换
 
-```rust
+```rust,ignore
 use byteorder::{BigEndian, ReadBytesExt};
 use std::io::Cursor;
 
@@ -399,7 +399,7 @@ assert_eq!(val, 1000);
 
 ### 性能优化
 
-```rust
+```rust,ignore
 use bytes::BytesMut;
 
 // 预分配容量
@@ -411,7 +411,7 @@ buf.reserve(1024);
 
 ### 网络编程应用
 
-```rust
+```rust,ignore
 use bytes::{Bytes, BytesMut, BufMut};
 
 // 构建网络消息

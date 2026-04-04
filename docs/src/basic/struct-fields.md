@@ -32,7 +32,7 @@
 
 ## 第一个例子
 
-```rust
+```rust,ignore
 struct User {
     username: String,  // 用户名
     email: String,     // 邮箱
@@ -74,7 +74,7 @@ println!("用户名：{}", user.username);
 
 字段可以是任何 Rust 类型：
 
-```rust
+```rust,ignore
 struct Example {
     text: String,
     number: i32,
@@ -85,7 +85,7 @@ struct Example {
 
 **嵌套结构体**：
 
-```rust
+```rust,ignore
 struct Point { x: f64, y: f64 }
 
 struct Circle {
@@ -98,14 +98,14 @@ struct Circle {
 
 **String 字段**会移动：
 
-```rust
+```rust,ignore
 let user2 = User { username: user1.username };
 // println!("{}", user1.username); // ❌ 已移动
 ```
 
 **Copy 类型的字段**会复制：
 
-```rust
+```rust,ignore
 struct Point { x: i32, y: i32 } // i32 实现了 Copy
 
 let p1 = Point { x: 10, y: 20 };
@@ -117,7 +117,7 @@ println!("p1.x = {}", p1.x); // ✅ 可以
 
 变量名和字段名相同时可省略：
 
-```rust
+```rust,ignore
 fn build_user(username: String, email: String) -> User {
     User {
         username,  // ✅ 简写 (等同于 username: username)
@@ -129,7 +129,7 @@ fn build_user(username: String, email: String) -> User {
 
 ### 4. 公有和私有字段
 
-```rust
+```rust,ignore
 mod my_module {
     pub struct User {
         pub username: String,  // 公有
@@ -140,7 +140,7 @@ mod my_module {
 
 ### 5. 字段必须标注类型
 
-```rust
+```rust,ignore
 struct Valid {
     name: String,  // ✅
 }
@@ -154,7 +154,7 @@ struct Valid {
 
 ### 错误 1: 缺少类型注解
 
-```rust
+```rust,ignore
 struct User {
     username,  // ❌ 编译错误!
 }
@@ -162,7 +162,7 @@ struct User {
 
 **修复**：添加类型
 
-```rust
+```rust,ignore
 struct User {
     username: String,  // ✅
 }
@@ -170,7 +170,7 @@ struct User {
 
 ### 错误 2: 移动私有字段
 
-```rust
+```rust,ignore
 let user = my_module::User {
     // email: ... ❌ 私有字段不可访问
 };
@@ -180,7 +180,7 @@ let user = my_module::User {
 
 ### 错误 3: 忘记字段
 
-```rust
+```rust,ignore
 let user = User {
     username: String::from("alice"),
     // ❌ 缺少 email 和 active
@@ -193,7 +193,7 @@ let user = User {
 
 ### 练习 1: 预测结果
 
-```rust
+```rust,ignore
 struct Point { x: i32, y: i32 }
 
 let p1 = Point { x: 10, y: 20 };
@@ -210,7 +210,7 @@ println!("p1: ({}, {})", p1.x, p1.y); // 通过吗？
 
 ### 练习 2: 使用简写
 
-```rust
+```rust,ignore
 // 重写：
 Person {
     name: name,
@@ -221,7 +221,7 @@ Person {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 Person {
     name,  // ✅ 简写
     age,

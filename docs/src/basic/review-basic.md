@@ -10,7 +10,7 @@
 
 ### 练习 1：角色定义
 
-```rust
+```rust,ignore
 // TODO: 定义 Character 结构体
 // 字段：name (String), health (u32), level (u32), class (职业枚举)
 
@@ -23,7 +23,7 @@
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 #[derive(Debug)]
 enum Class {
     Warrior,
@@ -54,7 +54,7 @@ impl Character {
 
 ### 练习 2：角色行为
 
-```rust
+```rust,ignore
 // TODO: 实现 Character 的方法
 // - level_up() - 等级 +1，生命值 +10
 // - take_damage(amount: u32) - 减少生命值
@@ -65,7 +65,7 @@ impl Character {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 impl Character {
     fn level_up(&mut self) {
         self.level += 1;
@@ -98,7 +98,7 @@ impl Character {
 
 ### 练习 3：战斗系统
 
-```rust
+```rust,ignore
 // TODO: 实现 attack 函数
 // 两个角色互相攻击
 // Warrior: 造成 15-25 点伤害 (随机)
@@ -111,7 +111,7 @@ impl Character {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use rand::Rng;
 
 fn attack(attacker: &mut Character, defender: &mut Character) {
@@ -145,7 +145,7 @@ fn attack(attacker: &mut Character, defender: &mut Character) {
 
 这段代码会编译通过吗？为什么？
 
-```rust
+```rust,ignore
 fn main() {
     let s1 = String::from("hello");
     let s2 = s1;
@@ -159,7 +159,7 @@ fn main() {
 ❌ **不会通过**。`s1` 的所有权已移动给 `s2`，`s1` 不再有效。
 
 **修复方法**：
-```rust
+```rust,ignore
 let s2 = s1.clone();  // 克隆
 // 或
 println!("{}", &s1);  // 先借用再移动
@@ -170,7 +170,7 @@ println!("{}", &s1);  // 先借用再移动
 
 以下代码有什么问题？
 
-```rust
+```rust,ignore
 fn main() {
     let mut s = String::from("hello");
     let r1 = &s;
@@ -186,7 +186,7 @@ fn main() {
 ❌ **编译错误**。不能同时存在不可变引用 (`r1`, `r2`) 和可变引用 (`r3`)。
 
 **修复方法**：
-```rust
+```rust,ignore
 let r1 = &s;
 let r2 = &s;
 println!("{}, {}", r1, r2);  // 不可变引用使用完毕
@@ -198,7 +198,7 @@ let r3 = &mut s;  // 现在可以创建可变引用
 
 为以下类型实现 `Display` trait：
 
-```rust
+```rust,ignore
 struct Point {
     x: f64,
     y: f64,
@@ -208,7 +208,7 @@ struct Point {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use std::fmt;
 
 impl fmt::Display for Point {
@@ -221,7 +221,7 @@ impl fmt::Display for Point {
 
 ### 问题 4：闭包捕获
 
-```rust
+```rust,ignore
 fn main() {
     let x = 4;
     let equal_to_x = |z| z == x;
@@ -238,14 +238,14 @@ fn main() {
 **不可变借用**。闭包通过 `&x` 捕获 `x`，因为只需要读取 `x` 的值。
 
 如果想强制移动捕获：
-```rust
+```rust,ignore
 let equal_to_x = move |z| z == x;
 ```
 </details>
 
 ### 问题 5：模块可见性
 
-```rust
+```rust,ignore
 mod outer {
     mod inner {
         pub fn hello() {
@@ -270,7 +270,7 @@ fn main() {
 `inner` 模块本身是私有的（没有 `pub`），所以外部无法访问 `inner::hello()`，即使 `hello` 是 `pub` 的。
 
 **修复方法**：
-```rust
+```rust,ignore
 pub mod inner {  // 模块也需要 pub
     pub fn hello() { ... }
 }

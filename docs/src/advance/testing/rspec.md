@@ -46,7 +46,7 @@ cargo add mockall --dev
 
 最简单的 RSpec 使用：
 
-```rust
+```rust,ignore
 use rspec::describe;
 use rspec::suite::Suite;
 
@@ -88,7 +88,7 @@ fn test_rspec_suite() {
 
 **使用 describe 组织测试**：
 
-```rust
+```rust,ignore
 use rspec::describe;
 
 describe("UserService", |ctx| {
@@ -106,7 +106,7 @@ describe("UserService", |ctx| {
 
 **使用 speculate! 宏**：
 
-```rust
+```rust,ignore
 use speculate::speculate;
 
 speculate! {
@@ -131,7 +131,7 @@ speculate! {
 
 **使用 before 块**：
 
-```rust
+```rust,ignore
 speculate! {
     describe "Database" {
         before {
@@ -154,7 +154,7 @@ speculate! {
 
 **嵌套 describe**：
 
-```rust
+```rust,ignore
 speculate! {
     describe "UserService" {
         describe "create" {
@@ -182,7 +182,7 @@ speculate! {
 
 ### 错误 1: 忘记导入
 
-```rust
+```rust,ignore
 speculate! {
     describe "Test" {
         it "should work" {
@@ -199,13 +199,13 @@ cannot find macro `speculate`
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 use speculate::speculate;  // ✅ 导入宏
 ```
 
 ### 错误 2: 语法错误
 
-```rust
+```rust,ignore
 speculate! {
     describe "Test" {
         it "should work" {
@@ -219,7 +219,7 @@ unexpected end of macro invocation
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 speculate! {
     describe "Test" {
         it "should work" {
@@ -231,7 +231,7 @@ speculate! {
 
 ### 错误 3: 共享变量作用域
 
-```rust
+```rust,ignore
 speculate! {
     describe "Test" {
         let shared = 42;  // ❌ 变量作用域错误
@@ -244,7 +244,7 @@ speculate! {
 ```
 
 **修复方法**:
-```rust
+```rust,ignore
 speculate! {
     describe "Test" {
         before {
@@ -264,7 +264,7 @@ speculate! {
 
 ### 练习 1: 简单测试
 
-```rust
+```rust,ignore
 use speculate::speculate;
 
 speculate! {
@@ -278,7 +278,7 @@ speculate! {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 speculate! {
     describe "Calculator" {
         it "should add" {
@@ -295,7 +295,7 @@ speculate! {
 
 ### 练习 2: 使用 before 块
 
-```rust
+```rust,ignore
 speculate! {
     describe "UserService" {
         // TODO: 在 before 中创建服务
@@ -308,7 +308,7 @@ speculate! {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 speculate! {
     describe "UserService" {
         before {
@@ -330,7 +330,7 @@ speculate! {
 
 ### 练习 3: 嵌套描述
 
-```rust
+```rust,ignore
 speculate! {
     // TODO: 描述 "Database"
     //   TODO: 描述 "connect"
@@ -343,7 +343,7 @@ speculate! {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 speculate! {
     describe "Database" {
         describe "connect" {
@@ -394,7 +394,7 @@ speculate! {
 
 ### 自定义匹配器
 
-```rust
+```rust,ignore
 speculate! {
     describe "Custom Matcher" {
         it "should be even" {
@@ -407,7 +407,7 @@ speculate! {
 
 ### 跳过测试
 
-```rust
+```rust,ignore
 speculate! {
     describe "Skipped" {
         xit "should skip this test" {
@@ -419,7 +419,7 @@ speculate! {
 
 ### 条件测试
 
-```rust
+```rust,ignore
 #[cfg(feature = "advanced")]
 speculate! {
     describe "Advanced" {

@@ -1,240 +1,353 @@
-# 文件目录操作 
+# 文件与目录操作
 
+## 开篇故事
 
+想象你在整理一个巨大的仓库。传统方式是：走进仓库 → 找到物品 → 拿出来 → 走回办公室记录。每次只能处理一件物品，效率极低。
 
-## 获取 HOME 目录
+更聪明的做法是：使用智能仓库管理系统——你可以一次性列出所有物品、批量移动、按类别搜索，甚至在不同房间之间建立快捷通道。Rust 的文件与目录操作就是你的"智能仓库管理系统"——它让你高效地管理文件系统。
 
-使用`std::env` 模块来获取 HOME 目录。也可以使用`dotenvy` 从 `.env` 文件中加载环境变量。
+---
 
-安装：
-```bash
-cargo add home
-cargo add dotenvy
-```
-或者配置`Cargo.toml`
-```toml
-dotenvy = "0.15.7"
-home = "0.5.11"
-```
+## 本章适合谁
 
+如果你需要在 Rust 程序中读写文件、遍历目录、处理路径，本章适合你。文件系统操作是几乎所有应用程序的基础需求。
 
-以下示例代码，主要实现通过dotenv 加载环境变量，获取当前环境变量全部列表配置，并打印出来。
-* 获取 HOME 环境变量。
-* 获取 CARGO_MANIFEST_DIR 环境变量。
-* 获取 Cargo.toml 所在的目录。
+---
 
+## 你会学到什么
 
-样例代码：
+完成本章后，你可以：
+
+1. 使用 `std::fs` 读写文件
+2. 使用 `std::path::Path` 和 `PathBuf` 处理路径
+3. 遍历目录树
+4. 创建和删除文件/目录
+5. 获取文件和目录元数据
+6. 处理跨平台路径差异
+
+---
+
+## 前置要求
+
+- [错误处理](../tools/error-handling.md) - Result 和错误传播
+- [所有权](../../basic/ownership.md) - 所有权基础
+
+---
+
+## 第一个例子
+
+读取文件内容：
 
 ```rust
-/// # dotenv_sample
-/// use dotenvy crate to load environment variables from .env file.
-/// Fails if .env file not found, not readable or invalid.
-///    dotenvy::dotenv()?;
-///
-use dotenvy;
-use home;
-use std::env::{self, home_dir};
-use std::error::Error;
+use std::fs;
 
-/// dotenv_sample
-/// use dotenvy crate to load environment variables from .env file.
-fn dotenv_sample() -> Result<(), Box<dyn Error>> {
-    // Load environment variables from .env file.
-    // Fails if .env file not found, not readable or invalid.
-    dotenvy::dotenv()?;
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 读取整个文件到字符串
+    let content = fs::read_to_string("hello.txt")?;
+    println!("文件内容：\n{}", content);
+    Ok(())
+}
+```
 
-    // Iterate over all environment variables
-    for (key, value) in env::vars() {
-        println!("{key}: {value}");
+**发生了什么？**
+
+- `fs::read_to_string` - 读取文件并返回 `String`
+- `?` - 错误传播（文件不存在或无权限时返回错误）
+
+---
+
+## 原理解析
+
+### 1. 文件系统树形结构
+
+```
+/ (根目录)
+├── home/
+│   └── user/
+│       ├── documents/
+│       │   ├── report.txt
+│       │   └── notes.md
+│       └── pictures/
+│           └── photo.jpg
+├── etc/
+│   └── config.ini
+└── tmp/
+    └── temp_file.txt
+```
+
+### 2. 路径处理
+
+```rust
+use std::path::{Path, PathBuf};
+
+// Path - 借用路径（不拥有所有权）
+let path = Path::new("hello.txt");
+println!("文件名：{}", path.file_name().unwrap().to_str().unwrap());
+
+// PathBuf - 拥有路径（可修改）
+let mut path_buf = PathBuf::from("/home");
+path_buf.push("user");
+path_buf.push("documents");
+println!("完整路径：{}", path_buf.display());
+
+// 推荐：使用 join 构建路径
+let path = Path::new("/home")
+    .join("user")
+    .join("documents")
+    .join("report.txt");
+```
+
+### 3. 文件读写操作
+
+```rust
+use std::fs::{self, File};
+use std::io::{Read, Write};
+
+// 读取整个文件
+let content = fs::read_to_string("file.txt")?;
+
+// 读取为字节
+let bytes = fs::read("file.txt")?;
+
+// 写入整个文件（覆盖）
+fs::write("output.txt", "Hello, World!")?;
+
+// 追加写入
+let mut file = File::options()
+    .create(true)
+    .append(true)
+    .open("log.txt")?;
+file.write_all(b"New log entry\n")?;
+```
+
+### 4. 目录遍历
+
+```rust
+use std::fs;
+
+// 读取目录内容
+let entries = fs::read_dir("/home/user")?;
+for entry in entries {
+    let entry = entry?;
+    println!("文件名：{}", entry.file_name().to_str().unwrap());
+    println!("路径：{}", entry.path().display());
+    
+    let metadata = entry.metadata()?;
+    println!("是文件：{}", metadata.is_file());
+    println!("是目录：{}", metadata.is_dir());
+}
+```
+
+### 5. 递归目录遍历
+
+```rust
+use std::fs;
+use std::path::Path;
+
+fn list_dir_recursive(path: &Path, prefix: &str) -> std::io::Result<()> {
+    let entries = fs::read_dir(path)?;
+    
+    for entry in entries {
+        let entry = entry?;
+        let path = entry.path();
+        let name = entry.file_name();
+        
+        println!("{}{}", prefix, name.to_str().unwrap());
+        
+        if path.is_dir() {
+            list_dir_recursive(&path, &format!("{}  ", prefix))?;
+        }
     }
-
-    // 获取 HOME 环境变量
-    let home = dotenvy::var("HOME")?;
-    println!("HOME: {}", home);
-
-    // 获取 CARGO_MANIFEST_DIR 环境变量
-    let cargo_home = env::var("CARGO_MANIFEST_DIR")?;
-    println!("CARGO_MANIFEST_DIR: {}", cargo_home);
-
-    // 获取 Cargo.toml 所在的目录
-    let manifest_dir = env!("CARGO_MANIFEST_DIR");
-    println!("Cargo manifest directory (Project root): {}", manifest_dir);
-
-    // 构建相对于 Cargo.toml 的路径
-    let data_path = format!("{}/data/data.txt", manifest_dir);
-    println!("Data file path: {}", data_path);
-
-    // 使用 PathBuf 构建路径（更推荐）
-    use std::path::PathBuf;
-    let data_path_buf = PathBuf::from(manifest_dir).join("data").join("data.txt");
-    println!("Data file path (PathBuf): {}", data_path_buf.display());
-
     Ok(())
 }
 
-fn current_dir_sample() -> Result<(), Box<dyn std::error::Error>> {
-    // 获取当前工作目录
-    let current_dir = env::current_dir()?;
-    println!("Current directory: {}", current_dir.display());
-
-    // 获取可执行文件的完整路径
-    let exe_path = env::current_exe()?;
-
-    // 从路径中提取目录部分
-    let exe_dir = exe_path
-        .parent()
-        .ok_or("Could not get executable directory")?;
-
-    println!("Executable directory: {}", exe_dir.display());
-
-    // 获取 HOME 目录
-    env::home_dir().map(|home| println!("Home directory: {}", home.display()));
-
-    // 获取 HOME 目录
-    home::home_dir().map(|home| println!("Home directory: {}", home.display()));
-
-    // 获取 HOME 目录
-    // 优先使用 home crate
-    home::cargo_home().map(|home| println!("Cargo home directory: {}", home.display()));
-
-    Ok(())
+fn main() -> std::io::Result<()> {
+    list_dir_recursive(Path::new("."), "")
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_dotenv_sample() {
-        dotenv_sample().unwrap();
-    }
-
-    #[test]
-    fn test_current_dir_sample() {
-        current_dir_sample().unwrap();
-    }
-}
-
-
 ```
 
-
-## 临时文件
-
-在 Rust 中，你可以使用 `std::fs` 模块来创建和管理临时文件。
-
-
-安装：
-```bash
-cargo add tempfile
-```
-或者配置`Cargo.toml`
-```toml
-tempfile = "3.10.0"
-```
-
-样例代码：
+### 6. 文件和目录操作
 
 ```rust
-use std::env;
-use std::fs::File;
-use std::io::{Read, Seek, SeekFrom, Write};
+use std::fs;
 
-use tempfile::{tempdir, NamedTempFile};
+// 创建目录
+fs::create_dir("new_dir")?;
+fs::create_dir_all("parent/child/grandchild")?;  // 递归创建
 
-/**
- * 临时文件样例，
- * 此创建一个系统临时文件，并进行写入内容，读取临时文件内容。
- */
-pub(crate) fn tempfile_sample() {
-    // 系统临时目录
-    let tmpdir = std::env::temp_dir();
-    println!("temp dir location: {:?}", tmpdir);
+// 删除文件
+fs::remove_file("file.txt")?;
 
-    let currdir = std::env::current_dir().unwrap();
+// 删除空目录
+fs::remove_dir("empty_dir")?;
 
-    println!("current dir: {:?}", currdir);
+// 删除目录及其内容
+fs::remove_dir_all("dir_with_contents")?;
 
-    // Write
-    let mut tmpfile: File = tempfile::tempfile().unwrap();
-    println!("tempfile : {:?}", tmpfile);
+// 复制文件
+fs::copy("source.txt", "dest.txt")?;
 
-    write!(tmpfile, "Hello World!").unwrap();
-
-    // Seek to start
-    tmpfile.seek(SeekFrom::Start(0)).unwrap();
-
-    // Read
-    let mut buf = String::new();
-    tmpfile.read_to_string(&mut buf).unwrap();
-    assert_eq!("Hello World!", buf);
-}
-
-/**
- *
- */
-pub(crate) fn temp_namedfile_sample() {
-    let text = "Brian was here. Briefly.";
-
-    let home_dir: std::path::PathBuf = env::home_dir().expect("Failed to get home directory");
-
-    // Create a file inside of path  by `NamedTempFile::new_in(paht)`.
-    let mut file1 = NamedTempFile::new_in(home_dir).unwrap();
-    println!("tempfile : {:?}", { &file1 });
-
-    // Re-open it.
-    let mut file2 = file1.reopen().unwrap();
-
-    // Write some test data to the first handle.
-    file1.write_all(text.as_bytes()).unwrap();
-
-    // Read the test data using the second handle.
-    let mut buf = String::new();
-    file2.read_to_string(&mut buf).unwrap();
-
-    assert_eq!(buf, text);
-}
-
-/**
- * 临时目录创建，临时文件
- */
-pub(crate) fn tempdir_addfile() {
-    // Create a directory inside of `std::env::temp_dir()`.
-    let dir = tempdir().unwrap();
-
-    let file_path = dir.path().join("my-temporary-note.txt");
-
-    let mut file = File::create(file_path).unwrap();
-
-    writeln!(file, "Brian was here. Briefly.").unwrap();
-
-    // By closing the `TempDir` explicitly, we can check that it has
-    // been deleted successfully. If we don't close it explicitly,
-    // the directory will still be deleted when `dir` goes out
-    // of scope, but we won't know whether deleting the directory
-    // succeeded.
-    drop(file);
-    dir.close().unwrap();
-}
-
-///
-/// 单元测试
-/// #[cfg(test)]
-///
-#[cfg(test)]
-mod tests {
-    // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
-    use super::*;
-
-    #[test]
-    fn test_tempfile() {
-        tempfile_sample();
-
-        tempdir_addfile();
-
-        temp_namedfile_sample();
-    }
-}
-
+// 重命名/移动
+fs::rename("old_name.txt", "new_name.txt")?;
 ```
+
+### 7. 文件元数据
+
+```rust
+use std::fs;
+
+let metadata = fs::metadata("file.txt")?;
+
+println!("文件大小：{} 字节", metadata.len());
+println!("是文件：{}", metadata.is_file());
+println!("是目录：{}", metadata.is_dir());
+
+// 权限（Unix 系统）
+#[cfg(unix)]
+{
+    use std::os::unix::fs::PermissionsExt;
+    let perms = metadata.permissions();
+    println!("权限：{:o}", perms.mode());
+}
+```
+
+---
+
+## 常见错误
+
+### 错误 1: 路径拼接使用字符串
+
+```rust
+// ❌ 错误：跨平台不兼容
+let path = format!("{}/{}", dir, filename);
+
+// ✅ 正确：使用 Path::join
+let path = Path::new(dir).join(filename);
+```
+
+### 错误 2: 不处理文件不存在
+
+```rust
+// ❌ 错误：panic 如果文件不存在
+let content = fs::read_to_string("missing.txt").unwrap();
+
+// ✅ 正确：处理错误
+match fs::read_to_string("missing.txt") {
+    Ok(content) => println!("{}", content),
+    Err(e) => eprintln!("无法读取文件：{}", e),
+}
+```
+
+---
+
+## 动手练习
+
+### 练习 1: 统计目录中文件类型
+
+编写程序统计目录中各种文件类型的数量：
+
+```rust
+// TODO: 实现 count_file_types 函数
+// 接受一个目录路径
+// 返回 HashMap<扩展名，数量>
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+use std::collections::HashMap;
+use std::fs;
+use std::path::Path;
+
+fn count_file_types(path: &Path) -> std::io::Result<HashMap<String, usize>> {
+    let mut counts = HashMap::new();
+    
+    for entry in fs::read_dir(path)? {
+        let entry = entry?;
+        let path = entry.path();
+        
+        if path.is_file() {
+            let ext = path
+                .extension()
+                .and_then(|e| e.to_str())
+                .unwrap_or("no_extension")
+                .to_string();
+            
+            *counts.entry(ext).or_insert(0) += 1;
+        }
+    }
+    
+    Ok(counts)
+}
+```
+</details>
+
+---
+
+## 故障排查
+
+### Q: 如何获取 HOME 目录？
+
+**A**: 
+```rust
+// 方法 1: std::env
+std::env::home_dir()
+
+// 方法 2: home crate (推荐)
+home::home_dir()
+```
+
+### Q: 如何处理大文件？
+
+**A**: 使用 `BufReader` 和 `BufWriter` 逐行/逐块处理：
+```rust
+use std::io::{BufReader, BufRead};
+let file = File::open("large.txt")?;
+let reader = BufReader::new(file);
+for line in reader.lines() {
+    // 处理每一行
+}
+```
+
+### Q: 跨平台路径分隔符？
+
+**A**: 永远使用 `Path::join` 或 `PathBuf::push`，不要硬编码 `/` 或 `\`。
+
+---
+
+## 小结
+
+**核心要点**：
+
+1. **std::fs**: 文件和目录操作
+2. **Path/PathBuf**: 路径处理
+3. **read_dir**: 目录遍历
+4. **metadata**: 文件信息
+
+---
+
+## 术语表
+
+| English           | 中文       |
+| ----------------- | ---------- |
+| File System       | 文件系统   |
+| Path              | 路径       |
+| Directory         | 目录       |
+| Metadata          | 元数据     |
+| Recursion         | 递归       |
+| Cross-platform    | 跨平台     |
+
+---
+
+完整示例：`src/advance/system/directory_sample.rs`
+
+---
+
+## 继续学习
+
+- 下一步：[临时文件](tempfile.md)
+- 进阶：[内存映射](memmap.md)
+- 回顾：[错误处理](../tools/error-handling.md)
+
+> 💡 **记住**：始终使用 Path/PathBuf 处理路径，确保跨平台兼容！

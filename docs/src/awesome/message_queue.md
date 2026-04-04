@@ -40,7 +40,7 @@
 
 学习本章前，你需要理解：
 
-- [异步编程](../advance/async.md) - `async/await` 语法和 Tokio 运行时
+- [异步编程](../advance/async/async.md) - `async/await` 语法和 Tokio 运行时
 - [错误处理](../basic/enums.md) - `Result` 类型的使用
 - [线程](../basic/threads.md) - 了解并发基本概念
 - 一个可用的 MQTT Broker（如 Mosquitto、EMQX 或测试用的公共 Broker）
@@ -1030,7 +1030,7 @@ async fn mqtt5_example() {
 **下一步**：
 
 - 学习 [微服务架构](./services.md) - 将 MQTT 集成到服务架构
-- 探索 [异步编程](../advance/async.md) - 深入理解 Tokio 运行时
+- 探索 [异步编程](../advance/async/async.md) - 深入理解 Tokio 运行时
 - 实践 [物联网项目](../../projects) - 构建完整的 IoT 应用
 
 ---
@@ -1055,7 +1055,7 @@ async fn mqtt5_example() {
 
 - 下一步：[微服务架构](./services.md)
 - 进阶：[数据库高级应用](./database.md)
-- 回顾：[异步编程](../advance/async.md)
+- 回顾：[异步编程](../advance/async/async.md)
 
 ---
 

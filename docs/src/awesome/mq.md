@@ -38,8 +38,8 @@
 学习本章前，你需要理解：
 
 - [所有权](../basic/ownership.md) - 理解所有权和生命周期
-- [异步编程](../advance/async.md) - 理解 async/await 基础
-- [Tokio](../advance/tokio.md) - 使用 Tokio 异步运行时
+- [异步编程](../advance/async/async.md) - 理解 async/await 基础
+- [Tokio](../advance/async/tokio.md) - 使用 Tokio 异步运行时
 - 安装 MQTT Broker（推荐 Mosquitto 或 EMQX）用于测试
 
 ---
@@ -814,7 +814,7 @@ mqttoptions.set_transport(Transport::tls_with_config(
 ## 继续学习
 
 - 下一步：[服务框架](services.md) - 生产级服务架构
-- 相关：[Tokio 异步运行时](../../advance/tokio.md) - rumqttc 的基础
+- 相关：[Tokio 异步运行时](../../advance/async/tokio.md) - rumqttc 的基础
 - 实战：尝试连接公共 MQTT Broker 如 \`test.mosquitto.org\`
 
 > 💡 **记住**：MQTT 的核心是"发布/订阅解耦"——生产者无需知道消费者是谁，只需关注消息主题。这种松耦合架构让系统更具弹性和可扩展性！

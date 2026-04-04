@@ -313,7 +313,7 @@ impl Parser {
 **下一步**：
 
 - 相关：[模块](module.md)
-- 进阶：[封装模式](encapsulation-patterns.md)
+- 进阶：封装模式
 
 ---
 

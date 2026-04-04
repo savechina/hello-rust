@@ -29,10 +29,10 @@
 
 学习本章前，你需要理解：
 
-- [异步编程](../advance/async.md) - `async/await` 语法和 Tokio 运行时
+- 异步编程 - `async/await` 语法和 Tokio 运行时
 - [结构体](../basic/struct.md) - 定义和使用结构体
-- [Serde 序列化](../advance/serialization.md) - JSON 序列化和反序列化
-- [SQLx 基础](../advance/sqlx.md) - 数据库连接和查询基础
+- Serde 序列化 - JSON 序列化和反序列化
+- SQLx 基础 - 数据库连接和查询基础
 
 ---
 
@@ -572,8 +572,8 @@ let similar = find_similar_products(&sqlite_conn, query_vector, 10)?;
 | Approximate Nearest Neighbor | 近似最近邻 |
 
 完整示例：
-- [SurrealDB 示例](../../crates/awesome/src/database/surrealdb_sample.rs)
-- [SQLite 向量扩展](../../crates/awesome/src/database/sqlite_vec_sample.rs)
+- SurrealDB 示例
+- SQLite 向量扩展
 
 ---
 
@@ -581,7 +581,7 @@ let similar = find_similar_products(&sqlite_conn, query_vector, 10)?;
 
 - 下一步：[消息队列](mq.md)
 - 进阶：[Web 服务](services.md)
-- 回顾：[SQLx 基础](../advance/sqlx.md)
+- 回顾：SQLx 基础
 
 ---
 

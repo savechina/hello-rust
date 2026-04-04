@@ -253,7 +253,7 @@ env_logger::Builder::new()
 **下一步**：
 
 - 继续：[追踪 (Tracking)](tracing.md) - 异步日志
-- 相关：[错误处理](error-handling.md)
+- 相关：错误处理
 
 ---
 

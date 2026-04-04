@@ -75,8 +75,8 @@ cargo run --bin greeter_server
 3. 添加日志输出
 
 **相关章节**:
-- [gRPC 服务](../advance/grpc.md)
-- [异步编程](../advance/async.md)
+- [gRPC 服务](../advance/web/axum.md)
+- [异步编程](../advance/async/async.md)
 
 ---
 
@@ -101,7 +101,7 @@ cargo run --bin greeter_client
 - 连接管理
 
 **相关章节**:
-- [gRPC 客户端](../advance/grpc-client.md)
+- [gRPC 客户端](../advance/web/axum.md)
 
 ---
 
@@ -126,7 +126,7 @@ cargo run --bin uds_client
 - 错误处理
 
 **相关章节**:
-- [IPC 编程](../advance/ipc.md)
+- [IPC 编程](../projects/binaries/README.md)
 
 ---
 
@@ -147,7 +147,7 @@ cargo run --bin stdio_parent
 - Stdin/Stdout 处理
 
 **相关章节**:
-- [进程管理](../advance/processes.md)
+- [进程管理](../advance/system/process.md)
 
 ---
 
@@ -172,7 +172,7 @@ rustc calc_pi_sample.rs -o calc_pi
 - 精度计算
 
 **相关章节**:
-- [算法实战](../algo/calc_pi.md)
+- [算法实战](../algo/algo.md)
 
 ---
 
@@ -183,8 +183,8 @@ rustc calc_pi_sample.rs -o calc_pi
 **难度**: 🟢 入门
 
 **题目列表**:
-1. [两数之和](solution_0001.rs) - HashMap 应用
-2. [两数相加](solution_0002.rs) - 链表操作
+1. [两数之和](../leetcode/leetcode.md) - HashMap 应用
+2. [两数相加](../leetcode/leetcode.md) - 链表操作
 
 **运行**:
 ```bash
@@ -198,8 +198,8 @@ cargo test
 - 测试驱动
 
 **相关章节**:
-- [LeetCode 题解](../leetcode/two_sum.md)
-- [LeetCode 题解](../leetcode/add_two_numbers.md)
+- [LeetCode 题解](../leetcode/leetcode.md)
+- [LeetCode 题解](../leetcode/leetcode.md)
 
 ---
 
@@ -223,8 +223,8 @@ cargo test
 - 错误处理最佳实践
 
 **相关章节**:
-- [服务框架](../awesome/framework.md)
-- [依赖注入](../awesome/di.md)
+- [服务框架](../advance/tools/services.md)
+- [依赖注入](../advance/tools/services.md)
 - [数据库集成](../awesome/database.md)
 
 ---

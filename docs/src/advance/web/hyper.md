@@ -26,7 +26,7 @@
 
 ## 前置要求
 
-- [Tokio 异步运行时](tokio.md) - 异步基础
+- Tokio 异步运行时 - 异步基础
 - [HTTP 基础](axum.md) - HTTP 概念（可选）
 
 ---
@@ -492,14 +492,14 @@ let resp = client.get(uri).await?;
 ## 继续学习
 
 **前一章**: [Axum Web 框架](axum.md)  
-**下一章**: [JSON 序列化](json.md)
+**下一章**: JSON 序列化
 
 **相关章节**:
 - [Axum Web 框架](axum.md)
-- [Tokio 异步运行时](tokio.md)
-- [JSON 序列化](json.md)
+- Tokio 异步运行时
+- JSON 序列化
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

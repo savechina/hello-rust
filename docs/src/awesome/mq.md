@@ -784,8 +784,8 @@ mqttoptions.set_transport(Transport::tls_with_config(
 **下一步**：
 
 - 学习 [服务框架](services.md) - 基于 MQTT 的微服务架构
-- 了解 [gRPC](tonic.md) - 另一种服务通信方式
-- 探索 [Tokio](tokio.md) - 异步运行时基础
+- 了解 gRPC - 另一种服务通信方式
+- 探索 Tokio - 异步运行时基础
 
 ---
 
@@ -814,7 +814,7 @@ mqttoptions.set_transport(Transport::tls_with_config(
 ## 继续学习
 
 - 下一步：[服务框架](services.md) - 生产级服务架构
-- 相关：[Tokio 异步运行时](../../advance/async/tokio.md) - rumqttc 的基础
+- 相关：Tokio 异步运行时 - rumqttc 的基础
 - 实战：尝试连接公共 MQTT Broker 如 \`test.mosquitto.org\`
 
 > 💡 **记住**：MQTT 的核心是"发布/订阅解耦"——生产者无需知道消费者是谁，只需关注消息主题。这种松耦合架构让系统更具弹性和可扩展性！

@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- [函数](../basic/closure.md) - 函数基础
-- [特征](../basic/trait.md) - trait 基础
-- [模块](../basic/module.md) - 模块基础
+- 函数 - 函数基础
+- 特征 - trait 基础
+- 模块 - 模块基础
 
 ---
 
@@ -432,10 +432,10 @@ debug!(some_variable);
 
 **相关章节**:
 - [派生宏](getset.md)
-- [特征](../basic/trait.md)
-- [模块](../basic/module.md)
+- 特征
+- 模块
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

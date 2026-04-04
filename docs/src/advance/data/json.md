@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- [结构体](../basic/struct.md) - 结构体定义
+- 结构体 - 结构体定义
 - [Serde 序列化](serialization.md) - 序列化基础
-- [枚举](../basic/enums.md) - 枚举类型
+- 枚举 - 枚举类型
 
 ---
 
@@ -537,15 +537,15 @@ fn process_value(value: &Value) {
 
 ## 继续学习
 
-**前一章**: [Hyper HTTP 库](hyper.md)  
+**前一章**: Hyper HTTP 库  
 **下一章**: [CSV 处理](csv.md)
 
 **相关章节**:
-- [Hyper HTTP 库](hyper.md)
+- Hyper HTTP 库
 - [CSV 处理](csv.md)
 - [零拷贝序列化](rkyv.md)
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

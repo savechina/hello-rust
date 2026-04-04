@@ -263,7 +263,7 @@ diesel migration run
 
 - 学习 [SQLx 详细用法](sqlx.md)
 - 探索 [Diesel ORM](diesel.md)
-- 理解 [事务管理](transactions.md)
+- 理解 事务管理
 
 ---
 

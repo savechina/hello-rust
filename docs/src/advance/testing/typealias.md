@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- [智能指针](../basic/pointer.md) - Arc, Weak 基础
-- [泛型](../basic/generic.md) - 泛型基础
-- [结构体](../basic/struct.md) - 结构体基础
+- 智能指针 - Arc, Weak 基础
+- 泛型 - 泛型基础
+- 结构体 - 结构体基础
 
 ---
 
@@ -379,14 +379,14 @@ trait Container {
 ## 继续学习
 
 **前一章**: [宏编程](macros.md)  
-**下一章**: [对象存储](objectstore.md)
+**下一章**: 对象存储
 
 **相关章节**:
 - [宏编程](macros.md)
-- [智能指针](../basic/pointer.md)
-- [泛型](../basic/generic.md)
+- 智能指针
+- 泛型
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

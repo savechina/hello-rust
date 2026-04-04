@@ -30,9 +30,9 @@
 
 学习本章前，你需要理解：
 
-- [所有权](../basic/ownership.md) - 理解所有权转移和借用
-- [生命周期](../basic/lifetimes.md) - 理解引用的有效范围
-- [Trait](../basic/trait.md) - 理解 trait 和实现
+- 所有权 - 理解所有权转移和借用
+- 生命周期 - 理解引用的有效范围
+- Trait - 理解 trait 和实现
 
 ---
 
@@ -544,8 +544,8 @@ fn poll_future(fut: Pin<&mut dyn Future<Output = ()>>) {
 **下一步**：
 
 - 学习 [Tokio 运行时](tokio.md) - 最流行的 Rust 异步运行时
-- 理解 [并发模式](concurrency.md) - async 与多线程的结合
-- 探索 [Stream](stream.md) - 异步版本的 Iterator
+- 理解 并发模式 - async 与多线程的结合
+- 探索 Stream - 异步版本的 Iterator
 
 ---
 
@@ -569,15 +569,15 @@ fn poll_future(fut: Pin<&mut dyn Future<Output = ()>>) {
 
 ---
 
-完整示例：[src/advance/futures_sample.rs](../../../src/advance/futures_sample.rs)
+完整示例：src/advance/futures_sample.rs
 
 ---
 
 ## 继续学习
 
 - 下一步：[Tokio 异步运行时](tokio.md)
-- 进阶：[并发与并行](concurrency.md)
-- 相关：[线程与并发](../basic/threads.md)
+- 进阶：并发与并行
+- 相关：线程与并发
 
 > 💡 **记住**：异步编程的核心是"等待时不浪费资源"。当你需要等待 I/O（网络、文件、数据库）时，async 能让你的程序更高效地利用资源！
 

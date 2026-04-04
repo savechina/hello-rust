@@ -602,9 +602,9 @@ enum AnimalEnum {
 
 **下一步**：
 
-- 学习 [高级特征](advanced-traits.md)
-- 理解 [智能指针](smart-pointers.md)
-- 探索 [枚举高级用法](advanced-enums.md)
+- 学习 高级特征
+- 理解 智能指针
+- 探索 枚举高级用法
 
 ---
 

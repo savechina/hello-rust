@@ -26,8 +26,8 @@
 
 ## 前置要求
 
-- [结构体](../basic/struct.md) - 结构体基础
-- [错误处理](error-handling.md) - 错误处理基础
+- 结构体 - 结构体基础
+- 错误处理 - 错误处理基础
 
 ---
 
@@ -419,7 +419,7 @@ for (interface_name, network) in system.networks() {
 - [资源嵌入](includedir.md)
 - [系统信息](sysinfo.md)
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

@@ -26,8 +26,8 @@
 
 ## 前置要求
 
-- [结构体](../basic/struct.md) - 结构体定义
-- [Serde 序列化](serialization.md) - 序列化基础
+- 结构体 - 结构体定义
+- Serde 序列化 - 序列化基础
 - [SQLx 数据库](sqlx.md) - 数据库基础（可选）
 
 ---
@@ -574,15 +574,15 @@ let posts = query.load::<Post>(&mut conn)?;
 
 ## 继续学习
 
-**前一章**: [Futures 异步编程](futures.md)  
-**下一章**: [宏编程](macros.md)
+**前一章**: Futures 异步编程  
+**下一章**: 宏编程
 
 **相关章节**:
 - [SQLx 数据库](sqlx.md)
-- [Futures 异步编程](futures.md)
-- [序列化](serialization.md)
+- Futures 异步编程
+- 序列化
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

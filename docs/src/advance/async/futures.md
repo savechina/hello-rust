@@ -27,8 +27,8 @@
 ## 前置要求
 
 - [Tokio 异步运行时](tokio.md) - async/await 基础
-- [闭包](../basic/closure.md) - 闭包语法
-- [特征](../basic/trait.md) - trait 基础
+- 闭包 - 闭包语法
+- 特征 - trait 基础
 
 ---
 
@@ -509,14 +509,14 @@ impl Future for MyFuture {
 ## 继续学习
 
 **前一章**: [Tokio 异步运行时](tokio.md)  
-**下一章**: [宏编程](macros.md)
+**下一章**: 宏编程
 
 **相关章节**:
 - [Tokio 异步运行时](tokio.md)
 - [并发异步编程](async.md)
-- [闭包](../basic/closure.md)
+- 闭包
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

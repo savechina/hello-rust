@@ -28,7 +28,7 @@
 
 - [文件与目录操作](directory.md) - 文件操作基础
 - [临时文件](tempfile.md) - 临时文件处理
-- [不安全代码](../basic/pointer.md) - unsafe 基础
+- 不安全代码 - unsafe 基础
 
 ---
 
@@ -441,9 +441,9 @@ let mmap = unsafe { Mmap::map(&file)? };
 **相关章节**:
 - [临时文件](tempfile.md)
 - [文件与目录操作](directory.md)
-- [不安全代码](../basic/pointer.md)
+- 不安全代码
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

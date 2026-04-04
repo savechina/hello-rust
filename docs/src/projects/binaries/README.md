@@ -216,8 +216,8 @@ cargo test --workspace
 
 ## 相关章节
 
-- [gRPC 服务](../advance/web/axum.md) - Web 框架
-- [进程管理](../advance/system/process.md) - 进程控制
-- [异步编程](../advance/async/async.md) - 异步基础
+- [gRPC 服务](../../advance/web/axum.md) - Web 框架
+- [进程管理](../../advance/system/process.md) - 进程控制
+- [异步编程](../../advance/async/async.md) - 异步基础
 
 > 💡 **提示**: UDS 示例仅在 Unix 系统上可用。Windows 用户可以使用 stdio IPC 示例。

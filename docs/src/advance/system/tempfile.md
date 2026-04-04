@@ -27,7 +27,7 @@
 ## 前置要求
 
 - [文件与目录操作](directory.md) - 文件操作基础
-- [错误处理](error-handling.md) - 错误处理基础
+- 错误处理 - 错误处理基础
 - [环境变量](dotenv.md) - 环境变量（可选）
 
 ---
@@ -462,7 +462,7 @@ let file = tempfile_in(&tmp_dir)?;
 - [内存映射](memmap.md)
 - [环境变量](dotenv.md)
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

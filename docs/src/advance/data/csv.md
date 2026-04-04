@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- [结构体](../basic/struct.md) - 结构体定义
+- 结构体 - 结构体定义
 - [Serde 序列化](serialization.md) - 序列化基础
-- [错误处理](error-handling.md) - 错误处理基础
+- 错误处理 - 错误处理基础
 
 ---
 
@@ -523,9 +523,9 @@ for result in reader.deserialize() {
 **相关章节**:
 - [JSON 序列化](json.md)
 - [Serde 序列化](serialization.md)
-- [结构体](../basic/struct.md)
+- 结构体
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

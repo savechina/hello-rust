@@ -29,7 +29,7 @@
 | [消息队列](mq.md) | MQTT Broker 和 Client | 🟡 中等 | 60 分钟 |
 | [序列生成](sequences.md) | UUID、雪花算法 | 🟡 中等 | 45 分钟 |
 | [模板引擎](templates.md) | Tera、Liquid、Pest | 🟡 中等 | 60 分钟 |
-| [数据处理](data.md) | Polars 数据分析 | 🟡 中等 | 60 分钟 |
+| 数据处理 | Polars 数据分析 | 🟡 中等 | 60 分钟 |
 | [插件系统](plugin.md) | 插件架构、动态加载 | 🔴 困难 | 90 分钟 |
 
 ---

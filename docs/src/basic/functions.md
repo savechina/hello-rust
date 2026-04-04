@@ -532,7 +532,7 @@ println!("{}", add_x(3));  // 打印 8
 
 **下一步**：
 
-- 学习 [控制流](control-flow.md)
+- 学习 控制流
 - 理解 [所有权](ownership.md)
 - 探索 [闭包](closure.md)
 

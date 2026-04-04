@@ -46,9 +46,9 @@
 
 学习本章前，你需要理解：
 
-- [所有权](../basic/ownership.md) - 特别是移动语义和所有权转移
-- [闭包](../basic/closure.md) - 闭包作为并行操作的参数
-- [迭代器](../basic/iterator.md) - 迭代器的基本用法
+- 所有权 - 特别是移动语义和所有权转移
+- 闭包 - 闭包作为并行操作的参数
+- 迭代器 - 迭代器的基本用法
 - Cargo.toml 中添加 rayon 依赖
 
 **添加依赖**：
@@ -634,8 +634,8 @@ fn parallel_sum(data: &[i32]) -> i32 {
 **下一步**：
 
 - 学习 [Tokio](tokio.md) - 异步 IO 运行时
-- 理解 [线程基础](../basic/threads.md) - 并发编程基础
-- 探索 [服务框架](../awesome/services.md) - 生产级并行应用
+- 理解 线程基础 - 并发编程基础
+- 探索 服务框架 - 生产级并行应用
 
 ---
 
@@ -654,7 +654,7 @@ fn parallel_sum(data: &[i32]) -> i32 {
 | Reduce | 归约 | 将多个值合并为单个值 |
 | Split | 分割 | 将任务/数据分成多份 |
 
-完整示例：[src/advance/rayon_sample.rs](../../src/advance/rayon_sample.rs)
+完整示例：src/advance/rayon_sample.rs
 
 ---
 
@@ -673,8 +673,8 @@ fn parallel_sum(data: &[i32]) -> i32 {
 ## 继续学习
 
 - 下一步：[Tokio 异步运行时](tokio.md)
-- 进阶：[线程与并发基础](../basic/threads.md)
-- 回顾：[闭包](../basic/closure.md)
+- 进阶：线程与并发基础
+- 回顾：闭包
 
 > 💡 **记住**：Rayon 的设计哲学是"顺序代码优先，并行化简单"——先写正确的顺序代码，然后加上 `par_` 前缀获得并行加速。让 Rayon 处理复杂的线程管理和负载均衡！
 

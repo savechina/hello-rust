@@ -26,8 +26,8 @@
 
 ## 前置要求
 
-- [异步编程](async.md) - async/await 基础
-- [Tokio 运行时](async.md) - Tokio 基础
+- 异步编程 - async/await 基础
+- Tokio 运行时 - Tokio 基础
 - [错误处理](error-handling.md) - 错误处理基础
 
 ---
@@ -412,15 +412,15 @@ println!("最后修改：{}", meta.last_modified);
 
 ## 继续学习
 
-**前一章**: [资源嵌入](includedir.md)  
-**下一章**: [Ollama AI 集成](ollama.md)
+**前一章**: 资源嵌入  
+**下一章**: Ollama AI 集成
 
 **相关章节**:
-- [资源嵌入](includedir.md)
-- [Ollama AI 集成](ollama.md)
-- [异步编程](async.md)
+- 资源嵌入
+- Ollama AI 集成
+- 异步编程
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

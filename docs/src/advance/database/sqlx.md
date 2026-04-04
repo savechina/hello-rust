@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- [Tokio 异步运行时](tokio.md) - 异步基础
-- [结构体](../basic/struct.md) - 结构体定义
-- [Serde 序列化](serialization.md) - 序列化基础
+- Tokio 异步运行时 - 异步基础
+- 结构体 - 结构体定义
+- Serde 序列化 - 序列化基础
 
 ---
 
@@ -494,15 +494,15 @@ cached.bind(2).fetch_one(&pool).await?;
 
 ## 继续学习
 
-**前一章**: [Tokio 异步运行时](tokio.md)  
+**前一章**: Tokio 异步运行时  
 **下一章**: [Diesel ORM](diesel.md)
 
 **相关章节**:
-- [Tokio 异步运行时](tokio.md)
+- Tokio 异步运行时
 - [数据库 ORM](diesel.md)
-- [序列化](serialization.md)
+- 序列化
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

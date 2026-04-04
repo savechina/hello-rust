@@ -550,7 +550,7 @@ let closure = |y| y + x;  // x 的生命周期被捕获
 
 - 学习 [闭包](closure.md)
 - 理解 [特征对象](trait-objects.md)
-- 探索 [高级生命周期](advanced-lifetimes.md)
+- 探索 高级生命周期
 
 ---
 

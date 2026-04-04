@@ -25,7 +25,7 @@
 ## 前置要求
 
 - [日志记录](logger.md) - 基础日志概念
-- [异步编程](async.md) - async/await 基础
+- 异步编程 - async/await 基础
 
 ---
 
@@ -257,7 +257,7 @@ fmt::fmt()
 **下一步**：
 
 - 相关：[日志记录](logger.md)
-- 进阶：[异步调试](async-debugging.md)
+- 进阶：异步调试
 
 ---
 

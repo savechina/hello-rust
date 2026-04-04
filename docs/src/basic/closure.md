@@ -728,7 +728,7 @@ println!("Counter: {}", counter);  // ✅ 输出: 10
 
 **下一步**:
 
-- 继续: [迭代器](iterators.md) - 闭包的最佳应用场景
+- 继续: 迭代器 - 闭包的最佳应用场景
 - 相关: [线程](threads.md) - `move` 闭包的典型用法
 - 相关: [所有权](ownership.md) - 理解捕获机制的基础
 

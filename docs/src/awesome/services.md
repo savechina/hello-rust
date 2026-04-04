@@ -44,9 +44,9 @@
 
 学习本章前，你需要理解：
 
-- [Tokio 异步运行时](../advance/tokio.md) - 特别是 `spawn`、`await`、通道的使用
+- Tokio 异步运行时 - 特别是 `spawn`、`await`、通道的使用
 - [所有权与生命周期](../basic/ownership.md) - 特别是 `Arc`、trait 对象的理解
-- [泛型与 trait](../basic/generics.md) - 理解泛型约束和 trait 对象
+- 泛型与 trait - 理解泛型约束和 trait 对象
 - [线程与并发](../basic/threads.md) - 了解并发基本概念
 
 本章涉及的 crate：
@@ -123,7 +123,7 @@ fn main() {
 }
 ```
 
-完整示例：[concrete_injection_sample.rs](../../crates/awesome/src/services/concrete_injection_sample.rs)
+完整示例：concrete_injection_sample.rs
 
 ---
 
@@ -143,7 +143,7 @@ struct UserService<R: UserRepository> {
 优点：零运行时开销，编译时类型安全  
 缺点：无法运行时切换实现，容器需要为每种组合存储单独的类型
 
-完整示例：[concrete_injection_sample.rs](../../crates/awesome/src/services/concrete_injection_sample.rs)
+完整示例：concrete_injection_sample.rs
 
 ---
 
@@ -192,7 +192,7 @@ impl ServiceContainer {
 优点：支持运行时切换实现，trait 对象共享所有权  
 缺点：需要处理复杂的类型擦除和 downcast
 
-完整示例：[dynmaic_injection_arc_sample.rs](../../crates/awesome/src/services/dynmaic_injection_arc_sample.rs)
+完整示例：dynmaic_injection_arc_sample.rs
 
 ---
 
@@ -214,7 +214,7 @@ impl ServiceContainer {
 }
 ```
 
-完整示例：[dynmaic_injection_box_sample.rs](../../crates/awesome/src/services/dynmaic_injection_box_sample.rs)
+完整示例：dynmaic_injection_box_sample.rs
 
 ---
 
@@ -255,7 +255,7 @@ fn main() {
 }
 ```
 
-完整示例：[inventory_sample.rs](../../crates/awesome/src/services/inventory_sample.rs)
+完整示例：inventory_sample.rs
 
 ---
 
@@ -291,7 +291,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-完整示例：[consul_sample.rs](../../crates/awesome/src/services/consul_sample.rs)
+完整示例：consul_sample.rs
 
 ---
 
@@ -350,7 +350,7 @@ impl ConsulClient {
 }
 ```
 
-完整代码：[framework/registry.rs](../../crates/awesome/src/services/framework/registry.rs)
+完整代码：framework/registry.rs
 
 ---
 
@@ -395,7 +395,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-完整示例：[tonic_hello_server.rs](../../crates/awesome/src/services/tonic_hello_server.rs)
+完整示例：tonic_hello_server.rs
 
 ---
 
@@ -419,7 +419,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-完整示例：[tonic_hello_client.rs](../../crates/awesome/src/services/tonic_hello_client.rs)
+完整示例：tonic_hello_client.rs
 
 ---
 
@@ -458,8 +458,8 @@ impl Inventory for StoreInventory {
 }
 ```
 
-完整示例：[tonic_store_server.rs](../../crates/awesome/src/services/tonic_store_server.rs)  
-客户端：[tonic_store_client.rs](../../crates/awesome/src/services/tonic_store_client.rs)
+完整示例：tonic_store_server.rs  
+客户端：tonic_store_client.rs
 
 ---
 
@@ -564,9 +564,9 @@ impl<S: RunnableService> ApplicationFramework<S> {
 ```
 
 完整代码：
-- [framework/lifecycle.rs](../../crates/awesome/src/services/framework/lifecycle.rs)
-- [framework/config.rs](../../crates/awesome/src/services/framework/config.rs)
-- [framework/error.rs](../../crates/awesome/src/services/framework/error.rs)
+- framework/lifecycle.rs
+- framework/config.rs
+- framework/error.rs
 
 ---
 
@@ -610,8 +610,8 @@ impl RunnableService for GreeterApplicationService {
 }
 ```
 
-完整示例：[greeter_service.rs](../../crates/awesome/src/services/greeter_service.rs)  
-服务消费者：[greeter_consume.rs](../../crates/awesome/src/services/greeter_consume.rs)
+完整示例：greeter_service.rs  
+服务消费者：greeter_consume.rs
 
 ---
 
@@ -893,7 +893,7 @@ async fn call_greeter(consul: &ConsulClient) -> Result<String> {
 }
 ```
 
-完整示例：[greeter_service.rs](../../crates/awesome/src/services/greeter_service.rs) / [greeter_consume.rs](../../crates/awesome/src/services/greeter_consume.rs)
+完整示例：greeter_service.rs / greeter_consume.rs
 
 ---
 
@@ -961,7 +961,7 @@ fn main() {
 }
 ```
 
-完整示例：[inventory_sample.rs](../../crates/awesome/src/services/inventory_sample.rs)
+完整示例：inventory_sample.rs
 
 ---
 
@@ -1077,7 +1077,7 @@ Server::builder()
     .await?;
 ```
 
-完整示例：[tonic_store_server.rs](../../crates/awesome/src/services/tonic_store_server.rs)
+完整示例：tonic_store_server.rs
 
 ---
 
@@ -1135,9 +1135,9 @@ impl ConfigWatcher {
 
 **下一步：**
 
-- 探索 [数据库访问](../advance/database.md) - 与 SQLx 和 Diesel 集成
-- 学习 [Tokio](../advance/tokio.md) - 深入理解异步运行时
-- 查看 [Axum](../advance/axum.md) - 构建 HTTP REST API
+- 探索 数据库访问 - 与 SQLx 和 Diesel 集成
+- 学习 Tokio - 深入理解异步运行时
+- 查看 Axum - 构建 HTTP REST API
 
 ---
 
@@ -1335,8 +1335,8 @@ async fn start_service_logic(&self, shutdown_rx: oneshot::Receiver<()>) -> Resul
 
 ## 继续学习
 
-- 下一步：[Tokio 异步运行时](../advance/tokio.md)
-- 进阶：[Axum Web 框架](../advance/axum.md)
-- 相关：[数据库访问](../advance/database.md)
+- 下一步：Tokio 异步运行时
+- 进阶：Axum Web 框架
+- 相关：数据库访问
 
 > 💡 **记住**：微服务架构的核心是解耦和自治——每个服务独立部署、独立扩展，通过标准协议（gRPC/HTTP）通信。服务框架让这些理念在 Rust 中变得可实现！

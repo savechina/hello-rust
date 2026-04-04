@@ -26,7 +26,7 @@
 
 ## 前置要求
 
-- [错误处理](error-handling.md) - 错误处理基础
+- 错误处理 - 错误处理基础
 - [文件与目录操作](directory.md) - 文件路径基础
 
 ---
@@ -505,7 +505,7 @@ impl Config {
 - [临时文件](tempfile.md)
 - [文件与目录操作](directory.md)
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

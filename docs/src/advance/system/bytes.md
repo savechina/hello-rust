@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- [变量与表达式](../basic/expression.md) - 基础语法
-- [数据类型](../basic/datatype.md) - 数据类型基础
-- [不安全代码](../basic/pointer.md) - unsafe 基础（可选）
+- 变量与表达式 - 基础语法
+- 数据类型 - 数据类型基础
+- 不安全代码 - unsafe 基础（可选）
 
 ---
 
@@ -491,7 +491,7 @@ socket.send(&msg.freeze()).await?;
 - [Cow 类型](cow.md)
 - [临时文件](tempfile.md)
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

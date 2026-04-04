@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- [结构体](../basic/struct.md) - 结构体定义
+- 结构体 - 结构体定义
 - [Serde 序列化](serialization.md) - 序列化基础
-- [枚举](../basic/enums.md) - 枚举类型
+- 枚举 - 枚举类型
 
 ---
 
@@ -451,14 +451,14 @@ let archived = rkyv::access::<ArchivedData>(&bytes[..]).unwrap();
 ## 继续学习
 
 **前一章**: [CSV 处理](csv.md)  
-**下一章**: [临时文件](tempfile.md)
+**下一章**: 临时文件
 
 **相关章节**:
 - [CSV 处理](csv.md)
 - [JSON 序列化](json.md)
 - [Serde 序列化](serialization.md)
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

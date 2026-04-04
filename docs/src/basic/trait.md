@@ -293,7 +293,7 @@ trait UnObjectSafeTrait {
 
 - [孤儿规则](https://doc.rust-lang.org/book/ch10-02-traits.html#implementing-a-trait-on-a-type) - 为什么不能为外部类型实现外部 trait
 - [默认实现](https://doc.rust-lang.org/book/ch10-02-traits.html#default-implementations) - trait 方法默认行为
-- [关联类型 vs 泛型](associated-types-vs-generics.md) - 何时使用哪个
+- 关联类型 vs 泛型 - 何时使用哪个
 
 **选择建议**:
 - 想学习运行时多态 → 继续学习 [特征对象](trait-objects.md)

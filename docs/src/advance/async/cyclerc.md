@@ -30,8 +30,8 @@
 学习本章前，你需要理解：
 
 - [所有权](../../basic/ownership.md) - 理解所有权和借用
-- [智能指针](../../basic/smart-pointers.md) - 理解 `Rc` 和 `Arc`
-- [引用计数](reference-counting.md) - 理解引用计数原理
+- 智能指针 - 理解 `Rc` 和 `Arc`
+- 引用计数 - 理解引用计数原理
 
 ---
 
@@ -360,9 +360,9 @@ println!("弱引用计数：{}", Rc::weak_count(&rc));
 
 **下一步**：
 
-- 学习 [智能指针](../../basic/smart-pointers.md)
-- 理解 [Rc 和 Arc](rc-arc.md)
-- 探索 [观察者模式](observer-pattern.md)
+- 学习 智能指针
+- 理解 Rc 和 Arc
+- 探索 观察者模式
 
 ---
 
@@ -417,8 +417,8 @@ println!("弱引用计数：{}", Rc::weak_count(&rc));
 
 ## 继续学习
 
-- 下一步：[智能指针](../../basic/smart-pointers.md)
-- 进阶：[无锁编程](lock-free-programming.md)
+- 下一步：智能指针
+- 进阶：无锁编程
 - 回顾：[所有权](../../basic/ownership.md)
 
 > 💡 **记住**：循环引用是 Rust 中少数会导致内存泄漏的情况。使用 Weak 打破循环，确保内存安全！

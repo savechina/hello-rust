@@ -27,8 +27,8 @@
 ## 前置要求
 
 - [测试基础](test.md) - 测试基础
-- [特征](../basic/trait.md) - trait 基础
-- [Arc 智能指针](../basic/pointer.md) - Arc 基础
+- 特征 - trait 基础
+- Arc 智能指针 - Arc 基础
 
 ---
 
@@ -469,15 +469,15 @@ mock.expect_monitor()
 
 ## 继续学习
 
-**前一章**: [Cow 类型](cow.md)  
+**前一章**: Cow 类型  
 **下一章**: [测试框架](rspec.md)
 
 **相关章节**:
-- [Cow 类型](cow.md)
+- Cow 类型
 - [测试框架](rspec.md)
-- [特征](../basic/trait.md)
+- 特征
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

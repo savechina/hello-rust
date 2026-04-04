@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- [所有权](../basic/ownership.md) - 所有权基础
-- [借用](../basic/ownership.md) - 借用基础
-- [枚举](../basic/enums.md) - 枚举类型
+- 所有权 - 所有权基础
+- 借用 - 借用基础
+- 枚举 - 枚举类型
 
 ---
 
@@ -485,14 +485,14 @@ fn process_cow(s: &str) -> Cow<str> {
 ## 继续学习
 
 **前一章**: [字节处理](bytes.md)  
-**下一章**: [派生宏](getset.md)
+**下一章**: 派生宏
 
 **相关章节**:
 - [字节处理](bytes.md)
-- [所有权](../basic/ownership.md)
-- [借用](../basic/ownership.md)
+- 所有权
+- 借用
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

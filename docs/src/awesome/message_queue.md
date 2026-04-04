@@ -1031,7 +1031,7 @@ async fn mqtt5_example() {
 
 - 学习 [微服务架构](./services.md) - 将 MQTT 集成到服务架构
 - 探索 [异步编程](../advance/async/async.md) - 深入理解 Tokio 运行时
-- 实践 [物联网项目](../../projects) - 构建完整的 IoT 应用
+- 实践 物联网项目 - 构建完整的 IoT 应用
 
 ---
 

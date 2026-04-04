@@ -26,7 +26,7 @@
 
 ## 前置要求
 
-- [错误处理](error-handling.md) - 错误处理基础
+- 错误处理 - 错误处理基础
 - [文件与目录操作](directory.md) - 文件路径基础
 
 ---
@@ -382,15 +382,15 @@ if status.success() {
 
 ## 继续学习
 
-**前一章**: [Ollama AI 集成](ollama.md)  
+**前一章**: Ollama AI 集成  
 **下一章**: [系统信息](sysinfo.md)
 
 **相关章节**:
-- [Ollama AI 集成](ollama.md)
+- Ollama AI 集成
 - [系统信息](sysinfo.md)
-- [错误处理](error-handling.md)
+- 错误处理
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

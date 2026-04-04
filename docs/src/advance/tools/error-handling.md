@@ -30,9 +30,9 @@
 
 学习本章前，你需要理解：
 
-- [所有权](../basic/ownership.md) - 理解所有权转移和借用
-- [特征](../basic/trait.md) - 理解 trait 定义和实现
-- [泛型](../basic/generic.md) - 理解泛型语法
+- 所有权 - 理解所有权转移和借用
+- 特征 - 理解 trait 定义和实现
+- 泛型 - 理解泛型语法
 
 ---
 
@@ -491,9 +491,9 @@ fn read_config() -> Result<String> {
 
 **下一步**：
 
-- 学习 [自定义错误类型](custom-errors.md)
-- 实践 [异步错误处理最佳实践](async-error-patterns.md)
-- 回顾 [Result 组合子](result-combinators.md)
+- 学习 自定义错误类型
+- 实践 异步错误处理最佳实践
+- 回顾 Result 组合子
 
 ---
 
@@ -539,8 +539,8 @@ fn read_config() -> Result<String> {
 
 ## 继续学习
 
-- 下一步：[数据库操作](database.md) - 实际项目中的错误处理
-- 进阶：[Tokio 异步运行时](tokio.md) - 异步错误处理模式
-- 回顾：[异步编程基础](async.md) - Result 在异步中的使用
+- 下一步：数据库操作 - 实际项目中的错误处理
+- 进阶：Tokio 异步运行时 - 异步错误处理模式
+- 回顾：异步编程基础 - Result 在异步中的使用
 
 > 💡 **记住**：好的错误处理让程序更健壮。永远不要忽略错误，显式处理每一个失败场景！

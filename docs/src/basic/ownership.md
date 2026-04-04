@@ -499,8 +499,8 @@ fn main() {
 
 **下一步**：
 
-- 学习 [借用和引用](引用.md) - 如何在不转移所有权的情况下使用值
-- 理解 [生命周期](生命周期.md) - 确保引用不会超出有效范围
+- 学习 借用和引用 - 如何在不转移所有权的情况下使用值
+- 理解 生命周期 - 确保引用不会超出有效范围
 
 ---
 
@@ -526,7 +526,7 @@ fn main() {
 
 - [Rust Book 所有权章节](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html) - 官方深入讲解
 - [借用检查器原理](https://blog.rust-lang.org/2015/08/14/First-borrow-checker-improvements.html) - 编译器如何实现
-- [Cell 和 RefCell](cell-refcell.md) - 内部可变性
+- Cell 和 RefCell - 内部可变性
 
 **选择建议**:
 - 想深入理解 → 继续学习 [生命周期](lifetimes.md)
@@ -534,7 +534,7 @@ fn main() {
 
 ## 继续学习
 
-- 下一步：[借用和引用](references.md)
+- 下一步：借用和引用
 - 进阶：[生命周期基础](lifetimes.md)
 - 回顾：[数据类型回顾](datatype.md)
 

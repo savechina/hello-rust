@@ -27,7 +27,7 @@
 ## 前置要求
 
 - [文件与目录操作](directory.md) - 文件路径基础
-- [宏编程](macros.md) - 宏基础
+- 宏编程 - 宏基础
 
 ---
 
@@ -417,14 +417,14 @@ lazy_static::lazy_static! {
 ## 继续学习
 
 **前一章**: [系统信息](sysinfo.md)  
-**下一章**: [对象存储](objectstore.md)
+**下一章**: 对象存储
 
 **相关章节**:
 - [系统信息](sysinfo.md)
-- [对象存储](objectstore.md)
-- [宏编程](macros.md)
+- 对象存储
+- 宏编程
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

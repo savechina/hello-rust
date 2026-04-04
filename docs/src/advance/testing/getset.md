@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- [结构体](../basic/struct.md) - 结构体基础
+- 结构体 - 结构体基础
 - [宏编程](macros.md) - 宏基础
-- [可变性](../basic/ownership.md) - mutability 基础
+- 可变性 - mutability 基础
 
 ---
 
@@ -544,9 +544,9 @@ pub struct Config {
 **相关章节**:
 - [RSpec 测试框架](rspec.md)
 - [宏编程](macros.md)
-- [结构体](../basic/struct.md)
+- 结构体
 
-**返回**: [高级进阶](advance-overview.md)
+**返回**: 高级进阶
 
 ---
 

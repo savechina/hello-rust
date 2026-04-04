@@ -273,3 +273,16 @@ env_logger::Builder::new()
 ---
 
 > 💡 **提示**：好的日志就像飞机的黑匣子 - 平时看不见，出问题时能救命！
+
+---
+
+## 继续学习
+
+**前一章**: [指针与不安全代码](pointer.md)  
+**下一章**: [追踪 (Tracing)](tracing.md)
+
+**相关章节**:
+- [追踪 (Tracing)](tracing.md) - 高级日志
+- [模块系统](module.md) - 日志模块
+
+**返回**: [基础入门](basic-overview.md)

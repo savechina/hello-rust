@@ -1,16 +1,14 @@
-# Getset 派生宏
+# 派生宏
 
 ## 开篇故事
 
-想象你正在开发一个电商系统，需要定义 `Product`、`Category`、`Order` 等数十个数据结构。每个结构体都有十几个字段，而你不得不为每个字段手动编写 getter 和 setter 方法——这会产生数百行重复的样板代码。更糟的是，当你修改字段时，还要同步更新这些方法。
-
-这就是 **getset** 派生宏的价值所在：**一行代码，自动生成所有访问器方法**。
+想象你要为结构体实现 getter 和 setter 方法。传统方式是：手动写每个方法 → 容易出错 → 代码重复。派生宏就像是：告诉编译器"帮我生成这些方法"，它自动完成。getset crate 就是这样的工具。
 
 ---
 
 ## 本章适合谁
 
-如果你厌倦了为结构体字段编写重复的 getter/setter，想了解 Rust 派生宏如何减少样板代码，本章适合你。这是 Rust 元编程在实际业务开发中最常见的应用之一。
+如果你想减少样板代码（getter、setter、builder），本章适合你。派生宏是 Rust 元编程的基础。
 
 ---
 
@@ -18,27 +16,112 @@
 
 完成本章后，你可以：
 
-1. 使用 `Getters`、`Setters`、`MutGetters`、`CopyGetters` 派生宏
-2. 配置字段级别的访问控制（`get = "pub"` 等）
-3. 区分不可变引用、可变引用和值拷贝三种 getter 类型
-4. 理解派生宏的代码生成机制
-5. 结合 Builder 模式构建复杂对象
+1. 理解派生宏概念
+2. 使用 getset crate
+3. 自动生成 getter/setter
+4. 使用 derive_more
+5. 创建 Builder 模式
 
 ---
 
 ## 前置要求
 
-学习本章前，你需要理解：
-
-- [结构体](../basic/struct.md) - 结构体定义和字段访问
-- [宏](macros.md) - 派生宏的基本概念
-- [可见性](../basic/visiable.md) - `pub`、`pub(crate)` 等访问控制
+- [结构体](../basic/struct.md) - 结构体基础
+- [宏编程](macros.md) - 宏基础
+- [可变性](../basic/ownership.md) - mutability 基础
 
 ---
 
 ## 第一个例子
 
-让我们看一个最简单的 getset 示例：
+最简单的 getset 使用：
+
+```rust
+use getset::{Getters, Setters};
+
+#[derive(Getters, Setters)]
+pub struct Category {
+    #[getset(get = "pub", set = "pub")]
+    id: u64,
+    
+    #[getset(get = "pub", set = "pub")]
+    name: String,
+}
+
+fn main() {
+    let mut cat = Category {
+        id: 1,
+        name: "Electronics".to_string(),
+    };
+    
+    // 使用生成的 getter
+    println!("ID: {}", cat.id());
+    
+    // 使用生成的 setter
+    cat.set_name("Books".to_string());
+}
+```
+
+**完整示例**: [getset_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/getset_sample.rs)
+
+---
+
+## 原理解析
+
+### getset 特性
+
+**getset 是代码生成库**：
+
+- ✅ 自动生成 getter
+- ✅ 自动生成 setter
+- ✅ 减少样板代码
+- ✅ 类型安全
+
+### 使用 Getters 派生
+
+**使用 #[derive(Getters)]**：
+
+```rust
+use getset::Getters;
+
+#[derive(Getters)]
+pub struct User {
+    #[get = "pub"]
+    id: u32,
+    
+    #[get = "pub"]
+    name: String,
+}
+
+// 生成：
+// impl User {
+//     pub fn id(&self) -> &u32 { &self.id }
+//     pub fn name(&self) -> &String { &self.name }
+// }
+```
+
+### 使用 Setters 派生
+
+**使用 #[derive(Setters)]**：
+
+```rust
+use getset::Setters;
+
+#[derive(Setters)]
+pub struct User {
+    #[set = "pub"]
+    name: String,
+}
+
+// 生成：
+// impl User {
+//     pub fn set_name(&mut self, val: String) { self.name = val; }
+// }
+```
+
+### 组合使用
+
+**使用 Getters + Setters**：
 
 ```rust
 use getset::{Getters, Setters};
@@ -47,205 +130,44 @@ use getset::{Getters, Setters};
 pub struct Product {
     #[getset(get = "pub", set = "pub")]
     id: u64,
+    
     #[getset(get = "pub", set = "pub")]
     name: String,
-    #[getset(get = "pub", set = "pub")]
-    price: u32,
 }
 ```
 
-**发生了什么？**
+### derive_more
 
-编译器会自动为 `Product` 结构体生成以下代码：
-
-```rust
-impl Product {
-    // Getters
-    pub fn id(&self) -> &u64 { &self.id }
-    pub fn name(&self) -> &String { &self.name }
-    pub fn price(&self) -> &u32 { &self.price }
-    
-    // Setters
-    pub fn set_id(&mut self, val: u64) -> &mut Self { 
-        self.id = val; 
-        self 
-    }
-    pub fn set_name(&mut self, val: String) -> &mut Self { 
-        self.name = val; 
-        self 
-    }
-    pub fn set_price(&mut self, val: u32) -> &mut Self { 
-        self.price = val; 
-        self 
-    }
-}
-```
-
-原本需要 30+ 行的样板代码，现在只需几行属性标记。
-
----
-
-## 原理解析
-
-### 代码生成过程
-
-```
-┌─────────────────────────────────────────┐
-│  源代码 (带 getset 属性)                 │
-│                                         │
-│  #[derive(Getters, Setters)]            │
-│  struct Product {                       │
-│      #[getset(get="pub", set="pub")]    │
-│      id: u64,                           │
-│  }                                      │
-└─────────────────────────────────────────┘
-                  ↓
-┌─────────────────────────────────────────┐
-│  编译时 - 派生宏展开                      │
-│                                         │
-│  1. syn 解析结构体 AST                   │
-│  2. 提取字段名和类型                      │
-│  3. 根据属性生成 impl 代码               │
-└─────────────────────────────────────────┘
-                  ↓
-┌─────────────────────────────────────────┐
-│  编译器看到的最终代码                    │
-│                                         │
-│  struct Product { id: u64 }             │
-│                                         │
-│  impl Product {                         │
-│      pub fn id(&self) -> &u64 {         │
-│          &self.id                       │
-│      }                                  │
-│      pub fn set_id(&mut self, ...) {...}│
-│  }                                      │
-└─────────────────────────────────────────┘
-```
-
-### 四种派生宏类型
-
-| 宏名称 | 生成的方法 | 返回类型 | 适用场景 |
-|--------|-----------|---------|---------|
-| `Getters` | `fn field(&self)` | `&T` (不可变引用) | 大多数情况 |
-| `Setters` | `fn set_field(&mut self, val: T)` | `&mut Self` | 链式调用 |
-| `MutGetters` | `fn field_mut(&mut self)` | `&mut T` (可变引用) | 需要修改字段内部 |
-| `CopyGetters` | `fn field(&self)` | `T` (值拷贝) | 实现了 `Copy` trait 的类型 |
-
-**关键区别**：
+**使用 derive_more**：
 
 ```rust
-#[derive(Getters, MutGetters, CopyGetters)]
-struct Example {
-    #[getset(get = "pub")]
-    name: String,      // getter 返回 &String
-    
-    #[getset(get_mut = "pub")]
-    category: Category, // getter 返回 &mut Category
-    
-    #[getset(get_copy = "pub")]
-    in_stock: bool,    // getter 返回 bool (拷贝值)
-}
-```
+use derive_more::Display;
 
----
-
-## 常见用法
-
-### 基础用法：商品结构体
-
-来自 `src/advance/getset_sample.rs` 的 `Product` 结构体：
-
-```rust
-#[derive(Getters, Setters, MutGetters, CopyGetters, Default, Display)]
-pub struct Product {
-    /// The unique identifier for the product
-    #[getset(get = "pub", set = "pub")]
-    id: u64,
-
-    /// The name of the product
-    #[getset(get = "pub", set = "pub")]
+#[derive(Display)]
+#[display("User{{id:{}, name:{}}}", id, name)]
+pub struct User {
+    id: u32,
     name: String,
-
-    /// The price of the product in cents
-    #[getset(get = "pub", set = "pub")]
-    price: u32,
-
-    /// Whether the product is in stock
-    #[getset(get_copy = "pub", set = "pub")] // get_copy for primitive types
-    in_stock: bool,
-
-    #[getset(get = "pub", get_mut = "pub", set = "pub")]
-    category: Category,
 }
+
+// 自动生成 Display 实现
+let user = User { id: 1, name: "Alice".to_string() };
+println!("{}", user);  // User{id:1, name:Alice}
 ```
 
-**使用示例**：
+### Builder 模式
+
+**手动实现 Builder**：
 
 ```rust
-fn getset_sample() {
-    // Create a new product instance
-    let mut product = Product {
-        id: 1,
-        name: "Rust Programming Book".to_string(),
-        price: 3999,
-        in_stock: true,
-        category: Category { /* ... */ },
-    };
-
-    // 使用生成的 getter 方法
-    println!("Product ID: {}", product.id());
-    println!("Product Name: {}", product.name());
-    println!("Price: ${}.{}", product.price() / 100, product.price() % 100);
-    println!("In Stock: {}", product.in_stock());  // get_copy 返回 bool 值
-
-    // 使用生成的 setter 方法（支持链式调用）
-    product
-        .set_name("Advanced Rust Programming".to_string())
-        .set_price(4999)
-        .set_in_stock(false);
-
-    // 使用可变 getter 修改嵌套结构
-    let category = product.category_mut();
-    category.set_first_category_id(2);
-}
-```
-
-### 嵌套结构：分类结构体
-
-```rust
-#[derive(Getters, Setters, Default, Display)]
-#[display("Category{{first_category_id:{}}}...")]
 pub struct Category {
-    #[getset(get = "pub", set = "pub")]
-    first_category_id: u64,
-    #[getset(get = "pub", set = "pub")]
-    first_category_name: String,
-    #[getset(get = "pub", set = "pub")]
-    second_category_id: u64,
-    #[getset(get = "pub", set = "pub")]
-    second_category_name: String,
-    #[getset(get = "pub", set = "pub")]
-    three_category_id: u64,
-    #[getset(get = "pub", set = "pub")]
-    three_categroy_name: String,
+    id: u64,
+    name: String,
 }
-```
 
-### 结合 Builder 模式
-
-`getset` 生成的 setter 支持**链式调用**（返回 `&mut Self`），天然适合 Builder 模式：
-
-```rust
 impl Category {
     pub fn builder() -> CategoryBuilder {
         CategoryBuilder::new()
-    }
-    
-    /// setting first category
-    pub fn with_first_category(mut self, id: u64, name: String) -> Self {
-        self.first_category_id = id;
-        self.first_category_name = name;
-        self
     }
 }
 
@@ -255,35 +177,33 @@ pub struct CategoryBuilder {
 
 impl CategoryBuilder {
     pub fn new() -> Self {
-        Self { inner: Category::default() }
+        Self {
+            inner: Category {
+                id: 0,
+                name: String::new(),
+            },
+        }
     }
-
-    pub fn with_first_category(mut self, id: u64, name: String) -> Self {
-        self.inner.set_first_category_id(id);
-        self.inner.set_first_category_name(name);
+    
+    pub fn with_id(mut self, id: u64) -> Self {
+        self.inner.id = id;
         self
     }
-
+    
+    pub fn with_name(mut self, name: String) -> Self {
+        self.inner.name = name;
+        self
+    }
+    
     pub fn build(self) -> Category {
         self.inner
     }
 }
-```
 
-**使用 Builder**：
-
-```rust
-// 使用 Category 自身的方法链
-let category = Category::default()
-    .with_first_category(1, "水果".to_string())
-    .with_second_category(10, "苹果梨".to_string())
-    .with_three_category(100, "苹果".to_string());
-
-// 使用独立 Builder
-let category = Category::builder()
-    .with_first_category(2, "水果".to_string())
-    .with_second_category(21, "苹果梨".to_string())
-    .with_three_category(201, "苹果".to_string())
+// 使用
+let cat = Category::builder()
+    .with_id(1)
+    .with_name("Electronics".to_string())
     .build();
 ```
 
@@ -291,131 +211,263 @@ let category = Category::builder()
 
 ## 常见错误
 
-### 错误 1: 在 Copy 类型上使用普通 getter
+### 错误 1: 忘记属性
+
+```rust
+use getset::Getters;
+
+#[derive(Getters)]
+pub struct User {
+    id: u32,  // ❌ 忘记 #[get] 属性
+}
+```
+
+**错误信息**:
+```
+no method named `id` found
+```
+
+**修复方法**:
+```rust
+#[derive(Getters)]
+pub struct User {
+    #[get = "pub"]
+    id: u32,  // ✅ 添加属性
+}
+```
+
+### 错误 2: 可见性错误
 
 ```rust
 #[derive(Getters)]
-struct BadExample {
-    #[getset(get = "pub")]  // ❌ 返回 &bool，通常不需要
-    flag: bool,
+pub struct User {
+    #[get = "pub"]
+    id: u32,
 }
 
-#[derive(Getters, CopyGetters)]
-struct GoodExample {
-    #[getset(get_copy = "pub")]  // ✅ 返回 bool
-    flag: bool,
+let user = User { id: 1 };
+user.id();  // ✅ 可以访问
+
+// 但在其他模块:
+mod other {
+    user.id();  // ❌ 如果 User 不是 pub 会失败
 }
 ```
 
-**为什么**：基本类型（bool、i32、u64 等）实现了 `Copy` trait，直接返回值更高效。
-
-### 错误 2: 忘记 mut 关键字调用 setter
-
+**修复方法**:
 ```rust
-let product = Product::default();
-product.set_name("New Name".to_string());  // ❌ 编译错误！product 不是 mut
-
-let mut product = Product::default();
-product.set_name("New Name".to_string());  // ✅ 正确
+pub struct User {  // ✅ 结构体也必须是 pub
+    #[get = "pub"]
+    id: u32,
+}
 ```
 
-### 错误 3: 试图通过 getter 修改字段
+### 错误 3: Builder 模式错误
 
 ```rust
-let mut product = Product::default();
-product.name().push_str(" suffix");  // ❌ 编译错误！name() 返回 &String，不是 &mut String
+pub struct Builder {
+    inner: User,
+}
 
-product.name_mut().push_str(" suffix");  // ✅ 需要 MutGetters 和 get_mut
+impl Builder {
+    pub fn with_name(self, name: String) -> Self {
+        self.inner.name = name;  // ❌ self 不是 mut
+        self
+    }
+}
 ```
+
+**修复方法**:
+```rust
+pub fn with_name(mut self, name: String) -> Self {
+    // ✅ 添加 mut
+    self.inner.name = name;
+    self
+}
+```
+
+---
+
+## 动手练习
+
+### 练习 1: 创建 Getters
+
+```rust
+use getset::Getters;
+
+#[derive(Getters)]
+pub struct Product {
+    // TODO: 添加 id 字段 (u64)
+    // TODO: 添加 name 字段 (String)
+    // TODO: 添加 pub getter
+}
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+#[derive(Getters)]
+pub struct Product {
+    #[get = "pub"]
+    id: u64,
+    #[get = "pub"]
+    name: String,
+}
+```
+</details>
+
+### 练习 2: 创建 Setters
+
+```rust
+use getset::Setters;
+
+#[derive(Setters)]
+pub struct User {
+    // TODO: 添加 name 字段
+    // TODO: 添加 pub setter
+}
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+#[derive(Setters)]
+pub struct User {
+    #[set = "pub"]
+    name: String,
+}
+```
+</details>
+
+### 练习 3: 实现 Builder
+
+```rust
+pub struct Config {
+    host: String,
+    port: u16,
+}
+
+impl Config {
+    // TODO: 实现 builder() 方法
+}
+
+pub struct ConfigBuilder {
+    inner: Config,
+}
+
+impl ConfigBuilder {
+    // TODO: 实现 new() 方法
+    // TODO: 实现 with_host() 方法
+    // TODO: 实现 with_port() 方法
+    // TODO: 实现 build() 方法
+}
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+impl Config {
+    pub fn builder() -> ConfigBuilder {
+        ConfigBuilder::new()
+    }
+}
+
+impl ConfigBuilder {
+    pub fn new() -> Self {
+        Self {
+            inner: Config {
+                host: String::new(),
+                port: 0,
+            },
+        }
+    }
+    
+    pub fn with_host(mut self, host: String) -> Self {
+        self.inner.host = host;
+        self
+    }
+    
+    pub fn with_port(mut self, port: u16) -> Self {
+        self.inner.port = port;
+        self
+    }
+    
+    pub fn build(self) -> Config {
+        self.inner
+    }
+}
+```
+</details>
 
 ---
 
 ## 故障排查 (FAQ)
 
-### Q: getset 和直接写方法有什么区别？
+### Q: getset 和手动实现有什么区别？
 
-**A**: 功能完全相同，只是代码生成方式不同。
+**A**: 
+- **getset**: 自动生成，减少样板
+- **手动**: 完全控制，更灵活
+- **推荐**: getset 用于简单 getter/setter
 
-| 方式 | 代码量 | 维护成本 | 灵活性 |
-|------|-------|---------|-------|
-| 手写方法 | 多 | 高 | 完全自定义 |
-| getset 宏 | 少 | 低 | 按模板生成 |
+### Q: 什么时候使用 Builder 模式？
 
-当你需要标准 getter/setter 时，getset 是最佳选择。需要特殊逻辑时，手动实现。
+**A**: 
+- 多个可选字段
+- 需要链式调用
+- 构建复杂对象
 
-### Q: 可以混合使用吗？
+### Q: derive_more 和 getset 有什么区别？
 
-**A**: 可以。getset 生成的方法只是普通的 impl 块内容，你可以在同一结构体上添加自定义方法：
-
-```rust
-#[derive(Getters, Setters)]
-struct Product {
-    #[getset(get = "pub", set = "pub")]
-    price: u32,
-}
-
-impl Product {
-    // getset 生成的 getter
-    // pub fn price(&self) -> &u32
-    
-    // 自定义方法
-    pub fn price_in_dollars(&self) -> f64 {
-        self.price as f64 / 100.0
-    }
-}
-```
-
-### Q: 如何控制生成的可见性？
-
-**A**: 使用 `"pub"`、`"pub(crate)"`、`"pub(super)"` 或省略（默认 private）：
-
-```rust
-#[getset(get = "pub", set = "pub(crate)")]
-field: String,  // getter pub, setter pub(crate)
-```
+**A**: 
+- **derive_more**: 派生各种 trait (Display, From, Into 等)
+- **getset**: 专门生成 getter/setter
+- **可以一起使用**
 
 ---
 
-## 知识扩展 (选学)
+## 知识扩展
 
-### 自定义 getter 前缀
-
-默认生成 `field()`，可以自定义：
-
-```rust
-#[getset(get = "pub", get_prefix = "get_")]
-name: String,  // 生成 get_name() 而不是 name()
-```
-
-### Skip 跳过字段
-
-某些字段不需要 getter/setter：
+### 可见性选项
 
 ```rust
 #[derive(Getters)]
-struct User {
-    #[getset(get = "pub")]
-    name: String,
-    
-    internal_id: u64,  // 无属性，不生成方法
+pub struct User {
+    #[get = "pub"]      // 公开
+    #[get = "pub(crate)"]  // crate 内公开
+    #[get = "pub(super)"]  // 父模块公开
+    #[get]              // 私有（默认）
+    id: u32,
 }
 ```
 
-### 与 derive_more 结合使用
-
-`getset_sample.rs` 中同时使用了 `Display` derive：
+### 组合派生
 
 ```rust
+use getset::{Getters, Setters, MutGetters};
 use derive_more::Display;
-use getset::{Getters, Setters};
 
-#[derive(Getters, Setters, Display)]
-#[display("Product(id={}, name={})", id, name)]
-pub struct Product {
-    #[getset(get = "pub", set = "pub")]
-    id: u64,
-    #[getset(get = "pub", set = "pub")]
+#[derive(Getters, Setters, MutGetters, Display)]
+#[display("User{{id:{}, name:{}}}", id, name)]
+pub struct User {
+    #[getset(get = "pub", set = "pub", get_mut = "pub")]
+    id: u32,
+    
+    #[getset(get = "pub", set = "pub", get_mut = "pub")]
     name: String,
+}
+```
+
+### 条件编译
+
+```rust
+#[cfg_attr(test, derive(Getters))]
+pub struct Config {
+    #[cfg_attr(test, get = "pub")]
+    value: String,
 }
 ```
 
@@ -425,24 +477,18 @@ pub struct Product {
 
 **核心要点**：
 
-1. **Getters 派生宏**为每个字段生成不可变引用 getter（`&T`）
-2. **Setters 派生宏**生成链式 setter 方法（返回 `&mut Self`）
-3. **MutGetters** 生成可变引用 getter（`&mut T`），用于修改嵌套结构
-4. **CopyGetters** 用于实现了 `Copy` trait 的类型，返回值的拷贝而非引用
-5. 使用 `#[getset(get = "pub", set = "pub")]` 语法配置字段级访问控制
+1. **getset**: 自动生成 getter/setter
+2. **derive_more**: 派生各种 trait
+3. **Builder**: 链式构建对象
+4. **可见性**: 控制访问级别
+5. **减少样板**: 提高开发效率
 
 **关键术语**：
 
-- **派生宏 (Derive Macro)** - 通过 `#[derive(...)]` 自动实现 trait
-- **Getter** - 获取字段值的访问器方法
-- **Setter** - 设置字段值的访问器方法
-- **Builder 模式** - 使用链式方法构建对象的构造模式
-- **样板代码 (Boilerplate)** - 重复、机械性的代码
-
-**下一步**：
-
-- 学习 [宏](macros.md) - 理解派生宏的工作原理
-- 了解 [依赖注入](../awesome/dependency_injection.md) - 在大型项目中组织数据结构
+- **Getter**: 获取字段值
+- **Setter**: 设置字段值
+- **Builder**: 构建器模式
+- **Derive**: 派生宏
 
 ---
 
@@ -450,223 +496,26 @@ pub struct Product {
 
 | English | 中文 |
 | ------- | ---- |
-| Derive Macro | 派生宏 |
-| Getter | 获取器 |
-| Setter | 设置器 |
-| Boilerplate | 样板代码 |
-| Visibility | 可见性 |
-| Copy trait | Copy trait |
-| Builder Pattern | Builder 模式 |
-
----
-
-完整示例：`src/advance/getset_sample.rs`
+| Getter | 获取方法 |
+| Setter | 设置方法 |
+| Builder | 构建器 |
+| Derive | 派生 |
+| Macro | 宏 |
 
 ---
 
 ## 继续学习
 
-- 上一步：[宏](macros.md)
-- 下一步：[数据库操作](database.md)
-- 进阶：[依赖注入模式](../awesome/dependency_injection.md)
+**前一章**: [RSpec 测试框架](rspec.md)  
+**下一章**: [宏编程](macros.md)
+
+**相关章节**:
+- [RSpec 测试框架](rspec.md)
+- [宏编程](macros.md)
+- [结构体](../basic/struct.md)
+
+**返回**: [高级进阶](advance-overview.md)
 
 ---
 
-## 知识检查
-
-**问题 1** (基础概念)
-
-以下代码使用了哪些派生宏？
-
-```rust
-#[derive(Getters, Setters, CopyGetters)]
-struct Item {
-    #[getset(get = "pub")]
-    name: String,
-    #[getset(get_copy = "pub", set = "pub")]
-    quantity: u32,
-}
-```
-
-A) 只有 `Getters`
-B) `Getters` 和 `Setters`
-C) `Getters`、`Setters` 和 `CopyGetters`
-D) 以上都不是
-
-<details>
-<summary>答案与解析</summary>
-
-**答案**: C) `Getters`、`Setters` 和 `CopyGetters`
-
-**解析**:
-- `Getters` 为 `name` 生成 `name(&self) -> &String`
-- `Setters` 为 `quantity` 生成 `set_quantity(&mut self, val: u32)`
-- `CopyGetters` 为 `quantity` 生成 `quantity(&self) -> u32`（返回值拷贝）
-
-注意一个字段可以同时使用多种 getter 类型。
-</details>
-
----
-
-**问题 2** (代码分析)
-
-下面的代码会编译通过吗？为什么？
-
-```rust
-let item = Item::default();
-item.set_quantity(10);
-```
-
-<details>
-<summary>答案与解析</summary>
-
-**答案**: ❌ 编译错误
-
-**原因**: `set_quantity` 需要 `&mut self`，但 `item` 不是可变绑定。
-
-**修复**:
-```rust
-let mut item = Item::default();  // 添加 mut
-item.set_quantity(10);
-```
-</details>
-
----
-
-**问题 3** (实际应用)
-
-为什么下面的结构体对 `price` 使用 `get_copy` 而不是 `get`？
-
-```rust
-#[derive(Getters, CopyGetters)]
-struct Product {
-    #[getset(get = "pub")]
-    name: String,
-    #[getset(get_copy = "pub")]
-    price: u64,
-}
-```
-
-<details>
-<summary>答案与解析</summary>
-
-**答案**: 
-
-1. **`name` 是 String** - 没有实现 `Copy`，使用 `get` 返回 `&String`（引用）
-2. **`price` 是 u64** - 实现了 `Copy` trait，使用 `get_copy` 直接返回值更高效
-3. **性能考虑** - 基本类型（u64、f64、bool 等）拷贝开销极小，直接返回值更符合 Rust 惯例
-
-如果写成 `#[getset(get = "pub")] price: u64`，会生成 `fn price(&self) -> &u64`，使用时需要解引用，不够便利。
-</details>
-
----
-
-## 代码生成可视化
-
-### Getter 类型对比
-
-```
-结构体定义:
-┌─────────────────────────────────────┐
-│ struct Product {                    │
-│     name: String,                   │
-│     price: u64,                     │
-│     category: Category,             │
-│ }                                   │
-└─────────────────────────────────────┘
-
-生成的代码:
-┌─────────────────────────────────────────────────────────┐
-│ // #[getset(get = "pub")]                              │
-│ impl Product {                                          │
-│     // String 类型 - 返回引用                           │
-│     pub fn name(&self) -> &String {                     │
-│         &self.name                                      │
-│     }                                                   │
-│ }                                                       │
-└─────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────┐
-│ // #[getset(get_copy = "pub")]  (u64 实现 Copy)        │
-│ impl Product {                                          │
-│     // u64 类型 - 返回值拷贝                            │
-│     pub fn price(&self) -> u64 {                        │
-│         self.price                                      │
-│     }                                                   │
-│ }                                                       │
-└─────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────┐
-│ // #[getset(get_mut = "pub")]                          │
-│ impl Product {                                          │
-│     // 可变引用 - 允许修改嵌套结构                      │
-│     pub fn category_mut(&mut self) -> &mut Category {   │
-│         &mut self.category                              │
-│     }                                                   │
-│ }                                                       │
-└─────────────────────────────────────────────────────────┘
-```
-
-### Setter 的链式调用
-
-```
-调用代码:
-product
-    .set_name("Book".to_string())
-    .set_price(2999)
-    .set_in_stock(true);
-
-展开过程:
-┌─────────────────────────────────────────────────────────┐
-│ product.set_name("Book".to_string())                    │
-│   └── 返回 &mut product                                 │
-│       .set_price(2999)                                  │
-│         └── 返回 &mut product                           │
-│             .set_in_stock(true)                         │
-│               └── 返回 &mut product                     │
-└─────────────────────────────────────────────────────────┘
-```
-
----
-
-## 工业界应用：减少 API 开发样板代码
-
-**真实场景**：
-
-一个微服务有 20 个 API 请求/响应结构体，每个平均 8 个字段：
-
-```rust
-// 不使用 getset：每个结构体 ~120 行
-pub struct CreateOrderRequest {
-    user_id: u64,
-    items: Vec<OrderItem>,
-    total_amount: u64,
-    // ... 还有 5 个字段
-}
-
-impl CreateOrderRequest {
-    pub fn user_id(&self) -> &u64 { &self.user_id }
-    pub fn set_user_id(&mut self, val: u64) -> &mut Self { self.user_id = val; self }
-    // 每个字段 2 个方法 × 8 字段 = 16 个方法
-}
-```
-
-**使用 getset**：
-
-```rust
-#[derive(Getters, Setters, Default)]
-pub struct CreateOrderRequest {
-    #[getset(get = "pub", set = "pub")]
-    user_id: u64,
-    #[getset(get = "pub", set = "pub")]
-    items: Vec<OrderItem>,
-    #[getset(get = "pub", set = "pub")]
-    total_amount: u64,
-    // ...
-}
-```
-
-**效果**：
-- 代码行数：**减少 85%**
-- 维护成本：添加新字段只需一行
-- Bug 减少：不会忘记同步 getter/setter
+**完整示例**: [getset_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/getset_sample.rs)

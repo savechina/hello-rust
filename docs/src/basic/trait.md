@@ -284,3 +284,17 @@ trait UnObjectSafeTrait {
 // }
 ```
 
+
+---
+
+## 继续学习
+
+**前一章**: [枚举](enums.md)  
+**下一章**: [泛型](generic.md)
+
+**相关章节**:
+- [枚举](enums.md)
+- [结构体](struct.md)
+- [泛型](generic.md)
+
+**返回**: [基础入门](basic-overview.md)

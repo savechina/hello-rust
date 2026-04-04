@@ -2,13 +2,13 @@
 
 ## 开篇故事
 
-想象你正在构建一个微服务架构的电商系统。服务 A 需要调用服务 B 的 API 获取商品信息，服务 C 需要接收来自客户端的订单请求。这些场景都离不开 HTTP 通信。在 Rust 生态中，**Hyper** 就是这样一个底层的 HTTP 库——它提供极致的灵活性和性能，让你能够精确控制每一个 HTTP 字节。
+想象你要建一家餐厅。Axum 是全套服务（前台、服务员、厨房），而 Hyper 只是厨房——它处理 HTTP 协议的核心部分，让你能构建自己的 Web 框架。Hyper 是 Rust 生态中许多 Web 框架的基础。
 
 ---
 
 ## 本章适合谁
 
-如果你已经学完了异步编程基础，现在想深入理解 HTTP 在 Rust 中的实现原理，本章适合你。Hyper 是 Tokio 生态系统的核心组件之一，也是许多高级 Web 框架（如 Axum）的底层依赖。
+如果你想深入理解 HTTP 协议底层，或想构建自己的 Web 框架，本章适合你。Hyper 是低级 HTTP 库，提供最大的灵活性。
 
 ---
 
@@ -16,82 +16,471 @@
 
 完成本章后，你可以：
 
-1. 理解 Hyper 的设计理念：为什么它如此"底层"
-2. 使用 Hyper 构建简单的 HTTP 服务器
-3. 处理 HTTP 请求和响应的 Body
-4. 实现基本的路由逻辑
+1. 理解 HTTP 请求和响应
+2. 创建 Hyper 服务器
+3. 处理请求路由
+4. 处理请求体和响应体
+5. 实现自定义服务
 
 ---
 
 ## 前置要求
 
-学习本章前，你需要理解：
-
-- async/await 基础
-- Tokio 运行时概念
-- 所有权和借用规则
+- [Tokio 异步运行时](tokio.md) - 异步基础
+- [HTTP 基础](axum.md) - HTTP 概念（可选）
 
 ---
 
 ## 第一个例子
 
-最简单的 Hyper HTTP 服务器：
+最简单的 Hyper 服务器：
 
 ```rust
-use hyper::{Request, Response, Body};
-use hyper::service::{make_service_fn, service_fn};
+use hyper::body::Incoming;
+use hyper::server::conn::http1;
+use hyper::service::service_fn;
+use hyper::{Request, Response};
+use tokio::net::TcpListener;
 
-async fn hello(_: Request<Body>) -> Result<Response<Body>, Infallible> {
-    Ok(Response::new(Body::from("Hello, World!")))
+async fn handle_request(
+    req: Request<Incoming>
+) -> Result<Response<String>, hyper::Error> {
+    Ok(Response::new("Hello, World!".to_string()))
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let addr = "127.0.0.1:3000";
+    let listener = TcpListener::bind(addr).await?;
+    
+    println!("服务器运行在 http://{}", addr);
+    
+    loop {
+        let (stream, _) = listener.accept().await?;
+        
+        tokio::task::spawn(async move {
+            let io = hyper_util::rt::TokioIo::new(stream);
+            
+            http1::Builder::new()
+                .serve_connection(io, service_fn(handle_request))
+                .await
+        });
+    }
 }
 ```
 
-完整示例：src/advance/hyper_sample.rs
+**完整示例**: [hyper_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/hyper_sample.rs)
 
 ---
 
 ## 原理解析
 
-### HTTP 请求/响应流程
+### Hyper 特性
 
+**Hyper 是一个 HTTP 库**：
+
+- ✅ 低级别 HTTP 实现
+- ✅ 高性能
+- ✅ 异步支持
+- ✅ 可构建 Web 框架
+
+### HTTP 请求和响应
+
+**Request 结构**：
+
+```rust
+use hyper::{Request, Method};
+
+let req = Request::builder()
+    .method(Method::GET)
+    .uri("/hello")
+    .body(())
+    .unwrap();
 ```
-Client → TcpListener → http1::Builder → service_fn → Handler → Response
+
+**Response 结构**：
+
+```rust
+use hyper::{Response, StatusCode};
+
+let resp = Response::builder()
+    .status(StatusCode::OK)
+    .body("Hello, World!")
+    .unwrap();
 ```
 
-### 核心类型
+### 服务函数
 
-- Request<Incoming>: HTTP 请求
-- Response<Full<Bytes>>: HTTP 响应
-- Body: 请求/响应正文
+**service_fn 处理请求**：
+
+```rust
+use hyper::service::service_fn;
+
+async fn handle(
+    req: Request<Incoming>
+) -> Result<Response<String>, hyper::Error> {
+    Ok(Response::new("Hello!".to_string()))
+}
+
+// 使用
+service_fn(handle)
+```
+
+### 路由
+
+**手动路由**：
+
+```rust
+async fn router(
+    req: Request<Incoming>
+) -> Result<Response<String>, hyper::Error> {
+    match req.uri().path() {
+        "/hello" => Ok(Response::new("Hello!".to_string())),
+        "/echo" => Ok(Response::new("Echo!".to_string())),
+        _ => Ok(Response::builder()
+            .status(404)
+            .body("Not Found".to_string())
+            .unwrap()),
+    }
+}
+```
+
+### 请求体处理
+
+**读取请求体**：
+
+```rust
+use hyper::body::Bytes;
+use http_body_util::BodyExt;
+
+async fn echo(
+    req: Request<Incoming>
+) -> Result<Response<String>, hyper::Error> {
+    // 收集整个请求体
+    let whole_body = req.collect().await?.to_bytes();
+    
+    Ok(Response::new(format!(
+        "Echo: {}",
+        String::from_utf8_lossy(&whole_body)
+    )))
+}
+```
+
+### 响应体
+
+**使用 Full 响应体**：
+
+```rust
+use http_body_util::Full;
+use hyper::body::Bytes;
+
+let body = Full::new(Bytes::from("Hello, World!"));
+let response = Response::new(body);
+```
+
+**使用 Empty 响应体**：
+
+```rust
+use http_body_util::Empty;
+
+let body = Empty::<Bytes>::new();
+let response = Response::new(body);
+```
+
+### 完整服务器示例
+
+```rust
+use hyper::body::Incoming;
+use hyper::server::conn::http1;
+use hyper::service::service_fn;
+use hyper::{Request, Response, StatusCode};
+use http_body_util::{BodyExt, Full};
+use hyper::body::Bytes;
+use tokio::net::TcpListener;
+
+async fn handle(
+    req: Request<Incoming>
+) -> Result<Response<Full<Bytes>>, hyper::Error> {
+    match req.uri().path() {
+        "/hello" => Ok(Response::new(Full::new(Bytes::from("Hello!")))),
+        "/echo" => {
+            let body = req.collect().await?.to_bytes();
+            Ok(Response::new(Full::new(body)))
+        }
+        _ => Ok(Response::builder()
+            .status(StatusCode::NOT_FOUND)
+            .body(Full::new(Bytes::from("Not Found")))
+            .unwrap()),
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let addr = "127.0.0.1:3000";
+    let listener = TcpListener::bind(addr).await?;
+    
+    println!("服务器运行在 http://{}", addr);
+    
+    loop {
+        let (stream, _) = listener.accept().await?;
+        let io = hyper_util::rt::TokioIo::new(stream);
+        
+        tokio::task::spawn(async move {
+            http1::Builder::new()
+                .serve_connection(io, service_fn(handle))
+                .await
+        });
+    }
+}
+```
 
 ---
 
 ## 常见错误
 
-### 错误 1: Body 只能消费一次
+### 错误 1: 忘记使用 Tokio
 
-Incoming body 是流式类型，只能读取一次
+```rust
+fn main() {  // ❌ 忘记 #[tokio::main]
+    let listener = TcpListener::bind("127.0.0.1:3000");
+    // ...
+}
+```
 
-### 错误 2: 忘记处理路由
+**错误信息**:
+```
+error[E0308]: mismatched types
+```
 
-需要根据 path 和 method 进行路由分发
+**修复方法**:
+```rust
+#[tokio::main]  // ✅ 添加异步运行时
+async fn main() {
+    // ...
+}
+```
+
+### 错误 2: 类型不匹配
+
+```rust
+// ❌ 错误的响应体类型
+Response::new("Hello")  // 期望 Body 类型
+```
+
+**修复方法**:
+```rust
+Response::new(Full::new(Bytes::from("Hello")))  // ✅ 正确的类型
+```
+
+### 错误 3: 忘记收集请求体
+
+```rust
+async fn handler(req: Request<Incoming>) {
+    let body = req.body();  // ❌ 这是 Incoming 类型，不是数据
+}
+```
+
+**修复方法**:
+```rust
+async fn handler(req: Request<Incoming>) {
+    let body = req.collect().await?.to_bytes();  // ✅ 收集并转换为 Bytes
+}
+```
 
 ---
 
-## 知识检查
+## 动手练习
 
-**问题 1**: Incoming 和 Full<Bytes> 的区别？
+### 练习 1: 创建简单服务器
 
-答案: Incoming 是流式请求 body，Full<Bytes> 是完整响应 body
+```rust
+use hyper::server::conn::http1;
+use tokio::net::TcpListener;
 
-**问题 2**: 如何设置响应状态码？
+#[tokio::main]
+async fn main() {
+    // TODO: 绑定 3000 端口
+    // TODO: 接受连接
+    // TODO: 处理请求
+}
+```
 
-答案: 使用 Response::builder().status(StatusCode::NOT_FOUND)
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
+
+loop {
+    let (stream, _) = listener.accept().await.unwrap();
+    let io = hyper_util::rt::TokioIo::new(stream);
+    
+    tokio::task::spawn(async move {
+        http1::Builder::new()
+            .serve_connection(io, service_fn(handle))
+            .await
+    });
+}
+```
+</details>
+
+### 练习 2: 实现路由
+
+```rust
+async fn handle(req: Request<Incoming>) {
+    // TODO: 根据路径路由
+    // "/" → 返回 "Home"
+    // "/about" → 返回 "About"
+    // 其他 → 返回 404
+}
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+match req.uri().path() {
+    "/" => Response::new(Full::new(Bytes::from("Home"))),
+    "/about" => Response::new(Full::new(Bytes::from("About"))),
+    _ => Response::builder()
+        .status(404)
+        .body(Full::new(Bytes::from("Not Found")))
+        .unwrap(),
+}
+```
+</details>
+
+### 练习 3: 实现 Echo 服务
+
+```rust
+async fn echo(req: Request<Incoming>) {
+    // TODO: 读取请求体
+    // TODO: 返回请求体内容
+}
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+let body = req.collect().await?.to_bytes();
+Ok(Response::new(Full::new(body)))
+```
+</details>
+
+---
+
+## 故障排查 (FAQ)
+
+### Q: Hyper 和 Axum 有什么区别？
+
+**A**: 
+- **Hyper**: 低级 HTTP 库，最大灵活性
+- **Axum**: 基于 Hyper 的高级框架，更易用
+- **推荐**: Axum（除非需要底层控制）
+
+### Q: 如何处理 JSON？
+
+**A**: 
+```rust
+use serde_json;
+
+let json = serde_json::to_string(&data)?;
+Response::new(Full::new(Bytes::from(json)))
+```
+
+### Q: 如何添加中间件？
+
+**A**: 
+```rust
+use tower::ServiceBuilder;
+
+let service = ServiceBuilder::new()
+    .layer(LoggingLayer)
+    .service(service_fn(handle));
+```
+
+---
+
+## 知识扩展
+
+### HTTPS 支持
+
+```rust
+use tokio_rustls::TlsAcceptor;
+
+let acceptor = TlsAcceptor::from(config);
+let stream = acceptor.accept(stream).await?;
+```
+
+### WebSocket 支持
+
+```rust
+use tokio_tungstenite::WebSocketStream;
+
+// 升级 HTTP 连接到 WebSocket
+let ws_stream = tokio_tungstenite::accept_async(stream).await?;
+```
+
+### 连接池
+
+```rust
+use hyper_util::client::legacy::Client;
+
+let client = Client::builder(hyper_util::rt::TokioExecutor::new())
+    .build_http();
+
+let resp = client.get(uri).await?;
+```
 
 ---
 
 ## 小结
 
-核心要点：底层 HTTP 库、Body 单次消费、Service 模式、Tokio集成
+**核心要点**：
 
-完整示例：src/advance/hyper_sample.rs
+1. **Hyper**: 低级 HTTP 库
+2. **Request/Response**: HTTP 请求和响应
+3. **service_fn**: 请求处理函数
+4. **路由**: 手动匹配路径
+5. **Body**: 请求体和响应体处理
+6. **异步**: 使用 Tokio 运行时
+
+**关键术语**：
+
+- **HTTP**: 超文本传输协议
+- **Request**: HTTP 请求
+- **Response**: HTTP 响应
+- **Body**: 请求/响应体
+- **Service**: 服务处理函数
+
+---
+
+## 术语表
+
+| English | 中文 |
+| ------- | ---- |
+| HTTP | 超文本传输协议 |
+| Request | 请求 |
+| Response | 响应 |
+| Body | 体/主体 |
+| Service | 服务 |
+| Route | 路由 |
+
+---
+
+## 继续学习
+
+**前一章**: [Axum Web 框架](axum.md)  
+**下一章**: [JSON 序列化](json.md)
+
+**相关章节**:
+- [Axum Web 框架](axum.md)
+- [Tokio 异步运行时](tokio.md)
+- [JSON 序列化](json.md)
+
+**返回**: [高级进阶](advance-overview.md)
+
+---
+
+**完整示例**: [hyper_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/hyper_sample.rs)

@@ -356,3 +356,17 @@ match find_user(1) {
 }
 ```
 
+
+---
+
+## 继续学习
+
+**前一章**: [结构体](struct.md)  
+**下一章**: [特征 (Traits)](trait.md)
+
+**相关章节**:
+- [结构体](struct.md)
+- [结构体字段](struct-fields.md)
+- [结构体方法](struct-methods.md)
+
+**返回**: [基础入门](basic-overview.md)

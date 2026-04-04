@@ -268,3 +268,17 @@ Person {
 ---
 
 > 💡 **提示**：字段是你与结构体交互的主要方式！
+
+---
+
+## 继续学习
+
+**前一章**: [结构体](struct.md)  
+**下一章**: [结构体方法](struct-methods.md)
+
+**相关章节**:
+- [结构体](struct.md)
+- [结构体方法](struct-methods.md)
+- [枚举](enums.md)
+
+**返回**: [基础入门](basic-overview.md)

@@ -179,3 +179,17 @@ mod garden {
 ---
 
 > 💡 **提示**：好的模块结构让代码像好文章一样易读！
+
+---
+
+## 继续学习
+
+**前一章**: [闭包](closure.md)  
+**下一章**: [线程与并发](threads.md)
+
+**相关章节**:
+- [闭包](closure.md)
+- [特征 (Traits)](trait.md)
+- [可见性控制](visiable.md)
+
+**返回**: [基础入门](basic-overview.md)

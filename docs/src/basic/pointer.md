@@ -88,3 +88,16 @@ let s = std::str::from_utf8(&bytes).unwrap();  // 会检查
 ---
 
 > 🔴 **记住**：unsafe 让你对编译器说"我知道我在做什么，相信我"。确保你真的知道！
+
+---
+
+## 继续学习
+
+**前一章**: [条件编译](cfg_if.md)  
+**下一章**: [日志记录](logger.md)
+
+**相关章节**:
+- [线程与并发](threads.md) - unsafe 代码
+- [所有权](ownership.md) - 内存安全
+
+**返回**: [基础入门](basic-overview.md)

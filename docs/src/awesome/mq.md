@@ -37,9 +37,9 @@
 
 学习本章前，你需要理解：
 
-- [所有权](../../basic/ownership.md) - 理解所有权和生命周期
-- [异步编程](../../advance/async.md) - 理解 async/await 基础
-- [Tokio](../../advance/tokio.md) - 使用 Tokio 异步运行时
+- [所有权](../basic/ownership.md) - 理解所有权和生命周期
+- [异步编程](../advance/async.md) - 理解 async/await 基础
+- [Tokio](../advance/tokio.md) - 使用 Tokio 异步运行时
 - 安装 MQTT Broker（推荐 Mosquitto 或 EMQX）用于测试
 
 ---

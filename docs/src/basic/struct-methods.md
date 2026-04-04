@@ -373,3 +373,17 @@ impl Rectangle {
 ---
 
 > 💡 **提示**：方法让结构体"活"起来 - 它们不仅能存储数据，还能处理数据！
+
+---
+
+## 继续学习
+
+**前一章**: [结构体字段](struct-fields.md)  
+**下一章**: [枚举](enums.md)
+
+**相关章节**:
+- [结构体字段](struct-fields.md)
+- [结构体](struct.md)
+- [枚举](enums.md)
+
+**返回**: [基础入门](basic-overview.md)

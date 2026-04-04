@@ -73,9 +73,9 @@
 
 **Basic Section Chapters** (14 files total):
 
-- [ ] T011 [P] [US1] Write `docs/src/basic/basic-overview.md` (section introduction, 500+ characters)
+- [x] T011 [P] [US1] Write `docs/src/basic/basic-overview.md` (section introduction, 500+ characters)
 - [x] T012 [P] [US1] Write `docs/src/basic/expression.md` based on `src/basic/expression_sample.rs` (variables, expressions)
-- [ ] T013 [P] [US1] Expand `docs/src/basic/datatype.md` based on `src/basic/datatype_sample.rs` (1017 lines → split into focused chapters)
+- [x] T013 [P] [US1] Expand `docs/src/basic/datatype.md` based on `src/basic/datatype_sample.rs` (1017 lines → split into focused chapters)
 - [x] T014 [P] [US1] Expand `docs/src/basic/ownership.md` based on `src/basic/ownership_sample.rs` (核心章节，include borrowing)
 - [x] T015 [P] [US1] Write `docs/src/basic/struct.md` based on `src/basic/rectangle.rs` and datatype examples
 - [x] T016 [P] [US1] Expand `docs/src/basic/struct-fields.md` (currently 1 line → 500+ characters)
@@ -93,9 +93,9 @@
 - [x] T028 [P] [US1] Write `docs/src/basic/visiable.md` based on `src/basic/visiable_sample.rs`
 
 **Quality Verification**:
-- [ ] T029 [US1] Verify all Basic chapters compile: `cargo build --workspace`
-- [ ] T030 [US1] Verify all Basic chapters mdBook build: `cd docs && mdbook build`
-- [ ] T031 [US1] Cross-link verification: Ensure all Basic chapters have proper prerequisites and forward links
+- [x] T029 [US1] Verify all Basic chapters compile: `cargo build --workspace`
+- [x] T030 [US1] Verify all Basic chapters mdBook build: `cd docs && mdbook build`
+- [x] T031 [US1] Cross-link verification: Ensure all Basic chapters have proper prerequisites and forward links
 
 **Checkpoint**: User Story 1 fully functional - learners can master Rust basics independently
 
@@ -112,22 +112,22 @@
 **Advance Section Chapters** (26 files total):
 
 - [ ] T032 [P] [US2] Write `docs/src/advance/advance-overview.md` (section introduction, 500+ characters)
-- [ ] T033 [P] [US2] Write `docs/src/advance/tokio.md` based on `src/advance/tokio_sample.rs` (509 lines → split: Async Basics + Network Programming)
-- [ ] T034 [P] [US2] Write `docs/src/advance/futures.md` based on `src/advance/futures_sample.rs`
-- [ ] T035 [P] [US2] Write `docs/src/advance/sqlx.md` based on `src/advance/sqlx_sample.rs` (async database)
-- [ ] T036 [P] [US2] Write `docs/src/advance/diesel.md` based on `src/advance/diesel_sample.rs` (ORM)
-- [ ] T037 [P] [US2] Write `docs/src/advance/axum.md` based on `src/advance/axum_sample.rs` (web framework)
-- [ ] T038 [P] [US2] Write `docs/src/advance/hyper.md` based on `src/advance/hyper_sample.rs` (lower-level HTTP)
-- [ ] T039 [P] [US2] Write `docs/src/advance/json.md` based on `src/advance/json_sample.rs` (serde_json)
-- [ ] T040 [P] [US2] Write `docs/src/advance/csv.md` based on `src/advance/csv_sample.rs` (CSV handling)
-- [ ] T041 [P] [US2] Write `docs/src/advance/rkyv.md` based on `src/advance/rkyv_sample.rs` (zero-copy serialization)
-- [ ] T042 [P] [US2] Write `docs/src/advance/tempfile.md` based on `src/advance/tempfile_sample.rs`
-- [ ] T043 [P] [US2] Write `docs/src/advance/memmap.md` based on `src/advance/memmap_sample.rs`
-- [ ] T044 [P] [US2] Write `docs/src/advance/dotenv.md` based on `src/advance/dotenv_sample.rs`
-- [ ] T045 [P] [US2] Write `docs/src/advance/bytes.md` based on `src/advance/bytes_sample.rs`
-- [ ] T046 [P] [US2] Write `docs/src/advance/cow.md` based on `src/advance/cow_sample.rs`
-- [ ] T047 [P] [US2] Write `docs/src/advance/getset.md` based on `src/advance/getset_sample.rs`
-- [ ] T048 [P] [US2] Write `docs/src/advance/rayon.md` based on `src/advance/rayon_sample.rs` (parallelism)
+- [x] T033 [P] [US2] Write `docs/src/advance/tokio.md` based on `src/advance/tokio_sample.rs` (509 lines → split: Async Basics + Network Programming)
+- [x] T034 [P] [US2] Write `docs/src/advance/futures.md` based on `src/advance/futures_sample.rs`
+- [x] T035 [P] [US2] Write `docs/src/advance/sqlx.md` based on `src/advance/sqlx_sample.rs` (async database)
+- [x] T036 [P] [US2] Write `docs/src/advance/diesel.md` based on `src/advance/diesel_sample.rs` (ORM)
+- [x] T037 [P] [US2] Write `docs/src/advance/axum.md` based on `src/advance/axum_sample.rs` (web framework)
+- [x] T038 [P] [US2] Write `docs/src/advance/hyper.md` based on `src/advance/hyper_sample.rs` (lower-level HTTP)
+- [x] T039 [P] [US2] Write `docs/src/advance/json.md` based on `src/advance/json_sample.rs` (serde_json)
+- [x] T040 [P] [US2] Write `docs/src/advance/csv.md` based on `src/advance/csv_sample.rs` (CSV handling)
+- [x] T041 [P] [US2] Write `docs/src/advance/rkyv.md` based on `src/advance/rkyv_sample.rs` (zero-copy serialization)
+- [x] T042 [P] [US2] Write `docs/src/advance/tempfile.md` based on `src/advance/tempfile_sample.rs`
+- [x] T043 [P] [US2] Write `docs/src/advance/memmap.md` based on `src/advance/memmap_sample.rs`
+- [x] T044 [P] [US2] Write `docs/src/advance/dotenv.md` based on `src/advance/dotenv_sample.rs`
+- [x] T045 [P] [US2] Write `docs/src/advance/bytes.md` based on `src/advance/bytes_sample.rs`
+- [x] T046 [P] [US2] Write `docs/src/advance/cow.md` based on `src/advance/cow_sample.rs`
+- [x] T047 [P] [US2] Write `docs/src/advance/getset.md` based on `src/advance/getset_sample.rs`
+- [x] T048 [P] [US2] Write `docs/src/advance/rayon.md` based on `src/advance/rayon_sample.rs` (parallelism)
 - [ ] T049 [P] [US2] Write `docs/src/advance/mock.md` based on `src/advance/mock_sample.rs`
 - [ ] T050 [P] [US2] Write `docs/src/advance/rspec.md` based on `src/advance/rspec_sample.rs`
 - [ ] T051 [P] [US2] Write `docs/src/advance/objectstore.md` based on `src/advance/objectstore_sample.rs`
@@ -135,9 +135,9 @@
 - [ ] T053 [P] [US2] Write `docs/src/advance/process.md` based on `src/advance/process_sample.rs`
 - [ ] T054 [P] [US2] Write `docs/src/advance/sysinfo.md` based on `src/advance/sysinfo_sample.rs`
 - [ ] T055 [P] [US2] Write `docs/src/advance/includedir.md` based on `src/advance/includedir_sample.rs`
-- [ ] T056 [P] [US2] Write `docs/src/advance/typealias.md` based on `src/advance/typealias_sample.rs`
-- [ ] T057 [P] [US2] Write `docs/src/advance/macros.md` based on `src/advance/macros_sample.rs`
-- [ ] T058 [P] [US2] Write `docs/src/advance/cyclerc.md` based on `src/advance/cyclerc_sample.rs`
+- [x] T056 [P] [US2] Write `docs/src/advance/typealias.md` based on `src/advance/typealias_sample.rs`
+- [x] T057 [P] [US2] Write `docs/src/advance/macros.md` based on `src/advance/macros_sample.rs`
+- [x] T058 [P] [US2] Write `docs/src/advance/cyclerc.md` based on `src/advance/cyclerc_sample.rs`
 - [ ] T059 [P] [US2] Write `docs/src/advance/mio.md` based on `src/advance/mio_sample.rs`
 
 **⚠️ Special Requirements for US2**:

@@ -333,3 +333,16 @@ impl Parser {
 ---
 
 > 💡 **提示**：好的可见性设计让你的代码像精密的钟表 - 用户只需要看表盘，不需要知道齿轮怎么转！
+
+---
+
+## 继续学习
+
+**前一章**: [追踪 (Tracing)](tracing.md)  
+**下一章**: [高级进阶](../advance/advance-overview.md) 🎓
+
+**相关章节**:
+- [模块系统](module.md) - 可见性
+- [特征](trait.md) - 公共 API
+
+**返回**: [基础入门](basic-overview.md)

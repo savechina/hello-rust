@@ -14,10 +14,10 @@
         - [结构体字段](./basic/struct-fields.md)
         - [结构体方法](./basic/struct-methods.md)
     - [枚举](./basic/enums.md)
-    - [模块系统](./basic/module.md)
     - [特征 (Traits)](./basic/trait.md)
     - [泛型](./basic/generic.md)
     - [闭包](./basic/closure.md)
+    - [模块系统](./basic/module.md)
     - [线程与并发](./basic/threads.md)
     - [条件编译](./basic/cfg_if.md)
     - [指针与不安全代码](./basic/pointer.md)
@@ -28,15 +28,39 @@
 # 进阶部分 (Advance)
 
 - [高级进阶](./advance/advance-overview.md)
-    - [测试](./advance/test.md)
-    - [文件与目录操作](./advance/directory.md)
-    - [CSV 文件处理](./advance/csv.md)
-    - [数据库操作](./advance/database.md)
-    - [并发异步编程](./advance/async.md)
-    - [宏编程](./advance/macros.md)
-    - [Web 服务](./advance/services.md)
-    - [序列化与反序列化](./advance/serialization.md)
-    - [rkyv 零拷贝序列化](./advance/rkyv.md)
+  - [异步编程](./advance/async.md) - Tokio 运行时和 async/await 语法
+    - [Futures 异步编程](./advance/futures.md) - Future trait 和组合子
+    - [并行计算](./advance/rayon.md) - 数据并行处理
+    - [MIO](./advance/mio.md) - 底层 I/O 库
+  - [数据库操作](./advance/database.md) - SQLx 异步数据库编程
+    - [数据库 ORM](./advance/diesel.md) - Diesel ORM 框架
+  - [Web 开发]()
+    - [Web 框架](./advance/axum.md) - Axum Web 服务构建
+    - [HTTP 库](./advance/hyper.md) - Hyper HTTP 底层库
+    - [AI 集成](./advance/ollama.md) - Ollama 本地 AI 集成
+  - [数据处理]() - 数据处理
+    - [JSON 序列化](./advance/json.md) - JSON 序列化/反序列化
+    - [CSV 处理](./advance/csv.md) - CSV 文件读写
+    - [零拷贝序列化](./advance/rkyv.md) - Rkyv 零拷贝优化
+  - [系统编程]() - 系统编程
+    - [文件与目录操作](./advance/directory.md) - 文件系统操作
+    - [临时文件](./advance/tempfile.md) - 临时文件管理
+    - [内存映射](./advance/memmap.md) - 内存映射文件
+    - [环境变量](./advance/dotenv.md) - 环境变量配置
+    - [字节处理](./advance/bytes.md) - 字节数据处理
+    - [Cow 类型](./advance/cow.md) - Clone-on-Write 优化
+    - [进程管理](./advance/process.md) - 进程控制和管理
+    - [系统信息](./advance/sysinfo.md) - 系统信息获取
+    - [资源嵌入](./advance/includedir.md) - 编译时资源嵌入
+  - [测试](./advance/test.md) - Mock 模拟测试
+    - [模拟测试](./advance/mock.md) - Mock 模拟测试
+    - [测试框架](./advance/rspec.md) - RSpec 行为驱动测试 
+  - [宏编程](./advance/macros.md) - 声明宏和过程宏
+    - [派生宏](./advance/getset.md) - Getters/Setters 派生
+  - [其他]() - 类型别名简化
+    - [循环引用](./advance/cyclerc.md) - 引用计数循环检测
+    - [类型别名](./advance/typealias.md) - 类型别名简化
+    - [对象存储](./advance/objectstore.md) - 对象存储接口
 
 # 实战精选 (Awesome)
 
@@ -67,12 +91,9 @@
 # 社区与贡献
 
 - [贡献指南](./CONTRIBUTING.md)
-- [质量审核标准](./QUALITY_AUDIT.md)
-- [代码示例规范](./README_CODE_EXAMPLES.md)
-- [GitHub 源码链接](./GITHUB_CODE_LINKS.md)
 
 # 附录
 
-- [术语表](./basic/glossary.md)
+- [术语表](./glossary.md)
 - [常见问题 FAQ](./faq.md)
 - [更新日志](./CHANGELOG.md)

@@ -108,7 +108,7 @@ mod tests {
 
         // 设置特定参数的返回值
         mock.expect_process()
-            .with(eq(b"hello"))
+            .withf(|data| data == b"hello")
             .returning(|_| Ok(b"HELLO".to_vec()));
 
         mock.expect_transform()

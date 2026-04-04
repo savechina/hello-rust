@@ -160,18 +160,18 @@ mod tests {
     use super::*;
 
     #[ignore]
-    #[tokio::test]
-    async fn test_ollama_chat() {
+    #[test]
+    fn test_ollama_chat() {
         // 需要本地运行 Ollama 服务
-        let result = ollama_chat_sample().await;
+        let result = ollama_chat_sample();
         assert!(result.is_ok());
     }
 
     #[ignore]
-    #[tokio::test]
-    async fn test_ollama_error_handling() {
+    #[test]
+    fn test_ollama_error_handling() {
         // 测试错误处理
-        let result = ollama_error_handling_sample().await;
+        let result = ollama_error_handling_sample();
         assert!(result.is_ok());
     }
 }

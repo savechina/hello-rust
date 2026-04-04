@@ -33,6 +33,7 @@ impl MonitorMessageConsumerListener {
 
 /// 简单计算器
 /// 用于演示基本的 RSpec 测试
+#[derive(Clone, Debug)]
 pub struct Calculator {
     value: f64,
 }
@@ -110,7 +111,7 @@ mod tests {
     #[test]
     fn test_rspec_monitor_suite() {
         rspec::run(&describe("MonitorMessageConsumerListener", (), |ctx| {
-            ctx.describe("when monitor service returns true", |ctx| {
+            ctx.context("when monitor service returns true", |ctx| {
                 ctx.it("should report healthy", |()| {
                     let mut mock = MockHmsMonitorService::new();
                     mock.expect_monitor().returning(|| true);
@@ -124,7 +125,7 @@ mod tests {
                 });
             });
 
-            ctx.describe("when monitor service returns false", |ctx| {
+            ctx.context("when monitor service returns false", |ctx| {
                 ctx.it("should report unhealthy", |()| {
                     let mut mock = MockHmsMonitorService::new();
                     mock.expect_monitor().returning(|| false);
@@ -141,56 +142,63 @@ mod tests {
     /// 计算器 RSpec 测试
     #[test]
     fn test_rspec_calculator_suite() {
-        rspec::run(&describe("Calculator", Calculator::new(), |ctx| {
-            ctx.before(|calc| {
-                calc.reset();
-            });
+        use std::sync::Arc;
+        // Calculator doesn't impl Clone; Arc satisfies rspec's Clone bound
+        let calc = Arc::new(Calculator::new());
+        rspec::run(&describe("Calculator", calc, |ctx| {
+            ctx.before(|_| {});
 
-            ctx.describe("addition", |ctx| {
+            ctx.context("addition", |ctx| {
                 ctx.it("should add positive numbers", |calc| {
-                    calc.add(5.0);
-                    calc.add(3.0);
-                    assert_eq!(calc.get_value(), 8.0);
+                    let mut c = Calculator::new();
+                    c.add(5.0);
+                    c.add(3.0);
+                    assert_eq!(c.get_value(), 8.0);
                     true
                 });
 
                 ctx.it("should add negative numbers", |calc| {
-                    calc.add(-5.0);
-                    calc.add(-3.0);
-                    assert_eq!(calc.get_value(), -8.0);
+                    let mut c = Calculator::new();
+                    c.add(-5.0);
+                    c.add(-3.0);
+                    assert_eq!(c.get_value(), -8.0);
                     true
                 });
             });
 
-            ctx.describe("subtraction", |ctx| {
+            ctx.context("subtraction", |ctx| {
                 ctx.it("should subtract numbers", |calc| {
-                    calc.add(10.0);
-                    calc.subtract(4.0);
-                    assert_eq!(calc.get_value(), 6.0);
+                    let mut c = Calculator::new();
+                    c.add(10.0);
+                    c.subtract(4.0);
+                    assert_eq!(c.get_value(), 6.0);
                     true
                 });
             });
 
-            ctx.describe("multiplication", |ctx| {
+            ctx.context("multiplication", |ctx| {
                 ctx.it("should multiply numbers", |calc| {
-                    calc.add(5.0);
-                    calc.multiply(3.0);
-                    assert_eq!(calc.get_value(), 15.0);
+                    let mut c = Calculator::new();
+                    c.add(5.0);
+                    c.multiply(3.0);
+                    assert_eq!(c.get_value(), 15.0);
                     true
                 });
             });
 
-            ctx.describe("division", |ctx| {
+            ctx.context("division", |ctx| {
                 ctx.it("should divide numbers", |calc| {
-                    calc.add(10.0);
-                    calc.divide(2.0).unwrap();
-                    assert_eq!(calc.get_value(), 5.0);
+                    let mut c = Calculator::new();
+                    c.add(10.0);
+                    c.divide(2.0).unwrap();
+                    assert_eq!(c.get_value(), 5.0);
                     true
                 });
 
                 ctx.it("should return error for division by zero", |calc| {
-                    calc.add(10.0);
-                    let result = calc.divide(0.0);
+                    let mut c = Calculator::new();
+                    c.add(10.0);
+                    let result = c.divide(0.0);
                     assert!(result.is_err());
                     true
                 });
@@ -202,7 +210,7 @@ mod tests {
     #[test]
     fn test_rspec_user_validation_suite() {
         rspec::run(&describe("User Validation", (), |ctx| {
-            ctx.describe("valid user creation", |ctx| {
+            ctx.context("valid user creation", |ctx| {
                 ctx.it("should create user with valid data", |()| {
                     let user = User::new("Alice", "alice@example.com", 30);
                     assert!(user.is_ok());
@@ -214,7 +222,7 @@ mod tests {
                 });
             });
 
-            ctx.describe("invalid user creation", |ctx| {
+            ctx.context("invalid user creation", |ctx| {
                 ctx.it("should reject empty name", |()| {
                     let user = User::new("", "test@example.com", 25);
                     assert!(user.is_err());

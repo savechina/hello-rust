@@ -1,18 +1,15 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version Change: 1.0.0 → 1.1.0 (MINOR: Materially expanded SDD Harness Engineering section)
+Version Change: 1.1.0 → 1.1.1 (PATCH: Update mdbook version + documentation quality clarifications)
 Modified Principles:
-  - V. SDD Harness Engineering: Expanded from basic workflow to full 8-phase lifecycle with triple quality gates
+  - Technology Stack: mdbook version 0.4.36+ → 0.4.52 (stable compatible version)
+  - Added Documentation Quality standards to all principles
+  - Clarified Chinese language requirements with English technical terms
 Added Sections:
-  - Development Phases (8 phases with quality gates)
-  - Triple Quality Gates (Metis + Momus + GStack)
-  - Skill Integration Matrix
+  - Documentation Quality Standards in each principle
 Removed Sections: None
-Templates Requiring Updates:
-  ✅ .specify/templates/plan-template.md (Constitution Check section aligned)
-  ✅ .specify/templates/spec-template.md (Success Criteria section aligned)
-  ✅ .specify/templates/tasks-template.md (Task categorization aligned)
+Templates Requiring Updates: None (documentation standards already in place)
 Follow-up TODOs: None
 ==================
 -->
@@ -33,6 +30,11 @@ All code MUST prioritize clarity, maintainability, and idiomatic Rust patterns.
 - Documentation comments (`///`) on all public APIs with examples
 - No `unsafe` code without documented safety invariants and architectural approval
 
+**Documentation Quality:**
+- All code examples MUST be from real project code (no fictional examples)
+- Code examples MUST include GitHub source links
+- All examples MUST compile successfully with `cargo build --workspace`
+
 **Rationale:** Learning resources must demonstrate best practices. Students learn from what they see. Poor code quality compounds as learners replicate patterns.
 
 **Quality Gates:**
@@ -52,6 +54,11 @@ Test-driven development is mandatory for all new features and bug fixes.
 - Integration tests for all inter-service communication patterns
 - Property-based tests for algorithmic code (using `proptest` crate)
 - Performance benchmarks for critical paths (using `criterion` crate)
+
+**Documentation Testing:**
+- Documentation code snippets MUST be executable
+- Knowledge checkpoint questions MUST validate learning outcomes
+- All examples MUST have corresponding test coverage
 
 **Rationale:** Tests serve as executable specifications and living documentation. They catch regressions and validate learning outcomes.
 
@@ -77,6 +84,17 @@ All user-facing interfaces MUST provide intuitive, consistent, and accessible ex
 - Error Messages: Actionable, specific, include context and remediation steps
 - Response Times: <100ms for interactive operations, <1s for complex queries
 
+**Documentation Language Standards:**
+- **Primary Language**: Chinese (Simplified) with English technical terms in parentheses
+  - Example: 所有权 (ownership), 借用 (borrowing), 生命周期 (lifetime)
+- **Writing Style**: Plain language, avoid academic jargon
+- **Chapter Structure**: 12-section template for all tutorial chapters
+- **Content Requirements**:
+  - Minimum 500 Chinese characters per chapter
+  - At least 3 executable code examples
+  - At least 3 knowledge checkpoint questions
+  - GitHub links to all source code examples
+
 **UX Principles:**
 - **Discoverability**: Every feature accessible via `--help` or API documentation
 - **Predictability**: Consistent naming, argument order, and output formats
@@ -87,6 +105,11 @@ All user-facing interfaces MUST provide intuitive, consistent, and accessible ex
 - Use `/browse` for manual UX validation before deployment
 - Use `/qa` for automated accessibility testing
 - Use `/design-review` for visual consistency audits
+
+**Documentation Build Quality:**
+- `mdbook build` MUST pass with zero errors and warnings
+- All links MUST be valid (no 404 errors)
+- All code examples MUST render correctly with syntax highlighting
 
 ### IV. Performance Requirements
 
@@ -105,6 +128,11 @@ All code MUST meet defined performance standards and resource constraints.
 - CLI startup: <50ms cold start, <10ms warm start
 - Memory footprint: <100MB for demo applications, <500MB for production services
 - Binary size: <20MB for CLI tools, <50MB for server binaries (release builds)
+
+**Documentation Performance:**
+- mdbook build time MUST be <5 minutes for full documentation
+- Individual chapter builds MUST be <30 seconds
+- Hot reload during development MUST be <2 seconds
 
 **Performance Anti-Patterns:**
 - `thread::sleep()` in polling loops (use async primitives instead)
@@ -148,6 +176,9 @@ Specification Driven Development (SDD) workflows MUST follow the **8-Phase Devel
 **Phase 4: Implementation**
 - `/speckit.implement` — Test-first execution with task delegation
 - **Quality Gate**: `cargo clippy` + `cargo fmt` + compilation success
+- **Manual Review**: Changes MUST be manually reviewed before commit
+- **Manual Commit**: ALL commits MUST be manually committed and pushed by user
+- **Prohibited**: NO automatic commits or pushes to remote repositories
 
 **Phase 5: Testing & Validation**
 - `cargo test && cargo nextest run` — Automated testing
@@ -157,8 +188,9 @@ Specification Driven Development (SDD) workflows MUST follow the **8-Phase Devel
 
 **Phase 6: Delivery & Release**
 - `/document-release` — Update all documentation
-- `/ship` — Merge, version bump, create PR
+- `/ship` — Merge, version bump, create PR (with user approval)
 - **Quality Gate**: All quality gates passed
+- **Manual Verification**: User MUST verify all changes before deployment
 
 **Phase 7: Retrospective**
 - `/retro` — Engineering retro with trend analysis
@@ -192,24 +224,28 @@ Specification Driven Development (SDD) workflows MUST follow the **8-Phase Devel
 - Test-first development enforced in Phase 4
 - All quality gates MUST pass before proceeding to next phase
 - Document all decisions in `docs/specs/{N}-{feature}/`
+- **Manual Control**: User MUST manually review, commit, and push all changes
 
 **Workflow Enforcement:**
 - No direct commits to `main` branch (use feature branches with PRs)
 - All PRs MUST reference a spec document in `docs/specs/`
 - All code changes MUST have corresponding test updates
 - Breaking changes MUST update version according to semver and migration guide
+- **CRITICAL**: NO automatic commits or pushes - user maintains full control
 
 **Automation Standards:**
 - CI pipeline: Build → Test → Lint → Benchmark → Deploy
 - Deployment: Automated via GitHub Actions, rollback procedures documented
 - Monitoring: Structured logging (`tracing`), metrics (`prometheus`), tracing (`jaeger`)
 - Incident Response: Runbooks in `docs/runbooks/`, on-call rotation documented
+- **Manual Gates**: User approval required at all deployment stages
 
 **Tool Stack:**
 - **Speckit Framework**: 8-phase SDD workflow (`specify`, `plan`, `tasks`, `analyze`, `checklist`, `implement`)
 - **GStack Skills**: Quality automation (`office-hours`, `plan-ceo-review`, `plan-eng-review`, `design-consultation`, `plan-design-review`, `review`, `qa`, `browse`, `ship`, `retro`)
 - **OhMyOpenCode Agents**: Triple quality gates (`metis` pre-planning, `momus` post-review, `oracle` architecture, `explore` codebase, `librarian` external research)
 - **Rust Tooling**: `cargo-nextest`, `cargo-tarpaulin`, `cargo-deny`, `cargo-audit`
+- **Manual Commit Policy**: ALL commits require user review and manual execution
 
 ## Technology Stack
 
@@ -232,9 +268,10 @@ Specification Driven Development (SDD) workflows MUST follow the **8-Phase Devel
 - Benchmarks: `criterion`
 
 **Documentation:**
-- mdBook 0.4.36+ with plugins (admonish, alerts, pagetoc)
-- Primary language: Chinese (Simplified)
+- mdBook 0.4.52 (stable version) with plugins (admonish, alerts, pagetoc)
+- Primary language: Chinese (Simplified) with English technical terms
 - Deployed to: GitHub Pages
+- Build verification: `mdbook build` MUST pass with zero errors
 
 **Build/CI:**
 - Protobuf: `protoc` 29.3 (for tonic-build)
@@ -259,7 +296,10 @@ Specification Driven Development (SDD) workflows MUST follow the **8-Phase Devel
 3. **Implementation** (`/speckit.tasks` → `/speckit.implement`)
    - Granular task breakdown (<4hr per task)
    - Test-first: Write tests → Tests fail → Implement → Tests pass
-   - Incremental commits with conventional commit messages
+   - **Manual Review**: ALL changes MUST be manually reviewed
+   - **Manual Commit**: User MUST execute all git commits
+   - **Manual Push**: User MUST execute all git pushes
+   - **Prohibited**: NO automatic commits or pushes
 
 4. **Quality Assurance** (`/qa`)
    - Automated testing (unit, integration, e2e)
@@ -277,12 +317,14 @@ Specification Driven Development (SDD) workflows MUST follow the **8-Phase Devel
    - Merge to `main` via PR
    - Automated CI/CD pipeline
    - Post-deploy monitoring
+   - **Manual approval required at all stages**
 
 ### Branch Strategy
 
 - `main`: Production-ready code, protected
 - `<###-feature-name>`: Feature branches (sequential numbering from speckit)
 - All branches MUST have associated spec document
+- **Manual Control**: User decides when to create branches and merge
 
 ### Commit Conventions
 
@@ -296,6 +338,21 @@ Specification Driven Development (SDD) workflows MUST follow the **8-Phase Devel
 
 Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
 
+**Manual Commit Examples:**
+```bash
+# User manually reviews and commits
+git add <files>
+git commit -m "feat(docs): Update constitution to v1.1.1"
+git push origin main
+```
+
+**Prohibited:**
+```bash
+# DO NOT automatically commit or push
+# git commit -m "auto: ..."  # FORBIDDEN
+# git push origin main       # FORBIDDEN without user approval
+```
+
 ## Governance
 
 **Authority:**
@@ -308,6 +365,7 @@ This constitution supersedes all other development practices and guides. In case
 4. Update constitution with version bump (MAJOR.MINOR.PATCH)
 5. Propagate changes to all dependent templates and documentation
 6. Announce changes to all contributors
+7. **Manual Execution**: All constitutional amendments require manual user approval and commit
 
 **Versioning Policy:**
 - **MAJOR**: Backward incompatible principle removals or redefinitions
@@ -318,6 +376,7 @@ This constitution supersedes all other development practices and guides. In case
 - All PRs MUST verify constitution compliance via `/review` command
 - Complexity exceptions MUST be justified in PR description with architectural approval
 - Violations of NON-NEGOTIABLE principles block merge
+- **Manual Review**: User MUST verify all compliance checks before merge
 
 **Runtime Guidance:**
 - Use `AGENTS.md` for project-specific technical guidance
@@ -328,7 +387,8 @@ This constitution supersedes all other development practices and guides. In case
 - CI checks for linting, formatting, testing, security
 - Mandatory code review for all changes
 - Quarterly constitution review and update cycle
+- **Manual Control**: User has final approval on all changes to main branch
 
 ---
 
-**Version**: 1.1.0 | **Ratified**: 2026-04-03 | **Last Amended**: 2026-04-03
+**Version**: 1.1.1 | **Ratified**: 2026-04-03 | **Last Amended**: 2026-04-04

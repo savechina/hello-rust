@@ -194,6 +194,77 @@ fn test_result() -> Result<(), String> {
 }
 ```
 
+### 7. 使用 nextest 批量测试
+
+**nextest** 是 Rust 的下一代测试运行器，比 `cargo test` 更快、更强大。
+
+**安装**:
+```bash
+cargo install cargo-nextest
+```
+
+**基本使用**:
+```bash
+# 运行所有测试
+cargo nextest run
+
+# 运行特定测试
+cargo nextest run test_add
+
+# 显示测试输出
+cargo nextest run --nocapture
+
+# 并行运行（默认使用所有 CPU 核心）
+cargo nextest run --test-threads 4
+```
+
+**nextest vs cargo test 对比**:
+
+| 特性 | cargo test | cargo nextest |
+|------|-----------|---------------|
+| 执行方式 | 单进程 | 每测试一进程 |
+| 并行度 | 有限 | 完全并行 |
+| 失败隔离 | 差（一个失败影响其他） | 好（完全隔离） |
+| 重试支持 | 无 | 支持 `--retries` |
+| 进度显示 | 简单 | 详细进度条 |
+| 速度 | 较慢 | 快 2-5 倍 |
+
+**高级功能**:
+
+```bash
+# 重试失败的测试
+cargo nextest run --retries 2
+
+# 只运行失败的测试
+cargo nextest run --no-run  # 先记录
+cargo nextest run --rerun   # 重跑失败
+
+# 生成 JUnit 报告
+cargo nextest run --message-format junit > report.xml
+
+# 按特性过滤
+cargo nextest run --features "feature1,feature2"
+
+# 跳过特定测试
+cargo nextest run --filter-expr "not test(/slow/)"
+```
+
+**在 CI/CD 中使用**:
+```yaml
+# GitHub Actions 示例
+- name: Install nextest
+  run: cargo install cargo-nextest --locked
+
+- name: Run tests
+  run: cargo nextest run --retries 2
+```
+
+**为什么选择 nextest？**
+- 测试隔离：每个测试在独立进程中运行
+- 快速失败：立即显示失败信息
+- 更好的输出：彩色输出、进度条、详细统计
+- CI 友好：原生支持重试和报告生成
+
 ---
 
 ## 常见错误

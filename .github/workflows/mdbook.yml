@@ -1,5 +1,5 @@
 # Workflow for building and deploying mdBook site to GitHub Pages
-# Using mdbook 0.5.x with built-in TOC support (no pagetoc needed)
+# Using mdbook 0.4.52 (stable, compatible version)
 
 name: Deploy Pages
 
@@ -23,8 +23,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Use mdbook 0.5+ with built-in TOC support
-      MDBOOK_VERSION: 0.5.1
+      # Use stable mdbook 0.4.52 for compatibility
+      MDBOOK_VERSION: 0.4.52
     steps:
       - uses: actions/checkout@v4
       
@@ -38,7 +38,6 @@ jobs:
           cargo install --version ${MDBOOK_VERSION} mdbook
           cargo install mdbook-admonish
           cargo install mdbook-alerts
-          # No pagetoc needed - TOC built into mdbook 0.5+
           
       - name: Install mdBook plugins
         run: mdbook-admonish install docs/

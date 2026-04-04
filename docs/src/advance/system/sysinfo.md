@@ -31,6 +31,16 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add sysinfo
+cargo add bigdecimal
+```
+
 ## 第一个例子
 
 获取系统信息：

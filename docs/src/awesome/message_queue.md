@@ -58,6 +58,20 @@ docker run -d -p 1883:1883 eclipse-mosquitto
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add serde_json
+cargo add tokio --features full
+cargo add axum
+cargo add bytes
+cargo add chrono
+cargo add rumqttc
+```
+
 ## 第一个例子
 
 让我们从一个简单的 MQTT 同步客户端开始：

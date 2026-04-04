@@ -32,6 +32,16 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add tokio --features full
+cargo add futures
+```
+
 ## 第一个例子
 
 最简单的 Future 使用：

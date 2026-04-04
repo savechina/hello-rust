@@ -58,6 +58,19 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add serde --features derive
+cargo add serde_json
+cargo add tokio --features full
+cargo add axum
+cargo add async-trait
+```
+
 ## 第一个例子
 
 让我们从最简单的依赖注入开始：

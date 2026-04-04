@@ -34,6 +34,17 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add uuid --features v4,v5,v7,md5
+cargo add md-5
+cargo add chrono
+```
+
 ## 第一个例子
 
 最常用的 UUID v4 随机生成：

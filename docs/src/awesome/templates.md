@@ -31,6 +31,18 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add tera
+cargo add liquid
+cargo add pest
+cargo add pest_derive
+```
+
 ## 第一个例子
 
 最简单的 Tera 模板渲染：

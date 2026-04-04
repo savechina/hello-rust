@@ -31,6 +31,17 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add serde_json
+cargo add tokio --features full
+cargo add hyper --features full
+```
+
 ## 第一个例子
 
 最简单的 Hyper 服务器：

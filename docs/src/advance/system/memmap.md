@@ -32,6 +32,16 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add memmap2
+cargo add tempfile
+```
+
 ## 第一个例子
 
 最简单的内存映射：

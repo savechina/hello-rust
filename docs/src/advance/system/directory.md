@@ -34,6 +34,16 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add home
+cargo add dotenvy
+```
+
 ## 第一个例子
 
 读取文件内容：

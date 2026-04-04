@@ -31,6 +31,15 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add nix --features process,signal
+```
+
 ## 第一个例子
 
 获取当前进程 ID：

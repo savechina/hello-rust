@@ -44,6 +44,16 @@
 
 ---
 
+
+### 依赖安装
+
+运行以下命令安装所需依赖：
+
+```bash
+cargo add tokio --features full
+cargo add rumqttc
+```
+
 ## 第一个例子
 
 让我们看一个最简单的 MQTT 同步客户端示例：

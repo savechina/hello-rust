@@ -1,6 +1,3 @@
-# Hello Rust documentation configuration
-# Compatible with mdbook 0.4.52 (stable)
-
 [book]
 title = "Hello Rust"
 authors = ["RenYan Wei"]
@@ -8,7 +5,11 @@ description = "Rust learning tutorial with comprehensive examples"
 src = "src"
 language = "en"
 
+[preprocessor.pagetoc]
+
 [output.html]
 git-repository-url = "https://github.com/savechina/hello-rust"
 git-repository-icon = "fa-github"
+additional-css = ["theme/pagetoc.css"]
+additional-js = ["theme/pagetoc.js"]
 default-theme = "light"

@@ -1,0 +1,58 @@
+/* mdbook-pagetoc styles */
+@media only screen and (max-width: 1080px) {
+  .sidetoc {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 1081px) {
+  .sidetoc {
+    position: fixed;
+    left: 1750px;
+    top: 170px;
+    width: 200px;
+  }
+}
+
+.padlet {
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+.pagetoc {
+  position: fixed;
+  width: 200px;
+  height: calc(100vh - 170px);
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.pagetoc a {
+  padding-left: 10px;
+  display: block;
+  color: #b3b3b3;
+  transition: color 0.3s;
+}
+
+.pagetoc a:hover,
+.pagetoc a.active {
+  color: #008cff;
+}
+
+.pagetoc-H1 {
+  font-weight: bold;
+  padding-left: 0px;
+}
+
+.pagetoc-H2 {
+  padding-left: 10px;
+}
+
+.pagetoc-H3 {
+  padding-left: 20px;
+}
+
+.pagetoc-H4 {
+  padding-left: 30px;
+}

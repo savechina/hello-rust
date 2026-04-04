@@ -187,7 +187,7 @@ Google 发现 Android 中 **~70% 的安全漏洞是内存安全问题**。他们
 
 ### 真实案例：AWS Firecracker
 
-AWS 用 Rust 构建 Firecracker（微虚拟机），**零内存安全漏洞**。
+AWS 用 Rust 构建 Firecracker（微虚拟机），**大幅减少内存安全漏洞**，启动时间 < 125ms（比 QEMU 快 10 倍），内存占用 < 5MB。
 
 ---
 

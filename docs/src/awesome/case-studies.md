@@ -61,7 +61,7 @@ Google 发现 Android 中 **~70% 的安全漏洞是内存安全问题**。
 
 ---
 
-## 案例 3: AWS Firecracker - 零内存安全漏洞
+## 案例 3: AWS Firecracker - 大幅减少内存安全漏洞
 
 ### 问题
 
@@ -75,7 +75,7 @@ AWS 需要构建微虚拟机（microVM）来隔离 serverless 工作负载。传
 
 ### 效果
 
-- **零内存安全漏洞** 自发布以来
+- **大幅减少内存安全漏洞**
 - 启动时间 < 125ms（比 QEMU 快 10 倍）
 - 内存占用 < 5MB
 
@@ -172,7 +172,7 @@ Mozilla 需要提升 Firefox 的性能和安全性，与 Chrome 竞争。
 |------|------|--------------|------|
 | **Microsoft** | 70% CVE 是内存安全 | 重写关键组件 | 编译时防止漏洞 |
 | **Google** | Android 70% 漏洞 | 系统组件用 Rust | 零内存安全漏洞 |
-| **AWS** | 需要安全微虚拟机 | Firecracker 全 Rust | 零漏洞，<125ms 启动 |
+| **AWS** | 需要安全微虚拟机 | Firecracker 全 Rust | 大幅减少漏洞，<125ms 启动 |
 | **Discord** | Go GC 暂停 | 重写为 Rust | 服务器减半，延迟稳定 |
 | **Cloudflare** | C 代码安全问题 | pingora 重写 | 零漏洞，开发效率提升 |
 | **Mozilla** | 浏览器性能 | Servo 引擎 | 2 倍性能提升 |

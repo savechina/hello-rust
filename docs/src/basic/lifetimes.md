@@ -97,7 +97,7 @@ error[E0597]: `x` does not live long enough
 
 **真实案例**:
 - **Firefox Quantum**: 使用 Rust 重写 CSS 引擎（Servo），生命周期系统确保无悬垂引用，性能提升 **2 倍**
-- **AWS Firecracker**: 微虚拟机使用 Rust，生命周期保证内存安全，**零内存安全漏洞**
+- **AWS Firecracker**: 微虚拟机使用 Rust，生命周期保证内存安全，**大幅减少内存安全漏洞**
 - **Discord**: 从 Go 迁移到 Rust，消除了 GC 暂停，延迟从 **P99 500ms** 降到 **P99 5ms**
 
 ### 初学者常见困惑

@@ -8,13 +8,16 @@
 
 - [基础入门](./basic/basic-overview.md)
     - [变量与表达式](./basic/expression.md)
+    - [函数基础](./basic/functions.md) - 函数定义和调用
     - [基础数据类型](./basic/datatype.md)
     - [了解所有权](./basic/ownership.md)
+        - [生命周期](./basic/lifetimes.md) - 引用有效范围
     - [结构体](./basic/struct.md)
         - [结构体字段](./basic/struct-fields.md)
         - [结构体方法](./basic/struct-methods.md)
     - [枚举](./basic/enums.md)
     - [特征 (Traits)](./basic/trait.md)
+        - [特征对象](./basic/trait-objects.md) - 动态分发
     - [泛型](./basic/generic.md)
     - [闭包](./basic/closure.md)
     - [模块系统](./basic/module.md)

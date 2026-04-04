@@ -1,31 +1,36 @@
-# 模块 (Modules)
+# 模块系统
 
 ## 开篇故事
 
-想象你有一个大型工具箱。如果所有工具（螺丝刀、锤子、扳手）都堆在一起，很难找到需要的工具。你会把它们分类放在不同的隔间里。Rust 的**模块**就是这样 - 它帮你组织代码，让大型项目保持清晰。
+想象你在经营一家大型超市。如果所有商品（食品、日用品、电器）都堆在一个大房间里，顾客会疯掉，员工也找不到东西。你需要把商品分类放在不同的区域：食品区、日用品区、电器区。每个区域有自己的入口，有些区域对所有顾客开放，有些区域（如仓库）只允许员工进入。
+
+Rust 的**模块系统**就是超市的分区系统——它帮你组织代码，控制访问权限，让大型项目保持清晰和可维护。
 
 ---
 
 ## 本章适合谁
 
-如果你已经能写 Rust 代码，现在想学习如何组织大型项目，本章适合你。模块是 Rust 项目结构的基础。
+如果你正在编写超过 500 行的 Rust 项目，或者想学习如何组织多文件项目，本章适合你。
 
 ---
 
 ## 你会学到什么
 
-1. 创建和使用模块
-2. 理解 pub 可见性
-3. 使用 use 导入
-4. 组织多文件项目
-5. 理解模块路径
+完成本章后，你可以：
+
+1. 使用 `mod` 创建模块层次结构
+2. 使用 `pub` 控制可见性
+3. 使用 `use` 简化路径
+4. 组织多文件项目结构
+5. 理解 `pub(crate)` 和 `pub(super)`
+6. 避免循环依赖
 
 ---
 
 ## 前置要求
 
-- [结构体](struct.md)
-- [特征](trait.md)
+- [结构体](struct.md) - 数据类型
+- [特征](trait.md) - 接口定义
 
 ---
 
@@ -42,56 +47,179 @@ mod front_of_house {
         fn take_order() {}
     }
 }
+
+fn main() {
+    // 调用模块内函数
+    front_of_house::hosting::add_to_waitlist();
+}
 ```
+
+**发生了什么？**
+
+- `mod` - 定义模块
+- `front_of_house::hosting` - 模块路径
+- 默认情况下，模块是**私有**的
 
 ---
 
 ## 原理解析
 
-### 1. 可见性
+### 1. 模块树形结构
+
+```
+crate (根)
+├── front_of_house
+│   ├── hosting
+│   │   ├── add_to_waitlist()
+│   │   └── seat_at_table()
+│   └── serving
+│       └── take_order()
+└── back_of_house
+    ├── Breakfast (pub struct)
+    └── Appetizer (pub enum)
+```
+
+### 2. 可见性规则
 
 ```rust
-mod back_of_house {
-    pub struct Breakfast {
-        pub toast: String,  // 公有字段
-        seasonal_fruit: String,  // 私有字段
+mod restaurant {
+    // 私有模块（默认）
+    mod kitchen {
+        pub fn cook() {}  // 即使函数是 pub，模块私有也无法从外部访问
     }
     
-    pub enum Appetizer {
-        Soup,
-        Salad,
+    // 公有模块
+    pub mod dining_area {
+        pub fn seat_customer() {}  // 可以从外部访问
     }
 }
-```
-
-### 2. use 导入
-
-```rust
-use std::collections::HashMap;
 
 fn main() {
-    let mut map = HashMap::new();
+    // ❌ 错误：kitchen 是私有模块
+    // restaurant::kitchen::cook();
+    
+    // ✅ 正确：dining_area 是公有模块
+    restaurant::dining_area::seat_customers();
 }
 ```
 
-### 3. 路径
+### 3. pub 修饰符详解
+
+```rust
+pub mod public_module {        // 公开模块
+    pub fn public_fn() {}      // 公开函数
+    fn private_fn() {}         // 私有函数
+    
+    pub struct PublicStruct {  // 公开结构体
+        pub field1: i32,       // 公开字段
+        field2: String,        // 私有字段
+    }
+    
+    pub enum PublicEnum {      // 公开枚举
+        Variant1,              // 枚举变体总是公开的
+        Variant2,
+    }
+}
+
+// 受限可见性
+pub(crate) mod crate_public {  // 只在 crate 内可见
+    pub fn internal_api() {}
+}
+
+pub(super) mod parent_public {  // 只在父模块可见
+    pub fn helper() {}
+}
+
+pub(in crate::my_module) mod restricted {  // 在特定路径可见
+    pub fn limited_api() {}
+}
+```
+
+### 4. use 导入
 
 ```rust
 // 绝对路径
-let x = std::collections::HashMap::new();
+use std::collections::HashMap;
 
 // 相对路径
 use crate::front_of_house::hosting;
 
-// 使用 super
-use super::front_of_house;
+// 使用 super 访问父模块
+mod parent {
+    mod child {
+        use super::sibling_function;
+    }
+}
+
+// 重命名避免冲突
+use std::fmt::Result;
+use std::io::Result as IoResult;
+
+// 导入多个
+use std::{
+    collections::HashMap,
+    io::{self, Read, Write},
+};
+
+// 重新导出（pub use）
+pub use crate::internal_module::PublicApi;
 ```
 
-### 4. 重命名
+### 5. 多文件项目组织
+
+```
+my_project/
+├── Cargo.toml
+├── src/
+│   ├── main.rs           // 入口点
+│   ├── lib.rs            // 库根（如果有）
+│   ├── models/           // 数据模型模块
+│   │   ├── mod.rs        // 模块声明
+│   │   ├── user.rs       // 用户模型
+│   │   └── post.rs       // 帖子模型
+│   ├── services/         // 业务逻辑模块
+│   │   ├── mod.rs
+│   │   ├── user_service.rs
+│   │   └── post_service.rs
+│   └── utils/            // 工具函数模块
+│       ├── mod.rs
+│       └── helpers.rs
+```
+
+**src/models/mod.rs**:
+```rust
+pub mod user;
+pub mod post;
+```
+
+**src/models/user.rs**:
+```rust
+pub struct User {
+    pub id: i32,
+    pub name: String,
+}
+```
+
+### 6. 模块最佳实践
 
 ```rust
-use std::fmt::Result;
-use std::io::Result as IoResult;  // 避免冲突
+// ✅ 好的模块设计
+pub mod api {
+    pub mod v1 {
+        pub mod users {
+            pub fn list() -> Vec<User> { vec![] }
+        }
+    }
+}
+
+// ✅ 使用 pub use 简化 API
+pub mod prelude {
+    pub use super::api::v1::users::list;
+    pub use super::models::User;
+}
+
+// 用户现在可以这样使用：
+// use my_crate::prelude::*;
 ```
 
 ---
@@ -109,7 +237,10 @@ mod restaurant {
 
 fn main() {
     // ❌ 无法访问私有模块
-    restaurant::kitchen::cook();
+    // restaurant::kitchen::cook();
+    
+    // ✅ 正确：将模块设为 pub
+    // pub mod kitchen { ... }
 }
 ```
 
@@ -117,19 +248,38 @@ fn main() {
 
 ```rust
 fn main() {
-    HashMap::new();  // ❌ 未导入
+    // ❌ 错误：未导入
+    // let map = HashMap::new();
+    
+    // ✅ 正确：先导入
+    use std::collections::HashMap;
+    let map = HashMap::new();
 }
 ```
 
 ### 错误 3: 循环依赖
 
 ```rust
+// ❌ 错误：模块 A 依赖 B，B 依赖 A
 mod a {
-    use crate::b;  // ❌ 循环
+    use crate::b::function_b;  // 循环！
 }
 
 mod b {
-    use crate::a;
+    use crate::a::function_a;  // 循环！
+}
+
+// ✅ 正确：重构为单向依赖
+mod common {
+    pub fn shared_logic() {}
+}
+
+mod a {
+    use crate::common::shared_logic;
+}
+
+mod b {
+    use crate::common::shared_logic;
 }
 ```
 
@@ -137,22 +287,106 @@ mod b {
 
 ## 动手练习
 
-### 练习 1: 创建模块
+### 练习 1: 创建花园模块
 
 ```rust
-// TODO: 创建 garden 模块，包含 Tree 和 Vegetable
+// TODO: 创建 garden 模块
+// - 包含 Tree 和 Vegetable 结构体
+// - Tree 是公开的，Vegetable 是私有的
+// - 提供 public_api() 函数返回 Tree
 ```
 
 <details>
 <summary>点击查看答案</summary>
 
 ```rust
-mod garden {
-    pub struct Tree;
-    pub struct Vegetable;
+pub mod garden {
+    pub struct Tree {
+        pub name: String,
+        height: f32,
+    }
+    
+    struct Vegetable {
+        name: String,
+    }
+    
+    pub fn public_api() -> Tree {
+        Tree {
+            name: String::from("Oak"),
+            height: 10.0,
+        }
+    }
 }
 ```
 </details>
+
+### 练习 2: 组织多文件项目
+
+```rust
+// TODO: 设计以下项目结构
+// library/
+// ├── src/
+// │   ├── lib.rs
+// │   ├── models/
+// │   │   ├── mod.rs
+// │   │   ├── book.rs
+// │   │   └── member.rs
+// │   └── services/
+// │       ├── mod.rs
+// │       └── catalog.rs
+```
+
+---
+
+## 故障排查
+
+### Q: mod.rs 和同名文件有什么区别？
+
+**A**: 
+- `mod.rs` - 旧风格（Rust 2015），模块内容在 `mod.rs` 中
+- `module_name.rs` - 新风格（Rust 2018+），模块内容在 `module_name.rs` 中
+- 推荐使用新风格
+
+### Q: 如何在测试中访问私有模块？
+
+**A**: 使用 `#[cfg(test)]` 模块：
+```rust
+mod private_module {
+    fn secret_function() -> i32 { 42 }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::private_module::secret_function;
+    
+    #[test]
+    fn test_secret() {
+        assert_eq!(secret_function(), 42);
+    }
+}
+```
+
+### Q: pub(crate) 和 pub 有什么区别？
+
+**A**: 
+- `pub` - 对所有 crate 可见
+- `pub(crate)` - 只对当前 crate 可见（内部 API）
+
+---
+
+## 知识扩展（选学）
+
+### 模块与文件系统映射
+
+Rust 2018+ 的模块解析规则：
+
+```rust
+// src/lib.rs
+mod models;  // 查找 src/models.rs 或 src/models/mod.rs
+
+// src/models.rs
+pub mod user;  // 查找 src/models/user.rs
+```
 
 ---
 
@@ -170,26 +404,25 @@ mod garden {
 
 ## 术语表
 
-| English | 中文 |
-| ------- | ---- |
-| Module | 模块 |
-| Visibility | 可见性 |
-| Path | 路径 |
+| English       | 中文       |
+| ------------- | ---------- |
+| Module        | 模块       |
+| Visibility    | 可见性     |
+| Path          | 路径       |
+| Crate         | 包         |
+| Re-export     | 重新导出   |
+| Prelude       | 预导入模块 |
 
 ---
 
-> 💡 **提示**：好的模块结构让代码像好文章一样易读！
+完整示例：`src/basic/module_sample.rs`
 
 ---
 
 ## 继续学习
 
-**前一章**: [闭包](closure.md)  
-**下一章**: [线程与并发](threads.md)
+- 下一步：[线程与并发](threads.md)
+- 进阶：[可见性控制](visiable.md)
+- 回顾：[特征](trait.md)
 
-**相关章节**:
-- [闭包](closure.md)
-- [特征 (Traits)](trait.md)
-- [可见性控制](visiable.md)
-
-**返回**: [基础入门](basic-overview.md)
+> 💡 **提示**：好的模块结构让代码像好文章一样易读！

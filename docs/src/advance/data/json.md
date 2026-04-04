@@ -26,9 +26,9 @@
 
 ## 前置要求
 
-- 结构体 - 结构体定义
+- [结构体](../../basic/struct.md) - 结构体定义
 - [Serde 序列化](serialization.md) - 序列化基础
-- 枚举 - 枚举类型
+- [枚举](../../basic/enums.md) - 枚举类型
 
 ---
 

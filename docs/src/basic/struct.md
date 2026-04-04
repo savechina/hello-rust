@@ -254,6 +254,105 @@ fn main() {
 - 标记类型（marker type）
 - 泛型编程中的占位符
 
+### 9. 组合 vs 继承
+
+**为什么 Rust 没有继承？**
+
+如果你来自 Java、C++ 或 Python，可能会疑惑：为什么 Rust 没有 `class` 和 `extends`？答案是 **Rust 选择了组合而非继承**。
+
+**继承的问题**：
+
+想象一家餐厅。老板规定"所有员工都必须会做饭"。这听起来合理，但如果你雇佣了一个收银员呢？收银员继承"员工"的行为，但不需要做饭。这就是**脆弱基类问题**——父类的改变会破坏子类。
+
+```java
+// Java 继承的困境
+class Employee {
+    void cook() { /* 做饭 */ }
+}
+
+class Cashier extends Employee {
+    // 收银员被迫"会做饭"？但实际不需要！
+    // 父类改变会影响所有子类
+}
+```
+
+**组合的解决方案**：
+
+Rust 用 trait + 组合解决这个问题。每个员工有不同的能力组合：
+
+```rust
+// Rust 的组合模式
+trait Cook {
+    fn cook(&self);
+}
+
+trait HandleCash {
+    fn handle_cash(&self);
+}
+
+struct Chef;
+struct Cashier;
+
+impl Cook for Chef {
+    fn cook(&self) {
+        println!("制作美食");
+    }
+}
+
+impl HandleCash for Cashier {
+    fn handle_cash(&self) {
+        println!("处理收银");
+    }
+}
+```
+
+**三个关键差异**：
+
+| 维度 | 继承 (Java/C++) | 组合 (Rust/Go) |
+|------|----------------|----------------|
+| 耦合度 | 紧耦合，父类改动影响子类 | 松耦合，trait 独立变化 |
+| 灵活性 | 单继承限制，难以混合行为 | 自由组合多个 trait |
+| 可测试性 | 需要模拟整个父类 | 只需模拟依赖的 trait |
+| 代码复用 | 通过继承链 | 通过 trait + 组合 |
+| 运行时行为 | 编译时固定 | 动态分发可选 |
+
+**实战对比：游戏角色**
+
+```java
+// Java: 继承链越来越深
+class Character {
+    void move() {}
+}
+class FlyingCharacter extends Character {
+    void fly() {}
+}
+class SwimmingFlyingCharacter extends FlyingCharacter {
+    void swim() {}  // 继承链爆炸！
+}
+```
+
+```rust
+// Rust: 灵活组合
+trait Move { fn move(&self); }
+trait Fly { fn fly(&self); }
+trait Swim { fn swim(&self); }
+
+struct Dragon;
+
+impl Move for Dragon { fn move(&self) {} }
+impl Fly for Dragon { fn fly(&self) {} }
+impl Swim for Dragon { fn swim(&self) {} }
+// 自由组合，无需继承链
+```
+
+**最佳实践**：
+
+- ✅ 用 trait 定义行为接口
+- ✅ 用组合组装复杂对象
+- ✅ 用 `impl Trait for Type` 实现多态
+- ❌ 避免深层继承链
+- ❌ 避免为复用代码而继承
+
 ---
 
 ## 常见错误
@@ -840,28 +939,28 @@ fn main() {
 ### 1. 结构体内存布局
 
 ```
-Rectangle struct (16 bytes):
-+0x00         +0x08
-+-------------+-------------+
-| width (f64) | height(f64) |
-|  8 bytes    |  8 bytes    |
-+-------------+-------------+
+Rectangle struct (8 bytes):
++0x00        +0x04
++------------+------------+
+| width(u32) | height(u32)|
+|  4 bytes   |  4 bytes   |
++------------+------------+
 ```
 
 **说明**:
-- f64 类型占用 8 字节
+- u32 类型占用 4 字节
 - 无填充，紧密排列
-- 总计 16 字节
+- 总计 8 字节
 
 ### 2. 字段访问模式
 
 ```
 rect ──────────→ [Rectangle struct]
-                   ├─ width: 10.0
-                   └─ height: 20.0
+                   ├─ width: 10
+                   └─ height: 20
 
-rect.width  ───→ 直接字段访问 (10.0)
-rect.height ───→ 直接字段访问 (20.0)
+rect.width  ───→ 直接字段访问 (10)
+rect.height ───→ 直接字段访问 (20)
 ```
 
 ### 3. 方法调用流程
@@ -873,7 +972,7 @@ rect.area()
 impl Rectangle {
     fn area(&self) -> u32 {
         self.width * self.height
-        // 10.0 * 20.0 = 200.0
+        // 10 * 20 = 200
     }
 }
 ```

@@ -134,6 +134,73 @@ fn divide(a: i32, b: i32) -> Result<i32, String> {
 }
 ```
 
+### 6. 代数数据类型 (ADT)
+
+**什么是 ADT？**
+
+代数数据类型（Algebraic Data Types）源自函数式编程，它用数学方式描述数据结构：
+
+- **Product Types（积类型）**: 所有字段同时存在 → 就是 `struct`
+- **Sum Types（和类型）**: 每次只有一个变体有效 → 就是 `enum`
+
+```rust
+// Product Type: 结构体包含所有字段
+struct Point { x: i32, y: i32 }  // x 和 y 同时存在
+
+// Sum Type: 枚举只能选一个
+enum Option<T> { Some(T), None }  // 要么 Some，要么 None
+```
+
+**多语言枚举对比**
+
+不同语言对枚举的支持差异很大：
+
+C 语言（只有名称，无数据）:
+```c
+enum Color { RED, GREEN, BLUE };  // 只能是整数常量
+```
+
+Java 枚举（单例对象）:
+```java
+enum Color { RED, GREEN, BLUE }  // 本质是类的实例
+```
+
+Go 语言（常数 + iota）:
+```go
+type Color int
+const (
+    RED Color = iota  // 0
+    GREEN              // 1
+    BLUE               // 2
+)
+```
+
+Swift 枚举（类似 Rust）:
+```swift
+enum Result<T, E> {
+    case success(T)
+    case failure(E)
+}
+```
+
+Rust 枚举（完整 ADT）:
+```rust
+enum Message {
+    Quit,                              // 无数据
+    Move { x: i32, y: i32 },          // 命名字段
+    Write(String),                     // 携带值
+    ChangeColor(i32, i32, i32),        // 多个值
+}
+```
+
+**为什么 ADT 强大？**
+
+1. **类型安全**: 编译器保证你处理了所有可能的情况
+2. **数据携带**: 变体可以携带任意类型的数据，不只是整数
+3. **模式匹配**: `match` 表达式可以解构并提取数据
+
+Rust 的枚举不是简单的整数常量，而是真正的代数数据类型。这让 `Option` 和 `Result` 这样的类型成为可能，从根本上避免了空指针错误。
+
 ---
 
 ## 常见错误

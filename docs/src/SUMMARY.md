@@ -84,6 +84,7 @@
         - [插件系统](./awesome/plugin.md)
     - [序列生成](./awesome/sequences.md)
     - [消息队列](./awesome/mq.md)
+        - [MQTT 专项教程](./awesome/mqtt.md) - 物联网消息协议
     - [模板引擎](./awesome/templates.md)
 
 # 算法与练习

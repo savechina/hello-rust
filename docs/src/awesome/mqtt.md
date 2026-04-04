@@ -1,21 +1,21 @@
-# 消息队列 (Message Queue)
+# MQTT 消息协议
 
 ## 开篇故事
 
-想象你经营着一家繁忙的餐厅。传统的方式是顾客直接告诉厨师要吃什么——但当顾客太多时，厨房会陷入混乱，订单被遗忘或搞混。消息队列就像是餐厅的前台接待系统：顾客（生产者）把订单放到柜台（队列），厨师（消费者）按顺序从柜台取单并制作。这样即使高峰期也能有序运作。
+想象你在设计一个智能家居系统。温度传感器需要每分钟上报数据，门锁需要接收开关命令，摄像头需要在有人移动时发送警报。如果每个设备都直接连接服务器，服务器会被大量连接压垮。MQTT 协议就像是一个智能邮局——设备只需把消息发送到邮局（Broker），邮局负责将消息分发给需要的订阅者。
 
-在分布式系统中，消息队列是服务间异步通信的核心组件。**MQTT**（Message Queuing Telemetry Transport）是一种轻量级的发布/订阅消息协议，特别适合物联网场景——从智能家居到工业传感器，MQTT 都能稳定可靠地传递消息。
+MQTT（Message Queuing Telemetry Transport）是轻量级的发布/订阅消息协议，特别适合物联网场景——从智能家居到工业传感器，MQTT 都能稳定可靠地传递消息。
 
 ---
 
 ## 本章适合谁
 
-如果你已经理解 Rust 基础编程和异步编程，现在想学习：
-- 如何在微服务架构中使用消息队列进行异步通信
-- MQTT 协议的发布/订阅模式及其实现
+如果你已经理解 Rust 异步编程基础，现在想学习：
+- MQTT 协议的发布/订阅模式
 - 如何使用 rumqttc 客户端库连接 MQTT Broker
+- 实现物联网设备间的消息通信
 
-本章适合你。消息队列是构建可扩展、松耦合系统的关键技术。
+本章适合你。
 
 ---
 
@@ -23,13 +23,12 @@
 
 完成本章后，你可以：
 
-1. 解释消息队列的核心概念和应用场景
-2. 理解 MQTT 协议的发布/订阅模式
-3. 使用 rumqttc 创建同步和异步 MQTT 客户端
-4. 实现消息的发布(Publish)和订阅(Subscribe)
-5. 理解 QoS 等级及其对消息可靠性的影响
+1. 理解 MQTT 的核心概念（Broker、Topic、QoS）
+2. 使用 rumqttc 创建同步和异步 MQTT 客户端
+3. 实现消息的发布(Publish)和订阅(Subscribe)
+4. 理解 QoS 等级及其对消息可靠性的影响
+5. 处理连接保持和重连逻辑
 6. 编写基于 MQTT 的物联网通信程序
-7. 处理连接保持和重连逻辑
 
 ---
 
@@ -37,10 +36,20 @@
 
 学习本章前，你需要理解：
 
-- [所有权](../basic/ownership.md) - 理解所有权和生命周期
-- [异步编程](../advance/async/async.md) - 理解 async/await 基础
+- [异步编程](../advance/async/async.md) - async/await 基础
 - [Tokio](../advance/async/tokio.md) - 使用 Tokio 异步运行时
 - 安装 MQTT Broker（推荐 Mosquitto 或 EMQX）用于测试
+
+**安装 MQTT Broker**：
+
+```bash
+# macOS
+brew install mosquitto
+brew services start mosquitto
+
+# 或使用 Docker
+docker run -d -p 1883:1883 eclipse-mosquitto
+```
 
 ---
 
@@ -53,8 +62,6 @@ cargo add tokio --features full
 cargo add rumqttc
 cargo add serde --features derive
 cargo add serde_json
-cargo add tracing
-cargo add tracing-subscriber
 ```
 
 ---
@@ -807,12 +814,11 @@ mqttoptions.set_transport(Transport::tls_with_config(
 
 **核心要点**：
 
-1. **消息队列** 实现了生产者与消费者的解耦
-2. **MQTT** 是轻量级的发布/订阅协议，适合 IoT
-3. **Topic** 使用层级结构组织消息，`+` 和 `#` 是通配符
-4. **QoS** 控制消息可靠性：0(最快) → 2(最可靠)
-5. **同步客户端** 使用 `Client`，**异步客户端** 使用 `AsyncClient`
-6. **遗嘱消息** 在意外断开时自动通知其他客户端
+1. **MQTT** 是轻量级的发布/订阅协议，适合 IoT
+2. **Topic** 使用层级结构组织消息，`+` 和 `#` 是通配符
+3. **QoS** 控制消息可靠性：0(最快) → 2(最可靠)
+4. **同步客户端** 使用 `Client`，**异步客户端** 使用 `AsyncClient`
+5. **遗嘱消息** 在意外断开时自动通知其他客户端
 
 **关键术语**：
 
@@ -830,8 +836,8 @@ mqttoptions.set_transport(Transport::tls_with_config(
 
 **下一步**：
 
-- 学习 [服务框架](services.md) - 基于 MQTT 的微服务架构
-- 了解 gRPC - 另一种服务通信方式
+- 学习 [消息队列总览](mq.md) - 了解 Rust 生态各种 MQ 方案
+- 了解 [服务框架](services.md) - 基于 MQTT 的微服务架构
 - 探索 Tokio - 异步运行时基础
 
 ---
@@ -840,7 +846,6 @@ mqttoptions.set_transport(Transport::tls_with_config(
 
 | English | 中文 |
 |---------|------|
-| Message Queue | 消息队列 |
 | MQTT | 消息队列遥测传输 |
 | Broker | 消息代理 |
 | Topic | 主题 |
@@ -860,6 +865,7 @@ mqttoptions.set_transport(Transport::tls_with_config(
 
 ## 继续学习
 
+- 上一步：[消息队列总览](mq.md) - Rust 生态各种 MQ 方案对比
 - 下一步：[服务框架](services.md) - 生产级服务架构
 - 相关：Tokio 异步运行时 - rumqttc 的基础
 - 实战：尝试连接公共 MQTT Broker 如 `test.mosquitto.org`

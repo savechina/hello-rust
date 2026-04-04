@@ -33,8 +33,8 @@ gRPC 就像是一个"通用翻译器"——你定义服务接口（使用 Protoc
 
 ## 前置要求
 
-- [异步编程](../advance/async/async.md) - async/await 基础
-- [Tokio](../advance/async/tokio.md) - Tokio 异步运行时
+- [异步编程](../async/async.md) - async/await 基础
+- [Tokio](../async/tokio.md) - Tokio 异步运行时
 - 理解微服务基本概念
 
 ---
@@ -383,9 +383,9 @@ async fn say_hello_multiple(
 
 **下一步**：
 
-- 学习 [Unix Domain Socket](uds.md) - 本地进程间通信
-- 了解 [服务框架](services.md) - 生产级服务架构
-- 探索 [依赖注入](dependency_injection.md) - 服务容器模式
+- 学习 [Unix Domain Socket](../system/uds.md) - 本地进程间通信
+- 了解 [服务框架](../tools/services.md) - 生产级服务架构
+- 探索 [依赖注入](../../awesome/dependency_injection.md) - 服务容器模式
 
 ---
 
@@ -412,8 +412,8 @@ async fn say_hello_multiple(
 
 ## 继续学习
 
-- 上一步：[消息队列](../awesome/mq.md) - 异步通信
-- 下一步：[Unix Domain Socket](uds.md) - 本地 IPC
-- 相关：[服务框架](../awesome/services.md) - 生产级服务架构
+- 上一步：[消息队列](../../awesome/mq.md) - 异步通信
+- 下一步：[Unix Domain Socket](../system/uds.md) - 本地 IPC
+- 相关：[服务框架](../../awesome/services.md) - 生产级服务架构
 
 > 💡 **记住**：gRPC 的核心是"定义接口，自动生成代码"。使用 Protocol Buffers 定义服务，tonic 自动生成类型安全的客户端和服务端代码！

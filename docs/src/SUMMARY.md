@@ -27,40 +27,53 @@
 
 # 进阶部分 (Advance)
 
+<!-- 异步编程 -->
 - [高级进阶](./advance/advance-overview.md)
-  - [异步编程](./advance/async.md) - Tokio 运行时和 async/await 语法
-    - [Futures 异步编程](./advance/futures.md) - Future trait 和组合子
-    - [并行计算](./advance/rayon.md) - 数据并行处理
-    - [MIO](./advance/mio.md) - 底层 I/O 库
-  - [数据库操作](./advance/database.md) - SQLx 异步数据库编程
-    - [数据库 ORM](./advance/diesel.md) - Diesel ORM 框架
-  - [Web 开发]()
-    - [Web 框架](./advance/axum.md) - Axum Web 服务构建
-    - [HTTP 库](./advance/hyper.md) - Hyper HTTP 底层库
-    - [AI 集成](./advance/ollama.md) - Ollama 本地 AI 集成
-  - [数据处理]() - 数据处理
-    - [JSON 序列化](./advance/json.md) - JSON 序列化/反序列化
-    - [CSV 处理](./advance/csv.md) - CSV 文件读写
-    - [零拷贝序列化](./advance/rkyv.md) - Rkyv 零拷贝优化
-  - [系统编程]() - 系统编程
-    - [文件与目录操作](./advance/directory.md) - 文件系统操作
-    - [临时文件](./advance/tempfile.md) - 临时文件管理
-    - [内存映射](./advance/memmap.md) - 内存映射文件
-    - [环境变量](./advance/dotenv.md) - 环境变量配置
-    - [字节处理](./advance/bytes.md) - 字节数据处理
-    - [Cow 类型](./advance/cow.md) - Clone-on-Write 优化
-    - [进程管理](./advance/process.md) - 进程控制和管理
-    - [系统信息](./advance/sysinfo.md) - 系统信息获取
-    - [资源嵌入](./advance/includedir.md) - 编译时资源嵌入
-  - [测试](./advance/test.md) - Mock 模拟测试
-    - [模拟测试](./advance/mock.md) - Mock 模拟测试
-    - [测试框架](./advance/rspec.md) - RSpec 行为驱动测试 
-  - [宏编程](./advance/macros.md) - 声明宏和过程宏
-    - [派生宏](./advance/getset.md) - Getters/Setters 派生
-  - [其他]() - 类型别名简化
-    - [循环引用](./advance/cyclerc.md) - 引用计数循环检测
-    - [类型别名](./advance/typealias.md) - 类型别名简化
-    - [对象存储](./advance/objectstore.md) - 对象存储接口
+- [异步编程](./advance/async/async.md) - Tokio 运行时和 async/await 语法
+- [Futures 异步编程](./advance/async/futures.md) - Future trait 和组合子
+- [并行计算](./advance/async/rayon.md) - 数据并行处理
+- [MIO](./advance/async/mio.md) - 底层 I/O 库
+- [CycleRC](./advance/async/cyclerc.md) - 引用计数循环检测
+
+<!-- 数据库操作 -->
+- [数据库操作](./advance/database/database.md) - SQLx 异步数据库编程
+- [数据库 ORM](./advance/database/diesel.md) - Diesel ORM 框架
+- [SQLx](./advance/database/sqlx.md) - SQLx 异步查询
+
+<!-- Web 开发 -->
+- [Web 框架](./advance/web/axum.md) - Axum Web 服务构建
+- [HTTP 库](./advance/web/hyper.md) - Hyper HTTP 底层库
+- [AI 集成](./advance/web/ollama.md) - Ollama 本地 AI 集成
+
+<!-- 数据处理 -->
+- [JSON 序列化](./advance/data/json.md) - JSON 序列化/反序列化
+- [CSV 处理](./advance/data/csv.md) - CSV 文件读写
+- [零拷贝序列化](./advance/data/rkyv.md) - Rkyv 零拷贝优化
+- [序列化基础](./advance/data/serialization.md) - 序列化概念
+
+<!-- 系统编程 -->
+- [文件与目录操作](./advance/system/directory.md) - 文件系统操作
+- [临时文件](./advance/system/tempfile.md) - 临时文件管理
+- [内存映射](./advance/system/memmap.md) - 内存映射文件
+- [环境变量](./advance/system/dotenv.md) - 环境变量配置
+- [字节处理](./advance/system/bytes.md) - 字节数据处理
+- [Cow 类型](./advance/system/cow.md) - Clone-on-Write 优化
+- [进程管理](./advance/system/process.md) - 进程控制和管理
+- [系统信息](./advance/system/sysinfo.md) - 系统信息获取
+- [资源嵌入](./advance/system/includedir.md) - 编译时资源嵌入
+
+<!-- 测试与模拟 -->
+- [测试基础](./advance/testing/test.md) - 测试基础
+- [模拟测试](./advance/testing/mock.md) - Mock 模拟测试
+- [测试框架](./advance/testing/rspec.md) - RSpec 行为驱动测试
+- [派生宏](./advance/testing/getset.md) - Getters/Setters 派生
+- [宏编程](./advance/testing/macros.md) - 声明宏和过程宏
+- [类型别名](./advance/testing/typealias.md) - 类型别名简化
+
+<!-- 其他工具 -->
+- [错误处理](./advance/tools/error-handling.md) - 错误处理最佳实践
+- [对象存储](./advance/tools/objectstore.md) - 对象存储接口
+- [服务框架](./advance/tools/services.md) - 服务框架基础
 
 # 实战精选 (Awesome)
 

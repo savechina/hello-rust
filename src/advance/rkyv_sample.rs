@@ -17,8 +17,8 @@ use rkyv::{
 
 /// 测试结构体
 /// 使用 rkyv 的派生宏生成序列化和反序列化代码
-#[derive(Archive, Deserialize, Serialize, Debug, PartialEq, Eq)]
-#[rkyv(compare(PartialEq), derive(Debug, Eq))]
+#[derive(Archive, Deserialize, Serialize, Debug, PartialEq)]
+#[rkyv(compare(PartialEq), derive(Debug))]
 struct TestStruct {
     int: u8,
     string: String,
@@ -183,11 +183,17 @@ pub fn rkyv_validation_sample() {
 
     let bytes = rkyv::to_bytes::<Error>(&value).unwrap();
 
-    let archived = access::<ArchivedTestStruct, Error>(&bytes).unwrap();
-
-    let is_valid = archived.check_bytes(&mut rkyv::util::AlignedVec::new()).is_ok();
-
-    println!("数据验证：{}", if is_valid { "有效" } else { "无效" });
+    // rkyv 0.8: access() already validates the bytes internally
+    // If the bytes are corrupted, access() will return an error
+    match rkyv::access::<ArchivedTestStruct, Error>(&bytes) {
+        Ok(archived) => {
+            println!("数据验证：有效");
+            println!("归档 int 值：{}", archived.int);
+        }
+        Err(e) => {
+            println!("数据验证：无效 - {:?}", e);
+        }
+    }
     println!("✓ 数据验证成功\n");
 }
 

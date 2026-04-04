@@ -65,6 +65,7 @@
     - [Unix Domain Socket](./advance/system/uds.md) - Unix 域套接字 IPC
     - [Stdio IPC](./advance/system/stdio-ipc.md) - 标准输入输出进程间通信
     - [CLI 开发](./advance/system/cli.md) - CLI 开发最佳实践
+    - [Rust 消除的问题](./advance/system/rust-eliminates.md) - Rust 编译时安全优势
   - [测试]() - 测试
     - [测试基础](./advance/testing/test.md) - 测试基础
     - [模拟测试](./advance/testing/mock.md) - Mock 模拟测试

@@ -12,7 +12,7 @@ pub fn process_getpid_sample() -> io::Result<()> {
     // 获取父进程 ID (Unix 系统)
     #[cfg(unix)]
     {
-        let ppid = unsafe { libc::getppid() };
+        let ppid = unsafe { nix::libc::getppid() };
         println!("父进程 ID: {}", ppid);
     }
 

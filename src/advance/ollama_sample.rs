@@ -5,7 +5,6 @@ use ollama_rs::{
     },
     Ollama,
 };
-use std::error::Error;
 use tokio::io;
 
 /// 基础聊天机器人示例
@@ -25,7 +24,7 @@ pub async fn ollama_chat_sample() -> io::Result<()> {
             println!("\n--- 元数据 ---");
             println!("模型：{}", res.model);
             println!("总耗时：{:?}ms", res.total_duration);
-            println!("加载耗时：{:?}ms", res.load_duration);
+            println!("总耗时：{:?}ns", res.total_duration);
             println!("评估计数：{}", res.eval_count.unwrap_or(0));
         }
         Err(e) => {
@@ -91,7 +90,6 @@ pub async fn ollama_vision_sample() -> io::Result<()> {
 /// 逐 token 输出，适合长文本生成
 #[tokio::main]
 pub async fn ollama_stream_sample() -> io::Result<()> {
-    use ollama_rs::generation::completion::GenerationResponseStream;
     use tokio_stream::StreamExt;
 
     let ollama = Ollama::default();
@@ -108,10 +106,13 @@ pub async fn ollama_stream_sample() -> io::Result<()> {
 
     let mut full_response = String::new();
 
-    while let Some(Ok(res)) = stream.next().await {
-        if let Some(response) = res.response {
-            print!("{}", response);
-            full_response.push_str(&response);
+    while let Some(Ok(chunk)) = stream.next().await {
+        // Each chunk is a Vec<GenerationResponse>
+        for res in chunk {
+            if !res.response.is_empty() {
+                print!("{}", res.response);
+                full_response.push_str(&res.response);
+            }
         }
     }
 

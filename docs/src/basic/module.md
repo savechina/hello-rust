@@ -62,6 +62,22 @@ fn main() {
 
 ---
 
+### Python/Java/C++ vs Rust 对比
+
+如果你有其他语言经验，这个对比会帮助你快速理解：
+
+| 概念         | Python               | Java                 | C++                    | Rust                       | 关键差异                  |
+| ------------ | -------------------- | -------------------- | ---------------------- | -------------------------- | ------------------------- |
+| 模块定义     | 文件即模块           | `package` + 文件夹   | `namespace`            | `mod` 关键字               | Rust 需显式声明 `mod`     |
+| 可见性       | 无强制控制           | `public/private`     | 无强制控制             | `pub` + 默认私有           | Rust 默认私有             |
+| 导入语法     | `import module`      | `import pkg.Class`   | `using namespace`      | `use crate::module`        | Rust 用 `use` + 路径      |
+| 嵌套模块     | `import pkg.sub`     | `package pkg.sub`    | `namespace ns::sub`    | `mod outer { mod inner }`  | Rust 用树形结构           |
+| 文件映射     | 自动                 | 文件夹映射包         | 无映射                 | `mod.rs` 或同名文件        | Rust 有两种风格           |
+
+**核心差异**: Python 最简单（文件即模块），Java 用 package + class，Rust 用 `mod` + 文件映射且默认私有。
+
+---
+
 ## 原理解析
 
 ### 1. 模块树形结构

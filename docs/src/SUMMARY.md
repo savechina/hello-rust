@@ -64,6 +64,7 @@
     - [资源嵌入](./advance/system/includedir.md) - 编译时资源嵌入
     - [Unix Domain Socket](./advance/system/uds.md) - Unix 域套接字 IPC
     - [Stdio IPC](./advance/system/stdio-ipc.md) - 标准输入输出进程间通信
+    - [CLI 开发](./advance/system/cli.md) - CLI 开发最佳实践
   - [测试]() - 测试
     - [测试基础](./advance/testing/test.md) - 测试基础
     - [模拟测试](./advance/testing/mock.md) - Mock 模拟测试
@@ -76,7 +77,7 @@
     - [错误处理](./advance/tools/error-handling.md) - 错误处理最佳实践
     - [对象存储](./advance/tools/objectstore.md) - 对象存储接口
     - [服务框架](./advance/tools/services.md) - 服务框架基础
-    - [阶段复习：高级进阶](./advance/review-advance.md)
+  - [阶段复习：高级进阶](./advance/review-advance.md)
 
 # 实战精选 (Awesome)
 

@@ -265,6 +265,102 @@ cargo nextest run --filter-expr "not test(/slow/)"
 - 更好的输出：彩色输出、进度条、详细统计
 - CI 友好：原生支持重试和报告生成
 
+### 8. 工程实践：测试组织
+
+#### 测试目录结构
+
+```
+my-crate/
+├── src/
+│   ├── lib.rs
+│   ├── module_a.rs
+│   │   └── #[cfg(test)] mod tests { ... }  # 单元测试
+│   └── module_b.rs
+│       └── #[cfg(test)] mod tests { ... }  # 单元测试
+├── tests/
+│   ├── integration_test_a.rs                # 集成测试
+│   └── integration_test_b.rs                # 集成测试
+└── benches/
+    └── benchmark_a.rs                       # 基准测试
+```
+
+#### 测试辅助函数
+
+创建共享的测试辅助函数：
+
+```rust
+// tests/common/mod.rs
+pub fn setup_test_db() -> Database {
+    // 创建测试数据库
+}
+
+pub fn cleanup_test_db(db: &Database) {
+    // 清理测试数据
+}
+
+// tests/integration_test.rs
+mod common;
+
+#[test]
+fn test_user_creation() {
+    let db = common::setup_test_db();
+    // 测试逻辑
+    common::cleanup_test_db(&db);
+}
+```
+
+#### 属性测试 (Property-Based Testing)
+
+使用 `proptest` crate 进行属性测试：
+
+```rust
+use proptest::prelude::*;
+
+proptest! {
+    #[test]
+    fn test_sort_always_produces_sorted_vec(
+        input in prop::collection::vec(any::<i32>(), 0..100)
+    ) {
+        let mut sorted = input.clone();
+        sorted.sort();
+        
+        // 验证排序后的向量是有序的
+        for i in 0..sorted.len().saturating_sub(1) {
+            prop_assert!(sorted[i] <= sorted[i + 1]);
+        }
+        
+        // 验证长度不变
+        prop_assert_eq!(sorted.len(), input.len());
+    }
+}
+```
+
+#### Mock 测试
+
+使用 `mockall` crate 创建 Mock 对象：
+
+```rust
+use mockall::automock;
+
+#[automock]
+trait Database {
+    fn get_user(&self, id: u64) -> Option<User>;
+    fn save_user(&self, user: &User) -> Result<(), Error>;
+}
+
+#[test]
+fn test_user_service() {
+    let mut mock_db = MockDatabase::new();
+    mock_db.expect_get_user()
+        .with(eq(1))
+        .returning(|_| Some(User { id: 1, name: "Alice".into() }));
+    
+    let service = UserService::new(mock_db);
+    let user = service.get_user(1);
+    assert_eq!(user.unwrap().name, "Alice");
+}
+```
+
 ---
 
 ## 常见错误

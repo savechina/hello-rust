@@ -512,6 +512,114 @@ fn identity_str(x: &str) -> &str { x }
 fn identity_bool(x: bool) -> bool { x }
 ```
 
+### 5. 类型系统进阶
+
+#### Newtype 模式（新类型模式）
+
+使用元组结构体创建类型安全的包装器：
+
+```rust,ignore
+// ❌ 错误：容易混淆
+fn process_user(id: u64, product_id: u64) {
+    // id 和 product_id 都是 u64，容易传反
+}
+
+// ✅ 正确：使用 Newtype 模式
+struct UserId(u64);
+struct ProductId(u64);
+
+fn process_user(user_id: UserId, product_id: ProductId) {
+    // 类型安全，不会传反
+}
+
+let user = UserId(123);
+let product = ProductId(456);
+process_user(user, product);  // ✅ 类型检查
+```
+
+#### PhantomData（幽灵数据）
+
+当你需要在泛型中使用类型参数，但实际不存储该类型的值时：
+
+```rust,ignore
+use std::marker::PhantomData;
+
+// 标记结构体拥有的数据类型
+struct Owned<T> {
+    ptr: *mut u8,
+    _marker: PhantomData<T>,  // 告诉编译器我们"拥有" T
+}
+
+impl<T> Drop for Owned<T> {
+    fn drop(&mut self) {
+        unsafe {
+            // 释放内存
+        }
+    }
+}
+```
+
+#### 零大小类型 (ZST)
+
+不占用任何内存空间的类型，常用于类型级编程：
+
+```rust,ignore
+// 零大小类型
+struct Marker;  // sizeof(Marker) = 0
+
+// 在泛型中使用
+struct Container<T> {
+    data: Vec<u8>,
+    _marker: std::marker::PhantomData<T>,
+}
+
+// 不同标记不会增加内存开销
+let a: Container<Marker> = Container { data: vec![1,2,3], _marker: PhantomData };
+let b: Container<Marker> = Container { data: vec![4,5,6], _marker: PhantomData };
+// a 和 b 的内存占用相同
+```
+
+#### 类型状态模式 (Type-State Pattern)
+
+使用类型系统在编译时防止无效状态：
+
+```rust,ignore
+// 类型状态模式：编译时防止无效操作
+struct Draft;
+struct Reviewed;
+struct Published;
+
+struct Article<State> {
+    title: String,
+    content: String,
+    _state: std::marker::PhantomData<State>,
+}
+
+impl Article<Draft> {
+    fn new(title: String, content: String) -> Self {
+        Article { title, content, _state: PhantomData }
+    }
+    
+    fn review(self) -> Article<Reviewed> {
+        Article { title: self.title, content: self.content, _state: PhantomData }
+    }
+}
+
+impl Article<Reviewed> {
+    fn publish(self) -> Article<Published> {
+        Article { title: self.title, content: self.content, _state: PhantomData }
+    }
+}
+
+// 使用：编译时保证流程正确
+let draft = Article::new("Title".into(), "Content".into());
+let reviewed = draft.review();
+let published = reviewed.publish();
+
+// ❌ 编译错误：不能直接从 Draft 到 Published
+// let published = draft.publish();
+```
+
 ---
 
 ## 知识检查

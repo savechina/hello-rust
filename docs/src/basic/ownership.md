@@ -48,6 +48,18 @@ println!("{}", s2); // ✅ 可以工作
 
 第 2 行 `let s2 = s1;` 不是复制字符串，而是**转移所有权**。`s1` 的所有权移动给了 `s2`，`s1` 不再有效。
 
+### Python/Java/C++ vs Rust 对比
+
+如果你有其他语言经验，这个对比会帮助你快速理解：
+
+| 概念     | Python               | Java                 | C++                    | Rust                       | 关键差异                  |
+| -------- | -------------------- | -------------------- | ---------------------- | -------------------------- | ------------------------- |
+| 变量赋值 | `s2 = s1` (引用)       | `s2 = s1` (引用)       | `s2 = s1` (浅拷贝)       | `let s2 = s1;` (移动)        | Rust 转移所有权，其他语言共享 |
+| 内存管理 | 垃圾回收 (GC)        | 垃圾回收 (GC)        | 手动 `delete` / 智能指针 | 所有权系统 (编译时检查)      | Rust 无运行时 GC            |
+| 字符串复制 | `s2 = s1[:]` (显式)  | `s2 = s1.clone()`    | `s2 = s1` (浅) / 深拷贝  | `let s2 = s1.clone();`       | Rust 显式克隆，默认移动     |
+| 函数参数 | 传递引用 (默认)      | 传递引用 (对象)      | 值传递 / 引用传递        | 移动 (默认) / 借用 (`&`)     | Rust 默认转移所有权         |
+| 悬垂指针 | 不可能 (GC 保护)     | 不可能 (GC 保护)     | 可能 (运行时错误)        | **编译时阻止**               | Rust 在编译时防止           |
+
 ---
 
 ## 原理解析
@@ -128,46 +140,45 @@ let s2 = s1;  // s1 的所有权移动给 s2
 
 ### 错误 1: 移动后使用 (Use After Move)
 
+**❌ 错误代码**：
+
 ```rust
 let s1 = String::from("hello");
 let s2 = s1;
 println!("{}", s1); // ❌ 编译错误!
 ```
 
-**编译器输出**:
+**🤔 为什么这行不编译？**
+
+编译器会告诉你：
 ```
 error[E0382]: borrow of moved value: `s1`
-  --> src/main.rs:4:20
-   |
-2  |     let s2 = s1;
-   |              -- value moved here
-3  |     println!("{}", s1); // ❌ 编译错误!
-   |                    ^^ value borrowed here after move
-   |
-   = note: borrow occurs due to deref coercion to `str`
-   = note: this error originates in the macro `$crate::format_args_nl`
+  |
+2 |     let s2 = s1;
+  |              -- value moved here
+3 |     println!("{}", s1); // ❌ 编译错误!
+  |                    ^^ value borrowed here after move
 ```
 
-**错误原因**：
-`s1` 在第 2 行已经移动给 `s2` 了，第 3 行不能再使用 `s1`。
+**解释**：`s1` 在第 2 行已经移动给 `s2` 了。Rust 不允许使用已移动的变量，这是为了防止"悬垂指针"——如果 `s2` 清理了堆内存，`s1` 就会指向无效数据！
 
-**修复方法**：
+**✅ 修复方法 1**：如果只需读取，使用引用（借用）：
 
-1. **如果只需读取**，使用引用：
-   ```rust
-   let s1 = String::from("hello");
-   let s2 = &s1;  // 借用，不移动
-   println!("{}", s1); // ✅ s1 仍然可用
-   println!("{}", s2); // ✅ s2 是引用
-   ```
+```rust
+let s1 = String::from("hello");
+let s2 = &s1;  // 借用，不移动
+println!("{}", s1); // ✅ s1 仍然可用
+println!("{}", s2); // ✅ s2 是引用
+```
 
-2. **如果需要两个独立的 String**，使用克隆：
-   ```rust
-   let s1 = String::from("hello");
-   let s2 = s1.clone();  // 深度复制
-   println!("{}", s1); // ✅ 两者都可用
-   println!("{}", s2); // ✅
-   ```
+**✅ 修复方法 2**：如果需要两个独立的 String，使用克隆：
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1.clone();  // 深度复制
+println!("{}", s1); // ✅ 两者都可用
+println!("{}", s2); // ✅
+```
 
 ---
 
@@ -259,9 +270,11 @@ error[E0515]: cannot return reference to local variable `s`
 
 ## 动手练习
 
-### 练习 1: 识别所有权转移
+### 🟢 入门练习：识别所有权转移
 
 下面的代码会编译通过吗？如果不会，如何修复？
+
+> 💡 **编译器是你的老师**：尝试运行这段代码，仔细阅读编译器错误信息。它会告诉你移动发生在哪里！
 
 ```rust
 fn main() {
@@ -292,9 +305,11 @@ println!("{}", x); // ✅ 三者都可用
 
 ---
 
-### 练习 2: 修复函数参数
+### 🟡 中级练习：修复函数参数
 
 补全下面的函数，使得调用后 `original` 仍然可用：
+
+> 💡 **提示**：想想"借用"和"所有权"的区别。如果你只需要读取，不需要拥有，应该用什么？
 
 ```rust
 fn print_and_??? (s: ???) {
@@ -328,9 +343,11 @@ fn main() {
 
 ---
 
-### 练习 3: 理解移动与复制
+### 🔴 挑战练习：理解移动与复制
 
 预测下面代码哪些会编译通过：
+
+> 💡 **挑战**：先不看答案，自己推理每个案例。思考"这个类型实现了 Copy trait 吗？"
 
 ```rust
 // A
@@ -496,6 +513,17 @@ fn main() {
 - **移动 (Move)**: 所有权的转移
 - **Copy trait**: 自动复制的类型
 - **借用 (Borrow)**: 临时访问，不转移所有权
+
+**🧠 学习提示**：
+> 所有权是 Rust 最独特的特性，也是很多初学者的第一道坎。如果你感到困惑，这完全正常！
+> 
+> **Microsoft Rust 培训建议**："Struggling with the borrow checker is part of learning. If stuck >15 minutes → check solution, study, close, try again from scratch."
+>
+> **推荐学习流程**：
+> 1. 先自己写代码，让编译器报错
+> 2. 仔细阅读错误信息（Rust 的编译器是最好的老师）
+> 3. 如果卡住超过 15 分钟，查看答案
+> 4. 关掉答案，从头自己写一遍
 
 **下一步**：
 

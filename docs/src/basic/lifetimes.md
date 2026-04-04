@@ -557,8 +557,8 @@ let closure = |y| y + x;  // x 的生命周期被捕获
 
 ## 继续学习
 
-- 下一步：[闭包](closure.md)
-- 进阶：[高级生命周期](advanced-lifetimes.md)
-- 回顾：[所有权](ownership.md)
+- 下一步：[闭包](closure.md) - 捕获环境变量的匿名函数
+- 进阶：[泛型](generic.md) - 生命周期与泛型结合
+- 回顾：[所有权](ownership.md) - 生命周期基础
 
 > 💡 **记住**：生命周期是 Rust 的安全保障。标注生命周期不是负担，而是编译器帮助你避免错误的工具！

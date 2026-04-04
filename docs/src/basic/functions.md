@@ -558,8 +558,8 @@ println!("{}", add_x(3));  // 打印 8
 
 ## 继续学习
 
-- 下一步：[控制流](control-flow.md)
-- 进阶：[泛型函数](generic-functions.md)
-- 回顾：[变量与表达式](expression.md)
+- 下一步：[基础数据类型](datatype.md) - 深入理解 Rust 类型系统
+- 进阶：[泛型](generic.md) - 编写通用函数
+- 回顾：[变量与表达式](expression.md) - 基础语法
 
 > 💡 **记住**：函数是代码的基石。好的函数应该短小、专注、可复用！

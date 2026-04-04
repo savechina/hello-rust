@@ -616,8 +616,8 @@ enum AnimalEnum {
 
 ## 继续学习
 
-- 下一步：[高级特征](advanced-traits.md)
-- 进阶：[智能指针](smart-pointers.md)
-- 回顾：[特征](trait.md)
+- 下一步：[特征](trait.md) - 回顾特征基础
+- 进阶：[模块系统](module.md) - 组织复杂代码结构
+- 回顾：[泛型](generic.md) - 静态分发 vs 动态分发
 
 > 💡 **记住**：特征对象是 Rust 实现运行时多态的工具。优先使用泛型（静态分发），在需要灵活性时使用特征对象（动态分发）！

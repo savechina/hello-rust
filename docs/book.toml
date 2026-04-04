@@ -10,8 +10,8 @@ assets_version = "3.1.0"
 
 [preprocessor.alerts]
 
-# Temporarily disabled pagetoc until compatible version found
-# [preprocessor.pagetoc]
+# mdBook 0.5+ has built-in TOC support - no pagetoc needed
+# See: https://github.com/rust-lang/mdBook/pull/2822
 
 [output.html]
 default-theme = "light"
@@ -19,3 +19,6 @@ git-repository-url = "https://github.com/savechina/hello-rust"
 git-repository-icon = "fa-github"
 additional-css = ["./assets/css/mdbook-admonish.css"]
 additional-js = []
+
+# Built-in TOC sidebar (mdBook 0.5+)
+# No additional CSS/JS needed for TOC

@@ -1,5 +1,5 @@
 # Workflow for building and deploying mdBook site to GitHub Pages
-# Using mdbook 0.4.36 for pagetoc compatibility
+# Using mdbook 0.5.x with built-in TOC support (no pagetoc needed)
 
 name: Deploy Pages
 
@@ -23,34 +23,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # Use 0.4.36 for pagetoc compatibility
+      # Use mdbook 0.5+ with built-in TOC support
       MDBOOK_VERSION: 0.5.1
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Install Rust
         run: |
           curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf -y | sh
           rustup update
-
+          
       - name: Install mdBook and plugins
         run: |
           cargo install --version ${MDBOOK_VERSION} mdbook
           cargo install mdbook-admonish
           cargo install mdbook-alerts
-          cargo install mdbook-pagetoc
-
+          # No pagetoc needed - TOC built into mdbook 0.5+
+          
       - name: Install mdBook plugins
         run: mdbook-admonish install docs/
-
+        
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-
+        
       - name: Build with mdBook
         run: mdbook build
         working-directory: docs
-
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -1,38 +1,46 @@
-# 测试
+# 测试基础
 
+## 开篇故事
 
-## Mock 测试
+想象你在建造一座大桥。你不会等到桥建好了才测试它是否稳固——你会在每一步都进行检查：地基是否牢固？钢筋强度够吗？混凝土配比正确吗？软件测试也是如此。测试不是最后才做的事情，而是贯穿整个开发过程的质量保障。
 
-Rust 中有类似Java Mockito 的测试Mock框架，mockall 框架。
+Rust 的测试系统就像一位严格的质检员——它在编译时就确保你的代码符合预期，让 bug 无处藏身。
 
-下面是一个完成Mock 测试样例代码：
+---
+
+## 本章适合谁
+
+如果你想学习如何编写可靠的 Rust 代码，或者理解测试在 Rust 中的最佳实践，本章适合你。
+
+---
+
+## 你会学到什么
+
+完成本章后，你可以：
+
+1. 理解 Rust 测试的三种类型（单元、集成、文档）
+2. 使用 `#[cfg(test)]` 组织测试模块
+3. 使用 `assert!`、`assert_eq!`、`assert_ne!` 宏
+4. 编写会 panic 的测试 (`#[should_panic]`)
+5. 使用 `#[ignore]` 跳过慢测试
+6. 运行特定测试和并行测试
+
+---
+
+## 前置要求
+
+- [函数基础](../../basic/functions.md) - 函数定义
+- [模块系统](../../basic/module.md) - 模块组织
+
+---
+
+## 第一个例子
+
+最简单的测试：
 
 ```rust
-
-use mockall::automock;
-use std::sync::Arc;
-
-/// trait mock sample
-#[automock]
-trait HmsMonitorService {
-    fn monitor(&self) -> bool;
-}
-
-#[derive(Clone)]
-pub struct MonitorMessageConsumerListener {
-    monitor_service: Arc<dyn HmsMonitorService>,
-}
-
-/// async trait sample
-#[automock]
-#[async_trait::async_trait]
-trait HmsMonitorAsyncService {
-    async fn monitor(&self) -> bool;
-}
-
-#[derive(Clone)]
-pub struct MonitorMessageController {
-    monitor_service: Arc<dyn HmsMonitorAsyncService>,
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
 }
 
 #[cfg(test)]
@@ -40,28 +48,305 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_monitor() {
-        let mut mock = MockHmsMonitorService::new();
-        mock.expect_monitor().returning(|| true);
-        let listener = MonitorMessageConsumerListener {
-            monitor_service: Arc::new(mock),
-        };
-        assert!(listener.monitor_service.monitor());
-    }
-
-    #[tokio::test]
-    async fn test_monitor_async() {
-        let mut mock = MockHmsMonitorAsyncService::new();
-        mock.expect_monitor().returning(|| true);
-        let listener = MonitorMessageController {
-            monitor_service: Arc::new(mock),
-        };
-        assert!(listener.monitor_service.monitor().await);
+    fn test_add() {
+        assert_eq!(add(2, 3), 5);
     }
 }
-
-
 ```
 
+**运行测试**:
+```bash
+cargo test
+```
 
-## Rspec 测试
+**发生了什么？**
+
+- `#[cfg(test)]` - 只在测试时编译
+- `#[test]` - 标记测试函数
+- `assert_eq!` - 断言相等
+
+---
+
+## 原理解析
+
+### 1. 测试的三种类型
+
+```
+测试类型
+├── 单元测试 (Unit Tests)
+│   ├── 测试单个函数/模块
+│   ├── 放在 src/ 文件中
+│   └── 使用 #[cfg(test)]
+├── 集成测试 (Integration Tests)
+│   ├── 测试公共 API
+│   ├── 放在 tests/ 目录
+│   └── 像外部用户使用
+└── 文档测试 (Doc Tests)
+    ├── 测试文档示例
+    ├── 放在 /// 注释中
+    └── cargo test 自动运行
+```
+
+### 2. 单元测试组织
+
+```rust
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+pub fn subtract(a: i32, b: i32) -> i32 {
+    a - b
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add() {
+        assert_eq!(add(2, 3), 5);
+    }
+
+    #[test]
+    fn test_subtract() {
+        assert_eq!(subtract(5, 3), 2);
+    }
+
+    #[test]
+    fn test_add_negative() {
+        assert_eq!(add(-1, -1), -2);
+    }
+}
+```
+
+### 3. Assert 宏家族
+
+```rust
+#[test]
+fn test_assertions() {
+    // assert! - 条件必须为 true
+    assert!(true);
+    assert!(2 + 2 == 4);
+
+    // assert_eq! - 两个值相等
+    assert_eq!(4, 2 + 2);
+    assert_eq!("hello", "hello");
+
+    // assert_ne! - 两个值不相等
+    assert_ne!(4, 5);
+    assert_ne!("hello", "world");
+
+    // 自定义错误消息
+    assert!(2 + 2 == 4, "数学出错了！");
+    assert_eq!(4, 2 + 2, "加法应该工作");
+}
+```
+
+### 4. 应该 Panic 的测试
+
+```rust
+pub fn divide(a: i32, b: i32) -> i32 {
+    if b == 0 {
+        panic!("除数不能为 0");
+    }
+    a / b
+}
+
+#[test]
+#[should_panic(expected = "除数不能为 0")]
+fn test_divide_by_zero() {
+    divide(10, 0);
+}
+```
+
+### 5. 忽略慢测试
+
+```rust
+#[test]
+fn test_fast() {
+    assert_eq!(1 + 1, 2);
+}
+
+#[test]
+#[ignore]
+fn test_slow() {
+    // 这个测试很慢，默认跳过
+    std::thread::sleep(std::time::Duration::from_secs(10));
+    assert!(true);
+}
+```
+
+**运行被忽略的测试**:
+```bash
+cargo test -- --ignored
+```
+
+### 6. 测试结果类型
+
+```rust
+#[test]
+fn test_result() -> Result<(), String> {
+    if 2 + 2 == 4 {
+        Ok(())
+    } else {
+        Err(String::from("数学出错了"))
+    }
+}
+```
+
+---
+
+## 常见错误
+
+### 错误 1: 忘记 #[cfg(test)]
+
+```rust
+// ❌ 错误：测试代码会被编译到生产代码中
+mod tests {
+    #[test]
+    fn test_something() {}
+}
+
+// ✅ 正确：只在测试时编译
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_something() {}
+}
+```
+
+### 错误 2: 测试依赖外部状态
+
+```rust
+// ❌ 错误：依赖文件系统
+#[test]
+fn test_read_file() {
+    let content = std::fs::read_to_string("data.txt").unwrap();
+    assert_eq!(content, "expected");
+}
+
+// ✅ 正确：使用临时文件或 mock
+#[test]
+fn test_read_file() {
+    let temp_dir = std::env::temp_dir();
+    let file_path = temp_dir.join("test_data.txt");
+    std::fs::write(&file_path, "expected").unwrap();
+    // 测试完成后自动清理
+}
+```
+
+---
+
+## 动手练习
+
+### 练习 1: 编写测试
+
+为以下函数编写完整的测试：
+
+```rust
+pub fn is_even(n: i32) -> bool {
+    n % 2 == 0
+}
+
+// TODO: 编写测试覆盖：
+// - 正偶数
+// - 正奇数
+// - 零
+// - 负偶数
+// - 负奇数
+```
+
+<details>
+<summary>点击查看答案</summary>
+
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_positive_even() {
+        assert!(is_even(2));
+        assert!(is_even(100));
+    }
+
+    #[test]
+    fn test_positive_odd() {
+        assert!(!is_even(1));
+        assert!(!is_even(99));
+    }
+
+    #[test]
+    fn test_zero() {
+        assert!(is_even(0));
+    }
+
+    #[test]
+    fn test_negative_even() {
+        assert!(is_even(-2));
+        assert!(is_even(-100));
+    }
+
+    #[test]
+    fn test_negative_odd() {
+        assert!(!is_even(-1));
+        assert!(!is_even(-99));
+    }
+}
+```
+</details>
+
+---
+
+## 故障排查
+
+### Q: 如何运行单个测试？
+
+**A**: `cargo test test_name`
+
+### Q: 如何并行运行测试？
+
+**A**: `cargo test -- --test-threads=4`
+
+### Q: 如何显示测试输出？
+
+**A**: `cargo test -- --nocapture`
+
+---
+
+## 小结
+
+**核心要点**：
+
+1. **#[cfg(test)]**: 只在测试时编译
+2. **#[test]**: 标记测试函数
+3. **Assert 宏**: 验证预期结果
+4. **should_panic**: 测试错误处理
+5. **ignore**: 跳过慢测试
+
+---
+
+## 术语表
+
+| English           | 中文       |
+| ----------------- | ---------- |
+| Unit Test         | 单元测试   |
+| Integration Test  | 集成测试   |
+| Doc Test          | 文档测试   |
+| Assertion         | 断言       |
+| Panic             | 恐慌       |
+| Test Fixture      | 测试夹具   |
+
+---
+
+完整示例：`src/advance/testing/test_sample.rs`
+
+---
+
+## 继续学习
+
+- 下一步：[模拟测试](mock.md)
+- 进阶：[测试框架](rspec.md)
+- 回顾：[函数基础](../../basic/functions.md)
+
+> 💡 **记住**：好的测试是代码最好的文档！

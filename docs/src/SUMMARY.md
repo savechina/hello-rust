@@ -37,7 +37,7 @@
     - [并行计算](./advance/async/rayon.md) - 数据并行处理
     - [MIO](./advance/async/mio.md) - 底层 I/O 库
     - [CycleRC](./advance/async/cyclerc.md) - 引用计数循环检测
-  - [数据库操作](./advance/database/database.md) - SQLx 异步数据库编程
+  - [数据库](./advance/database/database.md) - SQLx 异步数据库编程
     - [数据库 ORM](./advance/database/diesel.md) - Diesel ORM 框架
     - [SQLx](./advance/database/sqlx.md) - SQLx 异步查询
   - [Web 开发]() - Web 开发

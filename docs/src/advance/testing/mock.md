@@ -447,6 +447,26 @@ mock.expect_monitor()
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `#[automock]` 属性做了什么？
+
+2. 如何设置 Mock 的返回值？
+
+3. Mock 和真实实现的区别？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 自动生成 trait 的 Mock 实现（`MockTraitName`）
+2. `mock.expect_method().returning(|args| value)`
+3. Mock 是测试用的假实现，可控行为；真实实现是生产用的
+
+**关键理解**: Mock 让你隔离测试，不依赖外部系统。
+</details>
+
 ## 继续学习
 
 **前一章**: [Cow 类型](cow.md)  

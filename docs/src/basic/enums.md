@@ -426,6 +426,18 @@ match find_user(1) {
 
 ---
 
+## 延伸阅读
+
+学习完枚举后，你可能还想了解：
+
+- [Option 类型深入](https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html#the-option-enum-and-its-advantages-over-null-values) - 为什么 Rust 没有 null
+- [模式匹配高级用法](https://doc.rust-lang.org/book/ch18-00-patterns.html) - 高级模式
+- [Newtype 模式](newtype-pattern.md) - 类型安全封装
+
+**选择建议**:
+- 想学习多态 → 继续学习 [特征](trait.md)
+- 想练习 → 跳到 [泛型](generic.md)
+
 ## 继续学习
 
 **前一章**: [结构体](struct.md)  

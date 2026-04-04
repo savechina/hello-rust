@@ -331,6 +331,26 @@ fn load_config(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `#[derive(Serialize, Deserialize)]` 做了什么？
+
+2. 如何处理序列化错误？
+
+3. `serde_json::to_string` 和 `to_string_pretty` 的区别？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 自动生成序列化和反序列化代码
+2. 使用 `Result<T, serde_json::Error>` 处理
+3. `to_string` 紧凑格式，`to_string_pretty` 格式化输出
+
+**关键理解**: Serde 是 Rust 序列化的事实标准框架。
+</details>
+
 ## 继续学习
 
 - 下一步：[CSV 处理](csv.md)

@@ -474,6 +474,38 @@ impl Future for MyFuture {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. Future 是惰性的还是立即执行的？
+
+2. `poll()` 返回 `Pending` 后，谁会再次调用 `poll()`？
+
+3. `async/await` 和 Future 是什么关系？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 惰性的 - 需要被 poll 才会执行
+2. Waker（由执行器提供）
+3. `async/await` 是 Future 的语法糖，编译器转换为状态机
+
+**关键理解**: Future 本身不执行，需要执行器 (Executor) 驱动。
+</details>
+
+## 延伸阅读
+
+学习完 Futures 后，你可能还想了解：
+
+- [Future 组合子](https://docs.rs/futures/latest/futures/future/trait.FutureExt.html) - map, then, and_then
+- [Stream trait](https://docs.rs/futures/latest/futures/stream/trait.StreamExt.html) - 异步迭代器
+- [futures-util crate](https://docs.rs/futures-util) - 实用工具集
+
+**选择建议**:
+- 想学习并行 → 继续学习 [并行计算](rayon.md)
+- 想学习底层 I/O → 跳到 [MIO](mio.md)
+
 ## 继续学习
 
 **前一章**: [Tokio 异步运行时](tokio.md)  

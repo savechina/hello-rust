@@ -392,6 +392,26 @@ impl Database for MockDatabase {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. 服务生命周期的三个阶段是什么？
+
+2. 依赖注入的作用是什么？
+
+3. 如何测试使用依赖注入的服务？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 启动 (Start) → 运行 (Running) → 停止 (Stop)
+2. 解耦服务，使组件可替换、可测试
+3. 注入 Mock 依赖，验证服务行为
+
+**关键理解**: 好的服务框架让复杂应用变得简单。
+</details>
+
 ## 继续学习
 
 - 下一步：[依赖注入](../../awesome/dependency_injection.md)

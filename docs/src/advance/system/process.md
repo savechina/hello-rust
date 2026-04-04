@@ -360,6 +360,26 @@ if status.success() {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `Command::spawn()` 和 `Command::output()` 有什么区别？
+
+2. 如何向子进程发送数据？
+
+3. 子进程退出后如何获取退出码？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `spawn()` 返回正在运行的子进程，`output()` 等待完成并返回输出
+2. 使用 `stdin(Stdio::piped())` 获取 stdin 句柄
+3. `Child::wait()` 返回 `ExitStatus`，使用 `.code()` 获取退出码
+
+**关键理解**: `spawn()` 适合长时间运行的进程，`output()` 适合一次性命令。
+</details>
+
 ## 继续学习
 
 **前一章**: [Ollama AI 集成](ollama.md)  

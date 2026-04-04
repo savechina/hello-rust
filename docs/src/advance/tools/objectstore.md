@@ -390,6 +390,26 @@ println!("最后修改：{}", meta.last_modified);
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. 对象存储和文件系统有什么区别？
+
+2. 常见的对象存储服务有哪些？
+
+3. `object_store` crate 提供什么抽象？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 对象存储是扁平的（key-value），文件系统是分层的（目录树）
+2. AWS S3, GCP Cloud Storage, Azure Blob Storage
+3. 统一的对象存储接口，支持多种后端
+
+**关键理解**: 对象存储适合大规模数据存储和访问。
+</details>
+
 ## 继续学习
 
 **前一章**: [资源嵌入](includedir.md)  

@@ -495,6 +495,26 @@ for result in reader.deserialize() {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. CSV 和 JSON 序列化有什么区别？
+
+2. 如何处理 CSV 中不同类型的列？
+
+3. `csv::Reader` 和 `csv::StringRecord` 的区别？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. CSV 是表格格式（行/列），JSON 是树形格式
+2. 使用 Serde 反序列化到结构体，自动类型转换
+3. `Reader` 是迭代器，`StringRecord` 是单行数据
+
+**关键理解**: CSV 适合表格数据，JSON 适合嵌套数据。
+</details>
+
 ## 继续学习
 
 **前一章**: [JSON 序列化](json.md)  

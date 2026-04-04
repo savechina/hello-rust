@@ -508,6 +508,18 @@ let result = loop {
 
 ---
 
+## 延伸阅读
+
+学习完变量与表达式后，你可能还想了解：
+
+- [`let` 关键字](https://doc.rust-lang.org/book/ch02-00-guessing-game-tutorial.html#storing-values-with-variables) - 变量绑定深入
+- [Rust 表达式语法](https://doc.rust-lang.org/reference/expressions.html) - 官方参考
+- [常量 vs 变量](const-vs-var.md) - 何时使用 `const`
+
+**选择建议**:
+- 初学者 → 继续学习 [数据类型](datatype.md)
+- 有经验的程序员 → 跳到 [所有权](ownership.md)
+
 ## 继续学习
 
 - 下一步：[数据类型](datatype.md)

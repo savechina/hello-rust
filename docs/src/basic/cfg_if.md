@@ -386,6 +386,26 @@ const PATH_SEPARATOR: &str = "\\";
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `#[cfg]` 和 `#[cfg_attr]` 有什么区别？
+
+2. 如何在编译时定义自定义特性标志？
+
+3. `cfg_if!` 宏相比多个 `#[cfg]` 有什么优势？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `#[cfg]` 条件编译代码，`#[cfg_attr]` 条件添加属性
+2. `cargo rustc --cfg my_feature` 或在 Cargo.toml 的 `[features]` 中定义
+3. `cfg_if!` 更清晰，支持 `else` 分支，避免重复 `#[cfg]`
+
+**关键理解**: 条件编译是编译时决定，零运行时开销。
+</details>
+
 ## 继续学习
 
 - 下一步：[指针与不安全代码](pointer.md)

@@ -450,6 +450,18 @@ fn process_cow(s: &str) -> Cow<str> {
 
 ---
 
+## 延伸阅读
+
+学习完 Cow 类型后，你可能还想了解：
+
+- [Cow 源码分析](https://doc.rust-lang.org/src/alloc/borrow.rs.html) - 标准库实现
+- [零拷贝优化](https://docs.rs/bytes) - Bytes crate 的类似模式
+- [写时复制文件系统](https://en.wikipedia.org/wiki/Copy-on-write) - 操作系统中的 COW
+
+**选择建议**:
+- 想学习进程管理 → 继续学习 [进程管理](process.md)
+- 想学习字节处理 → 跳到 [字节处理](bytes.md)
+
 ## 继续学习
 
 **前一章**: [字节处理](bytes.md)  

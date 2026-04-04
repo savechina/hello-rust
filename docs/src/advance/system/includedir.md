@@ -382,6 +382,18 @@ lazy_static::lazy_static! {
 
 ---
 
+## 延伸阅读
+
+学习完资源嵌入后，你可能还想了解：
+
+- [include_bytes!](https://doc.rust-lang.org/std/macro.include_bytes.html) - 嵌入二进制
+- [rust-embed crate](https://docs.rs/rust-embed) - 更强大的嵌入
+- [Phf (完美哈希)](https://docs.rs/phf) - 编译时查找表
+
+**选择建议**:
+- 想学习系统信息 → 继续学习 [系统信息](sysinfo.md)
+- 想学习临时文件 → 跳到 [临时文件](tempfile.md)
+
 ## 继续学习
 
 **前一章**: [系统信息](sysinfo.md)  

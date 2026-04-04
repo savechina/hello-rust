@@ -432,6 +432,26 @@ let file = tempfile_in(&tmp_dir)?;
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `tempfile()` 和 `NamedTempFile` 有什么区别？
+
+2. 临时文件什么时候被删除？
+
+3. `TempDir` 的作用是什么？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `tempfile()` 无名称（自动删除），`NamedTempFile` 有路径（可持久化）
+2. `TempFile` 在 drop 时自动删除，`NamedTempFile` 可调用 `persist()` 保留
+3. `TempDir` 创建临时目录，drop 时删除目录及其内容
+
+**关键理解**: 临时文件是测试和临时数据存储的理想选择。
+</details>
+
 ## 继续学习
 
 **前一章**: [内存映射](memmap.md)  

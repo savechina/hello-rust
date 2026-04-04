@@ -389,6 +389,26 @@ for (interface_name, network) in system.networks() {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `System::new_all()` 做了什么？
+
+2. 如何获取特定进程的信息？
+
+3. `refresh_all()` 和 `new_all()` 的区别？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 创建 System 实例并刷新所有信息（CPU、内存、进程等）
+2. 使用 `system.process(Pid::from_u32(pid))`
+3. `new_all()` = 创建 + 刷新，`refresh_all()` = 仅刷新已有实例
+
+**关键理解**: sysinfo 提供跨平台的系统和进程信息。
+</details>
+
 ## 继续学习
 
 **前一章**: [进程管理](process.md)  

@@ -343,6 +343,26 @@ mod tests {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `#[cfg(test)]` 的作用是什么？
+
+2. `assert!`、`assert_eq!`、`assert_ne!` 的区别？
+
+3. 如何测试会 panic 的函数？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 只在测试编译时包含代码
+2. `assert!` = 条件为真，`assert_eq!` = 相等，`assert_ne!` = 不相等
+3. 使用 `#[should_panic]` 属性
+
+**关键理解**: 测试是代码质量的重要保障。
+</details>
+
 ## 继续学习
 
 - 下一步：[模拟测试](mock.md)

@@ -762,6 +762,18 @@ struct RectangleRef<'a> {
 
 ---
 
+## 延伸阅读
+
+学习完结构体后，你可能还想了解：
+
+- [元组结构体](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#using-tuple-structs-without-named-fields) - 匿名结构体
+- [单元结构体](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#unit-like-structs-without-any-fields) - 标记类型
+- [更新语法](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax) - 结构体更新
+
+**选择建议**:
+- 想学习枚举 → 继续学习 [枚举](enums.md)
+- 想学习方法 → 跳到 [结构体方法](struct-methods.md)
+
 ## 继续学习
 
 - 下一步：[结构体方法](struct-methods.md)

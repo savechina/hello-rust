@@ -504,6 +504,38 @@ pub struct Config {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `#[derive(Getters)]` 生成什么代码？
+
+2. `#[get = "pub"]` 和 `#[get]` 有什么区别？
+
+3. 什么时候应该使用派生宏而不是手动实现？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 为每个字段生成 `fn field_name(&self) -> &Type` 方法
+2. `#[get = "pub"]` 生成公共方法，`#[get]` 生成私有方法
+3. 字段多、样板代码多时使用派生宏，减少重复
+
+**关键理解**: 派生宏是减少样板代码的有效工具。
+</details>
+
+## 延伸阅读
+
+学习完派生宏后，你可能还想了解：
+
+- [derive_more crate](https://docs.rs/derive_more) - 更多派生宏
+- [smart-default crate](https://docs.rs/smart-default) - 默认值派生
+- [typed-builder crate](https://docs.rs/typed-builder) - Builder 模式派生
+
+**选择建议**:
+- 想学习宏编程 → 继续学习 [宏编程](macros.md)
+- 想学习类型别名 → 跳到 [类型别名](typealias.md)
+
 ## 继续学习
 
 **前一章**: [RSpec 测试框架](rspec.md)  

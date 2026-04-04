@@ -447,6 +447,18 @@ println!("{}", now.format("%Y-%m-%d %H:%M:%S"));
 
 ---
 
+## 延伸阅读
+
+学习完数据类型后，你可能还想了解：
+
+- [数值类型转换](https://doc.rust-lang.org/book/ch03-02-data-types.html#integer-types) - `as` 关键字
+- [字符串类型深入](https://doc.rust-lang.org/book/ch08-02-strings.html) - `String` vs `&str`
+- [数组 vs Vec](vec-vs-array.md) - 选择指南
+
+**选择建议**:
+- 想理解内存 → 继续学习 [所有权](ownership.md)
+- 想练习 → 跳到 [结构体](struct.md)
+
 ## 继续学习
 
 **前一章**: [变量与表达式](expression.md)  

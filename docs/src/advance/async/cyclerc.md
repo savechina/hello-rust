@@ -383,6 +383,38 @@ println!("弱引用计数：{}", Rc::weak_count(&rc));
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. 为什么 `Rc` 会导致循环引用问题？
+
+2. `Weak::upgrade()` 返回什么类型？
+
+3. 如何检测循环引用？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `Rc` 是强引用，互相持有导致引用计数永远 > 0
+2. `Option<Rc<T>>` - 如果强引用还在返回 `Some`，否则 `None`
+3. 使用 `Weak` 弱引用打破循环，或使用调试工具检查引用计数
+
+**关键理解**: 循环引用是 Rust 中少数会导致内存泄漏的情况。
+</details>
+
+## 延伸阅读
+
+学习完循环引用检测后，你可能还想了解：
+
+- [Rc 和 Arc 的区别](https://doc.rust-lang.org/book/ch15-04-rc.html) - 何时使用哪个
+- [Weak 引用深入](https://doc.rust-lang.org/book/ch15-06-reference-cycles.html) - 弱引用原理
+- [内存泄漏检测工具](https://github.com/brson/rust-memory-leak-checker) - 自动化检测
+
+**选择建议**:
+- 想学习异步 → 继续学习 [异步编程](async.md)
+- 想学习数据库 → 跳到 [数据库操作](../database/database.md)
+
 ## 继续学习
 
 - 下一步：[智能指针](../../basic/smart-pointers.md)

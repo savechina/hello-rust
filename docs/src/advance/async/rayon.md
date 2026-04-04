@@ -658,6 +658,18 @@ fn parallel_sum(data: &[i32]) -> i32 {
 
 ---
 
+## 延伸阅读
+
+学习完并行计算后，你可能还想了解：
+
+- [rayon 官方文档](https://docs.rs/rayon) - 完整 API 参考
+- [并行迭代器](https://docs.rs/rayon/latest/rayon/iter/trait.ParallelIterator.html) - par_iter vs iter
+- [工作窃取调度器](https://blog.rayon-rs.org/2018/01/13/implementation-details.html) - 原理
+
+**选择建议**:
+- 想学习底层 I/O → 继续学习 [MIO](mio.md)
+- 想学习循环引用 → 跳到 [CycleRC](cyclerc.md)
+
 ## 继续学习
 
 - 下一步：[Tokio 异步运行时](tokio.md)

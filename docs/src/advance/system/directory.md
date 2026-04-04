@@ -344,6 +344,26 @@ for line in reader.lines() {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `Path` 和 `PathBuf` 有什么区别？
+
+2. 为什么不应该使用字符串拼接路径？
+
+3. `fs::read_dir` 返回什么类型？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `Path` 是借用类型，`PathBuf` 是拥有类型
+2. 跨平台不兼容（Windows 用 `\`，Unix 用 `/`）
+3. `Result<ReadDir, io::Error>`，迭代返回 `Result<DirEntry, io::Error>`
+
+**关键理解**: 始终使用 `Path::join` 构建路径。
+</details>
+
 ## 继续学习
 
 - 下一步：[临时文件](tempfile.md)

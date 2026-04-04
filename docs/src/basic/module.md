@@ -419,6 +419,18 @@ pub mod user;  // 查找 src/models/user.rs
 
 ---
 
+## 延伸阅读
+
+学习完模块系统后，你可能还想了解：
+
+- [use 关键字深入](https://doc.rust-lang.org/book/ch07-04-bringing-paths-into-scope-with-the-use-keyword.html) - 重导出和私有性
+- [crate 组织](https://doc.rust-lang.org/book/ch07-01-packages-and-crates.html) - 包与 crate
+- [工作空间](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html) - 多 crate 项目
+
+**选择建议**:
+- 想学习并发 → 继续学习 [线程与并发](threads.md)
+- 想学习条件编译 → 跳到 [条件编译](cfg_if.md)
+
 ## 继续学习
 
 - 下一步：[线程与并发](threads.md)

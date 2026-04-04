@@ -454,6 +454,26 @@ async fn main() {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `mpsc` 通道的 `m`、`p`、`s`、`c` 分别代表什么？
+
+2. 为什么发送端需要 `drop(tx)`？
+
+3. `RwLock` 和 `Mutex` 如何选择？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. **m**ultiple **p**roducer, **s**ingle **c**onsumer
+2. 不 drop 的话接收端会永远等待（认为还有更多消息）
+3. 读多写少用 `RwLock`，读写均衡用 `Mutex`
+
+**关键理解**: Tokio 的通道是异步的，与 std::sync::mpsc 不同。
+</details>
+
 ## 继续学习
 
 - 下一步：[Futures 异步编程](futures.md)

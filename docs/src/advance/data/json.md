@@ -515,6 +515,26 @@ fn process_value(value: &Value) {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `serde_json::Value` 和类型化反序列化有什么区别？
+
+2. 如何处理 JSON 中可能缺失的字段？
+
+3. `#[serde(flatten)]` 的作用是什么？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `Value` 是无类型的动态 JSON 对象，类型化反序列化直接得到结构体
+2. 使用 `Option<T>` 字段，或 `#[serde(default)]`
+3. 将嵌套对象"展平"到当前结构体中
+
+**关键理解**: 优先使用类型化反序列化，`Value` 仅在动态场景使用。
+</details>
+
 ## 继续学习
 
 **前一章**: [Hyper HTTP 库](hyper.md)  

@@ -472,6 +472,26 @@ cached.bind(2).fetch_one(&pool).await?;
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `query!` 和 `query_as!` 有什么区别？
+
+2. SQLx 的编译时检查需要什么条件？
+
+3. 如何处理可选参数？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `query!` 返回匿名结构体，`query_as!` 返回指定类型
+2. 需要数据库连接和 `DATABASE_URL` 环境变量
+3. 使用 `Option<T>` 参数，SQL 中用 `IS NULL` 处理
+
+**关键理解**: SQLx 在编译时验证 SQL，减少运行时错误。
+</details>
+
 ## 继续学习
 
 **前一章**: [Tokio 异步运行时](tokio.md)  

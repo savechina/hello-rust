@@ -449,6 +449,18 @@ socket.send(&msg.freeze()).await?;
 
 ---
 
+## 延伸阅读
+
+学习完字节处理后，你可能还想了解：
+
+- [Bytes crate](https://docs.rs/bytes) - 零拷贝字节缓冲区
+- [零拷贝网络编程](https://tokio.rs/tokio/tutorial/streams) - 直接传递缓冲区
+- [SIMD 字节处理](https://docs.rs/simd-json) - 加速解析
+
+**选择建议**:
+- 想学习写时复制 → 继续学习 [Cow 类型](cow.md)
+- 想学习环境变量 → 跳到 [环境变量](dotenv.md)
+
 ## 继续学习
 
 **前一章**: [环境变量](dotenv.md)  

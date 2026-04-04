@@ -421,6 +421,26 @@ let request = GenerationRequest::new(model, prompt)
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. Ollama 是什么？
+
+2. 如何在 Rust 中调用 Ollama API？
+
+3. 本地 AI 集成的应用场景有哪些？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. Ollama 是本地运行大语言模型的工具
+2. 使用 HTTP 客户端（如 reqwest）调用 Ollama 的 REST API
+3. 智能助手、代码生成、文本分析、摘要
+
+**关键理解**: 本地 AI 集成保护隐私，无需云端依赖。
+</details>
+
 ## 继续学习
 
 **前一章**: [对象存储](objectstore.md)  

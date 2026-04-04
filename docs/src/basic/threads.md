@@ -347,6 +347,32 @@ let sum: i32 = (1..1000).par_iter().sum();
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `Rc<T>` 可以在多线程中使用吗？
+
+2. 这段代码有什么问题？
+```rust
+let data = vec![1, 2, 3];
+let handle = thread::spawn(|| {
+    println!("{:?}", data);
+});
+```
+
+3. 通道 (channel) 和 Mutex 有什么区别？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. ❌ 不能 - `Rc` 不是线程安全的，应该使用 `Arc`
+2. `data` 的所有权没有转移到闭包，需要使用 `move`
+3. 通道 = 消息传递（所有权转移），Mutex = 共享状态（借用）
+
+**关键理解**: Rust 在编译时防止数据竞争。
+</details>
+
 ## 继续学习
 
 - 下一步：[条件编译](cfg_if.md)

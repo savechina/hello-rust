@@ -615,6 +615,30 @@ enum AnimalEnum {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. 这段代码能编译通过吗？
+```rust
+trait Foo { fn bar(&self) -> Self; }
+let obj: Box<dyn Foo>;
+```
+
+2. `dyn Trait` 和泛型有什么区别？
+
+3. 什么是对象安全？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. ❌ 不能 - 返回 `Self` 的 trait 不是对象安全的
+2. `dyn Trait` 是运行时动态分发，泛型是编译时单态化
+3. 对象安全 = trait 可以作为特征对象使用（无 `Self` 返回、无泛型方法）
+
+**关键理解**: 特征对象牺牲性能换取灵活性。
+</details>
+
 ## 继续学习
 
 - 下一步：[特征](trait.md) - 回顾特征基础

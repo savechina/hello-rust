@@ -552,6 +552,26 @@ let posts = query.load::<Post>(&mut conn)?;
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. Diesel 的 schema 是什么？
+
+2. `Queryable` 和 `Insertable` 有什么区别？
+
+3. 如何处理数据库迁移？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 数据库表结构的 Rust 表示（table! 宏）
+2. `Queryable` = 查询结果映射，`Insertable` = 插入数据映射
+3. 使用 Diesel CLI：`diesel migration generate` 和 `diesel migration run`
+
+**关键理解**: Diesel 是类型安全的 ORM，编译时检查查询。
+</details>
+
 ## 继续学习
 
 **前一章**: [Futures 异步编程](futures.md)  

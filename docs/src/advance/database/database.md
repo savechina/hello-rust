@@ -284,6 +284,26 @@ diesel migration run
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. SQLx 和 Diesel 的核心区别是什么？
+
+2. 连接池的作用是什么？
+
+3. 编译时 SQL 检查是如何工作的？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. SQLx = 异步 + 原生 SQL，Diesel = 同步 + ORM
+2. 复用数据库连接，避免频繁创建/销毁
+3. 连接数据库验证 SQL 语法和表结构
+
+**关键理解**: 选择数据库库取决于你的需求：异步用 SQLx，ORM 用 Diesel。
+</details>
+
 ## 继续学习
 
 - 下一步：[SQLx 异步查询](sqlx.md)

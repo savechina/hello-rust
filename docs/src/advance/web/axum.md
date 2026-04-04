@@ -544,6 +544,26 @@ async fn handler(
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. Axum 和 Hyper 是什么关系？
+
+2. 路由参数如何提取？
+
+3. 中间件在 Axum 中如何实现？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. Axum 构建在 Hyper 之上，提供更高级的 API
+2. 使用 `Path<T>` 提取器，T 需要实现 `Deserialize`
+3. 使用 `tower::Service` 或 `axum::middleware`
+
+**关键理解**: Axum 是 Tokio 团队开发的 Web 框架。
+</details>
+
 ## 继续学习
 
 **前一章**: [Tokio 异步运行时](tokio.md)  

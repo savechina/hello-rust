@@ -484,6 +484,18 @@ fn main() {
 
 ---
 
+## 延伸阅读
+
+学习完所有权后，你可能还想了解：
+
+- [Rust Book 所有权章节](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html) - 官方深入讲解
+- [借用检查器原理](https://blog.rust-lang.org/2015/08/14/First-borrow-checker-improvements.html) - 编译器如何实现
+- [Cell 和 RefCell](cell-refcell.md) - 内部可变性
+
+**选择建议**:
+- 想深入理解 → 继续学习 [生命周期](lifetimes.md)
+- 想实践 → 跳到 [结构体](struct.md)
+
 ## 继续学习
 
 - 下一步：[借用和引用](references.md)

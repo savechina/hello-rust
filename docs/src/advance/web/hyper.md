@@ -469,6 +469,26 @@ let resp = client.get(uri).await?;
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. Hyper 和 Tokio 是什么关系？
+
+2. `Service` trait 的作用是什么？
+
+3. 什么时候应该直接使用 Hyper 而不是 Axum？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. Hyper 是基于 Tokio 的 HTTP 库
+2. `Service` 是处理请求/响应的抽象
+3. 需要极致性能控制、自定义 HTTP 行为时
+
+**关键理解**: Hyper 是底层 HTTP 库，Axum 是高级框架。
+</details>
+
 ## 继续学习
 
 **前一章**: [Axum Web 框架](axum.md)  

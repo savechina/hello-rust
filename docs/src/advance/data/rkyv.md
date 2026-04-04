@@ -428,6 +428,26 @@ let archived = rkyv::access::<ArchivedData>(&bytes[..]).unwrap();
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. rkyv 和 serde 的主要区别是什么？
+
+2. 什么是"零拷贝"反序列化？
+
+3. 什么时候应该使用 rkyv 而不是 serde？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. rkyv 是零拷贝序列化，serde 需要反序列化到内存
+2. 直接访问序列化后的内存，无需复制到新结构
+3. 性能关键场景：游戏、数据库、网络传输大数据
+
+**关键理解**: rkyv 牺牲兼容性换取极致性能。
+</details>
+
 ## 继续学习
 
 **前一章**: [CSV 处理](csv.md)  

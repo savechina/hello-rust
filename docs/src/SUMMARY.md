@@ -60,8 +60,6 @@
     - [测试基础](./advance/testing/test.md) - 测试基础
     - [模拟测试](./advance/testing/mock.md) - Mock 模拟测试
     - [测试框架](./advance/testing/rspec.md) - RSpec 行为驱动测试
-    - [派生宏](./advance/testing/getset.md) - Getters/Setters 派生
-    - [宏编程](./advance/testing/macros.md) - 声明宏和过程宏
     - [类型别名](./advance/testing/typealias.md) - 类型别名简化
   - [宏编程]() - 宏编程
     - [派生宏](./advance/testing/getset.md) - Getters/Setters 派生

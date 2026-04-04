@@ -280,6 +280,38 @@ fmt::fmt()
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `tracing` 和 `log` 的区别是什么？
+
+2. span 的作用是什么？
+
+3. 如何添加自定义字段到 span？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `tracing` 支持结构化日志和 span，`log` 是简单文本
+2. span 表示一段时间内的操作，可嵌套
+3. 在 `#[instrument]` 中添加参数或使用 `Span::current().record()`
+
+**关键理解**: tracing 是现代 Rust 应用的首选日志框架。
+</details>
+
+## 延伸阅读
+
+学习完追踪后，你可能还想了解：
+
+- [tracing-subscriber](https://docs.rs/tracing-subscriber) - 日志订阅器配置
+- [OpenTelemetry](https://docs.rs/opentelemetry) - 分布式追踪
+- [tracing-tree](https://docs.rs/tracing-tree) - 树形日志输出
+
+**选择建议**:
+- 想学习可见性 → 继续学习 [可见性控制](visiable.md)
+- 想复习基础 → 跳到 [基础入门](basic-overview.md)
+
 ## 继续学习
 
 **前一章**: [日志记录](logger.md)  

@@ -422,6 +422,38 @@ impl<T> Vec<T> {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. 原始指针和引用有什么区别？
+
+2. 什么时候需要使用 `unsafe`？
+
+3. `*const T` 和 `*mut T` 的区别？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 原始指针不遵循借用规则，可以为空或悬垂
+2. 解引用原始指针、调用 unsafe 函数、访问可变静态
+3. `*const T` 不可变，`*mut T` 可变
+
+**关键理解**: unsafe 是强大但危险的工具，应谨慎使用并封装在安全接口中。
+</details>
+
+## 延伸阅读
+
+学习完指针与不安全代码后，你可能还想了解：
+
+- [Rustonomicon](https://doc.rust-lang.org/nomicon/) - 不安全 Rust 指南
+- [FFI 指南](https://doc.rust-lang.org/nomicon/ffi.html) - 与 C 代码交互
+- [智能指针深入](https://doc.rust-lang.org/book/ch15-00-smart-pointers.html) - Box, Rc, Arc
+
+**选择建议**:
+- 想学习日志 → 继续学习 [日志记录](logger.md)
+- 想学习追踪 → 跳到 [追踪 (Tracing)](tracing.md)
+
 ## 继续学习
 
 - 下一步：[日志记录](logger.md)

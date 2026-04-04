@@ -271,6 +271,38 @@ Person {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. 如何初始化结构体时省略字段？
+
+2. 结构体更新语法是什么？
+
+3. 元组结构体和普通结构体有什么区别？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 不能省略 - 所有字段必须初始化（除非有默认值）
+2. `Struct { field1: value, ..existing_instance }`
+3. 元组结构体有匿名命名字段，普通结构体有命名字段
+
+**关键理解**: 结构体更新语法可以减少重复代码。
+</details>
+
+## 延伸阅读
+
+学习完结构体字段后，你可能还想了解：
+
+- [元组结构体](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#using-tuple-structs-without-named-fields) - 匿名结构体
+- [单元结构体](https://doc.rust-lang.org/book/ch05-01-defining-structs.html#unit-like-structs-without-any-fields) - 标记类型
+- [字段级属性](https://doc.rust-lang.org/reference/attributes.html) - serde 派生等
+
+**选择建议**:
+- 想学习方法 → 继续学习 [结构体方法](struct-methods.md)
+- 想学习枚举 → 跳到 [枚举](enums.md)
+
 ## 继续学习
 
 **前一章**: [结构体](struct.md)  

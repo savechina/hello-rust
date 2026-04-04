@@ -431,6 +431,26 @@ pub mod user;  // 查找 src/models/user.rs
 - 想学习并发 → 继续学习 [线程与并发](threads.md)
 - 想学习条件编译 → 跳到 [条件编译](cfg_if.md)
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `mod` 和 `use` 的区别是什么？
+
+2. 如何使模块公开？
+
+3. `pub(crate)` 的作用是什么？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `mod` 定义模块，`use` 引入名称到当前作用域
+2. 在模块前加 `pub`：`pub mod my_module`
+3. 只在当前 crate 内可见，对外部 crate 私有
+
+**关键理解**: 模块系统帮助组织大型项目和控制可见性。
+</details>
+
 ## 继续学习
 
 - 下一步：[线程与并发](threads.md)

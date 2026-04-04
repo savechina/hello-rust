@@ -336,6 +336,38 @@ impl Parser {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. Rust 中默认的可见性是什么？
+
+2. `pub`、`pub(crate)`、`pub(super)` 的区别？
+
+3. 如何重新导出名称？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 默认私有（private）
+2. `pub` 公开，`pub(crate)` crate 内可见，`pub(super)` 父模块可见
+3. 使用 `pub use`：`pub use inner_module::MyType`
+
+**关键理解**: 可见性控制是封装和 API 设计的重要部分。
+</details>
+
+## 延伸阅读
+
+学习完可见性控制后，你可能还想了解：
+
+- [pub use 模式](https://doc.rust-lang.org/book/ch07-04-bringing-paths-into-scope-with-the-use-keyword.html#re-exporting-names-with-pub-use) - 公共 API 设计
+- [crate 可见性](https://doc.rust-lang.org/reference/visibility-and-privacy.html) - 包级别可见性
+- [API 设计指南](https://rust-lang.github.io/api-guidelines/) - Rust API 规范
+
+**选择建议**:
+- 想学习高级主题 → 继续学习 [高级进阶](../advance/advance-overview.md)
+- 想复习基础 → 跳到 [基础入门](basic-overview.md)
+
 ## 继续学习
 
 **前一章**: [追踪 (Tracing)](tracing.md)  

@@ -276,6 +276,38 @@ env_logger::Builder::new()
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `log` crate 和 `env_logger` 的关系是什么？
+
+2. 日志级别有哪些？
+
+3. 如何设置日志级别？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `log` 提供 API，`env_logger` 是具体实现
+2. error, warn, info, debug, trace
+3. 设置 `RUST_LOG` 环境变量
+
+**关键理解**: 日志是调试和监控生产应用的重要工具。
+</details>
+
+## 延伸阅读
+
+学习完日志记录后，你可能还想了解：
+
+- [tracing 框架](tracing.md) - 更强大的结构化日志
+- [env_logger 配置](https://docs.rs/env_logger) - 环境变量控制日志
+- [slog crate](https://docs.rs/slog) - 结构化日志库
+
+**选择建议**:
+- 想学习结构化日志 → 继续学习 [追踪 (Tracing)](tracing.md)
+- 想学习可见性 → 跳到 [可见性控制](visiable.md)
+
 ## 继续学习
 
 **前一章**: [指针与不安全代码](pointer.md)  

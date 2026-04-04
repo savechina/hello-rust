@@ -204,3 +204,35 @@
 ---
 
 **准备好了吗？让我们开始 [变量与表达式](expression.md) 的学习！** 🚀
+
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. Rust 是什么类型的语言？
+
+2. Rust 的主要优势是什么？
+
+3. 本教程的学习路径是什么？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. Rust 是系统级编程语言，注重内存安全和性能
+2. 内存安全无需 GC、零成本抽象、并发安全
+3. 基础入门 → 高级进阶 → 实战精选 → 算法练习
+
+**关键理解**: Rust 是一门独特的语言，结合了系统级性能和现代语言安全性。
+</details>
+
+## 延伸阅读
+
+完成基础入门后，你可能还想了解：
+
+- [Rust 官方 Book](https://doc.rust-lang.org/book/) - 最权威的学习资源
+- [Rust By Example](https://doc.rust-lang.org/rust-by-example/) - 代码驱动学习
+- [Rustlings 练习](https://github.com/rust-lang/rustlings) - 交互式练习
+
+**选择建议**:
+- 想开始学习 → 继续学习 [变量与表达式](expression.md)
+- 想快速上手 → 跳到 [快速开始](../getting-started.md)

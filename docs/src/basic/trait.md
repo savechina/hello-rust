@@ -299,6 +299,26 @@ trait UnObjectSafeTrait {
 - 想学习运行时多态 → 继续学习 [特征对象](trait-objects.md)
 - 想学习编译时多态 → 跳到 [泛型](generic.md)
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. trait 和接口的区别是什么？
+
+2. 如何为外部类型实现 trait？
+
+3. 默认方法实现的作用？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. Rust trait 更灵活，支持默认实现和关联类型
+2. 孤儿规则：trait 或类型至少有一个在当前 crate 中
+3. 提供默认行为，实现者可以选择覆盖
+
+**关键理解**: trait 是 Rust 多态的核心机制。
+</details>
+
 ## 继续学习
 
 **前一章**: [枚举](enums.md)  

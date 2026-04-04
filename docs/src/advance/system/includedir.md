@@ -394,6 +394,26 @@ lazy_static::lazy_static! {
 - 想学习系统信息 → 继续学习 [系统信息](sysinfo.md)
 - 想学习临时文件 → 跳到 [临时文件](tempfile.md)
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. `include_str!` 和 `include_bytes!` 的区别？
+
+2. 编译时嵌入的优缺点？
+
+3. `rust-embed` crate 的作用？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. `include_str!` 返回 `&str`，`include_bytes!` 返回 `&[u8]`
+2. 优点：无需运行时加载，缺点：增加二进制大小
+3. 更强大的嵌入，支持目录和 glob 模式
+
+**关键理解**: 编译时嵌入适合小型静态资源。
+</details>
+
 ## 继续学习
 
 **前一章**: [系统信息](sysinfo.md)  

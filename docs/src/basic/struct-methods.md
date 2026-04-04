@@ -376,6 +376,38 @@ impl Rectangle {
 
 ---
 
+## 知识检查
+
+**快速测验**（答案在下方）：
+
+1. 方法和函数有什么区别？
+
+2. `&self`、`&mut self`、`self` 的区别？
+
+3. 关联函数和实例方法的区别？
+
+<details>
+<summary>点击查看答案与解析</summary>
+
+1. 方法在 `impl` 块中定义，第一个参数是 `self`
+2. `&self` 借用，`&mut self` 可变借用，`self` 获取所有权
+3. 关联函数没有 `self` 参数（如 `new()`），实例方法有 `self`
+
+**关键理解**: 方法是附加到结构体上的函数，`self` 决定访问模式。
+</details>
+
+## 延伸阅读
+
+学习完结构体方法后，你可能还想了解：
+
+- [关联函数](https://doc.rust-lang.org/book/ch05-03-method-syntax.html#associated-functions) - new() 等工厂方法
+- [方法链](https://doc.rust-lang.org/book/ch05-03-method-syntax.html#multiple-impl-blocks) - Builder 模式
+- [Deref trait](https://doc.rust-lang.org/book/ch15-02-deref.html) - 智能指针方法调用
+
+**选择建议**:
+- 想学习枚举 → 继续学习 [枚举](enums.md)
+- 想学习特征 → 跳到 [特征](trait.md)
+
 ## 继续学习
 
 **前一章**: [结构体字段](struct-fields.md)  

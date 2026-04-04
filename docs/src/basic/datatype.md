@@ -197,13 +197,13 @@ let num: i32 = num_str.parse().unwrap();
 
 ### 错误 1: 整数溢出
 
-```rust
+```rust,ignore
 let x: u8 = 255;
 let y = x + 1;  // ❌ 编译错误：溢出
 ```
 
 **错误信息**:
-```
+```text
 error: this arithmetic operation will overflow
 ```
 
@@ -219,7 +219,7 @@ let y = x.checked_add(1).unwrap();
 
 ### 错误 2: 类型不匹配
 
-```rust
+```rust,ignore
 let x: i32 = 42;
 let y: f64 = x;  // ❌ 编译错误：类型不匹配
 ```
@@ -231,7 +231,7 @@ let y: f64 = x as f64;  // ✅ 显式转换
 
 ### 错误 3: 数组越界
 
-```rust
+```rust,ignore
 let array = [1, 2, 3];
 let x = array[5];  // ❌ 运行时 panic
 ```
@@ -381,7 +381,7 @@ let vec: Vec<i32> = vec![1, 2, 3];       // 可变长度
 
 ### BigDecimal 高精度计算
 
-```rust
+```rust,ignore
 use bigdecimal::BigDecimal;
 
 let a = BigDecimal::from(10);
@@ -393,7 +393,7 @@ println!("{}", result);  // 3.333...
 
 ### chrono 日期时间
 
-```rust
+```rust,ignore
 use chrono::{Utc, DateTime};
 
 let now: DateTime<Utc> = Utc::now();
@@ -517,7 +517,7 @@ D) char
 
 以下代码会编译通过吗？
 
-```rust
+```rust,ignore
 let mut names = Vec::new();
 names.push("Alice");
 names.push(42);

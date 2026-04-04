@@ -47,7 +47,7 @@ cargo add axum
 
 最简单的 Axum Web 服务器：
 
-```rust
+```rust,ignore
 use axum::{routing::get, Router};
 
 #[tokio::main]
@@ -67,6 +67,8 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 ```
+
+> 💡 **注意**：此代码需要服务端运行。请使用 `cargo run --bin axum_sample` 进行完整测试，并使用浏览器或 HTTP 客户端访问。
 
 **完整示例**: [axum_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/axum_sample.rs)
 
@@ -181,7 +183,7 @@ async fn create_user(
 
 **实现优雅关闭**：
 
-```rust
+```rust,ignore
 use tokio::signal;
 
 async fn shutdown_signal() {
@@ -218,11 +220,13 @@ axum::serve(listener, app)
     .unwrap();
 ```
 
+> 💡 **注意**：此代码需要服务端运行。请使用完整的服务器程序进行测试。
+
 ### 完整示例
 
 **多路由应用**：
 
-```rust
+```rust,ignore
 use axum::{
     routing::{get, post},
     Json, Router,
@@ -275,6 +279,8 @@ async fn get_user(Path(id): Path<u32>) -> Json<User> {
     })
 }
 ```
+
+> 💡 **注意**：此代码需要服务端运行。请使用 `cargo run` 启动服务器，并使用 HTTP 客户端（如 curl 或浏览器）访问各路由进行测试。
 
 ---
 
@@ -353,7 +359,7 @@ async fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 use axum::{routing::get, Router};
 
 #[tokio::main]
@@ -368,6 +374,9 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 ```
+
+> 💡 **注意**：此代码需要服务端运行。请使用 `cargo run` 启动服务器，并使用 HTTP 客户端访问进行测试。
+
 </details>
 
 ### 练习 2: 实现用户 API

@@ -46,7 +46,7 @@ cargo add hyper --features full
 
 最简单的 Hyper 服务器：
 
-```rust
+```rust,ignore
 use hyper::body::Incoming;
 use hyper::server::conn::http1;
 use hyper::service::service_fn;
@@ -79,6 +79,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 }
 ```
+
+> 💡 **注意**：此代码需要服务端运行。请使用 `cargo run --bin hyper_sample` 进行完整测试，并使用 HTTP 客户端访问。
 
 **完整示例**: [hyper_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/hyper_sample.rs)
 
@@ -200,7 +202,7 @@ let response = Response::new(body);
 
 ### 完整服务器示例
 
-```rust
+```rust,ignore
 use hyper::body::Incoming;
 use hyper::server::conn::http1;
 use hyper::service::service_fn;
@@ -244,6 +246,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 }
 ```
+
+> 💡 **注意**：此代码需要服务端运行。请使用 `cargo run` 启动服务器，并使用 HTTP 客户端访问进行测试。
 
 ---
 
@@ -319,7 +323,7 @@ async fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
 
 loop {
@@ -333,6 +337,9 @@ loop {
     });
 }
 ```
+
+> 💡 **注意**：此代码需要服务端运行。请使用 `cargo run` 启动服务器，并使用 HTTP 客户端访问进行测试。
+
 </details>
 
 ### 练习 2: 实现路由

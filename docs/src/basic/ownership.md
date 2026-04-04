@@ -66,7 +66,7 @@ println!("{}", s2); // ✅ 可以工作
 
 ### 所有权内存模型
 
-```
+```text
 栈 (Stack)                    堆 (Heap)
 +---------------+          +----------------+
 | s1 (pointer)  |--------->| "hello"        |
@@ -92,7 +92,7 @@ let s2 = s1;  // 移动后:
 
 ### 借用 vs 移动
 
-```
+```text
 移动 (Move):
 s1 ──→ [堆内存]     s2 = s1     s1 ❌  s2 ──→ [堆内存]
 
@@ -142,7 +142,7 @@ let s2 = s1;  // s1 的所有权移动给 s2
 
 **❌ 错误代码**：
 
-```rust
+```rust,ignore
 let s1 = String::from("hello");
 let s2 = s1;
 println!("{}", s1); // ❌ 编译错误!
@@ -151,7 +151,7 @@ println!("{}", s1); // ❌ 编译错误!
 **🤔 为什么这行不编译？**
 
 编译器会告诉你：
-```
+```text
 error[E0382]: borrow of moved value: `s1`
   |
 2 |     let s2 = s1;
@@ -184,7 +184,7 @@ println!("{}", s2); // ✅
 
 ### 错误 2: 函数参数移动
 
-```rust
+```rust,ignore
 fn takes_ownership(s: String) {
     println!("Got: {}", s);
 } // s 离开作用域，被丢弃
@@ -223,7 +223,7 @@ println!("{}", my_string); // ❌ 编译错误！my_string 已经移动给函数
 
 ### 错误 3: 试图返回局部变量的引用
 
-```rust
+```rust,ignore
 fn returns_local_ref() -> &String {
     let s = String::from("hello");
     &s // ❌ 编译错误！s 会在函数结束时被清理
@@ -231,7 +231,7 @@ fn returns_local_ref() -> &String {
 ```
 
 **编译器输出**:
-```
+```text
 error[E0515]: cannot return reference to local variable `s`
  --> src/main.rs:4:5
   |
@@ -276,7 +276,7 @@ error[E0515]: cannot return reference to local variable `s`
 
 > 💡 **编译器是你的老师**：尝试运行这段代码，仔细阅读编译器错误信息。它会告诉你移动发生在哪里！
 
-```rust
+```rust,ignore
 fn main() {
     let x = String::from("hello");
     let y = x;
@@ -311,7 +311,7 @@ println!("{}", x); // ✅ 三者都可用
 
 > 💡 **提示**：想想"借用"和"所有权"的区别。如果你只需要读取，不需要拥有，应该用什么？
 
-```rust
+```rust,ignore
 fn print_and_??? (s: ???) {
     println!("Length: {}", s.len());
 }
@@ -349,7 +349,7 @@ fn main() {
 
 > 💡 **挑战**：先不看答案，自己推理每个案例。思考"这个类型实现了 Copy trait 吗？"
 
-```rust
+```rust,ignore
 // A
 let a = 5;
 let b = a;

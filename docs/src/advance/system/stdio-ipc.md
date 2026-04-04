@@ -55,7 +55,7 @@ use std::io::{self, BufRead, BufReader, Write};
 
 **子进程** (`stdio_child.rs`):
 
-```rust
+```rust,ignore
 use std::io::{self, BufRead, Write};
 
 fn main() -> io::Result<()> {
@@ -78,9 +78,11 @@ fn main() -> io::Result<()> {
 }
 ```
 
+> 💡 **注意**：此代码需要父进程配合运行。请使用 `cargo run --bin stdio_parent` 进行完整测试。
+
 **父进程** (`stdio_parent.rs`):
 
-```rust
+```rust,ignore
 use std::io::{self, BufRead, BufReader, Write};
 use std::process::{Command, Stdio};
 
@@ -120,6 +122,8 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 ```
+
+> 💡 **注意**：此代码需要子进程配合运行。请使用 `cargo run --bin stdio_parent` 进行完整测试。
 
 **运行方式**:
 
@@ -171,7 +175,7 @@ cargo run --bin stdio_parent
 
 ### 父进程实现详解
 
-```rust
+```rust,ignore
 use std::io::{self, BufRead, BufReader, Write};
 use std::process::{Command, Stdio};
 
@@ -212,9 +216,11 @@ fn main() -> io::Result<()> {
 }
 ```
 
+> 💡 **注意**：此代码需要子进程配合运行。请使用 `cargo run --bin stdio_parent` 进行完整测试。
+
 ### 子进程实现详解
 
-```rust
+```rust,ignore
 use std::io::{self, BufRead, Write};
 
 fn main() -> io::Result<()> {
@@ -240,6 +246,8 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 ```
+
+> 💡 **注意**：此代码需要父进程配合运行。请使用 `cargo run --bin stdio_child` 进行完整测试。
 
 ### Stdio IPC vs UDS 对比
 

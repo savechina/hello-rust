@@ -76,7 +76,7 @@ let apples = 5;  // 将名称 "apples" 绑定到值 5
 
 Rust 默认让变量不可变：
 
-```rust
+```rust,ignore
 let x = 5;
 x = 6; // ❌ 编译错误！
 ```
@@ -147,7 +147,7 @@ println!("外部作用域的 x: {}", x);  // 输出：6
 
 **遮蔽 vs 可变**：
 
-```rust
+```rust,ignore
 // 使用 mut
 let mut spaces = "   ";
 spaces = spaces.len(); // ❌ 编译错误！类型不同
@@ -168,13 +168,13 @@ let spaces = spaces.len(); // ✅ 可以改变类型
 
 ### 错误 1: 试图修改不可变变量
 
-```rust
+```rust,ignore
 let x = 5;
 x = 10; // ❌ 编译错误!
 ```
 
 **编译器输出**:
-```
+```texttext
 error[E0384]: cannot assign twice to immutable variable `x`
  --> src/main.rs:3:5
   |
@@ -202,12 +202,12 @@ error[E0384]: cannot assign twice to immutable variable `x`
 
 ### 错误 2: 常量缺少类型注解
 
-```rust
+```rust,ignore
 const MAX_SIZE = 100; // ❌ 编译错误!
 ```
 
 **编译器输出**:
-```
+```texttext
 error[E0284]: type annotations needed
  --> src/main.rs:1:7
   |
@@ -233,7 +233,7 @@ fn main() {
 ```
 
 **编译器输出**:
-```
+```text
 warning: unused variable: `unused`
  --> src/main.rs:2:9
   |
@@ -272,7 +272,7 @@ fn main() {
 <summary>点击查看答案</summary>
 
 **输出**:
-```
+```text
 内部：12
 外部：6
 ```
@@ -292,7 +292,7 @@ fn main() {
 
 下面的代码有编译错误，请修复：
 
-```rust
+```rust,ignore
 fn main() {
     let counter = 0;
     counter = counter + 1;  // ❌ 错误
@@ -359,7 +359,7 @@ fn main() {
 - **可以遮蔽时优先遮蔽** - 转换类型或复用名称
 
 示例：
-```rust
+```rust,ignore
 // ✅ 好的实践
 let config = load_config();  // 不需要修改
 let mut total = 0;  // 需要累加
@@ -438,7 +438,7 @@ println!("y = {}", y); // 输出：11
 
 在 Rust 中，**大多数结构都是表达式**：
 
-```rust
+```rust,ignore
 // if 是表达式
 let max = if a > b { a } else { b };
 
@@ -551,7 +551,7 @@ int calculate(int x) {
 3. **并发更安全** - 不可变数据可以在线程间安全共享
 
 **试试这个**：
-```rust
+```rust,ignore
 // 猜猜哪行会报错？
 let x = 5;
 x = 6;  // ❌ 编译错误！
@@ -597,7 +597,7 @@ fn main() {
 
 **练习**：下面哪个场景应该用 `mut`？
 
-```rust
+```rust,ignore
 // A. 服务器端口配置
 let port = 8080;
 
@@ -642,7 +642,7 @@ cart_items.push("商品");  // ✅
 
 以下代码的输出是什么？
 
-```rust
+```rust,ignore
 let x = 5;
 let y = x + 3;
 println!("{}", y);
@@ -665,7 +665,7 @@ D) 运行时错误
 
 这段代码有什么问题？
 
-```rust
+```rust,ignore
 let s1 = String::from("hello");
 let s2 = s1;
 println!("{}", s1);
@@ -683,7 +683,7 @@ println!("{}", s1);
 
 以下哪个表达式会在编译时被优化？
 
-```rust
+```rust,ignore
 const X: i32 = 2 + 3;
 let y = 4 * 5;
 static Z: i32 = 6 + 7;

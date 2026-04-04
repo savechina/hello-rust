@@ -59,7 +59,7 @@ cargo add anyhow
 
 **服务端** (`grpc_hello_server.rs`):
 
-```rust
+```rust,ignore
 use awesome::services::tonic_hello_server;
 use clap::Parser;
 
@@ -79,9 +79,11 @@ fn main() {
 }
 ```
 
+> 💡 **注意**：此代码需要服务端和客户端配合运行。请使用 `cargo run --bin grpc_hello_server` 进行完整测试。
+
 **客户端** (`grpc_hello_client.rs`):
 
-```rust
+```rust,ignore
 use awesome::services::tonic_hello_client;
 use clap::Parser;
 
@@ -98,6 +100,8 @@ fn main() {
     tonic_hello_client::hello_client(opts.url);
 }
 ```
+
+> 💡 **注意**：此代码需要服务端和客户端配合运行。请使用 `cargo run --bin grpc_hello_client` 进行完整测试。
 
 **运行方式**:
 
@@ -193,7 +197,7 @@ message HelloReply {
 
 ### tonic 服务端实现
 
-```rust
+```rust,ignore
 use tonic::{transport::Server, Request, Response, Status};
 use tonic::codegen::tokio_stream;
 
@@ -229,9 +233,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
+> 💡 **注意**：此代码需要服务端和客户端配合运行。请使用 `cargo run --bin greeter_server` 进行完整测试。
+
 ### tonic 客户端实现
 
-```rust
+```rust,ignore
 use tonic::transport::Channel;
 
 #[tokio::main]
@@ -249,6 +255,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 ```
+
+> 💡 **注意**：此代码需要服务端配合运行。请先启动服务器，再运行客户端进行完整测试。
 
 ### 生产级 gRPC 服务架构
 

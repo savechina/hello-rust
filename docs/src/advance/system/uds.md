@@ -52,7 +52,7 @@ use std::os::unix::net::{UnixListener, UnixStream};
 
 最简单的 UDS 服务端：
 
-```rust
+```rust,ignore
 use std::fs;
 use std::os::unix::net::UnixListener;
 use std::io;
@@ -81,6 +81,8 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 ```
+
+> 💡 **注意**：此代码需要服务端和客户端配合运行。请使用 `cargo run --bin uds_server` 和 `cargo run --bin uds_client` 进行完整测试。
 
 完整示例：
 - [uds_server.rs](https://github.com/savechina/hello-rust/blob/main/src/bin/uds_server.rs)
@@ -134,7 +136,7 @@ fn main() -> io::Result<()> {
 
 ### UDS 服务端实现
 
-```rust
+```rust,ignore
 use std::fs;
 use std::io::{self, Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -193,9 +195,11 @@ fn main() -> io::Result<()> {
 }
 ```
 
+> 💡 **注意**：此代码需要服务端配合运行。请使用 `cargo run --bin uds_server` 进行完整测试。
+
 ### UDS 客户端实现
 
-```rust
+```rust,ignore
 use std::io::{self, Read, Write};
 use std::os::unix::net::UnixStream;
 
@@ -228,9 +232,11 @@ fn main() -> io::Result<()> {
 }
 ```
 
+> 💡 **注意**：此代码需要服务端配合运行。请使用 `cargo run --bin uds_client` 进行完整测试。
+
 ### 父进程编排
 
-```rust
+```rust,ignore
 use std::fs;
 use std::io;
 use std::process::{Command, Stdio};
@@ -266,6 +272,8 @@ fn main() -> io::Result<()> {
     Ok(())
 }
 ```
+
+> 💡 **注意**：此代码需要服务端和客户端配合运行。请使用 `cargo run --bin uds_parent` 进行完整测试。
 
 ### UDS vs TCP 对比
 

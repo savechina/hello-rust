@@ -47,7 +47,7 @@ cargo add futures
 
 最简单的 Ollama 使用：
 
-```rust
+```rust,ignore
 use ollama_rs::{
     generation::completion::request::GenerationRequest,
     Ollama,
@@ -75,6 +75,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 ```
+
+> 💡 **注意**：此代码需要 Ollama 服务运行。请先安装并启动 Ollama (`ollama serve`)，然后使用 `cargo run --bin ollama_sample` 进行完整测试。
 
 **完整示例**: [ollama_sample.rs](https://github.com/savechina/hello-rust/blob/main/src/advance/ollama_sample.rs)
 
@@ -116,7 +118,7 @@ let ollama = Ollama::new(
 
 **使用 GenerationRequest**：
 
-```rust
+```rust,ignore
 use ollama_rs::generation::completion::request::GenerationRequest;
 
 let model = "llama3.2:latest".to_string();
@@ -126,11 +128,13 @@ let request = GenerationRequest::new(model, prompt);
 let response = ollama.generate(request).await?;
 ```
 
+> 💡 **注意**：此代码需要 Ollama 服务运行并已下载相应模型。请先使用 `ollama pull llama3.2:latest` 下载模型。
+
 ### 处理响应
 
 **解析生成结果**：
 
-```rust
+```rust,ignore
 let res = ollama.generate(request).await?;
 
 if let Ok(res) = res {
@@ -140,11 +144,13 @@ if let Ok(res) = res {
 }
 ```
 
+> 💡 **注意**：此代码需要 Ollama 服务运行。请确保 Ollama 服务已启动。
+
 ### 聊天机器人
 
 **实现简单聊天**：
 
-```rust
+```rust,ignore
 async fn chatbot() -> Result<(), Box<dyn std::error::Error>> {
     let ollama = Ollama::default();
     let model = "llama3.2:latest".to_string();
@@ -170,6 +176,8 @@ async fn chatbot() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 ```
+
+> 💡 **注意**：此代码需要 Ollama 服务运行。请先启动 Ollama 服务并下载模型。
 
 ---
 
@@ -275,7 +283,7 @@ async fn main() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 let model = "llama3.2:latest".to_string();
 let prompt = "什么是 Rust？".to_string();
 
@@ -285,6 +293,9 @@ let res = ollama.generate(
 
 println!("{}", res.response);
 ```
+
+> 💡 **注意**：此代码需要 Ollama 服务运行并已下载相应模型。
+
 </details>
 
 ### 练习 3: 创建聊天机器人
@@ -304,7 +315,7 @@ async fn chatbot() {
 <details>
 <summary>点击查看答案</summary>
 
-```rust
+```rust,ignore
 loop {
     print!("你：");
     std::io::stdout().flush().unwrap();
@@ -323,6 +334,9 @@ loop {
     println!("AI: {}", response.response);
 }
 ```
+
+> 💡 **注意**：此代码需要 Ollama 服务运行。请先启动 Ollama 服务并下载模型。
+
 </details>
 
 ---
@@ -358,7 +372,7 @@ loop {
 
 ### 流式响应
 
-```rust
+```rust,ignore
 use ollama_rs::generation::completion::request::GenerationRequest;
 
 let mut stream = ollama.generate_stream(
@@ -371,9 +385,11 @@ while let Some(chunk) = stream.next().await {
 }
 ```
 
+> 💡 **注意**：此代码需要 Ollama 服务运行。请先启动 Ollama 服务。
+
 ### 多轮对话
 
-```rust
+```rust,ignore
 let mut context = Vec::new();
 
 // 第一轮
@@ -389,6 +405,8 @@ let response = ollama.generate(
         .with_context(context)
 ).await?;
 ```
+
+> 💡 **注意**：此代码需要 Ollama 服务运行。请先启动 Ollama 服务。
 
 ### 自定义参数
 

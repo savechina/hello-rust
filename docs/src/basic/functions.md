@@ -83,7 +83,7 @@ fn add(a: i32, b: i32) -> i32 {
 
 ### 1. 函数定义语法
 
-```rust
+```rust,ignore
 fn function_name(parameter1: Type1, parameter2: Type2) -> ReturnType {
     // 函数体
     expression  // 返回值（无分号）
@@ -203,7 +203,7 @@ fn unused_param(_x: i32) {
 
 ### 错误 1: 忘记返回类型
 
-```rust
+```rust,ignore
 // ❌ 错误：缺少返回类型
 fn add(a: i32, b: i32) {
     a + b
@@ -216,7 +216,7 @@ fn add(a: i32, b: i32) -> i32 {
 ```
 
 **编译器输出**:
-```
+```text
 error[E0308]: mismatched types
   --> src/main.rs:4:5
    |
@@ -229,7 +229,7 @@ error[E0308]: mismatched types
 
 ### 错误 2: 返回值加分号
 
-```rust
+```rust,ignore
 // ❌ 错误：返回值有分号
 fn add(a: i32, b: i32) -> i32 {
     a + b;  // 分号使这成为语句
@@ -242,7 +242,7 @@ fn add(a: i32, b: i32) -> i32 {
 ```
 
 **编译器输出**:
-```
+```text
 error[E0308]: mismatched types
  --> src/main.rs:3:5
   |
@@ -256,7 +256,7 @@ error[E0308]: mismatched types
 
 ### 错误 3: 所有权转移后使用
 
-```rust
+```rust,ignore
 // ❌ 错误：所有权转移后使用变量
 fn main() {
     let s = String::from("hello");
@@ -282,7 +282,7 @@ fn print_string(s: &String) {
 
 ### 错误 4: 参数类型不匹配
 
-```rust
+```rust,ignore
 // ❌ 错误：类型不匹配
 fn add(a: i32, b: i32) -> i32 {
     a + b
@@ -306,7 +306,7 @@ fn main() {
 
 定义一个函数 `greet`，接受名字参数并打印问候语：
 
-```rust
+```rust,ignore
 // TODO: 定义 greet 函数
 
 fn main() {
@@ -336,7 +336,7 @@ fn main() {
 
 定义一个函数计算圆的面积：
 
-```rust
+```rust,ignore
 // TODO: 定义 circle_area 函数，接受半径，返回面积
 
 fn main() {
@@ -366,7 +366,7 @@ fn main() {
 
 定义一个函数同时返回商和余数：
 
-```rust
+```rust,ignore
 // TODO: 定义 div_mod 函数，返回 (商，余数)
 
 fn main() {
@@ -396,7 +396,7 @@ fn main() {
 
 完成以下代码，使 `s` 在调用后仍可用：
 
-```rust
+```rust,ignore
 fn main() {
     let mut s = String::from("hello");
     
@@ -504,7 +504,7 @@ fn main() {
 
 函数可以接受泛型参数：
 
-```rust
+```rust,ignore
 fn largest<T: PartialOrd>(list: &[T]) -> &T {
     let mut largest = &list[0];
     for item in list {
@@ -578,7 +578,7 @@ println!("{}", add_x(3));  // 打印 8
 **快速测验**（答案在下方）：
 
 1. 这段代码能编译通过吗？为什么？
-```rust
+```rust,ignore
 fn add(a: i32, b: i32) -> i32 {
     a + b;
 }

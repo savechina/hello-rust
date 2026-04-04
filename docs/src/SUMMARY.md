@@ -27,6 +27,7 @@
     - [日志记录](./basic/logger.md)
     - [追踪 (Tracing)](./basic/tracing.md)
     - [可见性控制](./basic/visiable.md)
+    - [阶段复习：基础部分](./basic/review-basic.md)
 
 # 进阶部分 (Advance)
 
@@ -72,6 +73,7 @@
     - [错误处理](./advance/tools/error-handling.md) - 错误处理最佳实践
     - [对象存储](./advance/tools/objectstore.md) - 对象存储接口
     - [服务框架](./advance/tools/services.md) - 服务框架基础
+    - [阶段复习：高级进阶](./advance/review-advance.md)
 
 # 实战精选 (Awesome)
 

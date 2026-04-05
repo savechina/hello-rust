@@ -327,6 +327,10 @@ Specification Driven Development (SDD) workflows MUST follow the **8-Phase Devel
 - **Manual Control**: User decides when to create branches and merge
 
 ### Commit Conventions
+ 
+ **DO NOT COMMIT and PUSH**
+ **DO NOT COMMIT and PUSH**
+ **DO NOT COMMIT and PUSH**
 
 ```
 <type>(<scope>): <description>
@@ -342,8 +346,8 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`
 ```bash
 # User manually reviews and commits
 git add <files>
-git commit -m "feat(docs): Update constitution to v1.1.1"
-git push origin main
+# git commit -m "feat(docs): Update constitution to v1.1.1"
+# git push origin main
 ```
 
 **Prohibited:**

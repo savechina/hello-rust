@@ -13,3 +13,4 @@ data/test.db
 
 .continue
 docs/target
+examples/todo/target

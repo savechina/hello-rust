@@ -379,6 +379,91 @@ let vec: Vec<i32> = vec![1, 2, 3];       // 可变长度
 
 ## 知识扩展
 
+### 日期与时间
+
+Rust 标准库提供基础时间类型，第三方库 `chrono` 提供完整的日期时间处理：
+
+**1. 标准库时间类型**
+
+```rust
+use std::time::{Instant, Duration, SystemTime};
+
+// Instant - 用于测量时间间隔（如性能测试）
+let start = Instant::now();
+// ... 执行一些代码 ...
+let elapsed = start.elapsed();
+println!("耗时：{:?}", elapsed);
+
+// Duration - 时间间隔
+let one_second = Duration::from_secs(1);
+let one_millisecond = Duration::from_millis(1);
+
+// SystemTime - 系统时钟（可获取当前时间）
+let now = SystemTime::now();
+let since_epoch = now.duration_since(SystemTime::UNIX_EPOCH).unwrap();
+println!("Unix 时间戳：{} 秒", since_epoch.as_secs());
+```
+
+**2. chrono 库日期时间**
+
+```rust,ignore
+use chrono::{Utc, Local, DateTime, NaiveDateTime};
+
+// 获取当前 UTC 时间
+let now_utc: DateTime<Utc> = Utc::now();
+println!("UTC 时间：{}", now_utc);
+
+// 获取本地时间
+let now_local: DateTime<Local> = Local::now();
+println!("本地时间：{}", now_local);
+
+// 创建指定时间
+let specific = Utc.with_ymd_and_hms(2024, 10, 26, 12, 30, 0).unwrap();
+println!("指定时间：{}", specific);
+
+// Unix 时间戳转换
+let timestamp = 1700000000;
+let datetime = DateTime::from_timestamp(timestamp, 0).unwrap();
+println!("时间戳 {} 对应：{}", timestamp, datetime);
+
+// 格式化输出
+println!("{}", now_utc.format("%Y-%m-%d %H:%M:%S"));
+println!("{}", now_utc.format("%Y年%m月%d日"));
+
+// 解析字符串
+let parsed = "2024-10-26 12:30:00"
+    .parse::<NaiveDateTime>()
+    .unwrap();
+println!("解析结果：{}", parsed);
+```
+
+**3. 时间类型对比**
+
+| 类型 | 用途 | 是否含时区 | 使用场景 |
+|------|------|-----------|---------|
+| `Instant` | 测量时间间隔 | 否 | 性能测试、超时检测 |
+| `SystemTime` | 系统时钟 | 否 | 文件时间戳、日志时间 |
+| `DateTime<Utc>` | UTC 时间 | 是 (UTC) | 服务器时间、数据库存储 |
+| `DateTime<Local>` | 本地时间 | 是 (本地) | 用户界面显示 |
+| `NaiveDateTime` | 无时区时间 | 否 | 内部计算、解析中间值 |
+
+**4. Unix 时间戳**
+
+Unix 时间戳是从 1970 年 1 月 1 日 00:00:00 UTC 开始经过的秒数：
+
+```rust,ignore
+use chrono::{DateTime, Utc};
+
+// DateTime → Unix 时间戳
+let now = Utc::now();
+let timestamp = now.timestamp();
+println!("Unix 时间戳：{}", timestamp);
+
+// Unix 时间戳 → DateTime
+let datetime = DateTime::from_timestamp(timestamp, 0).unwrap();
+println!("对应时间：{}", datetime);
+```
+
 ### BigDecimal 高精度计算
 
 ```rust,ignore

@@ -33,6 +33,7 @@
 
 <!-- 异步编程 -->
 - [高级进阶](./advance/advance-overview.md)
+  - [智能指针](./advance/smart-pointers.md) - Box, Rc, RefCell, Arc
   - [异步编程](./advance/async/async.md) - Tokio 运行时和 async/await 语法
     - [Tokio 异步运行时](./advance/async/tokio.md) - Tokio 核心组件和任务调度
     - [Futures 异步编程](./advance/async/futures.md) - Future trait 和组合子
@@ -73,6 +74,8 @@
   - [宏编程]() - 声明宏与过程宏
     - [派生宏](./advance/testing/getset.md) - Getters/Setters 派生
     - [声明宏和过程宏](./advance/testing/macros.md) - 宏编程基础
+  - [高级特征](./advance/advanced-traits.md) - 关联类型、完全限定语法
+  - [原子类型](./advance/atomic-types.md) - 无锁并发编程
   - [错误处理](./advance/error-handling/error-handling.md) - 错误处理最佳实践
   - [其他工具]() - 对象存储与服务框架
     - [类型别名](./advance/testing/typealias.md) - 类型别名简化

@@ -1739,10 +1739,10 @@ fn main() {
 
 所有代码片段均可直接复制使用。更多完整示例请参考:
 
-- [文件操作示例](https://github.com/savechina/hello-rust/blob/main/src/advance/system/directory.md)
-- [异步编程示例](https://github.com/savechina/hello-rust/blob/main/src/advance/async/tokio.md)
-- [网络编程示例](https://github.com/savechina/hello-rust/blob/main/src/advance/web/axum.md)
-- [序列化示例](https://github.com/savechina/hello-rust/blob/main/src/advance/data/json.md)
+- [文件操作示例](../advance/system/directory.md)
+- [异步编程示例](../advance/async/tokio.md)
+- [Web 开发示例](../advance/web/axum.md)
+- [序列化示例](../advance/data/json.md)
 
 ---
 

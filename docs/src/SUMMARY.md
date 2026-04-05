@@ -34,6 +34,9 @@
 <!-- 异步编程 -->
 - [高级进阶](./advance/advance-overview.md)
   - [智能指针](./advance/smart-pointers.md) - Box, Rc, RefCell, Arc
+  - [错误处理](./advance/error-handling/error-handling.md) - 错误处理最佳实践
+  - [高级特征](./advance/advanced-traits.md) - 关联类型、完全限定语法
+  - [迭代器](./advance/iterators.md) - Map, Filter, Collect 等
   - [异步编程](./advance/async/async.md) - Tokio 运行时和 async/await 语法
     - [Tokio 异步运行时](./advance/async/tokio.md) - Tokio 核心组件和任务调度
     - [Futures 异步编程](./advance/async/futures.md) - Future trait 和组合子
@@ -67,6 +70,7 @@
     - [Stdio IPC](./advance/system/stdio-ipc.md) - 标准输入输出进程间通信
     - [CLI 开发](./advance/system/cli.md) - CLI 开发最佳实践
     - [Rust 消除的问题](./advance/system/rust-eliminates.md) - Rust 编译时安全优势
+    - [原子类型](./advance/atomic-types.md) - 无锁并发编程
   - [测试]() - 单元测试与集成测试
     - [测试基础](./advance/testing/test.md) - 测试基础
     - [模拟测试](./advance/testing/mock.md) - Mock 模拟测试
@@ -74,9 +78,6 @@
   - [宏编程]() - 声明宏与过程宏
     - [派生宏](./advance/testing/getset.md) - Getters/Setters 派生
     - [声明宏和过程宏](./advance/testing/macros.md) - 宏编程基础
-  - [高级特征](./advance/advanced-traits.md) - 关联类型、完全限定语法
-  - [原子类型](./advance/atomic-types.md) - 无锁并发编程
-  - [错误处理](./advance/error-handling/error-handling.md) - 错误处理最佳实践
   - [其他工具]() - 对象存储与服务框架
     - [类型别名](./advance/testing/typealias.md) - 类型别名简化
     - [对象存储](./advance/tools/objectstore.md) - 对象存储接口

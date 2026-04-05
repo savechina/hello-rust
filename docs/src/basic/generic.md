@@ -64,11 +64,11 @@ fn main() {
 
 | 概念 | Python | Java | C++ | Rust | 关键差异 |
 |---|---|---|---|---|---|
-| 泛型定义 | 无需声明 | List\<String\> | template\<typename T\> | fn foo\<T\>(x: T) | Rust 用 \<T\> 声明 |
+| 泛型定义 | 无需声明 | List<String> | template<typename T> | fn foo<T>(x: T) | Rust 用 <T> 声明 |
 | 类型检查 | 运行时检查 | 编译时检查 | 编译时检查 | 编译时检查 | Rust 和 Java/C++ 类似 |
 | 泛型实现 | 无泛型 | 类型擦除 | 编译时展开 | 单态化 | Rust 和 C++ 都是零成本 |
 | 约束机制 | 无 | T extends Base | 无强制约束 | T: Trait | Rust 用 trait 约束 |
-| 多类型参数 | 不需要 | Map\<K, V\> | template\<T, U\> | struct Pair\<T, U\> | 语法相似 |
+| 多类型参数 | 不需要 | Map<K, V> | template<T, U> | struct Pair<T, U> | 语法相似 |
 
 **核心差异**: Python 无泛型概念（动态类型），Java 用类型擦除（运行时有开销），Rust 和 C++ 用单态化（编译时零成本）。
 

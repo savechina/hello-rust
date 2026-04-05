@@ -250,7 +250,7 @@ println!("Result: {}", counter.load(Ordering::Relaxed));
 
 ## 继续学习
 
-- 下一步：[并发编程进阶](concurrency-advanced.md)
+- 下一步：[系统编程](../advance/system/directory.md)
 - 回顾：[线程与并发](../basic/threads.md)
 
 ---

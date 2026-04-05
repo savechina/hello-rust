@@ -401,7 +401,7 @@ pub mod inner {  // 模块也需要 pub
 ## 继续学习
 
 - 下一步：[高级进阶](../advance/advance-overview.md)
-- 挑战：[项目实战](../projects/README.md)
+- 挑战：[项目实战](../projects/)
 - 回顾：[基础入门](basic-overview.md)
 
 > 💡 **记住**：复习是学习的重要部分。不要急于前进，确保每个概念都理解了！

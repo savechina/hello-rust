@@ -387,7 +387,7 @@ struct User {
 ## 继续学习
 
 - 下一步：[精选实战](../awesome/awesome-overview.md)
-- 挑战：[项目实战](../projects/README.md)
+- 挑战：[项目实战](../projects/)
 - 回顾：[高级进阶概览](advance-overview.md)
 
 > 💡 **记住**：复习是学习的重要部分。不要急于前进，确保每个概念都理解了！

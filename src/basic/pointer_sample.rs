@@ -18,7 +18,7 @@ fn get_str_at_location(pointer: usize, length: usize) -> &'static str {
 }
 
 /// 获取字符串的内存地址和长度
-fn get_str_raw_sample() {
+pub(crate) fn get_str_raw_sample() {
     // 获取字符串的内存地址和长度
     let (pointer, length) = get_memory_location();
 
@@ -34,7 +34,7 @@ fn get_str_raw_sample() {
 }
 
 /// 原始指针示例
-fn raw_pointer_sample() {
+pub(crate) fn raw_pointer_sample() {
     // explicit cast
     let i: u32 = 1;
     let p_imm: *const u32 = &i as *const u32;

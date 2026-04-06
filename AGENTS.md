@@ -133,3 +133,6 @@ cd docs && mdbook serve
 - mdBook with 3 plugins: admonish, alerts, pagetoc
 - Deployed to `savechina.github.io/hello-rust/`
 - Pre-built HTML in `docs/book/` is committed (unusual — typically gitignored)
+
+## Recent Changes
+- 002-interactive-examples: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]

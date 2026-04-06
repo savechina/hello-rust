@@ -59,3 +59,8 @@ pub fn shave_all(yaks: usize) -> usize {
 
     yaks_shaved
 }
+
+/// CLI entry point - runs tracing demo with fixed yak count
+pub(crate) fn tracing_demo() {
+    let _ = shave_all(4);
+}

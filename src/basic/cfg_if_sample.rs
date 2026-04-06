@@ -18,7 +18,7 @@ cfg_if::cfg_if! {
 }
 
 ///cfg_if Sample Example
-fn cfg_if_sample() {
+pub(crate) fn cfg_if_sample() {
     // Example 1: Platform specific code (OS detection)
 
     println!("--- Platform Specific Example ---");

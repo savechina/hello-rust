@@ -18,7 +18,7 @@ impl Printable for Person {
         println!("Name: {}, Age: {}", self.name, self.age);
     }
 }
-fn traits_simple_sample() {
+pub(crate) fn traits_simple_sample() {
     let person = Person {
         name: "Alice".to_string(),
         age: 30,

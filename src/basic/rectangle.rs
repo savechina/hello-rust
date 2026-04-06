@@ -165,3 +165,28 @@ impl<'a> RectangleBorrowMut<'a> {
         RectangleBorrowMut { width, height }
     }
 }
+
+/// Demo entry point for CLI registration
+pub(crate) fn rectangle_example() {
+    let rect = Rectangle::new(30, 50);
+    println!(
+        "Rectangle: {}x{}, area={}",
+        rect.width,
+        rect.height,
+        rect.area()
+    );
+
+    let mut builder = RectangleBuilder::new();
+    let rect2 = builder.width(10).height(20).build();
+    println!(
+        "Builder rectangle: {}x{}, area={}",
+        rect2.width,
+        rect2.height,
+        rect2.area()
+    );
+
+    let w1 = 5;
+    let h1 = 10;
+    let rect_ref = RectangleRef::new(&w1, &h1);
+    println!("Ref rectangle: {}x{}", rect_ref.width, rect_ref.height);
+}

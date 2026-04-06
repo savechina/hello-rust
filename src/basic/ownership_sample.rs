@@ -84,7 +84,7 @@ fn create_shared_data() -> Arc<RefCell<i32>> {
     Arc::new(data) // Arc::new 会将 RefCell 移动到堆上，并返回 Arc 的所有权
 } // data 在这里不会被 drop，因为它内部的 RefCell 已经被移到堆上并被 Arc 拥有
 
-fn ownership_variable_return_sample() {
+pub(crate) fn ownership_variable_return_sample() {
     let value = 23;
     let result = get_ref_from_external_source(&value); // 这个函数会返回一个 Box<i32>
     println!("{}", result);
@@ -100,7 +100,7 @@ fn ownership_variable_return_sample() {
     // 这里的 boxed_value 会被 drop，因为它的所有权已经被移出函数
 }
 
-fn ownership_shared_sample() {
+pub(crate) fn ownership_shared_sample() {
     let shared = create_shared_data(); // shared 现在拥有 Arc 的所有权
     println!("{}", shared.borrow());
 }

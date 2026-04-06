@@ -2792,6 +2792,7 @@ dependencies = [
  "hyper",
  "hyper-util",
  "include_dir",
+ "inventory",
  "leetcode",
  "log",
  "macros",

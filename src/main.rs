@@ -1,63 +1,136 @@
+//! Hello Rust — Interactive Learning CLI
+//! 
+//! A Rustlings-like CLI for learning Rust through runnable examples.
+//! 
+//! Usage:
+//!   hello                    Show help and categories
+//!   hello list               List all topics
+//!   hello basic              List basic topics
+//!   hello basic <topic>      Run a basic topic sample
+//!   hello advance <topic>    Run an advance topic sample
+//!   hello awesome <topic>    Run an awesome topic sample
+//!   hello algo <topic>       Run an algo topic sample
+
 #[macro_use]
 extern crate cfg_if;
 extern crate log;
-// Import the getset macros
-#[macro_use]
 extern crate getset;
-#[cfg(test)]
-extern crate rspec;
-//
-use log::info;
+extern crate inventory;
 
+use clap::Parser;
+use crate::cli::{Commands, dispatcher};
+
+mod cli;
 mod advance;
 mod algo;
 mod basic;
-use leetcode;
 
-//
-//Mian 函数
-//
+/// Hello Rust CLI — Interactive Learning Tool
+#[derive(Parser, Debug)]
+#[command(name = "hello")]
+#[command(author = "Hello Rust Contributors")]
+#[command(version = "0.1.0")]
+#[command(about = "Interactive Rustlings-like CLI for learning Rust", long_about = None)]
+struct Cli {
+    /// Subcommand to execute
+    #[command(subcommand)]
+    command: Option<Commands>,
+}
+
 fn main() {
-    println!("Hello, world!");
-
-    //Rust基础样例
-    basic::basic_example();
-
-    //Rust 高阶样例
-    advance::advance_sample();
-
-    //Rust LeetCode 题目解决答案，样例代码
-    leetcode::leetcode_example();
-
-    let x = add(3, 5);
-
-    info!("number add sum :{}", x);
-}
-
-/**
- * 函数 求和
- */
-fn add(a: i32, b: i32) -> i32 {
-    return a + b;
-}
-///
-/// 单元测试
-/// #[cfg(test)]
-///
-#[cfg(test)]
-mod tests {
-    // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
-    use super::*;
-
-    #[test]
-    fn test_add() {
-        assert_eq!(add(1, 2), 3);
-    }
-
-    #[ignore]
-    #[test]
-    fn test_bad_add() {
-        // 这个断言会导致测试失败。注意私有的函数也可以被测试！
-        assert_ne!(add(1, 2), 4);
+    let cli = Cli::parse();
+    
+    match &cli.command {
+        // No subcommand: show help
+        None => {
+            dispatcher::list_all();
+        }
+        
+        // List all topics
+        Some(Commands::List) => {
+            dispatcher::list_all();
+        }
+        
+        // Basic category
+        Some(Commands::Basic { topic, no_docs, force }) => {
+            match topic {
+                Some(topic_name) => {
+                    // Run specific topic
+                    if let Some(topic) = cli::registry::get_topic("basic", topic_name) {
+                        if let Err(e) = dispatcher::execute_topic(topic, *no_docs, *force) {
+                            eprintln!("Error: {}", e);
+                            std::process::exit(1);
+                        }
+                    } else {
+                        dispatcher::handle_unknown_topic("basic", topic_name);
+                        std::process::exit(1);
+                    }
+                }
+                None => {
+                    // List all basic topics
+                    dispatcher::list_category("basic");
+                }
+            }
+        }
+        
+        // Advance category
+        Some(Commands::Advance { topic, no_docs, force }) => {
+            match topic {
+                Some(topic_name) => {
+                    if let Some(topic) = cli::registry::get_topic("advance", topic_name) {
+                        if let Err(e) = dispatcher::execute_topic(topic, *no_docs, *force) {
+                            eprintln!("Error: {}", e);
+                            std::process::exit(1);
+                        }
+                    } else {
+                        dispatcher::handle_unknown_topic("advance", topic_name);
+                        std::process::exit(1);
+                    }
+                }
+                None => {
+                    dispatcher::list_category("advance");
+                }
+            }
+        }
+        
+        // Awesome category
+        Some(Commands::Awesome { topic, no_docs, force }) => {
+            match topic {
+                Some(topic_name) => {
+                    if let Some(topic) = cli::registry::get_topic("awesome", topic_name) {
+                        if let Err(e) = dispatcher::execute_topic(topic, *no_docs, *force) {
+                            eprintln!("Error: {}", e);
+                            std::process::exit(1);
+                        }
+                    } else {
+                        dispatcher::handle_unknown_topic("awesome", topic_name);
+                        std::process::exit(1);
+                    }
+                }
+                None => {
+                    dispatcher::list_category("awesome");
+                }
+            }
+        }
+        
+        // Algo category
+        Some(Commands::Algo { topic, no_docs, force }) => {
+            match topic {
+                Some(topic_name) => {
+                    if let Some(topic) = cli::registry::get_topic("algo", topic_name) {
+                        if let Err(e) = dispatcher::execute_topic(topic, *no_docs, *force) {
+                            eprintln!("Error: {}", e);
+                            std::process::exit(1);
+                        }
+                    } else {
+                        dispatcher::handle_unknown_topic("algo", topic_name);
+                        std::process::exit(1);
+                    }
+                }
+                None => {
+                    dispatcher::list_category("algo");
+                }
+            }
+        }
     }
 }

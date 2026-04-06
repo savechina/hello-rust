@@ -1,4 +1,4 @@
-fn closure_sample() {
+pub(crate) fn closure_sample() {
     // Example 1: Basic closure and Fn trait usage
 
     let add_one = |x: i32| x + 1; // A closure that takes an i32 and returns an i32

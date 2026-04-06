@@ -1,4 +1,5 @@
 use derive_more::Display;
+use getset::{CopyGetters, Getters, MutGetters, Setters};
 
 #[derive(Getters, Setters, Default, Display)]
 #[display("Catetory{{first_category_id:{first_category_id},first_category_name:{first_category_name},second_category_id:{second_category_id},second_category_name:{second_category_name},three_category_id:{three_category_id},three_categroy_name:{three_categroy_name}}}")]

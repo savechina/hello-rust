@@ -3,7 +3,7 @@
 //! New samples are registered by adding `inventory::submit!` declarations.
 //! No manual routing table updates required.
 
-use inventory::collect;
+use inventory::{collect, iter};
 
 /// Type of sample (for execution handling)
 #[derive(Debug, Clone, Copy)]
@@ -41,7 +41,7 @@ pub struct Topic {
 }
 
 // Register the inventory collection for all topics
-collect!(pub TOPICS: Topic);
+collect!(Topic);
 
 impl Topic {
     /// Create a new Topic instance
@@ -73,27 +73,23 @@ impl Topic {
 
 /// Get all registered topics
 pub fn get_all_topics() -> impl Iterator<Item = &'static Topic> {
-    TOPICS.iter()
+    iter::<Topic>()
 }
 
 /// Get topics filtered by category
 pub fn get_topics_by_category(category: &str) -> impl Iterator<Item = &'static Topic> {
-    TOPICS
-        .iter()
-        .filter(move |topic| topic.category == category)
+    iter::<Topic>().filter(move |topic| topic.category == category)
 }
 
 /// Get a specific topic by category and name
 pub fn get_topic(category: &str, name: &str) -> Option<&'static Topic> {
-    TOPICS
-        .iter()
-        .find(|topic| topic.category == category && topic.name == name)
+    iter::<Topic>().find(|topic| topic.category == category && topic.name == name)
 }
 
 /// Get all unique categories
 pub fn get_all_categories() -> impl Iterator<Item = &'static str> {
     let mut categories = Vec::new();
-    for topic in TOPICS.iter() {
+    for topic in iter::<Topic>() {
         if !categories.contains(&topic.category) {
             categories.push(topic.category);
         }

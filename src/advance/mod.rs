@@ -45,7 +45,7 @@ mod rkyv_sample;
 mod csv_sample;
 
 ///getset
-mod getset_sample;
+pub(crate) mod getset_sample;
 
 ///hyper
 mod hyper_sample;

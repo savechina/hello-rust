@@ -105,13 +105,13 @@ pub fn list_all() {
 }
 
 /// Get display name for a category
-fn get_category_display_name(category: &str) -> &'static str {
+fn get_category_display_name(category: &str) -> String {
     match category {
-        "basic" => "Rust 基础 (Basic)",
-        "advance" => "Rust 进阶 (Advance)",
-        "awesome" => "生产级样例 (Awesome)",
-        "algo" => "算法 (Algorithms)",
-        _ => category,
+        "basic" => "Rust 基础 (Basic)".to_string(),
+        "advance" => "Rust 进阶 (Advance)".to_string(),
+        "awesome" => "生产级样例 (Awesome)".to_string(),
+        "algo" => "算法 (Algorithms)".to_string(),
+        _ => category.to_string(),
     }
 }
 

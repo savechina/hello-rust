@@ -9,5 +9,8 @@ struct Args {
 fn main() {
     println!("Hello, Tonic Hello client!");
     let opts = Args::parse();
-    tonic_hello_client::hello_client(opts.url);
+    if let Err(e) = tonic_hello_client::hello_client(opts.url) {
+        eprintln!("Error: {}", e);
+        std::process::exit(1);
+    }
 }

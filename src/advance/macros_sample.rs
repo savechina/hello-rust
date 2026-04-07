@@ -5,7 +5,7 @@ macro_rules! say_hello {
     };
 }
 
-fn declare_macros_hello_sample() {
+pub(crate) fn declare_macros_hello_sample() {
     say_hello!(); // 调用宏
 }
 

@@ -114,7 +114,7 @@ pub struct Product {
 
 /// getset an sample . auto generate Struct getter and setter method.
 /// create an instance setting it field from getter and setter sample
-fn getset_sample() {
+pub(crate) fn getset_sample() {
     // Create a new product instance
     let mut product = Product {
         id: 1,

@@ -82,7 +82,7 @@ inventory::submit! {
     }
 }
 
-fn inventory_main() {
+pub fn inventory_main() {
     // Thread-safe inventory
     let inventory = Arc::new(Mutex::new(HashMap::<String, u32>::new()));
     inventory.lock().unwrap().insert("apple".to_string(), 10);

@@ -16,7 +16,7 @@ impl Drop for Node {
     }
 }
 
-fn cycle_weak_sample() {
+pub(crate) fn cycle_weak_sample() {
     // 创建节点 A (强引用)
     let a = Rc::new(Node {
         value: 1,
@@ -104,7 +104,7 @@ fn cycle_weak_sample() {
 // 结论：通过使用 Weak 引用，循环被打破，所有对象都能被正确 drop 和回收内存。
 
 use std::sync::{self, Arc}; // 导入 Arc 和 Weak // 用于 Arc/Rc 内部的可变性
-// 修改节点结构，prev 链接使用 Weak 引用
+                            // 修改节点结构，prev 链接使用 Weak 引用
 struct NodeFixed {
     value: i32,
     next: RefCell<Option<Arc<NodeFixed>>>,

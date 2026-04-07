@@ -24,6 +24,7 @@ mod cli;
 mod advance;
 mod algo;
 mod basic;
+mod awesome_bridge;
 
 /// Hello Rust CLI — Interactive Learning Tool
 #[derive(Parser, Debug)]

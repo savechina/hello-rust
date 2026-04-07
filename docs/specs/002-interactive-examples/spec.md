@@ -112,3 +112,26 @@ A learner wants a single `hello` command to access all example categories — ba
 - The `hello` binary name maps to the existing `hello-rust` package (set via `[[bin]]` entry in Cargo.toml).
 - The existing module structure (`src/basic/`, `src/advance/`, `crates/awesome/`) will be reused — sample code itself does not need to be rewritten, only the invocation mechanism changes.
 - Long-running server samples (e.g., gRPC servers) are out of scope for the interactive tutorial mode — they will be listed but marked as "server" type requiring separate terminal.
+
+## Implementation Status
+
+### Completed (2026-04-07)
+
+**Build fixes:**
+- Removed duplicate `src/basic.rs` (E0761 conflict with `src/basic/mod.rs`)
+- Fixed `inventory::collect!` macro syntax in `src/cli/registry.rs`
+- Added `visiable_sample()` function to `src/basic/visiable_sample.rs`
+- Added `getset` import to `src/advance/getset_sample.rs`
+- Fixed lifetime error in `src/cli/dispatcher.rs`
+
+**Topic registration:**
+- **basic**: 14 topics registered (expression, ownership, datatype, generic, threads, module, logger, tracing, closure, traits, pointer, rectangle, cfg-if, visiable)
+- **advance**: 20 topics registered (json, tempfile, memmap, futures, bytes, include-dir, dotenv, rkyv, csv, getset, sysinfo, rayon, cycle-rc, type-alias, process, macros, cow, sqlx, diesel, ollama)
+- **awesome**: 7 topics registered (inventory, di-concrete, di-arc, di-box, service-locator, consul, mqtt)
+- **algo**: 2 topics registered (pi-calculation, linked-list)
+
+**Total: 43 topics across 4 categories**
+
+### Not Implemented (Deferred)
+- Server-type samples (tokio, hyper, axum, mio) — require separate terminal, not suitable for CLI execution
+- Private awesome crate samples (database, templates, data, sequences) — would require lib.rs visibility changes

@@ -10,7 +10,7 @@ use std::error::Error;
 
 /// dotenv_sample
 /// use dotenvy crate to load environment variables from .env file.
-fn dotenv_sample() -> Result<(), Box<dyn Error>> {
+pub(crate) fn dotenv_sample() -> Result<(), Box<dyn Error>> {
     // Load environment variables from .env file.
     // Fails if .env file not found, not readable or invalid.
     dotenvy::dotenv()?;

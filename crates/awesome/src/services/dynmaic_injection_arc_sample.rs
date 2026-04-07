@@ -174,7 +174,7 @@ impl ServiceContainer {
     }
 }
 
-fn container_injection_main() {
+pub fn container_injection_main() {
     let container = Arc::new(ServiceContainer::new());
 
     // Register concrete services

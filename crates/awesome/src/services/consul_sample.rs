@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use tokio::time::{sleep, Duration};
 
 #[tokio::main]
-async fn main_consul() -> Result<(), Box<dyn std::error::Error>> {
+pub async fn main_consul() -> Result<(), Box<dyn std::error::Error>> {
     // 1. 配置 Consul 客户端
     // 默认连接到 localhost:8500。如果你有不同的Consul地址，可以在这里配置。
     // 例如：.address("http://your-consul-host:8500")

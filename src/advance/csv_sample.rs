@@ -82,7 +82,7 @@ fn process_large_csv() -> Result<()> {
 }
 
 /// 读取 CSV 文件并处理数据
-fn csv_sample() -> Result<()> {
+pub(crate) fn csv_sample() -> Result<()> {
     // 输入输出文件路径
     let input = "data/employees.csv";
     let output = "data/filtered_employees.csv";

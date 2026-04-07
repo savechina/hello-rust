@@ -70,7 +70,7 @@ impl Drop for TreeNode {
     }
 }
 
-fn typealias_sample() {
+pub(crate) fn typealias_sample() {
     println!("--- 使用辅助方法优化 Node 的使用 ---");
 
     {

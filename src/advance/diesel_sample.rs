@@ -138,7 +138,7 @@ fn delete_post(connection: &mut SqliteConnection) {
 /// The code includes functions for establishing a connection, creating necessary tables,
 /// inserting new posts, and querying published posts. Each function is designed to
 /// perform specific tasks related to the database operations.
-fn diesel_sample() {
+pub(crate) fn diesel_sample() {
     let mut connection = establish_connection();
 
     // setup the database

@@ -5,7 +5,7 @@ use std::thread;
 use std::time::Duration;
 
 /// Rayon 是一个用于并行计算的库，可以显著提高程序的性能。下面是一个简单的示例，展示如何使用 Rayon 来并行处理数据。
-fn rayon_sample() {
+pub(crate) fn rayon_sample() {
     let data = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     // 顺序处理

@@ -11,7 +11,7 @@ fn filter_profanity(input: &str) -> Cow<str> {
     }
 }
 
-fn cow_reader_sample() {
+pub(crate) fn cow_reader_sample() {
     let s1 = "Hello, world!";
     let res1 = filter_profanity(s1); // 此时是 Borrowed，没有内存分配
 

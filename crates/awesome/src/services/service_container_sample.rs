@@ -61,7 +61,7 @@ impl UserService {
     }
 }
 
-fn service_container_main() {
+pub fn service_container_main() {
     let mut locator = ServiceContainer::new();
     locator.register_logger(ConsoleLogger);
     let locator = Arc::new(locator);

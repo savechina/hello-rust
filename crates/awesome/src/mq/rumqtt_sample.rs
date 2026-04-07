@@ -10,7 +10,7 @@ use tracing_subscriber::prelude::*;
 use tracing_subscriber::FmtSubscriber;
 use tracing_subscriber::{filter::LevelFilter, EnvFilter}; // For `with_filter` and `EnvFilter` // For setting log level
 
-fn mqtt_sync_sample() {
+pub fn mqtt_sync_sample() {
     info!("mqtt sync sample start ...");
     // let mut mqttoptions = MqttOptions::new("rumqtt-sync", "test.mosquitto.org", 1883);
     let mut mqttoptions = MqttOptions::new("rumqtt-sync", "127.0.0.1", 1883);

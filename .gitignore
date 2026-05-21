@@ -5,7 +5,7 @@
 .ruby-lsp
 
 docs/book
-
+docs/src/CHANGELOG.md
 .zed
 data/filtered_employees.csv
 data/test.db

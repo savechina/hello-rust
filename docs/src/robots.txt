@@ -1,0 +1,11 @@
+# robots.txt for Hello Rust Tutorial
+# https://renyan.org/hello/rust/
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://renyan.org/hello/rust/sitemap.xml
+
+# Disallow print version to reduce crawl waste
+Disallow: /print.html

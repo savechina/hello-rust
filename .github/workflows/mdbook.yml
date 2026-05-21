@@ -48,6 +48,32 @@ jobs:
       - name: Build with mdBook
         run: mdbook build
         working-directory: docs
+      - name: Fix URLs (.md to .html)
+        run: |
+          # 将 canonical/OG URL 中的 .md 替换为 .html
+          find docs/book -name "*.html" -exec sed -i 's|renyan.org/hello/rust/\([^"]*\)\.md|renyan.org/hello/rust/\1.html|g' {} +
+      - name: Generate sitemap
+        run: |
+          cd docs/book
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > sitemap.xml
+          echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> sitemap.xml
+          echo '  <url>' >> sitemap.xml
+          echo '    <loc>https://renyan.org/hello/rust/</loc>' >> sitemap.xml
+          echo '    <priority>1.0</priority>' >> sitemap.xml
+          echo '    <changefreq>weekly</changefreq>' >> sitemap.xml
+          echo '  </url>' >> sitemap.xml
+          find . -name "*.html" ! -name "print.html" ! -name "404.html" | sort | while read -r file; do
+            url=$(echo "$file" | sed 's|^\./||' | sed 's|^|https://renyan.org/hello/rust/|')
+            echo '  <url>' >> sitemap.xml
+            echo "    <loc>$url</loc>" >> sitemap.xml
+            echo '    <priority>0.8</priority>' >> sitemap.xml
+            echo '    <changefreq>monthly</changefreq>' >> sitemap.xml
+            echo '  </url>' >> sitemap.xml
+          done
+          echo '</urlset>' >> sitemap.xml
+          echo "Generated sitemap.xml with $(grep -c '<url>' sitemap.xml) entries"
+      - name: Copy robots.txt
+        run: cp docs/src/robots.txt docs/book/robots.txt
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

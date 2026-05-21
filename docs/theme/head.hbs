@@ -1,0 +1,52 @@
+<!-- SEO: Meta Description -->
+<meta name="description" content="{{#if description}}{{description}}{{else}}Hello Rust - 完整的 Rust 编程教程，涵盖基础语法、异步编程、Web 开发、数据库、微服务等 80+ 章节，附带 15+ 可运行的二进制示例代码。{{/if}}">
+
+<!-- SEO: Canonical URL -->
+{{#if path}}
+<link rel="canonical" href="https://renyan.org/hello/rust/{{path}}">
+{{else}}
+<link rel="canonical" href="https://renyan.org/hello/rust/">
+{{/if}}
+
+<!-- SEO: Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://renyan.org/hello/rust/{{#if path}}{{path}}{{/if}}">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{#if description}}{{description}}{{else}}Hello Rust - 完整的 Rust 编程教程，涵盖基础语法、异步编程、Web 开发、数据库、微服务等 80+ 章节。{{/if}}">
+<meta property="og:image" content="https://renyan.org/hello/rust/images/og-cover.png">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="Hello Rust Tutorial">
+
+<!-- SEO: Additional Meta Tags -->
+<meta name="keywords" content="Rust, Rust教程, Rust编程, Rust学习, Rust入门, Rust异步, Rust Web, Rust数据库, Rust gRPC, Rust教程中文版">
+<meta name="author" content="RenYan Wei">
+<meta name="theme-color" content="#ffffff">
+
+<!-- SEO: JSON-LD Structured Data (LearningResource) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "Hello Rust - Rust 编程从入门到实战教程",
+  "description": "Hello Rust 是一套完整的 Rust 编程教程，涵盖基础语法、异步编程、Web 开发、数据库、微服务等 80+ 章节，附带 15+ 可运行的二进制示例代码。",
+  "url": "https://renyan.org/hello/rust/",
+  "inLanguage": "zh-CN",
+  "license": "https://opensource.org/licenses/MIT",
+  "creator": {
+    "@type": "Person",
+    "name": "RenYan Wei"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Hello Rust",
+    "url": "https://renyan.org/hello/rust/"
+  },
+  "educationalLevel": "Beginner to Advanced",
+  "teaches": ["Rust 编程", "所有权", "异步编程", "Web 开发", "数据库", "微服务", "gRPC"],
+  "codeRepository": "https://github.com/savechina/hello-rust",
+  "about": {
+    "@type": "Thing",
+    "name": "Rust Programming Language"
+  }
+}
+</script>

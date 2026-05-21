@@ -1,6 +1,11 @@
 # Hello Rust
  English | [简体中文](README_zh.md)
 
+[![CI](https://github.com/savechina/hello-rust/actions/workflows/rust.yml/badge.svg)](https://github.com/savechina/hello-rust/actions/workflows/rust.yml)
+[![Docs](https://img.shields.io/badge/docs-online-blue)](https://savechina.github.io/hello-rust/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/savechina/hello-rust?style=social)](https://github.com/savechina/hello-rust)
+
 [**Hello Rust Tutorial**](https://renyan.org/hello/rust) | [**GitHub Pages**](https://savechina.github.io/hello-rust/)
 
 A comprehensive sample project and tutorial for learning the Rust programming language, from basic syntax to advanced production-grade applications.

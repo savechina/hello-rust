@@ -2,6 +2,15 @@
 name = "hello-rust"
 version = "0.1.0"
 edition = "2024"
+description = "A comprehensive Rust learning tutorial with 15+ runnable binary examples — from basic syntax to production gRPC, async, and database applications"
+keywords = ["rust", "tutorial", "learning", "grpc", "async", "tokio", "axum", "sqlx"]
+categories = ["development-tools::build-utils", "education", "asynchronous"]
+repository = "https://github.com/savechina/hello-rust"
+license = "MIT"
+documentation = "https://savechina.github.io/hello-rust/"
+readme = "README.md"
+authors = ["RenYan Wei"]
+homepage = "https://savechina.github.io/hello-rust/"
 
 default-run = "hello-rust"
 

@@ -29,15 +29,6 @@ jobs:
         with:
           version: "29.3"
 
-      - name: Configure Swap
-        run: |
-          sudo rm -f /swapfile
-          sudo fallocate -l 4G /swapfile 2>/dev/null || sudo dd if=/dev/zero of=/swapfile bs=1M count=4096
-          sudo chmod 600 /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
-          free -h
-
       - name: Install nextest
         uses: taiki-e/install-action@v2
         with:

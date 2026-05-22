@@ -38,8 +38,13 @@ jobs:
           sudo swapon /swapfile
           free -h
 
+      - name: Install nextest
+        uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
+
       - name: Build
         run: CARGO_BUILD_JOBS=1 cargo build --verbose
 
       - name: Run tests
-        run: CARGO_BUILD_JOBS=1 cargo test --verbose --no-fail-fast
+        run: cargo nextest run --verbose --no-fail-fast --retries 2

@@ -8,6 +8,9 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  # Limit parallelism to avoid OOM on GitHub Actions runners (7GB RAM)
+  CARGO_BUILD_JOBS: 1
+  CARGO_NET_RETRY: 3
 
 jobs:
   build:
@@ -17,11 +20,18 @@ jobs:
       - uses: actions/checkout@v4
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
-      # 2. 安装 protoc
       - name: Install Protoc
         uses: arduino/setup-protoc@v2
         with:
           version: "29.3"
+      # Add swap to prevent OOM kills during heavy linking
+      - name: Configure Swap
+        run: |
+          sudo fallocate -l 4G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
       - name: Build
         run: cargo build --verbose
       - name: Run tests

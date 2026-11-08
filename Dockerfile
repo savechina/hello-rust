@@ -48,6 +48,8 @@ RUN for file in /etc/apt/sources.list.d/*.sources; do \
     kmod \
     cpio\
     python3 \
+    sqlite3 \
+    libsqlite3-dev \
     rustup && \
     # Install rustup - the Rust toolchain installer
     # Optional: HTTP Proxy setting
